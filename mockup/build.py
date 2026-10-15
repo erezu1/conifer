@@ -79,13 +79,24 @@ for k in out.get("undefined", []):
 svgs = out["out"]
 
 
+HL = '<span class="mjx-hl" aria-hidden="true"></span>'
+
+
+def with_band(svg):   # the selection band under a formula (tools/build_tree.py)
+    m = re.search(r'<svg[^>]*?\swidth="([\d.]+ex)"', svg)
+    a = svg.find(">")
+    if not m or a < 0 or not svg.startswith("<mjx-container"):
+        return svg
+    return svg[:a] + ' style="--w:%s">' % m.group(1) + HL + svg[a + 1:]
+
+
 def fill(o):
     if isinstance(o, dict):
         return {k: fill(v) for k, v in o.items()}
     if isinstance(o, list):
         return [fill(v) for v in o]
     if isinstance(o, str) and "\x00" in o:
-        return re.sub("\x00(\\d+)\x00", lambda m: svgs[int(m.group(1))].replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(items[int(m.group(1))]["tex"].strip(), quote=True), 1), o)
+        return re.sub("\x00(\\d+)\x00", lambda m: with_band(svgs[int(m.group(1))].replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(items[int(m.group(1))]["tex"].strip(), quote=True), 1)), o)
     return o
 
 

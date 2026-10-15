@@ -253,8 +253,21 @@ for f in (doc / "images").iterdir():
     images[f.name] = "data:%s;base64,%s" % (mime, base64.b64encode(f.read_bytes()).decode())
 
 
+HL = '<span class="mjx-hl" aria-hidden="true"></span>'
+
+
+def with_band(svg):
+    """Under the formula, an unseen picture as wide as its drawing (viewer.css .mjx-hl): a selection that takes the
+    formula in is shaded there by the browser itself, at its line's whole height, as the words round it are."""
+    m = re.search(r'<svg[^>]*?\swidth="([\d.]+ex)"', svg)
+    a = svg.find(">")
+    if not m or a < 0 or not svg.startswith("<mjx-container"):
+        return svg
+    return svg[:a] + ' style="--w:%s">' % m.group(1) + HL + svg[a + 1:]
+
+
 def with_tex(svg, tex):
-    return svg.replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(tex.strip(), quote=True), 1)
+    return with_band(svg.replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(tex.strip(), quote=True), 1))
 
 
 def fill(o):

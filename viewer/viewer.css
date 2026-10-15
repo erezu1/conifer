@@ -295,8 +295,23 @@ dfn { font-style: italic; }
 #find-count { font: 500 .84rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }
 ::highlight(conifer-find) { background: color-mix(in srgb, #f5c400 45%, transparent); }
 ::highlight(conifer-find-now) { background: color-mix(in srgb, #ff9500 65%, transparent); }
+/* a formula found by its TeX: a soft box round it; a symbol (or a run of them) found inside a formula: a soft box
+   behind just those glyphs, drawn inside the formula's own picture (search.js), so it scrolls and scales with it */
 mjx-container.find-f { background: color-mix(in srgb, #f5c400 30%, transparent); border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, #f5c400 30%, transparent); }
 mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, #ff9500 45%, transparent); }
+.find-g { fill: color-mix(in srgb, #f5c400 45%, transparent); stroke: none; transition: opacity .18s ease; }
+.find-g.now { fill: color-mix(in srgb, #ff9500 65%, transparent); }
+
+/* Selecting across a formula (Epsilon's way): the formula is selected whole (its picture has no letters to select
+   one by one) and copies as its TeX; under it an unseen picture as wide as its drawing (the build puts a span there),
+   which the browser shades in a selection at the line's whole height, as it shades the words round it, with the
+   drawing set back over the band */
+#paper mjx-container, #sheet-body mjx-container, #pop mjx-container { -webkit-user-select: all; user-select: all; }
+::selection { background-color: color-mix(in srgb, var(--accent) 24%, transparent); }
+mjx-container[style*="--w"] { white-space: nowrap; }
+mjx-container > .mjx-hl { display: inline-block; width: min(var(--w), 100%); height: 1px; pointer-events: none;
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='0' height='0'/%3E"); }
+mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%)); }
 
 /* ---- the skim: one line per paragraph, each a tap from its paragraph */
 .skim { margin: 0 0 .5em; padding: .05em .25em; border-radius: 3px; cursor: pointer; text-align: left; hyphens: manual; }
