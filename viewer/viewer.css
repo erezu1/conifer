@@ -28,12 +28,16 @@
   --glass: rgba(12, 14, 17, .74); --shadow: 0 10px 30px rgba(0, 0, 0, .55); --on-accent: #0c0e11; --edge: rgba(0, 0, 0, .6);
 }
 * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+[hidden] { display: none !important; }   /* a closed sheet is a flex box: the browser's own rule would lose to it */
 html { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 1.0625rem/1.6 var(--serif); padding-inline: 16px; -webkit-font-smoothing: antialiased; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 :focus:not(:focus-visible) { outline: none; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+.page a[href^="#"], #sheet-body a[href^="#"]:not(.peek-from) { color: inherit; border-bottom: 1px dotted color-mix(in srgb, var(--fg) 32%, transparent); border-radius: 3px; }
+.page a[href^="#"]:hover, #sheet-body a[href^="#"]:not(.peek-from):hover { text-decoration: none; background: var(--accent-soft); }
+.page a.fnref, .page a[id^="fnref"] { border-bottom: 0; }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
 .page p { margin: 0 0 1em; }
 b, strong { font-weight: 600; }
@@ -46,10 +50,10 @@ button { font-family: var(--sans); }
 @keyframes slide { from { transform: translateX(14px); opacity: 0; } }
 @keyframes slideout { to { transform: translateX(14px); opacity: 0; } }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } }
-@keyframes flash { 0% { background: color-mix(in srgb, var(--accent) 28%, transparent); } 60% { background: color-mix(in srgb, var(--accent) 20%, transparent); } 100% { background: transparent; } }
+@keyframes flash { 0% { background: color-mix(in srgb, var(--accent) 26%, transparent); box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 26%, transparent); } 60% { background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 18%, transparent); } 100% { background: transparent; box-shadow: 0 0 0 8px transparent; } }
 .btn, .ctl, .bar-btn, .bar-pill, .bar-title, .qbadge, .anchor, .fold-btn, .x-btn, .fold-line, .dial button, .seg button, .toc button, .gs, [data-def], .eqno {
-  transition: background-color .15s var(--ease-out), color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), transform .12s var(--ease-out), opacity .15s var(--ease-out); }
-.btn:active, .bar-btn:active, .bar-pill:active, .qbadge:active, .fold-btn:active, .x-btn:active, .dial button:active, .seg button:active { transform: scale(.96); }
+  transition: background-color .15s var(--ease-out), color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), opacity .15s var(--ease-out); }
+/* nothing shrinks when pressed: feedback is colour, underline or a fade; the dial's pill glides */
 #paper.swap { animation: fadein .28s var(--ease-out); }
 .fold-body.opening { animation: rise .26s var(--ease-out); }
 .fold-body.closing { animation: fall .18s var(--ease-in) forwards; }
@@ -74,11 +78,13 @@ button { font-family: var(--sans); }
 .bar-pill { border: 1px solid var(--rule); background: var(--bg); color: var(--fg); font: 500 .74rem var(--sans); padding: .3rem .6rem; border-radius: 999px; cursor: pointer; white-space: nowrap; flex: none; }
 .bar-pill:hover { background: var(--surface); }
 #back { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); animation: rise .22s var(--ease-out); }
-.dial { display: flex; gap: 2px; background: var(--surface); border-radius: 999px; padding: 3px; max-width: var(--page-w); margin: 0 auto; }
-.dial button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .28rem .2rem; cursor: pointer;
+.dial { position: relative; display: flex; gap: 2px; background: var(--surface); border-radius: 999px; padding: 3px; max-width: var(--page-w); margin: 0 auto; }
+.sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 999px; background: var(--bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); pointer-events: none; }
+.sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }
+.dial button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .28rem .2rem; cursor: pointer;
   font: 500 .8rem/1.15 var(--sans); color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: .05rem; }
 .dial button small { font-size: .66rem; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
-.dial button[aria-checked="true"] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); }
+.dial button[aria-checked="true"] { color: var(--fg); }
 .dial button:hover:not([aria-checked="true"]) { color: var(--fg); }
 
 /* ---- the title block */
@@ -129,8 +135,7 @@ a.fnref { font-size: .8em; vertical-align: super; line-height: 0; }
   scrollbar-width: none; }
 .eqbody::-webkit-scrollbar { display: none; }
 .kind-theorem .eqbody, .kind-remark .eqbody, .kind-definition .eqbody, .kind-proof .eqbody { --fade: var(--surface); }
-.eqno { flex: 0 0 auto; font-variant-numeric: lining-nums tabular-nums; cursor: pointer; border-radius: 4px; padding: 0 .15em; }
-.eqno:hover { background: var(--accent-soft); color: var(--accent); }
+.eqno { flex: 0 0 auto; font-variant-numeric: lining-nums tabular-nums; }
 mjx-container[jax="SVG"][display="true"] { margin: 0 !important; }
 mjx-container[jax="SVG"][display="true"]:not([width="full"]) { display: inline-block !important; }
 mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }
@@ -255,9 +260,9 @@ dfn { font-style: italic; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
 .set-note { font: .78rem/1.4 var(--sans); color: var(--muted); margin: .3rem 0 0; }
-.seg { display: flex; background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
-.seg button { flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .8rem var(--sans); color: var(--muted); cursor: pointer; }
-.seg button[aria-checked="true"] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 3px rgba(0, 0, 0, .14); }
+.seg { position: relative; display: flex; background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .8rem var(--sans); color: var(--muted); cursor: pointer; }
+.seg button[aria-checked="true"] { color: var(--fg); }
 .legend { display: grid; gap: .35rem; font: .82rem/1.4 var(--sans); color: var(--muted); }
 .legend div { display: flex; align-items: center; gap: .5rem; }
 .ctl { font: 500 .78rem var(--sans); color: var(--accent); background: none; border: 0; padding: .15rem .1rem; cursor: pointer; border-radius: 4px; }
@@ -268,3 +273,13 @@ dfn { font-style: italic; }
 #toast.closing { animation: fall .2s var(--ease-in) forwards; }
 .link-box { width: 100%; font: .85rem var(--sans); padding: .5rem .6rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); color: var(--fg); }
 .colophon { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: .8rem/1.5 var(--sans); color: var(--muted); }
+
+/* ---- search: the field takes the bar; found places are marked, the one you are on more strongly */
+#find-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
+#find-input { flex: 1; min-width: 0; font: 1rem var(--sans); padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--fg); }
+#find-input:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: 0 0 0 3px var(--accent-soft); }
+#find-count { font: 500 .78rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }
+::highlight(conifer-find) { background: color-mix(in srgb, #f5c400 45%, transparent); }
+::highlight(conifer-find-now) { background: color-mix(in srgb, #ff9500 65%, transparent); }
+mjx-container.find-f { background: color-mix(in srgb, #f5c400 30%, transparent); border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, #f5c400 30%, transparent); }
+mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, #ff9500 45%, transparent); }

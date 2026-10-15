@@ -162,11 +162,21 @@
     main.innerHTML = render(DOC.root, state.level, ctx);
     lastOpened = null;
     if (y0 != null) { const after = locate(keepKey); if (after) window.scrollBy(0, after.getBoundingClientRect().top - y0); }
-    $$('.display[id] .eqno', main).forEach(no => { const d = no.closest('.display'); no.setAttribute('role', 'button'); no.setAttribute('tabindex', '0'); no.dataset.copy = d.id; no.title = 'Copy a link to this equation'; });
     drawDial(); barTitle();
+    if (window.ConiferSearch) ConiferSearch.refresh();
+  }
+  function moveInd(group) {                       // the chosen option's pill glides to it (the dial, a segmented setting)
+    const ind = group.querySelector('.sel-ind'), on = group.querySelector('[aria-checked="true"]');
+    if (!ind || !on) return;
+    ind.style.width = on.offsetWidth + 'px';
+    ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+    ind.classList.add('placed');
   }
   function drawDial() {
-    $('#dial').innerHTML = LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
+    const dial = $('#dial');
+    if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
+    $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.querySelector('small').textContent = time(i); });
+    moveInd(dial);
     const who = $('#who'); if (who) who.textContent = audLabel(state.audience) + ' ▾';
     const back = $('#back'); if (back) { back.hidden = !backStack.length; if (backStack.length) back.textContent = '↩ ' + backStack[backStack.length - 1].label; }
   }
@@ -267,8 +277,9 @@
     backStack.push(origin); drawDial();
     const el = locate(id); if (!el) return;
     const target = opts.flash ? (el.querySelector('#' + CSS.escape(opts.flash)) || el) : el;
+    const mark = target === el && byId.get(id).children ? (el.querySelector('.sec-h') || el) : target;   // a section: its heading is marked, not the whole
     scrollTo(target);
-    afterScroll(() => { flash(target); if (opts.quote) flashQuote(el, opts.quote); commit(); });
+    afterScroll(() => { flash(mark); if (opts.quote) flashQuote(el, opts.quote); commit(); });
   }
   function goBack() {
     const o = backStack.pop(); if (!o) return;
@@ -369,16 +380,17 @@
     openSheet('Contents', html, 'sheet-toc');
   }
   function seg(name, opts, cur) {
-    return `<div class="seg" role="radiogroup">${opts.map(o => `<button type="button" role="radio" aria-checked="${String(o[0]) === String(cur)}" data-set="${name}:${o[0]}">${esc(o[1])}</button>`).join('')}</div>`;
+    return `<div class="seg" role="radiogroup"><span class="sel-ind" aria-hidden="true"></span>${opts.map(o => `<button type="button" role="radio" aria-checked="${String(o[0]) === String(cur)}" data-set="${name}:${o[0]}">${esc(o[1])}</button>`).join('')}</div>`;
   }
   function openSettings() {
-    const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}. Summaries are written for you, background notes open where you need them, and terms you may not know carry definitions.</p></div>` : '';
+    const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you, background notes open where you need them, and terms you may not know carry definitions.</p></div>` : '';
     const html = who +
       `<div class="set-group"><span class="set-head">Defined terms in the text</span>${seg('marks', [['auto', 'By reader'], ['on', 'Marked'], ['off', 'Plain']], state.marks)}<p class="set-note">A faint dotted line under a term that has a definition; tapping a term shows it either way.</p></div>` +
       `<div class="set-group"><span class="set-head">Section summaries in the Paper view</span>${seg('ledes', [['true', 'Show'], ['false', 'Hide']], state.ledes)}</div>` +
       `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
       `<div class="set-group"><span class="set-head">Appearance</span>${seg('theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], state.theme)}</div>`;
     openSheet('Settings', html, 'sheet-set');
+    $$('#sheet .seg').forEach(moveInd);
   }
 
   // ------------------------------------------------------------------ events
@@ -388,12 +400,15 @@
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
     if (t.id === 'back') { goBack(); return; }
     if (t.dataset.copy) { copyLink(t.dataset.copy); return; }
-    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else openSettings(); return; }
+    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } else openSettings(); return; }
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes') state.ledes = v === 'true'; else if (k === 'chips') state.chips = v === 'true'; else if (k === 'theme') state.theme = v;
       else if (k === 'audience') { state.audience = v; estimate(); } else if (k === 'marks') state.marks = v;
-      applyTheme(); save(); draw(); openSettings(); return;
+      const g = t.closest('.seg'); if (g) { $$('button', g).forEach(b => b.setAttribute('aria-checked', String(b === t))); moveInd(g); }
+      applyTheme(); save(); draw();
+      if (k === 'audience') { const note = $('#aud-note'); if (note) note.textContent = (AUD.find(a => a.key === v) || {}).hint || ''; }
+      return;
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
     if (t.dataset.act) {                                          // a fold opens or closes
@@ -454,6 +469,7 @@
   });
   let ticking = false;
   window.addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { barTitle(); followHash(); ticking = false; }); }, { passive: true });
+  window.addEventListener('resize', () => { $$('.dial, .seg').forEach(moveInd); });
 
   // ------------------------------------------------------------------ boot
   load(); applyTheme();

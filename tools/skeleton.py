@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""conifer skeleton: an Epsilon document (paper.json) -> the cone's tree with empty layers, and an outline to draft from.
+"""conifer skeleton: an Epsilon document (paper.json) -> the tree with empty layers, and an outline to draft from.
 
     python3 tools/skeleton.py papers/2608.21511/doc  [-o papers/2608.21511]
 
@@ -178,10 +178,10 @@ def main():
         "format": "conifer-doc", "version": 1,
         "meta": dict(meta, key={}, defaultAudience="physicist", source={"kind": "epsilon", "doc": str(doc)}),
         "levels": [
-            {"key": "gist", "label": "Gist", "hint": "the three things to know"},
-            {"key": "brief", "label": "Summary", "hint": "one page, every sentence opens"},
-            {"key": "paper", "label": "Paper", "hint": "the full text, appendices folded"},
-            {"key": "full", "label": "Everything", "hint": "appendices and proofs open"},
+            {"key": "gist", "label": "Gist", "hint": "the trunk: the three things to know"},
+            {"key": "brief", "label": "Summary", "hint": "the branches: one page, every sentence opens"},
+            {"key": "paper", "label": "Paper", "hint": "the foliage: the full text, with the roots folded"},
+            {"key": "full", "label": "Everything", "hint": "roots and all: appendices and proofs open"},
         ],
         "audiences": [],
         "root": root, "defs": [], "questions": [],

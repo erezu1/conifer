@@ -3,8 +3,8 @@
 
     python3 tools/site.py
 
-docs/index.html              the index: every cone, with its gist
-docs/<key>/index.html        the cone page (a copy of its built page)
+docs/index.html              the index: every tree, with its gist
+docs/<key>/index.html        the tree page (a copy of its built page)
 """
 import html
 import json
@@ -17,8 +17,8 @@ DOCS = HERE / "docs"
 DOCS.mkdir(exist_ok=True)
 
 cones = [
-    {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "cone.html", "data": HERE / "papers" / "2608.21511" / "cone.json"},
-    {"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.cone.json"},
+    {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "tree.html", "data": HERE / "papers" / "2608.21511" / "tree.json"},
+    {"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json"},
 ]
 rows = []
 for c in cones:
@@ -32,6 +32,19 @@ for c in cones:
     first = re.split(r"(?<=[.!?])\s+(?=Result)", gist)[0].replace("Context ", "", 1)
     rows.append((c["key"], m["title"], ", ".join(m.get("authors", [])), m.get("kicker") or "", first))
 
+# the app's files at the site's root: icons, the manifest, the service worker
+(DOCS / "icons").mkdir(exist_ok=True)
+for f in (HERE / "logo" / "icons").iterdir():
+    shutil.copyfile(f, DOCS / "icons" / f.name)
+shutil.copyfile(HERE / "logo" / "icons" / "favicon.ico", DOCS / "favicon.ico")
+(DOCS / "icons" / "favicon.svg").write_text((HERE / "logo" / "conifer-icon.svg").read_text().replace("currentColor", "#1d5b98"))
+shutil.copyfile(HERE / "viewer" / "manifest.webmanifest", DOCS / "manifest.webmanifest")
+shutil.copyfile(HERE / "viewer" / "sw.js", DOCS / "sw.js")
+HEAD = ('<link rel="icon" href="favicon.ico" sizes="32x32">\n<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">\n'
+        '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n<link rel="manifest" href="manifest.webmanifest">\n'
+        '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n<meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">\n'
+        '<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Conifer">\n<meta name="mobile-web-app-capable" content="yes">\n'
+        '<meta name="description" content="Project Conifer: papers grown into trees, read at any depth.">')
 css = (HERE / "viewer" / "viewer.css").read_text()
 logo = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 logo = re.sub(r"<!--.*?-->", "", logo, flags=re.S).strip()
@@ -44,6 +57,7 @@ page = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Conifer</title>
+{HEAD}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 {css}
@@ -60,14 +74,15 @@ page = f"""<!doctype html>
 <main class="page">
  <header class="titleblock">
   <p class="kicker">{logo}Project Conifer</p>
-  <h1 class="title">Papers you can read at any depth</h1>
-  <p class="intro">A cone opens at its tip: the context, the result, why it matters. Below it, a one-page summary whose sentences show the part of the paper they stand for; then the paper itself, with appendices and proofs folded; then everything. Definitions, background notes and anticipated questions hang off the text, and a dial sets how much is shown.</p>
+  <h1 class="title">Papers grown into trees</h1>
+  <p class="intro">Every paper here is a tree you can read at any depth. The trunk is the gist: the context, the result, why it matters. The branches are a one-page summary whose sentences show the part of the paper they stand for. The foliage is the paper itself, and the roots are its appendices and proofs, folded until you want them. Definitions, background notes and anticipated questions hang off the text, and a dial sets how much is shown.</p>
  </header>
  <ul class="cones">
 {items}
  </ul>
  <footer class="colophon">Summaries, definitions and questions are drafted by an AI reader and carry their status; the paper's text is the author's. Made with Epsilon.</footer>
 </main>
+<script>if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(function () {{}});</script>
 </body>
 </html>
 """

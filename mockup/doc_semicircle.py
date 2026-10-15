@@ -1,5 +1,5 @@
 """The sample Conifer document: an expository note on Wigner's semicircle law, written in the proposed
-data structure (see ../DESIGN.md). build.py turns it into semicircle.cone.json (the document as data, TeX
+data structure (see ../DESIGN.md). build.py turns it into semicircle.tree.json (the document as data, TeX
 intact) and into the mockup page (math drawn as SVG).
 
 Conventions used in the HTML strings:
@@ -67,10 +67,10 @@ DOC = {
         {"key": "student", "label": "Student", "hint": "knows linear algebra and some probability"},
     ],
     "levels": [
-        {"key": "gist", "label": "Gist", "hint": "the three things to know"},
-        {"key": "brief", "label": "Summary", "hint": "one page, every paragraph opens"},
-        {"key": "paper", "label": "Paper", "hint": "the full text, appendices folded"},
-        {"key": "full", "label": "Everything", "hint": "appendices and proofs open"},
+        {"key": "gist", "label": "Gist", "hint": "the trunk: the three things to know"},
+        {"key": "brief", "label": "Summary", "hint": "the branches: one page, every sentence opens"},
+        {"key": "paper", "label": "Paper", "hint": "the foliage: the full text, with the roots folded"},
+        {"key": "full", "label": "Everything", "hint": "roots and all: appendices and proofs open"},
     ],
     "root": {
         "id": "root",

@@ -11,7 +11,7 @@ from layers_side import DEFS, QUESTIONS, BACKGROUND   # the definitions, questio
 
 KICKER = "arXiv:2608.21511 · hep-th · August 2026"
 DATE = "21 August 2026"
-NOTE = ("A Conifer cone of the paper. The text at the Paper and Everything depths is the paper itself; the gist, the summaries, "
+NOTE = ("The paper as a Conifer tree. The text at the Paper and Everything depths is the paper itself; the gist, the summaries, "
         "the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author.")
 PAGE_TITLE = "String stars and the supersymmetric index"
 KEY = {"equation": "eq-W_gs_mass", "figure": "fig-transition"}

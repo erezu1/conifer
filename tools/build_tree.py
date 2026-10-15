@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""conifer build: a paper's skeleton + its drafted layers -> cone.json and a self-contained page.
+"""conifer build: a paper's skeleton + its drafted layers -> tree.json and a self-contained page.
 
-    python3 tools/build_cone.py papers/2608.21511
+    python3 tools/build_tree.py papers/2608.21511
 
 Expects in the paper folder:
   doc/            the Epsilon document (paper.json, math.json, images/)
   skeleton.json   from tools/skeleton.py
   layers.py       the drafted layers: ROOT_GIST, ROOT_BRIEF, GIST, BRIEF, BACKGROUND, DEFS, QUESTIONS, KEY, AUDIENCES, VARIANTS
 Writes:
-  cone.json       the Conifer document (TeX intact in the layers; the paper's own markup in the bodies)
-  cone.html       the page, self-contained (Epsilon's drawn math and images inside; the layers' math drawn the same way)
-  cone.artifact.html   the same without the document skeleton, to publish as a Claude artifact
+  tree.json       the Conifer document (TeX intact in the layers; the paper's own markup in the bodies)
+  tree.html       the page, self-contained (Epsilon's drawn math and images inside; the layers' math drawn the same way)
+  tree.artifact.html   the same without the document skeleton, to publish as a Claude artifact
 
 The layers refer to nodes by the ids in skeleton.json / outline.md. The build checks every id and every quote,
 marks the mentions of defined terms in the text, and reports what is stale (a summary whose covered text changed).
@@ -181,10 +181,10 @@ cone = {
     "levels": S["levels"], "audiences": getattr(L, "AUDIENCES", []),
     "root": root, "defs": defs, "questions": questions,
 }
-(paper / "cone.json").write_text(json.dumps(cone, indent=1, ensure_ascii=False) + "\n")
+(paper / "tree.json").write_text(json.dumps(cone, indent=1, ensure_ascii=False) + "\n")
 for p in problems:
     print("problem:", p, file=sys.stderr)
-print("cone.json: %d nodes, %d definitions, %d questions" % (len(byid), len(defs), len(questions)))
+print("tree.json: %d nodes, %d definitions, %d questions" % (len(byid), len(defs), len(questions)))
 
 # ---------------------------------------------------------------- drawing: the paper's formulas from Epsilon's cache, the layers' with MathJax
 svgs = M["svg"] if M.get("key") == D["math"]["key"] and len(M.get("svg", [])) == len(items) else None
@@ -244,14 +244,18 @@ for f in (doc / "images").iterdir():
     images[f.name] = "data:%s;base64,%s" % (mime, base64.b64encode(f.read_bytes()).decode())
 
 
+def with_tex(svg, tex):
+    return svg.replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(tex.strip(), quote=True), 1)
+
+
 def fill(o):
     if isinstance(o, dict):
         return {k: fill(v) for k, v in o.items()}
     if isinstance(o, list):
         return [fill(v) for v in o]
     if isinstance(o, str):
-        o = re.sub(r'<l2m-math n="(\d+)"></l2m-math>', lambda m: svgs[int(m.group(1))], o)
-        o = re.sub("\x00(\\d+)\x00", lambda m: new_svgs[int(m.group(1))], o)
+        o = re.sub(r'<l2m-math n="(\d+)"></l2m-math>', lambda m: with_tex(svgs[int(m.group(1))], items[int(m.group(1))]["tex"]), o)
+        o = re.sub("\x00(\\d+)\x00", lambda m: with_tex(new_svgs[int(m.group(1))], new_items[int(m.group(1))]["tex"]), o)
         o = re.sub(r'src="images/([^"]+)"', lambda m: 'src="%s"' % images.get(m.group(1), "images/" + m.group(1)), o)
         return o
     return o
@@ -262,12 +266,17 @@ page_doc = fill(page_doc)
 # ---------------------------------------------------------------- the page
 css = (HERE / "viewer" / "viewer.css").read_text() + "\n" + M.get("css", "")
 js = (HERE / "viewer" / "viewer.js").read_text()
+js += "\n" + (HERE / "viewer" / "search.js").read_text()
 meta = page_doc["meta"]
 data = json.dumps(page_doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
 fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;'
          '0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
 ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
+ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')
+ICON_BACK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>')
+ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>')
+ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
 ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
 LOGO = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
@@ -281,13 +290,15 @@ body = f"""<title>{html.escape(page_title)}</title>
 </style>
 <div class="app">
 <header class="bar" id="bar">
- <div class="bar-row">
+ <div class="bar-row" id="bar-row">
   <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{ICON_TOC}</button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
   <button type="button" class="bar-pill" data-open="settings" id="who" title="Who you are reading as"></button>
+  <button type="button" class="bar-btn" data-open="search" aria-label="Search in the paper">{ICON_FIND}</button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings">{ICON_SET}</button>
  </div>
+ <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
 </header>
 <main class="page">
@@ -298,7 +309,7 @@ body = f"""<title>{html.escape(page_title)}</title>
   <p class="note">{html.escape(meta.get("note") or "")}</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon">A Conifer cone of arXiv:{html.escape(meta.get("arxiv") or "")}. The paper's text is the author's, converted with Epsilon; the summaries, definitions, background notes and questions were drafted by an AI reader and carry their status. Built from <code>cone.json</code>.</footer>
+ <footer class="colophon">arXiv:{html.escape(meta.get("arxiv") or "")}, grown into a Conifer tree: the trunk is the gist, the branches the summary, the foliage the paper, the roots its appendices. The paper's text is the author's, converted with Epsilon; the summaries, definitions, background notes and questions were drafted by an AI reader and carry their status.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>
@@ -311,11 +322,16 @@ body = f"""<title>{html.escape(page_title)}</title>
 {js}
 </script>
 """
-(paper / "cone.artifact.html").write_text(body)
+(paper / "tree.artifact.html").write_text(body)
 head_end = body.index("</style>") + len("</style>")
-favicon = '<link rel="icon" href="data:image/svg+xml,' + urllib.parse.quote((HERE / "logo" / "conifer-icon.svg").read_text().replace("currentColor", "#1d5b98")) + '">\n'
+favicon = ('<link rel="icon" href="../favicon.ico" sizes="32x32">\n<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">\n'
+           '<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">\n<link rel="manifest" href="../manifest.webmanifest">\n'
+           '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n<meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">\n'
+           '<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Conifer">\n<meta name="mobile-web-app-capable" content="yes">\n'
+           '<meta name="description" content="' + html.escape(meta["title"]) + ', as a Conifer tree: read it at any depth.">\n')
+SW = '<script>if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("../sw.js").catch(function () {});</script>\n'
 page = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n" + favicon
-        + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + "\n</body>\n</html>\n")
-(paper / "cone.html").write_text(page)
-print("wrote cone.html (%d KB) and cone.artifact.html%s" % (len(page.encode()) // 1024, "; %d problems" % len(problems) if problems else ""))
+        + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + SW + "\n</body>\n</html>\n")
+(paper / "tree.html").write_text(page)
+print("wrote tree.html (%d KB) and cone.artifact.html%s" % (len(page.encode()) // 1024, "; %d problems" % len(problems) if problems else ""))

@@ -1,10 +1,10 @@
-# Project Conifer: a paper you can read at any depth
+# Project Conifer: a paper grown into a tree
 
 *Brainstorm, prior art and a proposed data structure. First draft, 15 October 2026. Companion to the mockup in `mockup/`.*
 
 ## 0. The idea in one paragraph
 
-A paper is published as a **cone of detail**. At the tip, three things: the context, the result, why it matters. Below that, a one-page summary in which every sentence can be opened into the part of the paper it stands for. Below that, the paper itself, each section led by its own summary, with proofs and appendices folded until asked for. The full text is the ground truth and is never lost; every coarser layer is *grounded* in it (each summary sentence knows what it summarises), so a reader can always check. Two cross-cutting layers hang off the tree: **definitions** anchored to the sentence that defines a term or symbol, and **questions** anchored to the region they are about. A third axis, the reader's **background**, picks which summaries they see and which background notes open for them. The author writes the paper as usual; an AI skill drafts the layers from the draft; the author approves and edits them, and the provenance of every piece of generated text stays visible. Because the cone is data, the same file serves readers, phones, and language models.
+A paper is published as a **tree**. The trunk is the gist, three things every reader passes through: the context, the result, why it matters. The branches are a one-page summary in which every sentence can be opened into the part of the paper it stands for. The foliage is the paper itself, each section led by its own summary; the roots are its proofs and appendices, folded until asked for. The full text is the ground truth and is never lost; every coarser layer is *grounded* in it (each summary sentence knows what it summarises), so a reader can always check. Two cross-cutting layers hang off the tree: **definitions** anchored to the sentence that defines a term or symbol, and **questions** anchored to the region they are about. A third axis, the reader's **background**, picks which summaries they see and which background notes open for them. The author writes the paper as usual; an AI skill drafts the layers from the draft; the author approves and edits them, and the provenance of every piece of generated text stays visible. Because the tree is data, the same file serves readers, phones, and language models.
 
 ## 1. What exists already
 
@@ -44,7 +44,7 @@ Readers differ along two independent axes, and the product has to serve both:
 - **Depth**: how much of the paper they want right now. The skimmer deciding whether to read (30 seconds), the colleague who wants the ideas but not the derivations (10 minutes), the student or referee who needs everything (hours). The same person moves along this axis during one sitting.
 - **Background**: what they already know. A specialist in the subfield, a physicist from another area, a student. A specialist wants the terse version and no explanations of Wick's theorem; a student needs the opposite. Your point that the paper should be readable by people of different backgrounds is this axis, and it changes the data structure (see 3.2), not just the viewer.
 
-There is a fourth reader: a language model. An agent that must "read" a hundred papers wants exactly the cone: load every gist, open the summaries of the relevant ones, expand only what it needs. The format is as much for machines as for people, and that is a strong argument for Conifer being a *data format* rather than a web page.
+There is a fourth reader: a language model. An agent that must "read" a hundred papers wants exactly the tree: load every gist, open the summaries of the relevant ones, expand only what it needs. The format is as much for machines as for people, and that is a strong argument for Conifer being a *data format* rather than a web page.
 
 ### 2.2 The reading experience
 
@@ -84,7 +84,7 @@ Plus, at every depth:
 
 ### 3.1 Shape
 
-A Conifer document is a **tree of nodes** plus a few **side tables** that point into the tree by id. Nothing in the side tables duplicates text from the tree. The mockup's `mockup/semicircle.cone.json` is a complete instance; the Python that generates it, `mockup/doc_semicircle.py`, is easier to read.
+A Conifer document is a **tree of nodes** plus a few **side tables** that point into the tree by id. Nothing in the side tables duplicates text from the tree. The mockup's `mockup/semicircle.tree.json` is a complete instance; the Python that generates it, `mockup/doc_semicircle.py`, is easier to read.
 
 ```
 Document
@@ -182,17 +182,17 @@ The root is special only in that its gist is drawn as the card with the key equa
 - Versions, comments, reader marks. Epsilon has marks; a Conifer document can carry them unchanged.
 - The "claims" layer (each claim typed as new / known / conjecture, with dependencies, like the Lean blueprint's graph). The `role` field is the hook for it.
 
-## 4. From a draft to a cone
+## 4. From a draft to a tree
 
 The pipeline I have in mind, each step a small tool:
 
 1. **`epsilon_convert.py paper.tex`** (exists). LaTeX to a document with numbering that matches the PDF, drawn math, figures, labels. The body already carries the markup Conifer needs; the converter would additionally wrap paragraphs with ids (today it emits `<p>` and `<p class="cont">` after a display; a paragraph node groups those).
-2. **`conifer skeleton paper.l2m`** (new, mechanical). Builds the tree from the body: sections from `h2`–`h5`, boxes from `.thm/.proof/...`, figures, paragraphs; assigns ids; writes `paper.cone.yaml` with empty renditions, and prints an outline with the text of every node, which is what the skill reads.
+2. **`conifer skeleton paper.l2m`** (new, mechanical). Builds the tree from the body: sections from `h2`–`h5`, boxes from `.thm/.proof/...`, figures, paragraphs; assigns ids; writes `paper.tree.yaml` with empty renditions, and prints an outline with the text of every node, which is what the skill reads.
 3. **The skill** (new, the AI part). Given the outline, it writes, bottom-up: a gist for every paragraph and box; a brief and gist for every section; the root's gist and the one-page summary with grounding spans; the definitions and their anchors; the term mentions; 5–15 anticipated questions with answers and `answeredBy`; background notes and variants for the audiences the author named. Everything it writes is `ai-draft`. It is told to refuse to write a summary sentence it cannot ground. For your own papers it should also read the referee reports and the talk notes if you give them to it, because the best questions are the ones people actually asked.
 4. **The author** edits the YAML (or, if we go the LaTeX route, the macros), marks what they approve, rewrites what they want in their own voice.
-5. **`conifer build paper.cone.yaml`** (new). Merges the layers with the Epsilon document, checks every id and quote, computes hashes and reading times, writes `paper.conifer.json`, and packs it with the viewer into one HTML file, exactly as `epsilon_render.py` does today. `conifer check` alone reports stale and broken pieces.
+5. **`conifer build paper.tree.yaml`** (new). Merges the layers with the Epsilon document, checks every id and quote, computes hashes and reading times, writes `paper.conifer.json`, and packs it with the viewer into one HTML file, exactly as `epsilon_render.py` does today. `conifer check` alone reports stale and broken pieces.
 
-**Sidecar or macros?** I propose the sidecar (`paper.cone.yaml`) as the canonical form: the `.tex` stays pristine and compiles as before, the skill's output is a reviewable diff of one file, and the same file can describe *someone else's* arXiv paper, which turns Epsilon's library into a library of cones. LaTeX macros (`\gist{…}` at the top of a section, `\begin{background}[student]…`) can be offered as sugar for authors who want the layers in the source, compiled into the same YAML. The YAML is friendlier than JSON for humans only because of multi-line strings; the JSON is what the viewer reads.
+**Sidecar or macros?** I propose the sidecar (`paper.tree.yaml`) as the canonical form: the `.tex` stays pristine and compiles as before, the skill's output is a reviewable diff of one file, and the same file can describe *someone else's* arXiv paper, which turns Epsilon's library into a library of trees. LaTeX macros (`\gist{…}` at the top of a section, `\begin{background}[student]…`) can be offered as sugar for authors who want the layers in the source, compiled into the same YAML. The YAML is friendlier than JSON for humans only because of multi-line strings; the JSON is what the viewer reads.
 
 ## 5. Relation to Epsilon
 
@@ -201,12 +201,12 @@ Epsilon already solves the hard, unglamorous half: faithful LaTeX conversion wit
 What Conifer adds on top:
 
 - the converter emits paragraph ids (small change in `epsilon_convert.py`);
-- a `conifer` module in the viewer that takes `paper.json` plus `cone.json` and does what `mockup/viewer.js` does: the dial, renditions, threads, folds, definitions, questions, audiences. The mockup viewer is 350 lines and written against the same document conventions (`.display`, `.thm`, `h2` ids, `cite-`, `eq-`), so it should port rather than be rewritten;
+- a `conifer` module in the viewer that takes `paper.json` plus `tree.json` and does what `mockup/viewer.js` does: the dial, renditions, threads, folds, definitions, questions, audiences. The mockup viewer is 350 lines and written against the same document conventions (`.display`, `.thm`, `h2` ids, `cite-`, `eq-`), so it should port rather than be rewritten;
 - the bar gets the dial and the audience pill; the contents panel gets the question counts;
-- a `cone` tab beside *Notes* in the contents panel, perhaps, listing the questions;
-- the library marks papers that have a cone, and the skill can make one for any paper in it.
+- a `tree` tab beside *Notes* in the contents panel, perhaps, listing the questions;
+- the library marks papers that have a tree, and the skill can make one for any paper in it.
 
-Two ways to ship: a mode of the Epsilon app ("any paper, with a cone when it has one"), or a separate Conifer site that reuses the converter and the theme. I lean to the first, because the library, offline copies and marks are already there, and because a reader should not have to know which of the two they are opening.
+Two ways to ship: a mode of the Epsilon app ("any paper, with a tree when it has one"), or a separate Conifer site that reuses the converter and the theme. I lean to the first, because the library, offline copies and marks are already there, and because a reader should not have to know which of the two they are opening.
 
 ## 6. The mockup
 
@@ -217,7 +217,7 @@ Files:
 | file | what |
 | --- | --- |
 | `mockup/doc_semicircle.py` | the sample document in the proposed structure, as Python for the multi-line strings |
-| `mockup/semicircle.cone.json` | the same as data, TeX intact: the format |
+| `mockup/semicircle.tree.json` | the same as data, TeX intact: the format |
 | `mockup/viewer.js`, `mockup/viewer.css` | the viewer |
 | `mockup/build.py` | draws the math with Epsilon's `render_math.js`, packs the page (full page and artifact fragment) |
 | `mockup/fig_semicircle.py` | Figure 1: one GUE spectrum at N = 1000 by Sturm counts on the tridiagonal model, no numpy |
@@ -225,16 +225,16 @@ Files:
 
 Rebuild with `python3 mockup/build.py` (needs node and Epsilon's `node_modules`).
 
-## 6b. The first real cone: arXiv:2608.21511
+## 6b. The first real tree: arXiv:2608.21511
 
 Built on 15 October 2026 from the arXiv source of *String stars, small black holes, and the supersymmetric index*, with the pipeline of section 4 as it now exists:
 
 | step | tool | what it did here |
 | --- | --- | --- |
 | fetch and convert | `tools/fetch_arxiv.py` | downloads the e-print, finds the main file, runs Epsilon's converter into `papers/2608.21511/doc/` (1220 formulas, 7 figures, 27 footnotes, no warnings) |
-| skeleton | `tools/skeleton.py` | reads Epsilon's `paper.json` into the cone tree: 27 sections, 112 paragraphs (each with its displays and continuations), 7 figures, footnotes, references; stable ids from the LaTeX labels; an `outline.md` with the text and TeX of every node, which is what the layers are drafted from |
+| skeleton | `tools/skeleton.py` | reads Epsilon's `paper.json` into the tree tree: 27 sections, 112 paragraphs (each with its displays and continuations), 7 figures, footnotes, references; stable ids from the LaTeX labels; an `outline.md` with the text and TeX of every node, which is what the layers are drafted from |
 | layers | `papers/2608.21511/layers*.py` | drafted by the AI reader: the three-part gist in three audience versions, a one-page summary of six grounded paragraphs, a gist for every paragraph and section, a grounded brief for every section, 19 definitions anchored to their defining sentence, 17 questions with the places that answer them, 5 background notes for non-specialists; all marked `ai-draft` |
-| build | `tools/build_cone.py` | merges, checks every id and every quoted anchor, marks the mentions of defined terms in the text, draws the layers' TeX with the paper's own macros, embeds Epsilon's pre-drawn formulas and figures, and packs `cone.html` (6.5 MB, self-contained) |
+| build | `tools/build_tree.py` | merges, checks every id and every quoted anchor, marks the mentions of defined terms in the text, draws the layers' TeX with the paper's own macros, embeds Epsilon's pre-drawn formulas and figures, and packs `tree.html` (6.5 MB, self-contained) |
 
 Decisions taken while doing it, in response to reading the first version:
 
@@ -254,7 +254,7 @@ What the format could not express, or that the skeleton got wrong, in this paper
 
 ## 6c. The reader, rethought (15 October, evening)
 
-After reading the first cone of his own paper, Erez asked for a calmer reader and for the question of what expands where to be settled. The answer now built into the viewer:
+After reading the first tree of his own paper, Erez asked for a calmer reader and for the question of what expands where to be settled. The answer now built into the viewer:
 
 - **The dial chooses which document you read**: gist, summary, paper, everything. Each is a clean, linear text with nothing expandable inside it, and nothing in it is marked as tappable: a sentence of the summary, a defined term, a citation, a footnote marker and an equation number look like text until hovered or tapped.
 - **A tap never rearranges the text; it opens a peek.** A peek is Epsilon's sheet: from the bottom on a phone, from the side on a desktop. A summary sentence peeks at the paragraphs it stands for; a term at its definition; a footnote marker at its note; a citation at its reference; an equation reference (in the summary) at the equation with its paragraph. The peek's header, *From §3.2 …* or *Defined in §2.1 …*, is the link that travels into the paper, and the long press on a link in the paper peeks instead of travelling, as in Epsilon.
@@ -263,10 +263,18 @@ After reading the first cone of his own paper, Erez asked for a calmer reader an
 - **The address is the link.** As you read, the hash follows the section (`#subsec-worldsheet`), or the document (`#summary`), so the address bar can be shared at any moment; the ¶ on a heading copies a link to that section. The *Copy link* buttons are gone.
 - **One motion language**: everything that opens rises in, everything that closes falls out, with the same curve; tapping the title opens the contents; sheets close with a circled × at the top right.
 
+## 6d. The tree, the app and the search (15 October, late)
+
+- **Tree, not cone.** The paper is a tree: the trunk is the gist, the branches the summary, the foliage the paper, the roots its appendices and proofs. The files are `tree.json` and `tree.html`, the build is `tools/build_tree.py`, and the dial's hints use the tree's words.
+- **An installable app.** The site carries a web app manifest, icons at every size a launcher asks for (16 and 32 for tabs, 180 for iOS, 192 and 512 plus a maskable 512 for Android, all drawn from the mark), theme colours for both appearances, and a service worker that keeps every page you have opened readable offline and refreshes it behind you. The pages are self-contained, so installing the index is enough.
+- **Search, after Epsilon's rules.** The magnifier in the bar takes the bar, as Epsilon's does. Words are found in the text; a query with TeX in it is found in the formulas, each of which carries its TeX on its drawing; a symbol by name or typed (`phi`, `\phi`, `φ`) is found in every formula; spellings that mean the same are one (`\le` and `\leq`, `<=`, `\to` and `\rightarrow`, `\epsilon` and `\varepsilon`); `\left`, `\right` and sizes do not count; a letter asked for plainly is found in any font, accent or prime; `?` is any one symbol and `{?}` anything in braces; `$...$` searches the formulas only. Enter and the arrows step through the matches, Escape closes. It is a port of the rules in `viewer/search.js`, not Epsilon's code: Epsilon's search lives inside its page's script and cannot be loaded on its own. If it were factored out into a module of its own, both apps could share one file, and an update to Epsilon would reach Conifer at its next build.
+- **Links in the text** keep the text's colour and carry the faint dotted line; the accent is reserved for the chrome and the peek headers. Equation numbers are plain again.
+- **The chosen tab glides** to its place in the dial and in every segmented setting, instead of snapping, and the tabs have no press animation.
+
 ## 7. Open questions for you
 
-1. **Whose papers first?** Your own (author-owned cones published next to the arXiv version) or any paper in the Epsilon library (reader-made cones, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.
-2. **The tip.** Context / Result / Why it matters, or Nature's Problem / Solution / Implications, or free? A fixed template makes cones comparable across papers and lets a library list them; I would fix it.
+1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.
+2. **The tip.** Context / Result / Why it matters, or Nature's Problem / Solution / Implications, or free? A fixed template makes trees comparable across papers and lets a library list them; I would fix it.
 3. **The one-page summary.** Flowing prose written as one piece (what the mockup does) or composed from the sections' briefs? Prose reads better and is harder to keep in sync; composition is automatic. The format allows both; the skill needs a default.
 4. **Thread or replace** when a summary opens, and should it differ between the summary page and the Paper view?
 5. **Authoring surface.** Sidecar YAML (my proposal), LaTeX macros, or both? Would you want the layers to appear in the PDF too (a "Summary" page after the abstract, say)?
@@ -279,7 +287,7 @@ After reading the first cone of his own paper, Erez asked for a calmer reader an
 
 ## 8. Name and logo
 
-Conifer: a tree, evergreen, and the cone of detail with the gist at its tip. The logo in `logo/` is a conifer drawn as a hierarchical graph: a trunk of nodes from the apex (the gist) down, with boughs at each level reaching wider the deeper they go. One colour, round strokes, reads at 16 px. `conifer-icon.svg` is the mark, `conifer-wordmark.svg` adds the name, `conifer-app-icon.svg` puts it on a blue tile for a home screen.
+Conifer: a tree, evergreen, and the tree with the gist at its tip. The logo in `logo/` is a conifer drawn as a hierarchical graph: a trunk of nodes from the apex (the gist) down, with boughs at each level reaching wider the deeper they go. One colour, round strokes, reads at 16 px. `conifer-icon.svg` is the mark, `conifer-wordmark.svg` adds the name, `conifer-app-icon.svg` puts it on a blue tile for a home screen.
 
 ## Sources
 
