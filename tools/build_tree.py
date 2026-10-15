@@ -174,12 +174,19 @@ for q in getattr(L, "QUESTIONS", []):
             problems.append("question %s answered by unknown node %s" % (q["id"], a))
     questions.append(q)
 
+LEVELS = [
+    {"key": "gist", "label": "Gist", "hint": "the trunk: the three things to know"},
+    {"key": "brief", "label": "Summary", "hint": "the branches: one page, every sentence opens"},
+    {"key": "skim", "label": "Skim", "hint": "the twigs: one line for every paragraph"},
+    {"key": "paper", "label": "Paper", "hint": "the foliage: the full text, with the roots folded"},
+    {"key": "full", "label": "Everything", "hint": "roots and all: appendices and proofs open"},
+]
 cone = {
     "format": "conifer-doc", "version": 1,
     "meta": dict(S["meta"], key=getattr(L, "KEY", {}), defaultAudience=getattr(L, "DEFAULT_AUDIENCE", "physicist"),
                  kicker=getattr(L, "KICKER", S["meta"].get("kicker")), date=getattr(L, "DATE", ""), note=getattr(L, "NOTE", ""),
                  macros=D["math"].get("macros", {})),
-    "levels": S["levels"], "audiences": getattr(L, "AUDIENCES", []),
+    "levels": LEVELS, "audiences": getattr(L, "AUDIENCES", []),
     "root": root, "defs": defs, "questions": questions,
 }
 (paper / "tree.json").write_text(json.dumps(cone, indent=1, ensure_ascii=False) + "\n")

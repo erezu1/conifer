@@ -39,6 +39,7 @@
   }
   function textOf(node) {                            // the text of a copied fragment, formulas as TeX
     if (node.nodeType === 3) return node.nodeValue;
+    if (node.nodeType === 11) { let f = ''; node.childNodes.forEach(c => { f += textOf(c); }); return f; }
     if (node.nodeType !== 1) return '';
     if (node.tagName === 'MJX-CONTAINER') {
       const tex = expand(node.getAttribute('data-tex') || '').trim();

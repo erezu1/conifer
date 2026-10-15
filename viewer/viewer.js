@@ -9,6 +9,9 @@
   const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const DOC = JSON.parse($('#conifer-doc').textContent);
   const LEVELS = DOC.levels;
+  const IDX = Object.fromEntries(LEVELS.map((l, i) => [l.key, i]));
+  const GIST = IDX.gist ?? 0, BRIEF = IDX.brief ?? 1, SKIM = IDX.skim, PAPER = IDX.paper ?? LEVELS.length - 2, FULL = IDX.full ?? LEVELS.length - 1;
+  const LEVEL_HASH = LEVELS.map(l => ({ gist: 'gist', brief: 'summary', skim: 'skim', paper: 'paper', full: 'everything' })[l.key] || l.key);
   const WPM = 230;
   const BOX = { theorem: 'Theorem', definition: 'Definition', remark: 'Remark', proof: 'Proof', lemma: 'Lemma' };
   const HEADED = { references: 'References', footnotes: 'Footnotes', abstract: 'Abstract' };
@@ -37,15 +40,14 @@
 
   // ------------------------------------------------------------------ the state
   const AUD = DOC.audiences || [];
-  const state = { level: 0, over: new Map(), ledes: true, chips: true, theme: 'system', marks: 'auto',
+  const state = { level: 0, over: new Map(), ledes: true, chips: true, theme: 'system',
     audience: (DOC.meta && DOC.meta.defaultAudience) || (AUD[0] && AUD[0].key) || '' };
   const audLabel = k => { const a = AUD.find(x => x.key === k); return a ? a.label : k; };
   const pick = t => (t && t.variants && t.variants[state.audience]) || t;
   const forMe = n => !n.audience || n.audience.includes(state.audience);
-  const marksOn = () => state.marks === 'on' || (state.marks === 'auto' && state.audience !== 'specialist');
-  function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience', 'marks'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
-  function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience, marks: state.marks })); } catch (e) {} }
-  function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; r.classList.toggle('marks-off', !marksOn()); }
+  function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
+  function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience })); } catch (e) {} }
+  function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; }
   let EST = [];
   let estimating = false;
   let lastOpened = null;                 // a fold just opened, for its animation
@@ -113,42 +115,62 @@
     const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
     const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}">${minus}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
-    const lede = n.brief && L >= 2 && state.ledes && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
+    const lede = n.brief && L >= PAPER && state.ledes && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
   }
   function render(n, inh, ctx) {
     const key = ctx.prefix + n.id;
     if (n.id === DOC.root.id && !ctx.prefix) return renderRoot(n, inh, ctx);
-    if ((HEADED[n.kind] || n.kind === 'background') && inh <= 1) return '';
+    if ((HEADED[n.kind] || n.kind === 'background') && inh < PAPER) return '';
     if (isFold(n)) {
-      const base = ctx.allOpen || inh >= 3 || (n.kind === 'background' && forMe(n)) ? 3 : 2;
+      const base = ctx.allOpen || inh >= FULL || (n.kind === 'background' && forMe(n)) ? 3 : 2;
       const eff = ctx.over.has(key) ? ctx.over.get(key) : base;
-      return eff >= 3 ? openFold(n, Math.max(inh, 2), ctx) : foldedLine(n, ctx);
+      return eff >= 3 ? openFold(n, Math.max(inh, PAPER), ctx) : foldedLine(n, ctx);
     }
     if (!n.children) return leaf(n, ctx);
-    return wrap(n, Math.max(inh, 2), ctx);
+    return wrap(n, Math.max(inh, PAPER), ctx);
   }
   function time(l) { const w = EST[l] || 0; const m = Math.max(1, Math.round(w / WPM)); return `≈ ${m} min`; }
   function actions(from) {
     if (estimating) return '';
     const b = [];
-    if (from < 1) b.push(`<button type="button" class="btn primary" data-setlevel="1">Read the summary <small>${time(1)}</small></button>`);
-    b.push(`<button type="button" class="btn${from >= 1 ? ' primary' : ''}" data-setlevel="2">Open the paper <small>${time(2)}</small></button>`);
+    if (from < BRIEF) b.push(`<button type="button" class="btn primary" data-setlevel="${BRIEF}">Read the summary <small>${time(BRIEF)}</small></button>`);
+    if (SKIM !== undefined && from < SKIM) b.push(`<button type="button" class="btn${from === BRIEF ? ' primary' : ''}" data-setlevel="${SKIM}">Skim the paper <small>${time(SKIM)}</small></button>`);
+    b.push(`<button type="button" class="btn${from >= BRIEF && (SKIM === undefined || from >= SKIM) ? ' primary' : ''}" data-setlevel="${PAPER}">Open the paper <small>${time(PAPER)}</small></button>`);
     return `<div class="gist-actions">${b.join('')}</div>`;
   }
   function renderRoot(n, L, ctx) {
-    if (L === 0 && n.gist) {
+    if (L === GIST && n.gist) {
       const key = DOC.meta.key || {};
       let eq = '';
       if (key.equation && anchorHost.has(key.equation)) { const m = byId.get(anchorHost.get(key.equation)).body.match(new RegExp(`<div class="display"[^>]*id="${key.equation}">[\\s\\S]*?</div>\\s*(?:<span class="eqno">[^<]*</span>\\s*)?</div>`)); if (m) eq = stripIds(m[0]); }
       const fig = key.figure && byId.get(key.figure) ? stripIds(byId.get(key.figure).body) : '';
-      return `<section class="node gist-card" data-id="${n.id}" data-key="${n.id}"><div class="card-label">The gist</div><div class="sum-body">${audienceDefs(withSpans(pick(n.gist).html, ctx))}</div>${eq ? `<div class="gist-eq">${eq}</div>` : ''}${fig ? `<div class="gist-fig">${fig}</div>` : ''}${actions(0)}<div class="sum-foot">${chip(pick(n.gist))}</div></section>`;
+      return `<section class="node gist-card" data-id="${n.id}" data-key="${n.id}"><div class="card-label">The gist</div><div class="sum-body">${audienceDefs(withSpans(pick(n.gist).html, ctx))}</div>${eq ? `<div class="gist-eq">${eq}</div>` : ''}${fig ? `<div class="gist-fig">${fig}</div>` : ''}${actions(GIST)}<div class="sum-foot">${chip(pick(n.gist))}</div></section>`;
     }
-    if (L === 1 && n.brief) {
-      return `<section class="node sum-page" data-id="${n.id}" data-key="${n.id}"><div class="card-label">Summary <span class="muted">· tap a sentence to see the part of the paper it stands for</span></div><div class="sum-body">${audienceDefs(withSpans(pick(n.brief).html, ctx))}</div><div class="sum-foot">${chip(pick(n.brief))}</div>${actions(1)}</section>`;
+    if (L === BRIEF && n.brief) {
+      return `<section class="node sum-page" data-id="${n.id}" data-key="${n.id}"><div class="card-label">Summary <span class="muted">· tap a sentence to see the part of the paper it stands for</span></div><div class="sum-body">${audienceDefs(withSpans(pick(n.brief).html, ctx))}</div><div class="sum-foot">${chip(pick(n.brief))}</div>${actions(BRIEF)}</section>`;
     }
-    return (n.children || []).map(c => render(c, Math.max(L, 2), ctx)).join('');
+    if (L === SKIM) return skimPage(n, ctx);
+    return (n.children || []).map(c => render(c, Math.max(L, PAPER), ctx)).join('');
+  }
+  // the skim: the headings, and one line for every paragraph; a tap on a line shows the paragraph
+  function skimPage(root, ctx) {
+    const parts = []; let status = null;
+    (function w(n) {
+      if (n === root) { (n.children || []).forEach(w); return; }
+      if (HEADED[n.kind] || n.kind === 'background') return;
+      if (n.children) {
+        const hl = Math.min(1 + depth(n.id), 5);
+        parts.push(`<h${hl} class="sec-h" data-node="${n.id}"><span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}</h${hl}>`);
+        n.children.forEach(w); return;
+      }
+      const g = n.gist ? pick(n.gist) : null;
+      if (g && !status) status = g.status;
+      const line = g ? g.html : (n.kind === 'figure' || n.kind === 'table') ? esc(n.title || 'Figure') : BOX[n.kind] ? esc(n.title || BOX[n.kind]) : '';
+      if (line) parts.push(`<p class="skim" data-peek="${n.id}" role="button" tabindex="0" title="Show this paragraph">${audienceDefs(line)}</p>`);
+    })(root);
+    return `<section class="node skim-page" data-id="${root.id}" data-key="${root.id}"><div class="card-label">Skim <span class="muted">· one line for every paragraph; tap a line to read it</span></div>${parts.join('')}<div class="sum-foot">${chip({ status })}</div>${actions(SKIM)}</section>`;
   }
 
   // ------------------------------------------------------------------ drawing the page
@@ -192,7 +214,7 @@
   let curSection = null;
   function barTitle() {
     const t = $('#bar-title');
-    if (state.level <= 1) { t.innerHTML = esc(LEVELS[state.level].label) + ' · ' + esc(DOC.meta.title); curSection = null; return; }
+    if (state.level === GIST || state.level === BRIEF) { t.innerHTML = esc(LEVELS[state.level].label) + ' · ' + esc(DOC.meta.title); curSection = null; return; }
     const top = barH() + 12;
     let cur = null;
     $$('#paper .sec-h', $('#paper')).forEach(h => { if (h.getBoundingClientRect().top <= top) cur = h; });
@@ -204,7 +226,7 @@
   function followHash() {
     clearTimeout(hashTimer);
     hashTimer = setTimeout(() => {
-      const want = state.level <= 1 ? LEVEL_HASH[state.level] : (curSection || LEVEL_HASH[state.level]);
+      const want = (state.level === GIST || state.level === BRIEF) ? LEVEL_HASH[state.level] : (curSection || LEVEL_HASH[state.level]);
       if (decodeURIComponent(location.hash.slice(1)) !== want) { try { history.replaceState(snapshot(history.state && { from: history.state.from }), '', '#' + want); } catch (e) {} }
     }, 250);
   }
@@ -236,7 +258,6 @@
 
   // ---- travelling: a jump into the paper remembers where the reader was (the pill), and is a history step too
   let backStack = [];
-  const LEVEL_HASH = ['gist', 'summary', 'paper', 'everything'];
   const snapshot = extra => Object.assign({ conifer: true, level: state.level, over: [...state.over], y: window.scrollY, from: null }, extra || {});
   function commit() { try { history.replaceState(snapshot(history.state && { from: history.state.from }), '', location.hash || ' '); } catch (e) {} }
   function push(hash, extra) { commit(); try { history.pushState(snapshot(extra), '', hash ? '#' + hash : (location.hash || location.pathname + location.search)); } catch (e) {} }
@@ -267,9 +288,9 @@
     opts = opts || {};
     if (!byId.has(id)) return;
     const fromLevel = state.level;
-    const origin = { label: fromLevel < 2 ? LEVELS[fromLevel].label : 'Back', sn: snapshot() };
+    const origin = { label: fromLevel < PAPER ? LEVELS[fromLevel].label : 'Back', sn: snapshot() };
     if (opts.push !== false) push(opts.flash || id, { from: fromLevel });
-    if (state.level < 2) { state.level = 2; state.over.clear(); save(); }
+    if (state.level < PAPER) { state.level = PAPER; state.over.clear(); save(); }
     ancestors(id).concat([id]).forEach(a => { const n = byId.get(a); if (isFold(n)) state.over.set(a, 3); });
     closeAll();
     draw();
@@ -302,7 +323,7 @@
   }
   function closeSheet() {
     const sh = $('#sheet'); if (sh.hidden) return;
-    $$('.gs.peeking').forEach(s => s.classList.remove('peeking'));
+    $$('.gs.peeking, .skim.peeking').forEach(s => s.classList.remove('peeking'));
     if (reduced()) { sh.hidden = true; $('#scrim').hidden = true; return; }
     sh.classList.add('closing'); $('#scrim').classList.add('closing');
     setTimeout(() => { sh.hidden = true; sh.classList.remove('closing'); $('#scrim').hidden = true; $('#scrim').classList.remove('closing'); }, 190);
@@ -319,7 +340,7 @@
     const ids = span.dataset.covers.split(/\s+/).filter(id => byId.has(id));
     if (!ids.length) return;
     const ctx = peekCtx();
-    const html = ids.map(id => render(byId.get(id), 2, ctx)).join('');
+    const html = ids.map(id => render(byId.get(id), PAPER, ctx)).join('');
     const places = [...new Set(ids.map(id => (titled(id) || {}).id).filter(Boolean))];
     const from = places.map(p => `<a href="#${esc(ids.find(i => (titled(i) || {}).id === p))}" class="peek-from" data-reveal="${esc(ids.find(i => (titled(i) || {}).id === p))}" title="Open the paper here">${placeHtml(p)}</a>`).join(', ');
     $$('.gs.peeking').forEach(s => s.classList.remove('peeking')); span.classList.add('peeking');
@@ -335,7 +356,7 @@
     if (n.kind === 'footnotes') { what = 'Note ' + esc(a.replace(/^fn/, '')); html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
     else if (n.kind === 'references') { what = 'Reference'; html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
     else if (n.kind === 'figure' || n.kind === 'table') { what = esc(n.title || 'Figure'); html = stripIds(n.body); }
-    else { const d = el.closest('.display') || el; what = 'Equation ' + esc((d.querySelector('.eqno') || {}).textContent || ''); html = render(n, 2, peekCtx()); mark = 'peek-' + (d.id || a); }
+    else { const d = el.closest('.display') || el; what = 'Equation ' + esc((d.querySelector('.eqno') || {}).textContent || ''); html = render(n, PAPER, peekCtx()); mark = 'peek-' + (d.id || a); }
     openSheet(`<span class="peek-label">${what}</span> <span class="peek-in">in</span> ${link}`, html, 'sheet-peek');
     if (mark) { const m = $('#sheet-body #' + CSS.escape(mark)); if (m) { m.scrollIntoView({ block: 'center' }); flash(m); } }
     return true;
@@ -343,7 +364,7 @@
   function peekNode(id) {
     const n = byId.get(id); if (!n) return false;
     const link = `<a href="#${esc(id)}" class="peek-from" data-reveal="${esc(id)}" title="Open the paper here">${placeHtml(id)}</a>`;
-    openSheet(`<span class="peek-label">From</span> ${link}`, render(n, 2, peekCtx()), 'sheet-peek');
+    openSheet(`<span class="peek-label">From</span> ${link}`, render(n, PAPER, peekCtx()), 'sheet-peek');
     return true;
   }
   function openDef(id, anchor) {
@@ -383,9 +404,8 @@
     return `<div class="seg" role="radiogroup"><span class="sel-ind" aria-hidden="true"></span>${opts.map(o => `<button type="button" role="radio" aria-checked="${String(o[0]) === String(cur)}" data-set="${name}:${o[0]}">${esc(o[1])}</button>`).join('')}</div>`;
   }
   function openSettings() {
-    const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you, background notes open where you need them, and terms you may not know carry definitions.</p></div>` : '';
+    const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you and background notes open where you need them.</p></div>` : '';
     const html = who +
-      `<div class="set-group"><span class="set-head">Defined terms in the text</span>${seg('marks', [['auto', 'By reader'], ['on', 'Marked'], ['off', 'Plain']], state.marks)}<p class="set-note">A faint dotted line under a term that has a definition; tapping a term shows it either way.</p></div>` +
       `<div class="set-group"><span class="set-head">Section summaries in the Paper view</span>${seg('ledes', [['true', 'Show'], ['false', 'Hide']], state.ledes)}</div>` +
       `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
       `<div class="set-group"><span class="set-head">Appearance</span>${seg('theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], state.theme)}</div>`;
@@ -395,7 +415,7 @@
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-act], [data-setlevel], .gs, .qbadge, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
+    const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], .qbadge, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
     if (t.id === 'back') { goBack(); return; }
@@ -404,7 +424,7 @@
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes') state.ledes = v === 'true'; else if (k === 'chips') state.chips = v === 'true'; else if (k === 'theme') state.theme = v;
-      else if (k === 'audience') { state.audience = v; estimate(); } else if (k === 'marks') state.marks = v;
+      else if (k === 'audience') { state.audience = v; estimate(); }
       const g = t.closest('.seg'); if (g) { $$('button', g).forEach(b => b.setAttribute('aria-checked', String(b === t))); moveInd(g); }
       applyTheme(); save(); draw();
       if (k === 'audience') { const note = $('#aud-note'); if (note) note.textContent = (AUD.find(a => a.key === v) || {}).hint || ''; }
@@ -422,6 +442,7 @@
       return;
     }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
+    if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.classList.contains('qbadge')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }
     if (t.dataset.def) { e.preventDefault(); openDef(t.dataset.def, t); return; }
     if (t.dataset.reveal) { e.preventDefault(); const q = t.dataset.quote, f = t.dataset.flash; reveal(t.dataset.reveal, { quote: q, flash: f }); return; }
@@ -430,10 +451,10 @@
       if (LEVEL_HASH.includes(a)) { e.preventDefault(); goHash(a, true); return; }
       if (longPressed) { longPressed = false; e.preventDefault(); return; }
       if (anchorHost.has(a) && ['footnotes', 'references'].includes(byId.get(anchorHost.get(a)).kind)) { e.preventDefault(); peekAnchor(a); return; }   // a note, a citation: a peek, as in Epsilon
-      if (byId.has(a)) { e.preventDefault(); if (state.level <= 1 && !t.closest('#sheet') && byId.get(a).kind !== 'section' && byId.get(a).kind !== 'appendix') peekNode(a); else reveal(a); return; }
+      if (byId.has(a)) { e.preventDefault(); if (state.level < PAPER && !t.closest('#sheet') && byId.get(a).kind !== 'section' && byId.get(a).kind !== 'appendix') peekNode(a); else reveal(a); return; }
       if (anchorHost.has(a)) {
         e.preventDefault();
-        if (state.level <= 1 || t.closest('#sheet')) { if (!peekAnchor(a)) reveal(anchorHost.get(a), { flash: a }); }
+        if (state.level < PAPER || t.closest('#sheet')) { if (!peekAnchor(a)) reveal(anchorHost.get(a), { flash: a }); }
         else reveal(anchorHost.get(a), { flash: a });               // in the paper a tap travels, as in Epsilon; a long press peeks
       }
       return;
@@ -450,7 +471,7 @@
   document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('#paper a[href^="#"]') && longPressed) e.preventDefault(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeAll();
-    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('gs')) { e.preventDefault(); e.target.click(); }
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && (e.target.classList.contains('gs') || e.target.classList.contains('skim'))) { e.preventDefault(); e.target.click(); }
   });
   document.addEventListener('submit', e => {
     const f = e.target.closest('#ask-form'); if (!f) return;
