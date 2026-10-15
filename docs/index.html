@@ -301,6 +301,9 @@ dfn { font-style: italic; }
 
 /* ---- search: the field takes the bar; found places are marked, the one you are on more strongly */
 #find-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
+#find-row.opening, .bar-row.opening { animation: fadein .22s var(--ease-out); }
+#find-row.closing { animation: fadeout .17s var(--ease-in) forwards; }
+@keyframes fadeout { to { opacity: 0; } }
 #find-input { flex: 1; min-width: 0; font: 1rem var(--sans); padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--fg); }
 #find-input:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: 0 0 0 3px var(--accent-soft); }
 #find-count { font: 500 .78rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }

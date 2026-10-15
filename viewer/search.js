@@ -170,12 +170,19 @@
 
   // ------------------------------------------------------------------ the field in the bar
   let timer = null;
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function show(on) {
+    if (open === on) return;
     open = on;
     const row = $('#bar-row'), find = $('#find-row'); if (!row || !find) return;
-    row.hidden = on; find.hidden = !on;
-    if (on) { const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ); }
-    else { clear(); count(); }
+    if (on) {
+      row.hidden = true; find.hidden = false; find.classList.remove('closing'); find.classList.add('opening');
+      const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);
+    } else {
+      clear(); count();
+      const done = () => { find.hidden = true; find.classList.remove('closing'); row.hidden = false; row.classList.add('opening'); setTimeout(() => row.classList.remove('opening'), 250); };
+      if (reduced()) done(); else { find.classList.remove('opening'); find.classList.add('closing'); setTimeout(done, 170); }
+    }
   }
   window.ConiferSearch = {
     open: () => show(true), close: () => show(false), toggle: () => show(!open), isOpen: () => open,
