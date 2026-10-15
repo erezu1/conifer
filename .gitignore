@@ -1,0 +1,8 @@
+# downloaded sources and build leftovers
+papers/*/source/
+*.artifact.html
+__pycache__/
+.DS_Store
+.claude/
+mockup/.claude/
+mockup/cone-*.html

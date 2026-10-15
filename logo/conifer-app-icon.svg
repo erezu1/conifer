@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" role="img" aria-label="Conifer">
+  <rect width="64" height="64" rx="14" fill="#1d5b98"/>
+  <g transform="translate(0,-1)">
+  <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 11 V 56"/>
+    <path d="M32 21 L 23.5 28.5 M32 21 L 40.5 28.5"/>
+    <path d="M32 32.5 L 18.5 43 M32 32.5 L 45.5 43"/>
+    <path d="M32 44 L 13 57 M32 44 L 51 57"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="32" cy="11" r="4"/>
+    <circle cx="32" cy="21" r="2.6"/><circle cx="23.5" cy="28.5" r="2.9"/><circle cx="40.5" cy="28.5" r="2.9"/>
+    <circle cx="32" cy="32.5" r="2.6"/><circle cx="18.5" cy="43" r="2.9"/><circle cx="45.5" cy="43" r="2.9"/>
+    <circle cx="32" cy="44" r="2.6"/><circle cx="13" cy="57" r="2.9"/><circle cx="51" cy="57" r="2.9"/>
+  </g>
+  </g>
+</svg>
