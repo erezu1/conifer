@@ -98,7 +98,7 @@
     const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
     const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
     const inner = ctx.estimate && !open ? '' : n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
-    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-open="${open}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -204,7 +204,7 @@
     state.over.set(key, open ? 3 : 2); commit();
     const el = locate(key);
     if (!el) { draw(); return; }
-    el.dataset.open = String(open);
+    el.dataset.state = open ? 'open' : 'closed';
     $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
@@ -450,7 +450,7 @@
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
     if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
-    const foldHead = e.target.closest('.fold[data-open="true"] > .fold-wrap > .fold-body > .fold-head, .fold[data-open="true"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
+    const foldHead = e.target.closest('.fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
     if (foldHead && !e.target.closest('a, .anchor, .qwords')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }

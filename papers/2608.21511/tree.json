@@ -6,7 +6,7 @@
   "authors": [
    "Erez Y. Urbach"
   ],
-  "arxiv": null,
+  "arxiv": "2608.21511",
   "abstractHtml": "<p>We discuss aspects of the black hole-string transition as the angular velocity approaches the supersymmetric index <l2m-math n=\"1217\"></l2m-math>. In this limit, the high-temperature Atick-Witten effective description breaks down. For Heterotic string theory, a new high-temperature description emerges near the index in terms of a Higgsed <l2m-math n=\"1218\"></l2m-math> supergravity with a magnetic field profile. The Hagedorn instability manifests in the theory as Ambjørn–Olesen W boson condensation, due to the background magnetic field. For type II, a tower of winding strings becomes light near the index, which opens up a new dimension in the T-dual picture. In both cases, a string star solution is found, similar to the Horowitz-Polchinski solution, but decouples at the index <l2m-math n=\"1219\"></l2m-math>.<br> Considering charged solutions, the string star appears to interpolate between charged black holes and the free string phase. At the index, both the charged black hole and the charged string star phases decouple. This suggests a tension between a smooth black hole-string transition and the existence of a stringy BPS two-charge black hole.</p>",
   "kicker": "arXiv:2608.21511 · hep-th · August 2026",
   "titleHtml": " String stars, small black holes, and the supersymmetric index ",

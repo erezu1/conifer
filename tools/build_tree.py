@@ -33,6 +33,8 @@ doc = paper / "doc"
 D = json.loads((doc / "paper.json").read_text())
 M = json.loads((doc / "math.json").read_text())
 S = json.loads((paper / "skeleton.json").read_text())
+if not S["meta"].get("arxiv") and (paper / "meta.json").exists():          # the arXiv number, from the fetch
+    S["meta"]["arxiv"] = json.loads((paper / "meta.json").read_text()).get("id") or paper.name
 sys.path.insert(0, str(paper))                 # the layers may be split over several files in the paper's folder
 spec = importlib.util.spec_from_file_location("layers", paper / "layers.py")
 L = importlib.util.module_from_spec(spec)
