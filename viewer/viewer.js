@@ -450,6 +450,8 @@
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
     if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
+    const foldHead = e.target.closest('.fold[data-open="true"] > .fold-wrap > .fold-body > .fold-head, .fold[data-open="true"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
+    if (foldHead && !e.target.closest('a, .anchor, .qwords')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }

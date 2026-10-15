@@ -202,8 +202,7 @@ dfn { font-style: italic; }
   display: inline-grid; place-items: center; font: 500 .85rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; box-sizing: border-box; }
 .fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .fold { margin: .1rem 0 1rem; }
-.fold-closed { display: flex; align-items: flex-start; gap: .55rem; }
-.fold-closed .fold-btn { margin-top: .22rem; }
+.fold-closed { display: flex; align-items: center; gap: .55rem; }
 .fold-line { flex: 1; min-width: 0; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .35rem; text-align: left; background: none; border: 0; padding: 0; cursor: pointer;
   font: 500 .88rem/1.5 var(--sans); color: var(--muted); border-radius: 4px; }
 .fold-line:hover { color: var(--accent); }
@@ -220,7 +219,8 @@ dfn { font-style: italic; }
 .fold[data-open="false"] .fold-body { visibility: hidden; transition: visibility 0s .3s; }
 .fold-bg[data-open="true"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
-.sec-h .fold-btn { margin-right: .5rem; vertical-align: .1em; }
+.sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
+.fold[data-open="true"] > .fold-wrap > .fold-body > .fold-head, .fold[data-open="true"] > .fold-wrap > .fold-body > .sec > .sec-h { cursor: pointer; }
 /* ---- provenance chips and question badges */
 .chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
 .chip.ai-approved { color: var(--muted); }
@@ -969,6 +969,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
     if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
+    const foldHead = e.target.closest('.fold[data-open="true"] > .fold-wrap > .fold-body > .fold-head, .fold[data-open="true"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
+    if (foldHead && !e.target.closest('a, .anchor, .qwords')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }
