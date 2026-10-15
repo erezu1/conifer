@@ -135,10 +135,9 @@ body = f"""<title>Conifer Reader Mockup</title>
   <p class="kicker">{LOGO}{html.escape(meta["kicker"])}</p>
   <h1 class="title">{html.escape(meta["title"])}</h1>
   <p class="authors">{html.escape(", ".join(meta["authors"]))} · {html.escape(meta["date"])}</p>
-  <p class="note">{html.escape(meta["note"])} The dial above sets how much of the paper is shown, and the pill who you are reading as; every summary opens in place, dotted terms carry definitions, and ? marks the parts with questions.</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon">A mockup for project Conifer: one document, four depths. The text is drawn from <code>semicircle.tree.json</code>; formulas were drawn once with MathJax through Epsilon.</footer>
+ <footer class="colophon"><p class="note">{html.escape(meta["note"])}</p>A mockup for project Conifer: one document, four depths. The text is drawn from <code>semicircle.tree.json</code>; formulas were drawn once with MathJax through Epsilon.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>

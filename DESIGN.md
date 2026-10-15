@@ -273,6 +273,10 @@ After reading the first tree of his own paper, Erez asked for a calmer reader an
 - **The chosen tab glides** to its place in the dial and in every segmented setting, instead of snapping.
 - **Motion rule.** Nothing shrinks or scales when pressed, anywhere. Feedback is colour, an underline, or a fade in or out; a sheet slides in from the edge it belongs to; the dial's pill glides; a place landed on is tinted and haloed for a few seconds.
 
+## 6e. What a reader-test agent found (15 October, night)
+
+An agent read and used the live site for a quarter of an hour, at desktop and phone widths, as the three readers. Real findings, all fixed: on a phone the leading between the lines of a summary sentence did not take a tap (now the whole line box does); the back pill crushed the section title in the bar on a phone (the reader pill now yields to it); Escape left the keyboard focus in the hidden search field. It also led to three changes of taste: a specialist starts with no section summaries and no chips (the settings' "By reader" default); the back pill names the section it returns to ("↩ §2.1") rather than "Back"; the disclaimer moved from above the gist to the foot of the page, so that the gist is the first thing on a phone. A fold now opens and closes where it stands, its height easing, so the text below slides rather than jumps. The agent's verdict on the Skim level and on what should be open or closed by default is recorded below when it arrives.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

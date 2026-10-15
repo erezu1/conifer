@@ -315,10 +315,9 @@ body = f"""<title>{html.escape(page_title)}</title>
   <p class="kicker">{LOGO}{html.escape(meta.get("kicker") or "")}</p>
   <h1 class="title">{title_html}</h1>
   <p class="authors">{html.escape(", ".join(meta["authors"]))}{(" · " + html.escape(meta["date"])) if meta.get("date") else ""}</p>
-  <p class="note">{html.escape(meta.get("note") or "")}</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon">arXiv:{html.escape(meta.get("arxiv") or "")}, grown into a Conifer tree: the trunk is the gist, the branches the summary, the foliage the paper, the roots its appendices. The paper's text is the author's, converted with Epsilon; the summaries, definitions, background notes and questions were drafted by an AI reader and carry their status.</footer>
+ <footer class="colophon"><p class="note">{html.escape(meta.get("note") or "")}</p>arXiv:{html.escape(meta.get("arxiv") or "")}, grown into a Conifer tree: the trunk is the gist, the branches the summary, the foliage the paper, the roots its appendices. The paper's text is the author's, converted with Epsilon; the summaries, definitions, background notes and questions were drafted by an AI reader and carry their status.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>

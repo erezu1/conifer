@@ -40,11 +40,13 @@
 
   // ------------------------------------------------------------------ the state
   const AUD = DOC.audiences || [];
-  const state = { level: 0, over: new Map(), ledes: true, chips: true, theme: 'system',
+  const state = { level: 0, over: new Map(), ledes: 'auto', chips: 'auto', theme: 'system',
     audience: (DOC.meta && DOC.meta.defaultAudience) || (AUD[0] && AUD[0].key) || '' };
   const audLabel = k => { const a = AUD.find(x => x.key === k); return a ? a.label : k; };
   const pick = t => (t && t.variants && t.variants[state.audience]) || t;
   const forMe = n => !n.audience || n.audience.includes(state.audience);
+  const ledesOn = () => state.ledes === true || (state.ledes === 'auto' && state.audience !== 'specialist');
+  const chipsOn = () => state.chips === true || (state.chips === 'auto' && state.audience !== 'specialist');
   function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
   function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience })); } catch (e) {} }
   function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; }
@@ -57,7 +59,7 @@
 
   // ------------------------------------------------------------------ rendering (HTML strings)
   function chip(t) {
-    if (!state.chips || !t || !t.status) return '';
+    if (!chipsOn() || !t || !t.status) return '';
     const M = { author: ['author', 'Written by the author'], 'ai-approved': ['AI draft · approved', 'Drafted by the AI reader and checked by the author'], 'ai-draft': ['AI draft · unreviewed', 'Drafted by the AI reader; the author has not checked it yet'] };
     const m = M[t.status]; if (!m) return '';
     return `<span class="chip ${t.status}" title="${esc(m[1])}">${esc(m[0])}</span>`;
@@ -115,7 +117,7 @@
     const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
     const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}">${minus}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
-    const lede = n.brief && L >= PAPER && state.ledes && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
+    const lede = n.brief && L >= PAPER && ledesOn() && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
   }
@@ -193,6 +195,33 @@
     ind.style.width = on.offsetWidth + 'px';
     ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
     ind.classList.add('placed');
+  }
+  // a fold, opened or closed where it stands: the node is redrawn alone and its body eases between 0 and its height
+  const renderNode = n => render(n, state.level, { prefix: '', over: state.over });
+  function swapNode(el, html) { const tmp = document.createElement('div'); tmp.innerHTML = html; const neu = tmp.firstElementChild; el.replaceWith(neu); return neu; }
+  function ease(body, from, to, after) {
+    body.style.overflow = 'hidden'; body.style.height = from + 'px'; body.style.opacity = from ? '1' : '0';
+    void body.offsetWidth;
+    body.style.transition = 'height .26s var(--ease-out), opacity .22s var(--ease-out)';
+    body.style.height = to + 'px'; body.style.opacity = to ? '1' : '0';
+    let done = false;
+    const end = () => { if (done) return; done = true; body.style.transition = ''; body.style.overflow = ''; body.style.height = ''; body.style.opacity = ''; after && after(); };
+    body.addEventListener('transitionend', end, { once: true }); setTimeout(end, 320);
+  }
+  function openFoldAt(key) {
+    const el = locate(key), n = byId.get(key.split('|').pop());
+    state.over.set(key, 3); commit();
+    if (!el || !n) { draw(); return; }
+    const neu = swapNode(el, renderNode(n)), body = neu.querySelector('.fold-body');
+    if (body && !reduced()) ease(body, 0, body.offsetHeight);
+    barTitle();
+  }
+  function closeFoldAt(key) {
+    const el = locate(key), n = byId.get(key.split('|').pop());
+    const finish = () => { state.over.set(key, 2); commit(); if (el && el.isConnected && n) swapNode(el, renderNode(n)); else draw(); barTitle(); };
+    const body = el && el.querySelector('.fold-body');
+    if (!body || reduced()) { finish(); return; }
+    ease(body, body.offsetHeight, 0, finish);
   }
   function drawDial() {
     const dial = $('#dial');
@@ -288,7 +317,7 @@
     opts = opts || {};
     if (!byId.has(id)) return;
     const fromLevel = state.level;
-    const origin = { label: fromLevel < PAPER ? LEVELS[fromLevel].label : 'Back', sn: snapshot() };
+    const origin = { label: fromLevel < PAPER ? LEVELS[fromLevel].label : (curSection && byId.has(curSection) ? shortLabel(byId.get(curSection)) : 'Back'), sn: snapshot() };
     if (opts.push !== false) push(opts.flash || id, { from: fromLevel });
     if (state.level < PAPER) { state.level = PAPER; state.over.clear(); save(); }
     ancestors(id).concat([id]).forEach(a => { const n = byId.get(a); if (isFold(n)) state.over.set(a, 3); });
@@ -406,8 +435,8 @@
   function openSettings() {
     const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you and background notes open where you need them.</p></div>` : '';
     const html = who +
-      `<div class="set-group"><span class="set-head">Section summaries in the Paper view</span>${seg('ledes', [['true', 'Show'], ['false', 'Hide']], state.ledes)}</div>` +
-      `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
+      `<div class="set-group"><span class="set-head">Section summaries in the Paper view</span>${seg('ledes', [['auto', 'By reader'], ['true', 'Show'], ['false', 'Hide']], state.ledes)}<p class="set-note">By reader: shown to everyone but a specialist.</p></div>` +
+      `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['auto', 'By reader'], ['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
       `<div class="set-group"><span class="set-head">Appearance</span>${seg('theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], state.theme)}</div>`;
     openSheet('Settings', html, 'sheet-set');
     $$('#sheet .seg').forEach(moveInd);
@@ -423,7 +452,7 @@
     if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } else openSettings(); return; }
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
-      if (k === 'ledes') state.ledes = v === 'true'; else if (k === 'chips') state.chips = v === 'true'; else if (k === 'theme') state.theme = v;
+      if (k === 'ledes' || k === 'chips') state[k] = v === 'auto' ? 'auto' : v === 'true'; else if (k === 'theme') state.theme = v;
       else if (k === 'audience') { state.audience = v; estimate(); }
       const g = t.closest('.seg'); if (g) { $$('button', g).forEach(b => b.setAttribute('aria-checked', String(b === t))); moveInd(g); }
       applyTheme(); save(); draw();
@@ -431,16 +460,7 @@
       return;
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
-    if (t.dataset.act) {                                          // a fold opens or closes
-      const key = t.dataset.key;
-      if (t.dataset.act === 'open') { state.over.set(key, 3); lastOpened = key; draw(key); commit(); }
-      else {
-        const el = locate(key); const body = el && el.querySelector('.fold-body');
-        const finish = () => { state.over.set(key, 2); draw(key); commit(); };
-        if (body && !reduced()) { body.classList.add('closing'); setTimeout(finish, 170); } else finish();
-      }
-      return;
-    }
+    if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.classList.contains('qbadge')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }

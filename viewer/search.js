@@ -180,6 +180,7 @@
       const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);
     } else {
       clear(); count();
+      const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
       const done = () => { find.hidden = true; find.classList.remove('closing'); row.hidden = false; row.classList.add('opening'); setTimeout(() => row.classList.remove('opening'), 250); };
       if (reduced()) done(); else { find.classList.remove('opening'); find.classList.add('closing'); setTimeout(done, 170); }
     }
