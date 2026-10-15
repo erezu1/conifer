@@ -210,6 +210,8 @@ dfn { font-style: italic; }
 .fold-bg[data-state="open"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
+.sec-h[data-lede] { cursor: pointer; }
+.fold-lede > .fold-wrap > .fold-body { padding-bottom: .1rem; }
 .fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h { cursor: pointer; }
 /* ---- provenance chips and question badges */
 .chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
@@ -643,8 +645,16 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const hl = Math.min(1 + depth(n.id), 5);
     const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
-    const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}">${minus}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
-    const lede = n.brief && L === PAPER && ledesOn() && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
+    // the section's brief, at Paper depth: a fold under the title, as every fold is (a circled +/− at the left of the
+    // title, which folds it as a whole); open by the reader's setting unless this one was folded or opened by hand.
+    // In a peek, and inside an appendix (whose title's circle is the appendix's), the brief stands open as it is.
+    const briefed = n.brief && L === PAPER && n.id !== DOC.root.id && n.title;
+    const ledeKey = ctx.prefix + 'lede:' + n.id, foldable = briefed && !ctx.prefix && !inFold;
+    const ledeOpen = foldable ? (ctx.over.has(ledeKey) ? ctx.over.get(ledeKey) >= 3 : ledesOn()) : ledesOn();
+    const toggle = foldable ? circle(ledeOpen ? 'close' : 'open', ledeKey, ledeOpen) : '';
+    const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldable ? ` data-lede="${ledeKey}"` : ''}>${minus}${toggle}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+    const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ctx.estimate && !ledeOpen ? '' : ledeBlock(n, ctx)}</div></div></div>`
+      : briefed && ledeOpen ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
   }
@@ -726,10 +736,13 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // a fold opens or closes where it stands: only its state flips, the stylesheet eases the rest
   function setFold(key, open) {
     state.over.set(key, open ? 3 : 2); commit();
-    const el = locate(key);
+    const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`);
     if (!el) { draw(); return; }
     el.dataset.state = open ? 'open' : 'closed';
     $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
+    $$(`#paper .sec-h > .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {   // a brief's one circle, in the title: it turns
+      b.setAttribute('aria-expanded', String(open)); b.dataset.act = open ? 'close' : 'open'; b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
+    });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
   }
@@ -948,7 +961,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function openSettings() {
     const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you and background notes open where you need them.</p></div>` : '';
     const html = who +
-      `<div class="set-group"><span class="set-head">Section summaries in the Paper view</span>${seg('ledes', [['auto', 'By reader'], ['true', 'Show'], ['false', 'Hide']], state.ledes)}<p class="set-note">By reader: shown to everyone but a specialist.</p></div>` +
+      `<div class="set-group"><span class="set-head">Section briefs in the Paper view</span>${seg('ledes', [['auto', 'By reader'], ['true', 'Open'], ['false', 'Folded']], state.ledes)}<p class="set-note">By reader: open for everyone but a specialist. The circle beside a section's title folds or opens its brief.</p></div>` +
       `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['auto', 'By reader'], ['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
       `<div class="set-group"><span class="set-head">Appearance</span>${seg('theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], state.theme)}</div>`;
     openSheet('Settings', html, 'sheet-set');
@@ -959,6 +972,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   document.addEventListener('click', e => {
     const foldHead = e.target.closest('.fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
     if (foldHead && !e.target.closest('a, .anchor, .qwords, [data-act]')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
+    const ledeHead = e.target.closest('.sec-h[data-lede]');                     // a section's title folds and opens its brief
+    if (ledeHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-act]')) { const k = ledeHead.dataset.lede; setFold(k, !(state.over.has(k) ? state.over.get(k) >= 3 : ledesOn())); return; }
     const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }

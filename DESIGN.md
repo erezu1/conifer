@@ -279,6 +279,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **Formulas in a selection, and a symbol found inside a formula (15 Oct, after Epsilon).** The build puts under each drawn formula an unseen picture as wide as its drawing (`.mjx-hl` with `--w`), so a selection that crosses a formula is shaded by the browser at the line's whole height, inline and display alike; a formula is selected whole and copies as its TeX. The search finds a single symbol, or a short run of TeX, glyph by glyph in each formula's drawing (MathJax's `data-c` codes, with Epsilon's tables of what a command draws, letters in any font, accents and primes passed over unless asked for) and lays a soft box behind just those glyphs, inside the formula's own SVG; longer TeX still marks the formula whole.
 
+**A section's brief is a fold (15 Oct).** At Paper depth the "In brief" block under a section title is a fold like every other: a circled +/− at the left of the title, and the whole title folds or opens it (the ¶, the question words and the badge keep their own taps). Open by the reader's setting (By reader: everyone but a specialist; Open; Folded), and each one remembers being folded or opened by hand for the visit. In a peek, and inside an appendix (whose title's circle is the appendix's own), the brief stands as it is.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

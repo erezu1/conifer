@@ -201,6 +201,8 @@ dfn { font-style: italic; }
 .fold-bg[data-state="open"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
+.sec-h[data-lede] { cursor: pointer; }
+.fold-lede > .fold-wrap > .fold-body { padding-bottom: .1rem; }
 .fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h { cursor: pointer; }
 /* ---- provenance chips and question badges */
 .chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
