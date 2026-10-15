@@ -139,7 +139,7 @@ body = f"""<title>Conifer Reader Mockup</title>
   <p class="authors">{html.escape(", ".join(meta["authors"]))} · {html.escape(meta["date"])}</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon"><p class="note">{html.escape(meta["note"])}</p>A mockup for project Conifer: one document, four depths. The text is drawn from <code>semicircle.tree.json</code>; formulas were drawn once with MathJax through Epsilon.</footer>
+ <footer class="colophon">A mockup for project Conifer: one document, four depths. The text is drawn from <code>semicircle.tree.json</code>; formulas were drawn once with MathJax through Epsilon.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>
