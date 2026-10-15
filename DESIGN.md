@@ -252,6 +252,17 @@ What the format could not express, or that the skeleton got wrong, in this paper
 - The gists of paragraphs in the appendices are present but nothing folds a single paragraph by default; the appendix as a whole folds to its brief.
 - The reading-time estimate counts the paper's words only; a specialist reads the derivations much faster than the dial suggests.
 
+## 6c. The reader, rethought (15 October, evening)
+
+After reading the first cone of his own paper, Erez asked for a calmer reader and for the question of what expands where to be settled. The answer now built into the viewer:
+
+- **The dial chooses which document you read**: gist, summary, paper, everything. Each is a clean, linear text with nothing expandable inside it, and nothing in it is marked as tappable: a sentence of the summary, a defined term, a citation, a footnote marker and an equation number look like text until hovered or tapped.
+- **A tap never rearranges the text; it opens a peek.** A peek is Epsilon's sheet: from the bottom on a phone, from the side on a desktop. A summary sentence peeks at the paragraphs it stands for; a term at its definition; a footnote marker at its note; a citation at its reference; an equation reference (in the summary) at the equation with its paragraph. The peek's header, *From §3.2 …* or *Defined in §2.1 …*, is the link that travels into the paper, and the long press on a link in the paper peeks instead of travelling, as in Epsilon.
+- **Travelling leaves a way back.** A jump from the summary into the paper, or from one place in the paper to another, shows a pill in the bar (*↩ Summary*, *↩ Back*) that returns to the exact place, and is a browser history step as well. The target is marked for a few seconds once the scroll has settled.
+- **The only inline expansion is the fold**, for what is optional in the Paper view: appendices, proofs and background notes. Closed, a fold is one quiet line with a circled + on the left; open, a circled − on the same spot. "Fold to one line" and "collapse to summary" are gone: they duplicated the dial.
+- **The address is the link.** As you read, the hash follows the section (`#subsec-worldsheet`), or the document (`#summary`), so the address bar can be shared at any moment; the ¶ on a heading copies a link to that section. The *Copy link* buttons are gone.
+- **One motion language**: everything that opens rises in, everything that closes falls out, with the same curve; tapping the title opens the contents; sheets close with a circled × at the top right.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned cones published next to the arXiv version) or any paper in the Epsilon library (reader-made cones, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.
