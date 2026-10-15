@@ -320,6 +320,15 @@ mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transpare
 
 @media (max-width: 560px) { .bar-row:has(#back:not([hidden])) #who { display: none; } #back { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; } }
 
+/* ---- quiet heads: who wrote a summary and how many questions, as words; the hint for a student */
+.lede-who { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.qwords { background: none; border: 0; padding: 0; font: 500 .72rem var(--sans); color: var(--muted); cursor: pointer; border-radius: 3px; }
+.qwords:hover { color: var(--accent); }
+.sum-foot .qwords { font-size: .78rem; }
+.hint { font: .82rem/1.45 var(--sans); color: var(--muted); margin: .8rem 0 0; text-align: left; hyphens: manual; }
+@media (max-width: 560px) { :root[data-depth="paper"] #who, :root[data-depth="full"] #who, :root[data-depth="skim"] #who { display: none; } }
+.qbadge { display: none; }
+
 
 mjx-container[jax="SVG"] {
   direction: ltr;
@@ -532,6 +541,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   const audLabel = k => { const a = AUD.find(x => x.key === k); return a ? a.label : k; };
   const pick = t => (t && t.variants && t.variants[state.audience]) || t;
   const forMe = n => !n.audience || n.audience.includes(state.audience);
+  const openByDefault = n => state.audience === 'student' && forMe(n);
+  const skimHidden = () => SKIM !== undefined && state.audience === 'student';
   const ledesOn = () => state.ledes === true || (state.ledes === 'auto' && state.audience !== 'specialist');
   const chipsOn = () => state.chips === true || (state.chips === 'auto' && state.audience !== 'specialist');
   function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
@@ -558,6 +569,14 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   }
   const stripIds = html => html.replace(/ id="([^"]*)"/g, ' id="peek-$1"');
   function qbadge(n, deep, ctx) {
+    return '';
+  }
+  function qwords(id, deep) {
+    const qs = deep ? questionsUnder(id) : (qsAt.get(id) || []);
+    if (!qs.length) return '';
+    return `<button type="button" class="qwords" data-q="${id}" data-deep="${deep ? 1 : 0}">${qs.length} question${qs.length > 1 ? 's' : ''}</button>`;
+  }
+  function qbadgeOld(n, deep, ctx) {
     if (ctx && ctx.prefix) return '';
     const qs = deep ? questionsUnder(n.id) : (qsAt.get(n.id) || []);
     if (!qs.length) return '';
@@ -596,7 +615,9 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   }
   function ledeBlock(n, ctx) {
     const t = pick(n.brief);
-    return `<div class="lede"><div class="lede-head"><span>In brief</span>${chip(t)}</div><div class="sum-body">${audienceDefs(withSpans(t.html, ctx))}</div></div>`;
+    const who = t.status === 'author' ? 'by the author' : t.status === 'ai-approved' ? 'AI draft, approved' : t.status === 'ai-draft' ? 'AI draft' : '';
+    const q = ctx.prefix ? '' : qwords(n.id, true);
+    return `<div class="lede"><div class="lede-head"><span>In brief${who ? ` <span class="lede-who">· ${esc(who)}</span>` : ''}</span>${q}</div><div class="sum-body">${audienceDefs(withSpans(t.html, ctx))}</div></div>`;
   }
   function wrap(n, L, ctx, inFold) {
     const key = ctx.prefix + n.id;
@@ -604,7 +625,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
     const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}">${minus}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
-    const lede = n.brief && L >= PAPER && ledesOn() && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
+    const lede = n.brief && L === PAPER && ledesOn() && n.id !== DOC.root.id ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
   }
@@ -613,7 +634,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (n.id === DOC.root.id && !ctx.prefix) return renderRoot(n, inh, ctx);
     if ((HEADED[n.kind] || n.kind === 'background') && inh < PAPER) return '';
     if (isFold(n)) {
-      const base = ctx.allOpen || inh >= FULL || (n.kind === 'background' && forMe(n)) ? 3 : 2;
+      const base = ctx.allOpen || inh >= FULL || (n.kind === 'background' && openByDefault(n)) ? 3 : 2;
       const eff = ctx.over.has(key) ? ctx.over.get(key) : base;
       return eff >= 3 ? openFold(n, Math.max(inh, PAPER), ctx) : foldedLine(n, ctx);
     }
@@ -625,7 +646,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (estimating) return '';
     const b = [];
     if (from < BRIEF) b.push(`<button type="button" class="btn primary" data-setlevel="${BRIEF}">Read the summary <small>${time(BRIEF)}</small></button>`);
-    if (SKIM !== undefined && from < SKIM) b.push(`<button type="button" class="btn${from === BRIEF ? ' primary' : ''}" data-setlevel="${SKIM}">Skim the paper <small>${time(SKIM)}</small></button>`);
+    if (SKIM !== undefined && from < SKIM && !skimHidden()) b.push(`<button type="button" class="btn${from === BRIEF ? ' primary' : ''}" data-setlevel="${SKIM}">Skim the paper <small>${time(SKIM)}</small></button>`);
     b.push(`<button type="button" class="btn${from >= BRIEF && (SKIM === undefined || from >= SKIM) ? ' primary' : ''}" data-setlevel="${PAPER}">Open the paper <small>${time(PAPER)}</small></button>`);
     return `<div class="gist-actions">${b.join('')}</div>`;
   }
@@ -635,10 +656,11 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       let eq = '';
       if (key.equation && anchorHost.has(key.equation)) { const m = byId.get(anchorHost.get(key.equation)).body.match(new RegExp(`<div class="display"[^>]*id="${key.equation}">[\\s\\S]*?</div>\\s*(?:<span class="eqno">[^<]*</span>\\s*)?</div>`)); if (m) eq = stripIds(m[0]); }
       const fig = key.figure && byId.get(key.figure) ? stripIds(byId.get(key.figure).body) : '';
-      return `<section class="node gist-card" data-id="${n.id}" data-key="${n.id}"><div class="card-label">The gist</div><div class="sum-body">${audienceDefs(withSpans(pick(n.gist).html, ctx))}</div>${eq ? `<div class="gist-eq">${eq}</div>` : ''}${fig ? `<div class="gist-fig">${fig}</div>` : ''}${actions(GIST)}<div class="sum-foot">${chip(pick(n.gist))}</div></section>`;
+      const hint = state.audience === 'student' ? `<p class="hint">Words with a dotted line have a definition: tap them. Background notes open for you where the paper assumes something.</p>` : '';
+      return `<section class="node gist-card" data-id="${n.id}" data-key="${n.id}"><div class="card-label">The gist</div><div class="sum-body">${audienceDefs(withSpans(pick(n.gist).html, ctx))}</div>${eq ? `<div class="gist-eq">${eq}</div>` : ''}${fig ? `<div class="gist-fig">${fig}</div>` : ''}${hint}${actions(GIST)}<div class="sum-foot">${chip(pick(n.gist))}${qwords(DOC.root.id, true)}</div></section>`;
     }
     if (L === BRIEF && n.brief) {
-      return `<section class="node sum-page" data-id="${n.id}" data-key="${n.id}"><div class="card-label">Summary <span class="muted">· tap a sentence to see the part of the paper it stands for</span></div><div class="sum-body">${audienceDefs(withSpans(pick(n.brief).html, ctx))}</div><div class="sum-foot">${chip(pick(n.brief))}</div>${actions(BRIEF)}</section>`;
+      return `<section class="node sum-page" data-id="${n.id}" data-key="${n.id}"><div class="card-label">Summary <span class="muted">· tap a sentence to see the part of the paper it stands for</span></div><div class="sum-body">${audienceDefs(withSpans(pick(n.brief).html, ctx))}</div><div class="sum-foot">${chip(pick(n.brief))}${qwords(DOC.root.id, true)}</div>${actions(BRIEF)}</section>`;
     }
     if (L === SKIM) return skimPage(n, ctx);
     return (n.children || []).map(c => render(c, Math.max(L, PAPER), ctx)).join('');
@@ -657,9 +679,9 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       const g = n.gist ? pick(n.gist) : null;
       if (g && !status) status = g.status;
       const line = g ? g.html : (n.kind === 'figure' || n.kind === 'table') ? esc(n.title || 'Figure') : BOX[n.kind] ? esc(n.title || BOX[n.kind]) : '';
-      if (line) parts.push(`<p class="skim" data-peek="${n.id}" role="button" tabindex="0" title="Show this paragraph">${audienceDefs(line)}</p>`);
+      if (line) parts.push(`<p class="skim" data-go="${n.id}" role="button" tabindex="0" title="Read this paragraph in the paper">${audienceDefs(line)}</p>`);
     })(root);
-    return `<section class="node skim-page" data-id="${root.id}" data-key="${root.id}"><div class="card-label">Skim <span class="muted">· one line for every paragraph; tap a line to read it</span></div>${parts.join('')}<div class="sum-foot">${chip({ status })}</div>${actions(SKIM)}</section>`;
+    return `<section class="node skim-page" data-id="${root.id}" data-key="${root.id}"><div class="card-label">Skim <span class="muted">· one line for every paragraph; a tap opens the paper there</span></div>${parts.join('')}<div class="sum-foot">${chip({ status })}</div>${actions(SKIM)}</section>`;
   }
 
   // ------------------------------------------------------------------ drawing the page
@@ -713,7 +735,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function drawDial() {
     const dial = $('#dial');
     if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
-    $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.querySelector('small').textContent = time(i); });
+    $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.querySelector('small').textContent = time(i); b.hidden = i === SKIM && skimHidden(); });
+    document.documentElement.dataset.depth = LEVELS[state.level].key;
     moveInd(dial);
     const who = $('#who'); if (who) who.textContent = audLabel(state.audience) + ' ▾';
     const back = $('#back'); if (back) { back.hidden = !backStack.length; if (backStack.length) back.textContent = '↩ ' + backStack[backStack.length - 1].label; }
@@ -931,7 +954,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
-    const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], .qbadge, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
+    const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
     if (t.id === 'back') { goBack(); return; }
@@ -940,7 +963,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes' || k === 'chips') state[k] = v === 'auto' ? 'auto' : v === 'true'; else if (k === 'theme') state.theme = v;
-      else if (k === 'audience') { state.audience = v; estimate(); }
+      else if (k === 'audience') { state.audience = v; estimate(); if (skimHidden() && state.level === SKIM) state.level = BRIEF; }
       const g = t.closest('.seg'); if (g) { $$('button', g).forEach(b => b.setAttribute('aria-checked', String(b === t))); moveInd(g); }
       applyTheme(); save(); draw();
       if (k === 'audience') { const note = $('#aud-note'); if (note) note.textContent = (AUD.find(a => a.key === v) || {}).hint || ''; }
@@ -950,7 +973,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
-    if (t.classList.contains('qbadge')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }
+    if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }
+    if (t.classList.contains('qbadge') || t.classList.contains('qwords')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }
     if (t.dataset.def) { e.preventDefault(); openDef(t.dataset.def, t); return; }
     if (t.dataset.reveal) { e.preventDefault(); const q = t.dataset.quote, f = t.dataset.flash; reveal(t.dataset.reveal, { quote: q, flash: f }); return; }
     if (t.matches('a[href^="#"]')) {
@@ -969,8 +993,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   });
   let longPressed = false, lpTimer = null;
   document.addEventListener('pointerdown', e => {
-    const a = e.target.closest && e.target.closest('#paper a[href^="#"]'); if (!a || e.button !== 0) return;
-    const id = decodeURIComponent(a.getAttribute('href').slice(1));
+    const a = e.target.closest && e.target.closest('#paper a[href^="#"], #paper [data-go]'); if (!a || e.button !== 0) return;
+    const id = a.dataset.go || decodeURIComponent(a.getAttribute('href').slice(1));
     clearTimeout(lpTimer);
     lpTimer = setTimeout(() => { longPressed = true; if (navigator.vibrate) { try { navigator.vibrate(12); } catch (err) {} } if (byId.has(id)) peekNode(id); else if (anchorHost.has(id)) peekAnchor(id); }, 480);
   });
@@ -1001,6 +1025,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
+  if (skimHidden() && state.level === SKIM) state.level = BRIEF;
   function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map() }))); estimating = false; }
   estimate();
   draw();
