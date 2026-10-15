@@ -583,7 +583,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   const forMe = n => !n.audience || n.audience.includes(state.audience);
   const openByDefault = n => state.audience === 'student' && forMe(n);
   const skimHidden = () => SKIM !== undefined && state.audience === 'student';
-  const ledesOn = () => state.ledes === true || (state.ledes === 'auto' && state.audience !== 'specialist');
+  const ledesOn = () => state.ledes === true;                    // briefs are folded unless the reader opens them all
   const chipsOn = () => state.chips === true || (state.chips === 'auto' && state.audience !== 'specialist');
   function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
   function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience })); } catch (e) {} }
@@ -971,7 +971,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function openSettings() {
     const who = AUD.length ? `<div class="set-group"><span class="set-head">Reading as</span>${seg('audience', AUD.map(a => [a.key, a.label]), state.audience)}<p class="set-note"><span id="aud-note">${esc((AUD.find(a => a.key === state.audience) || {}).hint || '')}</span>. Summaries are written for you and background notes open where you need them.</p></div>` : '';
     const html = who +
-      `<div class="set-group"><span class="set-head">Section briefs in the Paper view</span>${seg('ledes', [['auto', 'By reader'], ['true', 'Open'], ['false', 'Folded']], state.ledes)}<p class="set-note">By reader: open for everyone but a specialist. The circle beside a section's title folds or opens its brief.</p></div>` +
+      `<div class="set-group"><span class="set-head">Section briefs in the Paper view</span>${seg('ledes', [['auto', 'Folded'], ['true', 'Open']], state.ledes === true ? 'true' : 'auto')}<p class="set-note">The circle beside a section's title opens its brief, or folds it again.</p></div>` +
       `<div class="set-group"><span class="set-head">Who wrote each summary</span>${seg('chips', [['auto', 'By reader'], ['true', 'Show'], ['false', 'Hide']], state.chips)}<div class="legend" style="margin-top:.5rem"><div><span class="chip">author</span> written by the author</div><div><span class="chip ai-approved">AI draft · approved</span> drafted by the AI reader, checked by the author</div><div><span class="chip ai-draft">AI draft · unreviewed</span> not yet checked</div><div><span class="chip reader">from a reader</span> a question a reader sent in</div></div></div>` +
       `<div class="set-group"><span class="set-head">Appearance</span>${seg('theme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], state.theme)}</div>`;
     openSheet('Settings', html, 'sheet-set');
