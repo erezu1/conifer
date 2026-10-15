@@ -40,7 +40,7 @@ shutil.copyfile(HERE / "logo" / "icons" / "favicon.ico", DOCS / "favicon.ico")
 (DOCS / "icons" / "favicon.svg").write_text((HERE / "logo" / "conifer-icon.svg").read_text().replace("currentColor", "#1d5b98"))
 shutil.copyfile(HERE / "viewer" / "manifest.webmanifest", DOCS / "manifest.webmanifest")
 shutil.copyfile(HERE / "viewer" / "sw.js", DOCS / "sw.js")
-HEAD = ('<link rel="icon" href="favicon.ico" sizes="32x32">\n<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">\n'
+HEAD = ('<link rel="icon" href="favicon.ico" sizes="any">\n<link rel="icon" href="icons/favicon-32.png" type="image/png" sizes="32x32">\n<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">\n'
         '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n<link rel="manifest" href="manifest.webmanifest">\n'
         '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n<meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">\n'
         '<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Conifer">\n<meta name="mobile-web-app-capable" content="yes">\n'

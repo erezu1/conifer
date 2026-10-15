@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" href="../icons/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 <link rel="manifest" href="../manifest.webmanifest">
@@ -48,7 +49,7 @@
 * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 [hidden] { display: none !important; }   /* a closed sheet is a flex box: the browser's own rule would lose to it */
 html { height: 100%; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 1.0625rem/1.6 var(--serif); padding-inline: 16px; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 1.15rem/1.6 var(--serif); padding-inline: 16px; -webkit-font-smoothing: antialiased; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 :focus:not(:focus-visible) { outline: none; }
 a { color: var(--accent); text-decoration: none; }
@@ -92,7 +93,7 @@ button { font-family: var(--sans); }
   background: var(--glass); -webkit-backdrop-filter: saturate(1.3) blur(16px); backdrop-filter: saturate(1.3) blur(16px);
   border-bottom: 1px solid var(--rule); }
 .bar-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
-.bar-title { flex: 1; min-width: 0; text-align: center; font: 500 .82rem/1.3 var(--sans); color: var(--muted); border: 0; background: none;
+.bar-title { flex: 1; min-width: 0; text-align: center; font: 500 .9rem/1.3 var(--sans); color: var(--muted); border: 0; background: none;
   padding: .35rem .5rem; border-radius: 999px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-title:hover { background: var(--accent-soft); color: var(--fg); }
 .bar-title mjx-container { font-size: 100%; }
@@ -100,33 +101,32 @@ button { font-family: var(--sans); }
   display: grid; place-items: center; cursor: pointer; flex: none; }
 .bar-btn:hover { background: var(--accent-soft); }
 .bar-btn svg { width: 22px; height: 22px; }
-.bar-pill { border: 1px solid var(--rule); background: var(--bg); color: var(--fg); font: 500 .74rem var(--sans); padding: .3rem .6rem; border-radius: 999px; cursor: pointer; white-space: nowrap; flex: none; }
+.bar-pill { border: 1px solid var(--rule); background: var(--bg); color: var(--fg); font: 500 .8rem var(--sans); padding: .3rem .6rem; border-radius: 999px; cursor: pointer; white-space: nowrap; flex: none; }
 .bar-pill:hover { background: var(--surface); }
 #back { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); animation: rise .22s var(--ease-out); }
 .dial { position: relative; display: flex; gap: 2px; background: var(--surface); border-radius: 999px; padding: 3px; max-width: var(--page-w); margin: 0 auto; }
 .sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 999px; background: var(--bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); pointer-events: none; }
 .sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }
 .dial button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .28rem .2rem; cursor: pointer;
-  font: 500 .8rem/1.15 var(--sans); color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: .05rem; }
-.dial button small { font-size: .66rem; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
+  font: 500 .88rem/1.15 var(--sans); color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: .05rem; }
+.dial button small { font-size: .72rem; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
 .dial button[aria-checked="true"] { color: var(--fg); }
 .dial button:hover:not([aria-checked="true"]) { color: var(--fg); }
 
 /* ---- the title block */
-.kicker { font: 500 .72rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 1.3rem 0 .35rem; }
-h1.title { font: 600 1.85rem/1.15 var(--serif); margin: 0 0 .5rem; text-wrap: balance; letter-spacing: -.01em; }
-.authors { margin: 0; color: var(--muted); font-size: .95rem; }
-.note { font: .8rem/1.45 var(--sans); color: var(--muted); margin: .5rem 0 1.2rem; }
+.kicker { font: 500 .78rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 1.3rem 0 .35rem; }
+h1.title { font: 600 2.15rem/1.12 var(--serif); margin: 0 0 .5rem; text-wrap: balance; letter-spacing: -.01em; }
+.authors { margin: 0; color: var(--muted); font-size: 1.02rem; }
+.note { font: .86rem/1.45 var(--sans); color: var(--muted); margin: .5rem 0 1.2rem; }
 .logo { width: 22px; height: 22px; vertical-align: -6px; margin-right: .3rem; color: var(--accent); }
 
 /* ---- headings and body */
 .sec-h { font-weight: 600; line-height: 1.25; margin: 2.1rem 0 .7rem; text-wrap: balance; }
-h2.sec-h { font-size: 1.4rem; }
-h3.sec-h { font-size: 1.15rem; }
-h4.sec-h { font-size: 1.05rem; }
+h2.sec-h { font-size: 1.55rem; }
+h3.sec-h { font-size: 1.28rem; }
+h4.sec-h { font-size: 1.15rem; }
 .secnum { color: var(--muted); font-weight: 500; margin-right: .55em; font-variant-numeric: tabular-nums; }
 .secnum:empty { display: none; }
-.sec-h .fold-btn { margin-right: .5rem; vertical-align: .15em; }
 .leaf { position: relative; }
 .kind-theorem, .kind-remark, .kind-definition, .kind-proof { background: var(--surface); border-radius: 8px; padding: .75rem 1rem .1rem; margin: 1rem 0; }
 .kind-theorem p { font-style: italic; }
@@ -138,7 +138,7 @@ figure.float img { max-width: 100%; height: auto; display: block; margin: 0 auto
 figure.float .capname { font-weight: 600; color: var(--fg); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) figure.float img.l2m-ink, :root:not([data-theme="light"]) .l2m-pic img { filter: invert(.92) hue-rotate(180deg); } }
 :root[data-theme="dark"] figure.float img.l2m-ink, :root[data-theme="dark"] .l2m-pic img { filter: invert(.92) hue-rotate(180deg); }
-figcaption { font: .84rem/1.45 var(--sans); color: var(--muted); margin-top: .5rem; }
+figcaption { font: .9rem/1.45 var(--sans); color: var(--muted); margin-top: .5rem; }
 figcaption b { color: var(--fg); }
 .refs, .kind-footnotes ol, .kind-references ol { padding-left: 1.6rem; font-size: .92em; }
 .refs li, .kind-footnotes li, .kind-references li { margin-bottom: .45em; }
@@ -175,15 +175,15 @@ dfn { font-style: italic; }
 
 /* ---- summaries: the gist card, the summary page, the ledes in the paper */
 .gist-card { border: 1px solid var(--rule); border-radius: 14px; padding: 1.1rem 1.25rem 1rem; margin-top: .4rem; }
-.card-label { font: 600 .72rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: .6rem; }
+.card-label { font: 600 .78rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: .6rem; }
 .card-label .muted { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .gist-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .65rem; }
-.gist-list b { font: 600 .74rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .12rem; }
+.gist-list b { font: 600 .8rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .12rem; }
 .gist-eq { margin: .9rem 0 .2rem; }
 .gist-fig { margin: .3rem 0 .4rem; }
 .gist-fig figure { margin: .4rem 0 0; }
 .gist-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: .9rem 0 .6rem; }
-.btn { font: 500 .85rem var(--sans); padding: .5rem .95rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; }
+.btn { font: 500 .92rem var(--sans); padding: .5rem .95rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; }
 .btn:hover { background: var(--surface); }
 .btn small { color: var(--muted); font-weight: 400; font-size: .78rem; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
@@ -194,28 +194,35 @@ dfn { font-style: italic; }
 .sum-body p:last-child { margin-bottom: .35rem; }
 .sum-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .9rem; margin-top: .05rem; }
 .lede { border-left: 3px solid color-mix(in srgb, var(--accent) 40%, transparent); padding: .05rem 0 .05rem .9rem; margin: .1rem 0 1.1rem; font-size: .95em; color: color-mix(in srgb, var(--fg) 88%, var(--muted)); }
-.lede-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; font: 600 .68rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
+.lede-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; font: 600 .74rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
 
-/* ---- folds: a circle with + on the left of one quiet line; open, a circle with − and the content */
+/* ---- folds: a circle with + on the left of one quiet line; open, a circle with − and the content. The content stays
+   in the page; its grid track eases between 0 and its size, so nothing is measured or redrawn */
 .fold-btn { width: 1.15rem; height: 1.15rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--muted) 55%, transparent); background: var(--bg); color: var(--muted);
-  display: inline-grid; place-items: center; font: 500 .85rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; }
+  display: inline-grid; place-items: center; font: 500 .85rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; box-sizing: border-box; }
 .fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-.folded { display: flex; align-items: baseline; gap: .55rem; margin: .1rem 0 1rem; }
-.folded .fold-btn { position: relative; top: .2rem; }
-.fold-line { flex: 1; min-width: 0; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .35rem; text-align: left; background: none; border: 0; padding: .1rem 0; cursor: pointer;
-  font: 500 .8rem/1.45 var(--sans); color: var(--muted); border-radius: 4px; }
+.fold { margin: .1rem 0 1rem; }
+.fold-closed { display: flex; align-items: flex-start; gap: .55rem; }
+.fold-closed .fold-btn { margin-top: .22rem; }
+.fold-line { flex: 1; min-width: 0; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .35rem; text-align: left; background: none; border: 0; padding: 0; cursor: pointer;
+  font: 500 .88rem/1.5 var(--sans); color: var(--muted); border-radius: 4px; }
 .fold-line:hover { color: var(--accent); }
 .fold-name { font-weight: 600; }
-.fold-detail { font: 400 .95rem/1.45 var(--serif); color: var(--muted); }
+.fold-detail { font: 400 1.02rem/1.5 var(--serif); color: var(--muted); }
 .fold-who { font-size: .72rem; }
 .fold-bg .fold-name, .fold-bg .fold-head > span:first-of-type { color: var(--reader); }
-.fold-head { display: flex; align-items: center; gap: .55rem; font: 600 .7rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1rem 0 .35rem; }
-.fold-title { text-transform: none; letter-spacing: 0; font: 600 .95rem var(--sans); color: var(--fg); }
-.fold-open.fold-bg .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
-.fold-open .kind-proof { margin-top: .2rem; }
-
+.fold-head { display: flex; align-items: center; gap: .55rem; font: 600 .76rem/1.15 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1rem 0 .35rem; }
+.fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem var(--sans); color: var(--fg); }
+.fold-wrap { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
+.fold[data-open="true"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
+.fold[data-open="true"] .fold-closed { display: none; }
+.fold-body { min-height: 0; overflow: clip; overflow-clip-margin: 12px; }
+.fold[data-open="false"] .fold-body { visibility: hidden; transition: visibility 0s .3s; }
+.fold-bg[data-open="true"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
+.fold .kind-proof { margin-top: .2rem; }
+.sec-h .fold-btn { margin-right: .5rem; vertical-align: .1em; }
 /* ---- provenance chips and question badges */
-.chip { font: 500 .68rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
+.chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
 .chip.ai-approved { color: var(--muted); }
 .chip.ai-draft { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 .chip.reader { background: var(--reader-bg); color: var(--reader); border-color: transparent; }
@@ -236,7 +243,7 @@ dfn { font-style: italic; }
   border-radius: 16px 16px 0 0; padding: .5rem 1rem calc(.8rem + env(safe-area-inset-bottom, 0px)); box-shadow: var(--shadow); z-index: 40; animation: rise .24s var(--ease-out); }
 .sheet.closing { animation: fall .18s var(--ease-in) forwards; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .35rem 0 .45rem; margin-bottom: .2rem; border-bottom: 1px solid var(--rule); flex: none; }
-.sheet-head h2 { font: 600 .95rem/1.35 var(--sans); margin: 0; min-width: 0; }
+.sheet-head h2 { font: 600 1.05rem/1.35 var(--sans); margin: 0; min-width: 0; }
 #sheet-body { overflow: auto; min-height: 0; padding-top: .3rem; }
 .x-btn { width: 1.65rem; height: 1.65rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--muted); display: grid; place-items: center; font: 400 1.05rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; }
 .x-btn:hover { background: var(--surface); color: var(--fg); }
@@ -250,8 +257,8 @@ dfn { font-style: italic; }
 .sheet-peek .sec-h { margin-top: 1rem; font-size: 1.1rem; }
 .sheet-peek .lede { font-size: .93em; }
 .peek-fn, .peek-eq { font-size: .98em; }
-.pop { position: absolute; z-index: 30; width: min(24rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
-  box-shadow: var(--shadow); padding: .6rem .85rem .7rem; font-size: .92rem; line-height: 1.5; animation: rise .2s var(--ease-out); }
+.pop { position: absolute; z-index: 30; width: min(26rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
+  box-shadow: var(--shadow); padding: .6rem .85rem .7rem; font-size: 1rem; line-height: 1.5; animation: rise .2s var(--ease-out); }
 .pop.closing { animation: fall .15s var(--ease-in) forwards; }
 .pop-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .3rem; }
 .pop-term { font: 600 .95rem var(--sans); }
@@ -262,7 +269,7 @@ dfn { font-style: italic; }
 /* ---- contents, questions, settings inside sheets */
 .toc { list-style: none; padding: 0; margin: 0; }
 .toc li { display: flex; align-items: center; gap: .4rem; }
-.toc button { flex: 1; min-width: 0; text-align: left; background: none; border: 0; font: 1rem var(--serif); color: var(--fg); padding: .4rem .3rem; cursor: pointer; border-radius: 6px; }
+.toc button { flex: 1; min-width: 0; text-align: left; background: none; border: 0; font: 1.08rem var(--serif); color: var(--fg); padding: .4rem .3rem; cursor: pointer; border-radius: 6px; }
 .toc button:hover { background: var(--surface); }
 .toc-cur button { background: var(--accent-soft); }
 .toc-d2 button { padding-left: 1.5rem; font-size: .95rem; }
@@ -282,9 +289,9 @@ dfn { font-style: italic; }
 .ask-note { font: .82rem/1.45 var(--sans); color: var(--muted); margin: .6rem 0 0; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
-.set-note { font: .78rem/1.4 var(--sans); color: var(--muted); margin: .3rem 0 0; }
+.set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .3rem 0 0; }
 .seg { position: relative; display: flex; background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
-.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .8rem var(--sans); color: var(--muted); cursor: pointer; }
+.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .86rem var(--sans); color: var(--muted); cursor: pointer; }
 .seg button[aria-checked="true"] { color: var(--fg); }
 .legend { display: grid; gap: .35rem; font: .82rem/1.4 var(--sans); color: var(--muted); }
 .legend div { display: flex; align-items: center; gap: .5rem; }
@@ -295,7 +302,7 @@ dfn { font-style: italic; }
 #toast { position: fixed; left: 50%; bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); font: 500 .8rem var(--sans); padding: .45rem .9rem; border-radius: 999px; box-shadow: var(--shadow); z-index: 50; animation: rise .2s var(--ease-out); }
 #toast.closing { animation: fall .2s var(--ease-in) forwards; }
 .link-box { width: 100%; font: .85rem var(--sans); padding: .5rem .6rem; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); color: var(--fg); }
-.colophon { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: .8rem/1.5 var(--sans); color: var(--muted); }
+.colophon { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: .86rem/1.5 var(--sans); color: var(--muted); }
 
 /* ---- search: the field takes the bar; found places are marked, the one you are on more strongly */
 #find-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
@@ -304,7 +311,7 @@ dfn { font-style: italic; }
 @keyframes fadeout { to { opacity: 0; } }
 #find-input { flex: 1; min-width: 0; font: 1rem var(--sans); padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--fg); }
 #find-input:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: 0 0 0 3px var(--accent-soft); }
-#find-count { font: 500 .78rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }
+#find-count { font: 500 .84rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }
 ::highlight(conifer-find) { background: color-mix(in srgb, #f5c400 45%, transparent); }
 ::highlight(conifer-find-now) { background: color-mix(in srgb, #ff9500 65%, transparent); }
 mjx-container.find-f { background: color-mix(in srgb, #f5c400 30%, transparent); border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, #f5c400 30%, transparent); }
@@ -316,18 +323,20 @@ mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transpare
 .skim-page .sec-h { margin-top: 1.5rem; }
 .skim-page h2.sec-h { font-size: 1.2rem; }
 .skim-page h3.sec-h { font-size: 1.05rem; }
-@media (max-width: 430px) { .dial button { font-size: .72rem; padding-inline: .05rem; } .dial button small { font-size: .58rem; } }
+@media (max-width: 430px) { .dial button { font-size: .8rem; padding-inline: .05rem; } .dial button small { font-size: .64rem; } }
 
 @media (max-width: 560px) { .bar-row:has(#back:not([hidden])) #who { display: none; } #back { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; } }
 
 /* ---- quiet heads: who wrote a summary and how many questions, as words; the hint for a student */
 .lede-who { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
-.qwords { background: none; border: 0; padding: 0; font: 500 .72rem var(--sans); color: var(--muted); cursor: pointer; border-radius: 3px; }
+.qwords { background: none; border: 0; padding: 0; font: 500 .78rem var(--sans); color: var(--muted); cursor: pointer; border-radius: 3px; }
 .qwords:hover { color: var(--accent); }
 .sum-foot .qwords { font-size: .78rem; }
-.hint { font: .82rem/1.45 var(--sans); color: var(--muted); margin: .8rem 0 0; text-align: left; hyphens: manual; }
+.hint { font: .88rem/1.45 var(--sans); color: var(--muted); margin: .8rem 0 0; text-align: left; hyphens: manual; }
 @media (max-width: 560px) { :root[data-depth="paper"] #who, :root[data-depth="full"] #who, :root[data-depth="skim"] #who { display: none; } }
 .qbadge { display: none; }
+
+.bar-logo { width: 26px; height: 26px; color: var(--accent); }
 
 
 mjx-container[jax="SVG"] {
@@ -453,7 +462,21 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 <div class="app">
 <header class="bar" id="bar">
  <div class="bar-row" id="bar-row">
-  <button type="button" class="bar-btn" data-open="contents" aria-label="Contents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+  <button type="button" class="bar-btn" data-open="contents" aria-label="Contents"><svg viewBox="0 0 64 64" class="bar-logo" role="img" aria-label="Conifer">
+  
+  <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 9 V 56"/>
+    <path d="M32 20 L 23 28 M32 20 L 41 28"/>
+    <path d="M32 32 L 17.5 43 M32 32 L 46.5 43"/>
+    <path d="M32 44 L 11 58 M32 44 L 53 58"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="32" cy="9" r="4"/>
+    <circle cx="32" cy="20" r="2.6"/><circle cx="23" cy="28" r="2.9"/><circle cx="41" cy="28" r="2.9"/>
+    <circle cx="32" cy="32" r="2.6"/><circle cx="17.5" cy="43" r="2.9"/><circle cx="46.5" cy="43" r="2.9"/>
+    <circle cx="32" cy="44" r="2.6"/><circle cx="11" cy="58" r="2.9"/><circle cx="53" cy="58" r="2.9"/>
+  </g>
+</svg></button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
   <button type="button" class="bar-pill" data-open="settings" id="who" title="Who you are reading as"></button>
@@ -550,7 +573,6 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; }
   let EST = [];
   let estimating = false;
-  let lastOpened = null;                 // a fold just opened, for its animation
 
   // terms: a mention of a defined term is a link only for the readers it is meant for
   const audienceDefs = html => html.replace(/<a data-def="([^"]+)">([\s\S]*?)<\/a>/g, (m, id, txt) => { const d = defs.get(id); return d && d.audience && !d.audience.includes(state.audience) ? txt : m; });
@@ -584,26 +606,18 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   }
   const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="${act}" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
 
-  // a fold, closed: one quiet line
-  function foldedLine(n, ctx) {
+  // a fold: its one-line form and its content live together; data-open says which shows, and the content's grid
+  // track eases between nothing and its natural size (no measuring, no redrawing)
+  function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;
     const bg = n.kind === 'background';
     const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
     const detail = bg ? esc(n.title) : n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`;
     const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
-    return `<div class="node folded${bg ? ' fold-bg' : ''}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
-  }
-  // a fold, open: a small head with the minus, then the content
-  function openFold(n, L, ctx) {
-    const key = ctx.prefix + n.id;
-    const bg = n.kind === 'background';
-    const name = bg ? 'Background' : n.kind === 'appendix' ? '' : esc(n.title || BOX[n.kind] || '');
-    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
-    let inner;
-    if (n.children) inner = wrap(n, L, ctx, true);
-    else inner = leaf(n, ctx, n.kind === 'proof');
-    const anim = lastOpened === key ? ' opening' : '';
-    return `<div class="node fold-open${bg ? ' fold-bg' : ''}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-body${anim}">${inner}</div></div>`;
+    const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
+    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
+    const inner = ctx.estimate && !open ? '' : n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-open="${open}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -636,7 +650,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (isFold(n)) {
       const base = ctx.allOpen || inh >= FULL || (n.kind === 'background' && openByDefault(n)) ? 3 : 2;
       const eff = ctx.over.has(key) ? ctx.over.get(key) : base;
-      return eff >= 3 ? openFold(n, Math.max(inh, PAPER), ctx) : foldedLine(n, ctx);
+      return foldBlock(n, eff >= 3, Math.max(inh, PAPER), ctx);
     }
     if (!n.children) return leaf(n, ctx);
     return wrap(n, Math.max(inh, PAPER), ctx);
@@ -693,7 +707,6 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const before = keepKey ? locate(keepKey) : null;
     const y0 = before ? before.getBoundingClientRect().top : null;
     main.innerHTML = render(DOC.root, state.level, ctx);
-    lastOpened = null;
     if (y0 != null) { const after = locate(keepKey); if (after) window.scrollBy(0, after.getBoundingClientRect().top - y0); }
     drawDial(); barTitle();
     if (window.ConiferSearch) ConiferSearch.refresh();
@@ -705,33 +718,18 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
     ind.classList.add('placed');
   }
-  // a fold, opened or closed where it stands: the node is redrawn alone and its body eases between 0 and its height
-  const renderNode = n => render(n, state.level, { prefix: '', over: state.over });
-  function swapNode(el, html) { const tmp = document.createElement('div'); tmp.innerHTML = html; const neu = tmp.firstElementChild; el.replaceWith(neu); return neu; }
-  function ease(body, from, to, after) {
-    body.style.overflow = 'hidden'; body.style.height = from + 'px'; body.style.opacity = from ? '1' : '0';
-    void body.offsetWidth;
-    body.style.transition = 'height .26s var(--ease-out), opacity .22s var(--ease-out)';
-    body.style.height = to + 'px'; body.style.opacity = to ? '1' : '0';
-    let done = false;
-    const end = () => { if (done) return; done = true; body.style.transition = ''; body.style.overflow = ''; body.style.height = ''; body.style.opacity = ''; after && after(); };
-    body.addEventListener('transitionend', end, { once: true }); setTimeout(end, 320);
-  }
-  function openFoldAt(key) {
-    const el = locate(key), n = byId.get(key.split('|').pop());
-    state.over.set(key, 3); commit();
-    if (!el || !n) { draw(); return; }
-    const neu = swapNode(el, renderNode(n)), body = neu.querySelector('.fold-body');
-    if (body && !reduced()) ease(body, 0, body.offsetHeight);
+  // a fold opens or closes where it stands: only its state flips, the stylesheet eases the rest
+  function setFold(key, open) {
+    state.over.set(key, open ? 3 : 2); commit();
+    const el = locate(key);
+    if (!el) { draw(); return; }
+    el.dataset.open = String(open);
+    $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
+    if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
   }
-  function closeFoldAt(key) {
-    const el = locate(key), n = byId.get(key.split('|').pop());
-    const finish = () => { state.over.set(key, 2); commit(); if (el && el.isConnected && n) swapNode(el, renderNode(n)); else draw(); barTitle(); };
-    const body = el && el.querySelector('.fold-body');
-    if (!body || reduced()) { finish(); return; }
-    ease(body, body.offsetHeight, 0, finish);
-  }
+  const openFoldAt = key => setFold(key, true), closeFoldAt = key => setFold(key, false);
+  window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
     if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
@@ -1026,7 +1024,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
   if (skimHidden() && state.level === SKIM) state.level = BRIEF;
-  function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map() }))); estimating = false; }
+  function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map(), estimate: true }))); estimating = false; }
   estimate();
   draw();
   const h = decodeURIComponent(location.hash.slice(1));
@@ -1198,6 +1196,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     $$('#paper .find-f-now').forEach(f => f.classList.remove('find-f-now'));
     if (!h.range) h.el.classList.add('find-f-now');
     const el = h.range ? (h.range.startContainer.nodeType === 3 ? h.range.startContainer.parentElement : h.range.startContainer) : h.el;
+    const closed = el.closest && el.closest('.fold[data-open="false"]'); if (closed && window.ConiferFolds) ConiferFolds.open(closed.dataset.key);
     const r = h.range ? h.range.getBoundingClientRect() : el.getBoundingClientRect();
     const bar = $('#bar'); const top = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;
     if (r.top < top || r.bottom > window.innerHeight - 24) window.scrollTo({ top: window.scrollY + r.top - top - window.innerHeight * 0.3, behavior: first ? 'auto' : 'smooth' });

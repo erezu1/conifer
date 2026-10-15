@@ -162,6 +162,7 @@
     $$('#paper .find-f-now').forEach(f => f.classList.remove('find-f-now'));
     if (!h.range) h.el.classList.add('find-f-now');
     const el = h.range ? (h.range.startContainer.nodeType === 3 ? h.range.startContainer.parentElement : h.range.startContainer) : h.el;
+    const closed = el.closest && el.closest('.fold[data-open="false"]'); if (closed && window.ConiferFolds) ConiferFolds.open(closed.dataset.key);
     const r = h.range ? h.range.getBoundingClientRect() : el.getBoundingClientRect();
     const bar = $('#bar'); const top = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;
     if (r.top < top || r.bottom > window.innerHeight - 24) window.scrollTo({ top: window.scrollY + r.top - top - window.innerHeight * 0.3, behavior: first ? 'auto' : 'smooth' });

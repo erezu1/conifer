@@ -54,7 +54,6 @@
   function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; }
   let EST = [];
   let estimating = false;
-  let lastOpened = null;                 // a fold just opened, for its animation
 
   // terms: a mention of a defined term is a link only for the readers it is meant for
   const audienceDefs = html => html.replace(/<a data-def="([^"]+)">([\s\S]*?)<\/a>/g, (m, id, txt) => { const d = defs.get(id); return d && d.audience && !d.audience.includes(state.audience) ? txt : m; });
@@ -88,26 +87,18 @@
   }
   const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="${act}" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
 
-  // a fold, closed: one quiet line
-  function foldedLine(n, ctx) {
+  // a fold: its one-line form and its content live together; data-open says which shows, and the content's grid
+  // track eases between nothing and its natural size (no measuring, no redrawing)
+  function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;
     const bg = n.kind === 'background';
     const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
     const detail = bg ? esc(n.title) : n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`;
     const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
-    return `<div class="node folded${bg ? ' fold-bg' : ''}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
-  }
-  // a fold, open: a small head with the minus, then the content
-  function openFold(n, L, ctx) {
-    const key = ctx.prefix + n.id;
-    const bg = n.kind === 'background';
-    const name = bg ? 'Background' : n.kind === 'appendix' ? '' : esc(n.title || BOX[n.kind] || '');
-    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
-    let inner;
-    if (n.children) inner = wrap(n, L, ctx, true);
-    else inner = leaf(n, ctx, n.kind === 'proof');
-    const anim = lastOpened === key ? ' opening' : '';
-    return `<div class="node fold-open${bg ? ' fold-bg' : ''}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-body${anim}">${inner}</div></div>`;
+    const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
+    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
+    const inner = ctx.estimate && !open ? '' : n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-open="${open}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -140,7 +131,7 @@
     if (isFold(n)) {
       const base = ctx.allOpen || inh >= FULL || (n.kind === 'background' && openByDefault(n)) ? 3 : 2;
       const eff = ctx.over.has(key) ? ctx.over.get(key) : base;
-      return eff >= 3 ? openFold(n, Math.max(inh, PAPER), ctx) : foldedLine(n, ctx);
+      return foldBlock(n, eff >= 3, Math.max(inh, PAPER), ctx);
     }
     if (!n.children) return leaf(n, ctx);
     return wrap(n, Math.max(inh, PAPER), ctx);
@@ -197,7 +188,6 @@
     const before = keepKey ? locate(keepKey) : null;
     const y0 = before ? before.getBoundingClientRect().top : null;
     main.innerHTML = render(DOC.root, state.level, ctx);
-    lastOpened = null;
     if (y0 != null) { const after = locate(keepKey); if (after) window.scrollBy(0, after.getBoundingClientRect().top - y0); }
     drawDial(); barTitle();
     if (window.ConiferSearch) ConiferSearch.refresh();
@@ -209,33 +199,18 @@
     ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
     ind.classList.add('placed');
   }
-  // a fold, opened or closed where it stands: the node is redrawn alone and its body eases between 0 and its height
-  const renderNode = n => render(n, state.level, { prefix: '', over: state.over });
-  function swapNode(el, html) { const tmp = document.createElement('div'); tmp.innerHTML = html; const neu = tmp.firstElementChild; el.replaceWith(neu); return neu; }
-  function ease(body, from, to, after) {
-    body.style.overflow = 'hidden'; body.style.height = from + 'px'; body.style.opacity = from ? '1' : '0';
-    void body.offsetWidth;
-    body.style.transition = 'height .26s var(--ease-out), opacity .22s var(--ease-out)';
-    body.style.height = to + 'px'; body.style.opacity = to ? '1' : '0';
-    let done = false;
-    const end = () => { if (done) return; done = true; body.style.transition = ''; body.style.overflow = ''; body.style.height = ''; body.style.opacity = ''; after && after(); };
-    body.addEventListener('transitionend', end, { once: true }); setTimeout(end, 320);
-  }
-  function openFoldAt(key) {
-    const el = locate(key), n = byId.get(key.split('|').pop());
-    state.over.set(key, 3); commit();
-    if (!el || !n) { draw(); return; }
-    const neu = swapNode(el, renderNode(n)), body = neu.querySelector('.fold-body');
-    if (body && !reduced()) ease(body, 0, body.offsetHeight);
+  // a fold opens or closes where it stands: only its state flips, the stylesheet eases the rest
+  function setFold(key, open) {
+    state.over.set(key, open ? 3 : 2); commit();
+    const el = locate(key);
+    if (!el) { draw(); return; }
+    el.dataset.open = String(open);
+    $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
+    if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
   }
-  function closeFoldAt(key) {
-    const el = locate(key), n = byId.get(key.split('|').pop());
-    const finish = () => { state.over.set(key, 2); commit(); if (el && el.isConnected && n) swapNode(el, renderNode(n)); else draw(); barTitle(); };
-    const body = el && el.querySelector('.fold-body');
-    if (!body || reduced()) { finish(); return; }
-    ease(body, body.offsetHeight, 0, finish);
-  }
+  const openFoldAt = key => setFold(key, true), closeFoldAt = key => setFold(key, false);
+  window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
     if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
@@ -530,7 +505,7 @@
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
   if (skimHidden() && state.level === SKIM) state.level = BRIEF;
-  function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map() }))); estimating = false; }
+  function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map(), estimate: true }))); estimating = false; }
   estimate();
   draw();
   const h = decodeURIComponent(location.hash.slice(1));

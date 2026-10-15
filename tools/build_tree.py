@@ -287,6 +287,8 @@ ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
 ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
+LOGO_BAR = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
+LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
 LOGO = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
 title_html = fill(S["meta"].get("titleHtml") or html.escape(meta["title"]))
@@ -299,7 +301,7 @@ body = f"""<title>{html.escape(page_title)}</title>
 <div class="app">
 <header class="bar" id="bar">
  <div class="bar-row" id="bar-row">
-  <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{ICON_TOC}</button>
+  <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
   <button type="button" class="bar-pill" data-open="settings" id="who" title="Who you are reading as"></button>
@@ -331,7 +333,7 @@ body = f"""<title>{html.escape(page_title)}</title>
 """
 (paper / "tree.artifact.html").write_text(body)
 head_end = body.index("</style>") + len("</style>")
-favicon = ('<link rel="icon" href="../favicon.ico" sizes="32x32">\n<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">\n'
+favicon = ('<link rel="icon" href="../favicon.ico" sizes="any">\n<link rel="icon" href="../icons/favicon-32.png" type="image/png" sizes="32x32">\n<link rel="icon" href="../icons/favicon.svg" type="image/svg+xml">\n'
            '<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">\n<link rel="manifest" href="../manifest.webmanifest">\n'
            '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n<meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">\n'
            '<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Conifer">\n<meta name="mobile-web-app-capable" content="yes">\n'
