@@ -10,7 +10,7 @@
   --glass: rgba(255, 255, 255, .76); --shadow: 0 10px 30px rgba(20, 30, 40, .18); --on-accent: #ffffff; --edge: rgba(22, 25, 29, .22);
   --serif: "Newsreader", "Georgia", "Times New Roman", serif;
   --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  --page-w: 40rem;
+  --page-w: 40rem; --dot: color-mix(in srgb, var(--fg) 32%, transparent);
   --ease-out: cubic-bezier(.2, .7, .2, 1); --ease-in: cubic-bezier(.6, 0, .9, .4);
 }
 @media (prefers-color-scheme: dark) {
@@ -35,11 +35,20 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 1.0625rem/1.6 v
 :focus:not(:focus-visible) { outline: none; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
-.page a[href^="#"], #sheet-body a[href^="#"]:not(.peek-from) { color: inherit; border-bottom: 1px dotted color-mix(in srgb, var(--fg) 32%, transparent); border-radius: 3px; }
-.page a[href^="#"]:hover, #sheet-body a[href^="#"]:not(.peek-from):hover { text-decoration: none; background: var(--accent-soft); }
-.page a.fnref, .page a[id^="fnref"] { border-bottom: 0; }
+/* one rule for everything tappable in the reading text, wherever it is drawn (the page, a peek, the popover): the text's
+   colour and a faint dotted line; the accent is kept for the chrome (peek headers, buttons) */
+.page a, #sheet-body a, #pop a, [data-def] { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--dot); border-radius: 3px; }
+.page a:hover, #sheet-body a:hover, #pop a:hover, [data-def]:hover { text-decoration: none; background: var(--accent-soft); }
+.page a[id^="fnref"], .page a.fnref, #sheet-body a[id^="fnref"] { border-bottom: 0; }
+.peek-from, .peek-from:hover, .sheet-head a, .btn, .ctl { color: var(--accent); border-bottom: 0; }
+.btn.primary { color: var(--on-accent); }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
 .page p { margin: 0 0 1em; }
+.page p, .page li, .sum-body, .lede, #sheet-body p, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
+.gist-list b, .card-label, .fold-line, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
+/* a larger text on a wide screen, and the column widens with it (its width is in rem) */
+@media (min-width: 900px) { html { font-size: 112.5%; } }
+@media (min-width: 1400px) { html { font-size: 118.75%; } }
 b, strong { font-weight: 600; }
 .muted { color: var(--muted); }
 button { font-family: var(--sans); }
@@ -146,9 +155,8 @@ mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }
 .gs { cursor: pointer; border-radius: 3px; }
 .gs:hover, .gs:focus-visible, .gs.peeking { background: var(--accent-soft); outline: none; }
 dfn { font-style: italic; }
-[data-def] { cursor: pointer; border-radius: 3px; }
-:root:not(.marks-off) [data-def] { border-bottom: 1px dotted color-mix(in srgb, var(--fg) 32%, transparent); }
-[data-def]:hover { background: var(--accent-soft); }
+[data-def] { cursor: pointer; }
+:root.marks-off [data-def] { border-bottom: 0; }
 
 /* ---- summaries: the gist card, the summary page, the ledes in the paper */
 .gist-card { border: 1px solid var(--rule); border-radius: 14px; padding: 1.1rem 1.25rem 1rem; margin-top: .4rem; }

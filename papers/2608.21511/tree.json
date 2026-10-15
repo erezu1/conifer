@@ -20,7 +20,164 @@
    "doc": "papers/2608.21511/doc"
   },
   "date": "21 August 2026",
-  "note": "The paper as a Conifer tree. The text at the Paper and Everything depths is the paper itself; the gist, the summaries, the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author."
+  "note": "The paper as a Conifer tree. The text at the Paper and Everything depths is the paper itself; the gist, the summaries, the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author.",
+  "macros": {
+   "todo": [
+    "\\textcolor{red}{#1}",
+    1
+   ],
+   "titlemath": [
+    "\\texorpdfstring{#1}{Lg}",
+    1
+   ],
+   "eu": [
+    "\\textcolor{blue}{[EU: #1]}",
+    1
+   ],
+   "xtumfont": [
+    "\\textsc{#1}",
+    1
+   ],
+   "jname": "JHEP",
+   "acknowledgments": "\\section*{Acknowledgments}",
+   "notoc": "\\notoctrue",
+   "note": [
+    "\\if!#1!\\stepcounter{footnote}\\footnotetext{#2}\\else{\\renewcommand\\thefootnote{#1}\\footnotetext{#2}}\\fi",
+    2,
+    ""
+   ],
+   "compress": "\\renewcommand\\afterProceedingsSpace{\\bigskip}\\renewcommand\\afterTitleSpace{\\bigskip}\\renewcommand\\afterRuleSpace{\\bigskip\\bigskip}\n\\renewcommand\\afterEmailSpace{\\par\\bigskip}",
+   "afterLogoSpace": "\\smallskip",
+   "afterSubheaderSpace": "\\vskip3pt plus 2pt minus 1pt",
+   "afterProceedingsSpace": "\\vskip21pt plus0.4fil minus15pt",
+   "afterTitleSpace": "\\vskip23pt plus0.06fil minus13pt",
+   "afterRuleSpace": "\\vskip23pt plus0.06fil minus13pt",
+   "afterCollaborationSpace": "\\vskip3pt plus 2pt minus 1pt",
+   "afterCollaborationImgSpace": "\\vskip3pt plus 2pt minus 1pt",
+   "afterAuthorSpace": "\\vskip5pt plus4pt minus4pt",
+   "afterAffiliationSpace": "\\vskip3pt plus3pt",
+   "afterEmailSpace": "\\vskip16pt plus9pt minus10pt\\filbreak",
+   "afterXtumSpace": "\\par\\bigskip",
+   "afterAbstractSpace": "\\vskip16pt plus9pt minus13pt",
+   "afterKeywordsSpace": "\\vskip16pt plus9pt minus13pt",
+   "afterArxivSpace": "\\vskip3pt plus0.01fil minus10pt",
+   "afterDedicatedSpace": "\\vskip0pt plus0.01fil",
+   "afterTocSpace": "\\bigskip\\medskip",
+   "afterTocRuleSpace": "\\bigskip\\bigskip",
+   "beforetochook": "\\pagestyle{myplain}\\pagenumbering{roman}",
+   "baselinestretch": "1.1",
+   "topfraction": "1",
+   "bottomfraction": ".6",
+   "textfraction": "0",
+   "floatpagefraction": "0.8",
+   "theequation": "\\thesection.\\arabic{equation}",
+   "oldthebibliography": "\\thebibliography",
+   "endoldthebibliography": "\\endthebibliography",
+   "ensuremath": [
+    "#1",
+    1
+   ],
+   "xspace": "",
+   "qedhere": "",
+   "bm": [
+    "\\boldsymbol{#1}",
+    1
+   ],
+   "nobreak": "",
+   "allowbreak": "",
+   "mathbbm": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "intertext": [
+    "\\text{#1}",
+    1
+   ],
+   "shortintertext": [
+    "\\text{#1}",
+    1
+   ],
+   "num": [
+    "#1",
+    1
+   ],
+   "si": [
+    "\\mathrm{#1}",
+    1
+   ],
+   "SI": [
+    "#1\\,\\mathrm{#2}",
+    2
+   ],
+   "textsc": [
+    "\\text{#1}",
+    1
+   ],
+   "vspace": [
+    "",
+    1
+   ],
+   "nolimits": "",
+   "displaybreak": "",
+   "dd": "\\mathrm{d}",
+   "mathds": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "boldmath": "",
+   "unboldmath": "",
+   "slashed": [
+    "{\\not{#1}}",
+    1
+   ],
+   "dag": "\\dagger",
+   "Bar": [
+    "\\bar{#1}",
+    1
+   ],
+   "Tilde": [
+    "\\tilde{#1}",
+    1
+   ],
+   "Hat": [
+    "\\hat{#1}",
+    1
+   ],
+   "Tr": "\\operatorname{Tr}",
+   "tr": "\\operatorname{tr}",
+   "widecheck": [
+    "\\check{#1}",
+    1
+   ],
+   "tcboxmath": [
+    "\\boxed{#1}",
+    1
+   ],
+   "footnote": [
+    "",
+    1
+   ],
+   "footnotesize": "",
+   "small": "",
+   "toprule": "\\hline",
+   "midrule": "\\hline",
+   "bottomrule": "\\hline",
+   "href": [
+    "#2",
+    2
+   ],
+   "relax": "",
+   "bbone": "\\mathbb{1}",
+   "one": "\\mathbb{1}",
+   "tikzsetnextfilename": [
+    "",
+    1
+   ],
+   "raisebox": [
+    "\\raise{#1}{#2}",
+    2
+   ]
+  }
  },
  "levels": [
   {

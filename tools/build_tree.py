@@ -177,7 +177,8 @@ for q in getattr(L, "QUESTIONS", []):
 cone = {
     "format": "conifer-doc", "version": 1,
     "meta": dict(S["meta"], key=getattr(L, "KEY", {}), defaultAudience=getattr(L, "DEFAULT_AUDIENCE", "physicist"),
-                 kicker=getattr(L, "KICKER", S["meta"].get("kicker")), date=getattr(L, "DATE", ""), note=getattr(L, "NOTE", "")),
+                 kicker=getattr(L, "KICKER", S["meta"].get("kicker")), date=getattr(L, "DATE", ""), note=getattr(L, "NOTE", ""),
+                 macros=D["math"].get("macros", {})),
     "levels": S["levels"], "audiences": getattr(L, "AUDIENCES", []),
     "root": root, "defs": defs, "questions": questions,
 }
@@ -267,6 +268,7 @@ page_doc = fill(page_doc)
 css = (HERE / "viewer" / "viewer.css").read_text() + "\n" + M.get("css", "")
 js = (HERE / "viewer" / "viewer.js").read_text()
 js += "\n" + (HERE / "viewer" / "search.js").read_text()
+js += "\n" + (HERE / "viewer" / "copy.js").read_text()
 meta = page_doc["meta"]
 data = json.dumps(page_doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
 fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;'

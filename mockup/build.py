@@ -96,6 +96,7 @@ print("formulas drawn:", len(items))
 css = (HERE.parent / "viewer" / "viewer.css").read_text()
 js = (HERE.parent / "viewer" / "viewer.js").read_text()
 js += "\n" + (HERE.parent / "viewer" / "search.js").read_text()
+js += "\n" + (HERE.parent / "viewer" / "copy.js").read_text()
 meta = doc["meta"]
 data = json.dumps(doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
 fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;'
