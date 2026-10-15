@@ -203,10 +203,10 @@ dfn { font-style: italic; }
 .fold-bg .fold-name, .fold-bg .fold-head > span:first-of-type { color: var(--reader); }
 .fold-head { display: flex; align-items: center; gap: .55rem; font: 600 .76rem/1.15 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1rem 0 .35rem; }
 .fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem var(--sans); color: var(--fg); }
-.fold-wrap { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
+.fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
 .fold[data-open="true"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
 .fold[data-open="true"] .fold-closed { display: none; }
-.fold-body { min-height: 0; overflow: clip; overflow-clip-margin: 12px; }
+.fold-body { min-height: 0; min-width: 0; overflow: clip; overflow-clip-margin: 12px; }
 .fold[data-open="false"] .fold-body { visibility: hidden; transition: visibility 0s .3s; }
 .fold-bg[data-open="true"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
