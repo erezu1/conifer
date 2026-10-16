@@ -1021,7 +1021,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   let curSection = null;
   function barTitle() {
     const t = $('#bar-title');
-    if (state.level === GIST || state.level === BRIEF) { t.innerHTML = esc(LEVELS[state.level].label) + ' · ' + esc(DOC.meta.title); curSection = null; return; }
+    if (state.level === GIST || state.level === BRIEF) { t.innerHTML = esc(DOC.meta.title); curSection = null; return; }   // (the tabs under it say which document)
     const top = barH() + 12;
     let cur = null;
     $$('#paper .sec-h', $('#paper')).forEach(h => { if (h.getBoundingClientRect().top <= top) cur = h; });
