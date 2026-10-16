@@ -261,6 +261,11 @@ dfn { font-style: italic; }
 .fold-bg[data-state="open"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
+/* a heading's circle on its capitals: centred on the first line's box, then lifted by the distance from that box's
+   centre to the capitals' centre in the heading's font (0.1175 of the heading's size, measured), whatever its level */
+@property --sec-em { syntax: '<length>'; inherits: true; initial-value: 16px; }
+.sec-h { --sec-em: 1em; }
+.sec-h > .fold-btn { top: calc(var(--sec-em) * -0.1175); }
 .fold-lede > .fold-wrap > .fold-body { padding-bottom: .1rem; }
 /* ---- provenance chips and question badges */
 .chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
@@ -298,8 +303,8 @@ dfn { font-style: italic; }
    its soft ground; two sizes only, in the text (a fold's) and in a header. */
 .bar-btn svg *, #find-row svg *, .x-btn svg *, .fold-btn svg * { vector-effect: non-scaling-stroke; stroke-width: 1.25px; }
 .x-btn svg, .fold-btn svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
-.x-btn svg { width: 10px; height: 10px; }
-.fold-btn svg { width: 8px; height: 8px; }
+.x-btn svg { width: 12px; height: 12px; }
+.fold-btn svg { width: 10px; height: 10px; }
 .x-btn, .fold-btn { border: 1px solid color-mix(in srgb, var(--muted) 45%, transparent); color: var(--muted); background: var(--bg); }
 @media (min-width: 960px) {
   .sheet { left: auto; top: 0; bottom: 0; width: 28rem; max-height: none; border-radius: 0; border-top: 0; border-left: 1px solid var(--rule); padding-top: .8rem; animation: slide .24s var(--ease-out); }
@@ -329,7 +334,7 @@ dfn { font-style: italic; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
 .peek-row { display: flex; align-items: center; gap: .5rem; max-width: var(--page-w); margin: 0 auto; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); min-height: 2.4rem; }
 .peek-row .bar-btn { width: 1.9rem; height: 1.9rem; }
-.peek-row .peek-go svg { width: 10px; height: 10px; }   /* the expand: a circled control, as the x beside it and the folds' +/- are */
+.peek-row .peek-go svg { width: 12px; height: 12px; }   /* the expand: a circled control, as the x beside it and the folds' +/- are */
 .peek-row .x-btn + .x-btn { margin-left: .1rem; }
 .peek-title .peek-from::after { content: none; }      /* (the button says it; the title's link still goes there too) */
 .peek-title { flex: 1; min-width: 0; font: 600 1.02rem/1.35 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: ns-resize; }
