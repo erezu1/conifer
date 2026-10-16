@@ -20,7 +20,7 @@
    "doc": "papers/2608.21511/doc"
   },
   "date": "21 August 2026",
-  "note": "The paper as a Conifer tree. The text at the Paper and Everything depths is the paper itself; the gist, the summaries, the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author.",
+  "note": "The paper as a Conifer tree. The text at the Paper depth is the paper itself; the gist, the summaries, the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author.",
   "macros": {
    "todo": [
     "\\textcolor{red}{#1}",
