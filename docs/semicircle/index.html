@@ -1930,6 +1930,35 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     }
     return out;
   }
+  // a passage of words and formulas (as a selection gives it), as Epsilon finds it: the paper read as one stream, each
+  // formula as its TeX between two marks, the words in any case and any spacing; a hit is the passage's words and
+  // formulas in order, marked as words are (its formulas boxed)
+  const BLOCKS = 'p, li, h1, h2, h3, h4, h5, h6, .display, figcaption, td, th, blockquote, .thm';
+  function mixedHits(parts) {
+    const root = main(); if (!root) return [];
+    let text = '', last = null; const pieces = [];
+    const walk = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: n => {
+      if (n.nodeType === 1) { if (n.matches('mjx-container[data-tex]')) return NodeFilter.FILTER_ACCEPT; if (n.matches('svg, script, style, button, .mjx-hl, .anchor')) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_SKIP; }
+      return NodeFilter.FILTER_ACCEPT; } });
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      const blk = (n.nodeType === 1 ? n : n.parentNode).closest(BLOCKS);
+      if (blk !== last) { text += '\n'; last = blk; }
+      if (n.nodeType === 1) { const t = '\u0002' + texNorm(n.dataset.tex) + '\u0003'; pieces.push({ at: text.length, el: n, len: t.length }); text += t; }
+      else { pieces.push({ at: text.length, node: n, len: n.data.length }); text += n.data.toLowerCase(); }
+    }
+    const re = new RegExp(parts.map(p => p.f != null ? '\u0002' + reEsc(texNorm(p.f)) + '\u0003' : reEsc(p.t.trim().toLowerCase()).replace(/\s+/g, '\\s+')).join('\\s*'), 'g');
+    const at = k => { let lo = 0, hi = pieces.length - 1; while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (pieces[mid].at <= k) lo = mid; else hi = mid - 1; } return lo; };
+    const out = []; let m;
+    while ((m = re.exec(text)) && out.length < 500) {
+      if (!m[0]) { re.lastIndex++; continue; }
+      const i = m.index, j = i + m[0].length, a = pieces[at(i)], b = pieces[at(j - 1)], r = document.createRange();
+      if (a.el) r.setStartBefore(a.el); else r.setStart(a.node, Math.max(0, i - a.at));
+      if (b.el) r.setEndAfter(b.el); else r.setEnd(b.node, Math.min(b.len, j - b.at));
+      const forms = pieces.slice(at(i), at(j - 1) + 1).filter(x => x.el).map(x => x.el);
+      out.push({ range: r, el: (a.el || a.node.parentElement), forms });
+    }
+    return out;
+  }
   function texHits(q) {
     const out = [], seq = glyphsOf(texNorm(q)), single = !!seq && seq.length === 1;
     $$('#paper mjx-container[data-tex]').forEach(f => {
@@ -1951,9 +1980,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const w = what(q);
     if (!w) { count(); return; }
     let list = [];
-    if (w.mixed) {                                   // "the trace $\mathrm{Tr}\,\rho$ is": every text part, where a formula part is near
-      w.mixed.forEach(p => { if (p.t) list = list.concat(textHits(p.t)); else list = list.concat(texHits(p.f)); });
-    } else {
+    if (w.mixed) list = mixedHits(w.mixed);          // "the trace $\mathrm{Tr}\,\rho$ is": the passage itself, words and formulas in order
+    else {
       if (w.text) list = list.concat(textHits(w.text));
       if (w.tex) list = list.concat(texHits(w.tex));
     }
@@ -1965,7 +1993,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (window.Highlight && CSS.highlights) {
       CSS.highlights.set('conifer-find', new Highlight(...hits.filter(h => h.range).map(h => h.range)));
     }
-    hits.forEach(h => { if (h.range) return; if (h.glyphs) h.mark = markGlyphs(h.el, h.glyphs); else h.el.classList.add('find-f'); });
+    hits.forEach(h => { if (h.range) { (h.forms || []).forEach(f => f.classList.add('find-f')); return; } if (h.glyphs) h.mark = markGlyphs(h.el, h.glyphs); else h.el.classList.add('find-f'); });
   }
   function clear() {
     if (window.CSS && CSS.highlights) { CSS.highlights.delete('conifer-find'); CSS.highlights.delete('conifer-find-now'); }
@@ -1996,8 +2024,26 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // ------------------------------------------------------------------ the field in the bar
   let timer = null;
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // what is selected in the text, as a query: its words as they are, each formula as its TeX (as written, the way
+  // the search reads formulas), spaces made single; nothing if nothing is selected in the paper, a peek or a sheet
+  function selectedQuery() {
+    const sel = window.getSelection(); if (!sel || !sel.rangeCount || sel.isCollapsed) return '';
+    const r = sel.getRangeAt(0), at = r.commonAncestorContainer, el = at.nodeType === 1 ? at : at.parentElement;
+    if (!el || !el.closest('#paper, #peek-body, #sheet-body, #pop')) return '';
+    const walk = n => {
+      if (n.nodeType === 3) return n.nodeValue;
+      if (n.nodeType !== 1 && n.nodeType !== 11) return '';
+      if (n.nodeType === 1 && n.tagName === 'MJX-CONTAINER') return ' $' + (n.getAttribute('data-tex') || '').trim() + '$ ';
+      if (n.nodeType === 1 && n.matches('.qbadge, .anchor, .fold-btn, .x-btn, .eqno, .mjx-hl, script, style')) return '';
+      let t = ''; n.childNodes.forEach(c => { t += walk(c); }); return t;
+    };
+    let q = walk(r.cloneContents()).replace(/\s+/g, ' ').trim();
+    if (/^\$[^$]*\$$/.test(q) === false) q = q.replace(/^\$\s*\$|\$\s*\$$/g, '');
+    return q.length > 300 ? '' : q;                 // (a whole page selected is not a query)
+  }
   function show(on) {                              // the search takes the tab row (the lane, viewer.js): the labels give way to the field
-    if (open === on) return;
+    if (open === on) { if (on) { const q = selectedQuery(); if (q) { const f = $('#find-input'); f.value = q; f.focus(); run(q); } } return; }
+    const picked = on ? selectedQuery() : '';        // (read before the field takes the focus, and the selection with it)
     open = on;
     const bar = $('#bar'), find = $('#find-row'); if (!bar || !find) return;
     const sb = $('.bar-search'); if (sb) sb.setAttribute('aria-label', on ? 'Close the search' : 'Search in the paper');
@@ -2005,7 +2051,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       find.hidden = false; void find.offsetWidth;
       bar.classList.add('searching');
       if (window.ConiferLane) ConiferLane.search(true);
-      const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);
+      const f = $('#find-input'); f.value = picked || lastQ; f.focus(); f.select(); if (f.value) run(f.value);   // (a selection is searched at once)
     } else {
       clear(); count();
       const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
