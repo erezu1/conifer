@@ -870,4 +870,7 @@
   const h = decodeURIComponent(location.hash.slice(1));
   if (h) goHash(h, false);
   commit();
+  // the page is ready: the growing tree that stood while it loaded fades away (tools/loader.py)
+  const ld = document.getElementById('loader');
+  if (ld) { ld.classList.add('done'); setTimeout(() => ld.remove(), 400); }
 })();

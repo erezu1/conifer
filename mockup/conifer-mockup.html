@@ -515,10 +515,53 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   stroke-width: 3;
 }
 
+#loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: var(--bg, #fff); color: var(--accent, #1d5b98); transition: opacity .35s ease; }
+#loader svg { width: 76px; height: 76px; overflow: visible; }
+#loader.done { opacity: 0; pointer-events: none; }
+@keyframes ld-tree { 0%, 84% { opacity: 1; } 96%, 100% { opacity: 0; } }
+.ld-tree { animation: ld-tree 2.8s infinite ease-in-out; }
+@keyframes ld-trunk { 0%, 2% { stroke-dashoffset: 1; } 20%, 100% { stroke-dashoffset: 0; } }
+.ld-trunk { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-trunk 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-bl0 { 0%, 18% { stroke-dashoffset: 1; } 31%, 100% { stroke-dashoffset: 0; } }
+.ld-bl0 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-bl0 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-br0 { 0%, 18% { stroke-dashoffset: 1; } 31%, 100% { stroke-dashoffset: 0; } }
+.ld-br0 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-br0 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-bl1 { 0%, 26% { stroke-dashoffset: 1; } 39%, 100% { stroke-dashoffset: 0; } }
+.ld-bl1 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-bl1 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-br1 { 0%, 26% { stroke-dashoffset: 1; } 39%, 100% { stroke-dashoffset: 0; } }
+.ld-br1 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-br1 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-bl2 { 0%, 34% { stroke-dashoffset: 1; } 47%, 100% { stroke-dashoffset: 0; } }
+.ld-bl2 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-bl2 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-br2 { 0%, 34% { stroke-dashoffset: 1; } 47%, 100% { stroke-dashoffset: 0; } }
+.ld-br2 { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ld-br2 2.8s infinite; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+@keyframes ld-apex { 0%, 44% { transform: scale(0); } 52% { transform: scale(1.18); } 56%, 100% { transform: scale(1); } }
+.ld-apex { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-apex 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-j0 { 0%, 48% { transform: scale(0); } 55% { transform: scale(1.18); } 59%, 100% { transform: scale(1); } }
+.ld-j0 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-j0 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-l0 { 0%, 51% { transform: scale(0); } 58% { transform: scale(1.18); } 62%, 100% { transform: scale(1); } }
+.ld-l0 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-l0 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-r0 { 0%, 51% { transform: scale(0); } 58% { transform: scale(1.18); } 62%, 100% { transform: scale(1); } }
+.ld-r0 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-r0 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-j1 { 0%, 53% { transform: scale(0); } 60% { transform: scale(1.18); } 64%, 100% { transform: scale(1); } }
+.ld-j1 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-j1 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-l1 { 0%, 56% { transform: scale(0); } 63% { transform: scale(1.18); } 67%, 100% { transform: scale(1); } }
+.ld-l1 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-l1 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-r1 { 0%, 56% { transform: scale(0); } 63% { transform: scale(1.18); } 67%, 100% { transform: scale(1); } }
+.ld-r1 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-r1 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-j2 { 0%, 58% { transform: scale(0); } 65% { transform: scale(1.18); } 69%, 100% { transform: scale(1); } }
+.ld-j2 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-j2 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-l2 { 0%, 61% { transform: scale(0); } 68% { transform: scale(1.18); } 72%, 100% { transform: scale(1); } }
+.ld-l2 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-l2 2.8s infinite; animation-timing-function: ease-out; }
+@keyframes ld-r2 { 0%, 61% { transform: scale(0); } 68% { transform: scale(1.18); } 72%, 100% { transform: scale(1); } }
+.ld-r2 { transform-box: fill-box; transform-origin: center; transform: scale(0); animation: ld-r2 2.8s infinite; animation-timing-function: ease-out; }
+@media (prefers-reduced-motion: reduce) { #loader * { animation: none !important; stroke-dashoffset: 0 !important; transform: none !important; } #loader svg { animation: ld-calm 1.6s ease-in-out infinite alternate; } }
+@keyframes ld-calm { from { opacity: .45; } to { opacity: 1; } }
+
 </style>
 </head>
 <body>
 
+<div id="loader" role="progressbar" aria-label="Loading the paper"><svg viewBox="0 0 64 64" aria-hidden="true"><g class="ld-tree"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path class="ld-trunk" d="M32 56 V 9" pathLength="1"/><path class="ld-bl0" d="M32 20 L 23 28" pathLength="1"/><path class="ld-br0" d="M32 20 L 41 28" pathLength="1"/><path class="ld-bl1" d="M32 32 L 17.5 43" pathLength="1"/><path class="ld-br1" d="M32 32 L 46.5 43" pathLength="1"/><path class="ld-bl2" d="M32 44 L 11 58" pathLength="1"/><path class="ld-br2" d="M32 44 L 53 58" pathLength="1"/></g><g fill="currentColor"><circle class="ld-apex" cx="32" cy="9" r="4"/><circle class="ld-j0" cx="32" cy="20" r="2.6"/><circle class="ld-l0" cx="23" cy="28" r="2.9"/><circle class="ld-r0" cx="41" cy="28" r="2.9"/><circle class="ld-j1" cx="32" cy="32" r="2.6"/><circle class="ld-l1" cx="17.5" cy="43" r="2.9"/><circle class="ld-r1" cx="46.5" cy="43" r="2.9"/><circle class="ld-j2" cx="32" cy="44" r="2.6"/><circle class="ld-l2" cx="11" cy="58" r="2.9"/><circle class="ld-r2" cx="53" cy="58" r="2.9"/></g></g></svg></div>
 <div class="app">
 <header class="bar" id="bar">
  <div class="bar-row" id="bar-row">
@@ -1450,6 +1493,9 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   const h = decodeURIComponent(location.hash.slice(1));
   if (h) goHash(h, false);
   commit();
+  // the page is ready: the growing tree that stood while it loaded fades away (tools/loader.py)
+  const ld = document.getElementById('loader');
+  if (ld) { ld.classList.add('done'); setTimeout(() => ld.remove(), 400); }
 })();
 
 // Conifer: search in the paper, after Epsilon's rules. Words are found in the text as a browser finds them; a query

@@ -16,6 +16,8 @@ import json
 import re
 import subprocess
 import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent.parent / 'tools'))
+import loader  # noqa: E402
 import tempfile
 import urllib.parse
 from pathlib import Path
@@ -124,13 +126,15 @@ LOGO_BAR = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('widt
 LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
 LOGO = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg")
 LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
+LOADER_HTML, LOADER_CSS = loader.build()
 body = f"""<title>Conifer Reader Mockup</title>
 {fonts}
 <style>
 {css}
 {out["css"]}
+{LOADER_CSS}
 </style>
-<div class="app">
+{LOADER_HTML}<div class="app">
 <header class="bar" id="bar">
  <div class="bar-row" id="bar-row">
   <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>

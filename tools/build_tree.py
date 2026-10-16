@@ -22,6 +22,8 @@ import json
 import re
 import subprocess
 import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
+import loader  # noqa: E402
 import tempfile
 import urllib.parse
 from pathlib import Path
@@ -307,12 +309,14 @@ LOGO = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" heig
 LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
 title_html = fill(S["meta"].get("titleHtml") or html.escape(meta["title"]))
 page_title = getattr(L, "PAGE_TITLE", meta["title"])
+LOADER_HTML, LOADER_CSS = loader.build()
 body = f"""<title>{html.escape(page_title)}</title>
 {fonts}
 <style>
 {css}
+{LOADER_CSS}
 </style>
-<div class="app">
+{LOADER_HTML}<div class="app">
 <header class="bar" id="bar">
  <div class="bar-row" id="bar-row">
   <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>
