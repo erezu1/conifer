@@ -319,6 +319,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **References and notes (17 Oct).** The notes and the references end the paper at its top level (the converter had hung them on the last appendix, where a closed fold hid them); the converter's own heading inside them is hidden (the page heads them); an arXiv number is set in the text's face with lining figures (the browser's monospace was larger than the text around it); a note's number stands beside its text.
 
+**The peek's room and the title's box (17 Oct).** A peek has 2rem under its text; while a drag or the growth into the page makes it taller, it adds exactly the room that keeps a short text where it is, and at rest keeps only what its new size needs (the fixed 75% of the screen it had let one scroll far past the end). The bar's title box hugs its words (centred on the page's axis, or between the back pill and the icons), so its hover is as wide on both sides of them.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

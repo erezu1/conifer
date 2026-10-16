@@ -572,9 +572,20 @@
     const pk = $('#peek'), body = $('#peek-body');
     if (inPeek && peekIsOpen()) peekStack.push({ title: $('#peek-title').innerHTML, html: body.innerHTML, y: body.scrollTop });
     else peekStack.length = 0;
-    $('#peek-title').innerHTML = title; body.innerHTML = html; body.scrollTop = 0;
+    $('#peek-title').innerHTML = title; body.innerHTML = html; body.scrollTop = 0; body.dataset.extra = 0; body.style.removeProperty('--peek-room');
     $('[data-peekback]', pk).hidden = !peekStack.length;
     if (!peekIsOpen()) { pk.classList.remove('closing'); pk.hidden = false; peekSetH(peekAvail() * peekFrac); }
+  }
+  // the room under the peek's text: as much as keeps it still at a coming height (a taller peek would scroll a short
+  // text back), and no more; 2rem when nothing is needed
+  function peekRoom(targetH) {
+    const pk = $('#peek'), body = $('#peek-body'); if (!pk || !body) return;
+    const extra = parseFloat(body.dataset.extra || '0');
+    const content = body.scrollHeight - extra;
+    const future = body.clientHeight + (targetH - pk.getBoundingClientRect().height);
+    const need = Math.max(0, Math.ceil(body.scrollTop + future - content));
+    body.dataset.extra = need;
+    body.style.setProperty('--peek-room', need ? `calc(2rem + ${need}px)` : '');
   }
   function peekDone() {                              // gone: hidden, and every trace of a drag or a growth undone
     const pk = $('#peek');
@@ -625,6 +636,7 @@
     const body = $('#peek-body');
     // (made as tall as the bar allows at once and slid up by a transform, which the screen runs by itself)
     const top = pk.getBoundingClientRect().top, full = window.innerHeight - barH();
+    peekRoom(full);
     pk.style.transition = 'none'; pk.style.height = full + 'px'; pk.style.transform = `translateY(${Math.round(top - barH())}px)`;
     void pk.offsetWidth;
     // where its lines stand once grown (taller, a short text scrolls back): measured now, in the grown peek
@@ -664,6 +676,7 @@
       if (!settle) return;
       clearTimeout(settle.t); const h = settle.h; settle = null;
       pk.style.transition = 'none'; peekSetH(h); pk.style.transform = ''; void pk.offsetWidth; pk.style.transition = '';
+      peekRoom(pk.getBoundingClientRect().height);
     }
     head.addEventListener('pointerdown', e => {
       if (e.button !== 0 || e.target.closest('button, a') || peekExpanding) return;
@@ -672,7 +685,7 @@
       const max = peekMax(), h = window.innerHeight - pk.getBoundingClientRect().top;   // where it shows, even mid-spring
       drag = { y: e.clientY, h, at: h, max, id: e.pointerId };
       pk.classList.add('dragging'); pk.style.transition = 'none';
-      pk.style.height = max + 'px'; slide(h, max);
+      peekRoom(max); pk.style.height = max + 'px'; slide(h, max);
       head.setPointerCapture(e.pointerId);
     });
     head.addEventListener('pointermove', e => {
