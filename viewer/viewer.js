@@ -351,6 +351,11 @@
     const el = locate(id); if (!el) return;
     const target = opts.flash ? (el.querySelector('#' + CSS.escape(opts.flash)) || el) : el;
     const mark = target === el && byId.get(id).children ? (el.querySelector('.sec-h') || el) : target;   // a section: its heading is marked, not the whole
+    if (opts.place) {                               // put a given element at a given height, at once (the peek handing over)
+      const pe = opts.place.find() || target;
+      landAt(() => pe.getBoundingClientRect().top + window.scrollY - opts.place.y, false);
+      commit(); return;
+    }
     scrollTo(target);
     afterScroll(() => { flash(mark); if (opts.quote) flashQuote(el, opts.quote); commit(); });
   }
@@ -433,28 +438,57 @@
     $('#peek-title').innerHTML = prev.title; $('#peek-body').innerHTML = prev.html; $('#peek-body').scrollTop = prev.y;
     $('[data-peekback]').hidden = !peekStack.length;
   }
-  // The peek becomes the page (its title's link, or the grip pulled up to the bar), as in Epsilon: it grows up to the
-  // bar while its text fades; halfway, the page, faded out a moment, goes to the place and fades back in, and the
-  // peek fades away over it.
+  // The peek becomes the page (its title's link, or the grip pulled up to the bar), as in Epsilon. It grows up to the
+  // bar with its text as it is; grown, it covers the page, and the page goes to the place behind it, set so that the
+  // lines the peek shows stand at the same height; then the peek fades away over the page, which is already the same
+  // text in the same place. Nothing scrolls in sight and nothing flashes: the eye is already on the place.
   let peekExpanding = false;
+  const LINES = 'p, .display, li, .sec-h, figure, .fold-head';
+  function peekAnchorEl() {                          // the first block of lines the peek shows, and the page's same block
+    const body = $('#peek-body'), top = body.getBoundingClientRect().top;
+    for (const el of $$(LINES, body)) {
+      const r = el.getBoundingClientRect();
+      if (r.bottom <= top + 2 || r.height === 0) continue;
+      if (el.id && el.id.startsWith('peek-')) return { el, find: () => document.getElementById(el.id.slice(5)) };
+      const node = el.closest('.node[data-id]');      // (no id of its own: the same block, counted within the same node)
+      if (!node || !body.contains(node)) continue;
+      const k = $$(LINES, node).indexOf(el);
+      return { el, find: () => { const pn = $(`#paper .node[data-id="${CSS.escape(node.dataset.id)}"]`); return pn ? $$(LINES, pn)[k] || pn : null; } };
+    }
+    return null;
+  }
   function peekGo() {
     const a = $('#peek-title .peek-from'), pk = $('#peek'); if (!a || peekExpanding) return;
     if (reduced() || pk.hidden) { a.click(); return; }
     peekExpanding = true;
-    // (made as tall as the bar allows at once and slid up by a transform, which the screen runs by itself: the page's
-    // jump halfway, a long frame, does not stall it)
-    const top = pk.getBoundingClientRect().top, page = $('.page'), full = window.innerHeight - barH();
+    const body = $('#peek-body');
+    // (made as tall as the bar allows at once and slid up by a transform, which the screen runs by itself)
+    const top = pk.getBoundingClientRect().top, full = window.innerHeight - barH();
     pk.style.transition = 'none'; pk.style.height = full + 'px'; pk.style.transform = `translateY(${Math.round(top - barH())}px)`;
     void pk.offsetWidth;
+    // where its lines stand once grown (taller, a short text scrolls back): measured now, in the grown peek
+    const anchor = peekAnchorEl(), bt = body.getBoundingClientRect().top, inset = bt - pk.getBoundingClientRect().top;
+    const off = anchor ? anchor.el.getBoundingClientRect().top - bt : 0;
     pk.classList.add('expanding');
-    pk.style.transition = 'transform .34s var(--ease-out), opacity .2s ease .2s';
-    pk.style.transform = 'translateY(0)'; pk.style.opacity = '0';
-    page.classList.add('peek-fade');
-    setTimeout(() => {
-      peekExpanding = 'going'; a.click(); peekExpanding = true;   // (the page goes there; closing the peek is left to this)
-      void page.offsetWidth; page.classList.remove('peek-fade');
-    }, 150);
-    setTimeout(() => { peekDone(); peekStack.length = 0; peekExpanding = false; }, 420);
+    pk.style.transition = 'transform .32s var(--ease-out)'; pk.style.transform = 'translateY(0)';
+    setTimeout(() => {                               // grown: the page goes there, unseen
+      const y = barH() + inset + off;
+      peekExpanding = 'going';
+      reveal(a.dataset.reveal, { flash: a.dataset.flash, place: anchor ? { find: anchor.find, y } : { find: () => null, y } });
+      peekExpanding = true;
+      // the peek fades only once the page has held the place for two frames (the page's far blocks take their true
+      // heights as they are drawn, and the place is corrected meanwhile, unseen under the peek)
+      const pe = anchor ? anchor.find() : null; let calm = 0, n = 0;
+      const fade = () => {
+        pk.style.transition = 'opacity .22s ease'; pk.style.opacity = '0';
+        setTimeout(() => { peekDone(); peekStack.length = 0; peekExpanding = false; }, 240);
+      };
+      const settle = () => {
+        calm = !pe || Math.abs(pe.getBoundingClientRect().top - y) < 1.5 ? calm + 1 : 0;
+        if (calm >= 2 || ++n > 40) fade(); else requestAnimationFrame(settle);
+      };
+      requestAnimationFrame(settle);
+    }, 330);
   }
   // The grip: while it is held nothing is laid out again (the peek is made as tall as it can be and only slid, a
   // transform); let go, it springs to a third, a half or two thirds and only then takes that height. Let go low, it

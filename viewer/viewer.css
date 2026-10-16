@@ -44,7 +44,7 @@ a:hover { text-decoration: underline; }
 .btn.primary { color: var(--on-accent); }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
 .page p { margin: 0 0 1em; }
-.page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
+.page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, #peek-body li, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
 /* a larger text on a wide screen, and the column widens with it (its width is in rem) */
 @media (min-width: 900px) { html { font-size: 112.5%; } }
@@ -129,7 +129,7 @@ figcaption b { color: var(--fg); }
 .refs li, .kind-footnotes li, .kind-references li { margin-bottom: .45em; }
 .kind-abstract p { font-size: .98em; }
 .page ul, .page ol { padding-left: 1.4rem; }
-.page li { margin-bottom: .35em; }
+.page li, #peek-body li { margin-bottom: .35em; }   /* (the peek's text as the page's: see #peek-body below) */
 .titlemeta { display: none; }
 a.fnref { font-size: .8em; vertical-align: super; line-height: 0; }
 
@@ -263,11 +263,10 @@ dfn { font-style: italic; }
 @keyframes peekout { to { transform: translateY(100%); } }
 .peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
 .peek.dragging .peek-head { cursor: grabbing; }
-.peek.expanding .peek-body { opacity: 0; transition: opacity .14s ease; }
-.peek.expanding .peek-head { opacity: 0; transition: opacity .19s ease .15s; }
-.page { transition: opacity .2s ease; }
-.page.peek-fade { opacity: 0; transition: opacity .12s ease; }
 .peek-refs h2 { display: none; }
+/* the peek's blocks contained as the page's are (content-visibility contains them there): the same margins, the same
+   lines, so that when the peek becomes the page the text under it is the very same */
+#peek-body :is(p, li, .display, figure, .leaf) { contain: layout style; }
 .peek-head { flex: none; padding: 0 16px; cursor: ns-resize; touch-action: none; -webkit-user-select: none; user-select: none; }
 .peek-grip { display: block; width: 38px; height: 4px; border-radius: 2px; margin: 7px auto 3px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .2s; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
