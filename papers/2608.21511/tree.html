@@ -98,9 +98,14 @@ button { font-family: var(--sans); }
 
 /* ---- the reading bar and the depth dial */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin: 0 -16px; padding: .45rem 16px .55rem;
-  background: var(--glass); -webkit-backdrop-filter: saturate(1.3) blur(16px); backdrop-filter: saturate(1.3) blur(16px);
+  background: var(--glass); -webkit-backdrop-filter: saturate(1.3) blur(16px); backdrop-filter: saturate(1.3) blur(16px); padding-bottom: .2rem;
   border-bottom: 1px solid var(--rule); box-shadow: 0 8px 28px rgba(0, 0, 0, .10); }   /* (the peek's shadow, cast down: the two panels that stand over the page) */
-.bar-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
+.bar-row { position: relative; display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .2rem; }
+/* the title stands on the page's axis, over the dial's middle dot, whatever is at the row's two ends (an icon on the
+   left, two on the right); when the back pill is there it yields and stands between */
+.bar-row .bar-title { position: absolute; left: 50%; transform: translateX(-50%); width: calc(100% - 2 * 5.6rem); }
+.bar-row .bar-search { margin-left: auto; }
+.bar-row:has(#back:not([hidden])) .bar-title { position: static; transform: none; width: auto; }
 .bar-title { flex: 1; min-width: 0; text-align: center; font: 500 .9rem/1.3 var(--sans); color: var(--muted); border: 0; background: none;
   padding: .35rem .5rem; border-radius: 999px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-title:hover { background: var(--accent-soft); color: var(--fg); }
@@ -124,6 +129,13 @@ button { font-family: var(--sans); }
 .dial-line .lit { stroke: var(--accent); }
 .dial-line circle { fill: color-mix(in srgb, var(--muted) 45%, transparent); transition: r .2s var(--ease-out), fill .2s ease; }
 .dial-line circle.on { fill: var(--accent); }
+/* ONE BLUE LINE AT A TIME: the bar's focus is the one deep-blue line in it. Reading, it is the depth line; searching,
+   the search's underline, and the dial goes grey where it stands (it keeps its place and its size) */
+.dial-line .lit { transition: stroke .25s ease; }
+.dial button { transition: color .25s ease; }
+.bar.searching .dial button[aria-checked="true"] { color: var(--muted); }
+.bar.searching .dial-line .lit { stroke: color-mix(in srgb, var(--muted) 55%, transparent); }
+.bar.searching .dial-line circle.on { fill: color-mix(in srgb, var(--muted) 70%, transparent); }
 
 /* ---- the title block */
 .kicker { font: 500 .78rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 1.3rem 0 .35rem; }
@@ -382,10 +394,13 @@ dfn { font-style: italic; }
 /* the search field in the bar's own language: no box and no glow, a magnifier in the bar's deep blue and one line
    under the words (fainter at rest, the full blue while typing); the row keeps the bar row's edges and height, the
    back arrow where the logo was and the arrows where the bar's buttons were */
-.find-field { flex: 1; min-width: 0; height: 2.2rem; display: flex; align-items: center; gap: .55rem; padding: 0 .15rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); cursor: text; transition: border-color .2s var(--ease-out); }
-.find-field:focus-within { border-bottom-color: var(--accent); }
-.find-field > svg { width: 18px; height: 18px; flex: none; }
+.find-field { position: relative; flex: 1; min-width: 0; height: 2.2rem; display: flex; align-items: center; gap: .55rem; padding: 0 .15rem;
+  color: var(--accent); cursor: text; }
+/* its underline is the dial's line: the same 1.25px vector line with round ends (a border would be rounded to 1px) */
+.find-line { position: absolute; left: 0; bottom: -5px; width: 100%; height: 10px; overflow: visible; pointer-events: none; }
+.find-line line { vector-effect: non-scaling-stroke; stroke-width: 1.25px; stroke-linecap: round; stroke: color-mix(in srgb, var(--accent) 55%, transparent); transition: stroke .2s var(--ease-out); }
+.find-field:focus-within .find-line line { stroke: var(--accent); }
+.find-field > svg:not(.find-line) { width: 18px; height: 18px; flex: none; }
 /* the search row drawn in a fine line, as the logo and the circled controls are: its icons and its underline thin,
    in the full deep blue */
 #find-row .bar-btn { color: var(--accent); }
@@ -422,7 +437,7 @@ mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%));
 .skim-page h3.sec-h { font-size: 1.05rem; }
 @media (max-width: 430px) { .dial button { font-size: .74rem; padding-inline: .05rem; } }
 
-@media (max-width: 560px) { .bar-row:has(#back:not([hidden])) #who { display: none; } #back { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; } }
+@media (max-width: 560px) { #back { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; } }
 
 /* ---- quiet heads: who wrote a summary and how many questions, as words; the hint for a student */
 .lede-who { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
@@ -430,7 +445,6 @@ mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%));
 .qwords:hover { color: var(--accent); }
 .sum-foot .qwords { font-size: .78rem; }
 .hint { font: .88rem/1.45 var(--sans); color: var(--muted); margin: .8rem 0 0; text-align: left; hyphens: manual; }
-@media (max-width: 560px) { :root[data-depth="paper"] #who, :root[data-depth="skim"] #who { display: none; } }
 .qbadge { display: none; }
 
 .bar-logo { width: 26px; height: 26px; color: var(--accent); }
@@ -622,11 +636,10 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 </svg></button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
-  <button type="button" class="bar-pill" data-open="settings" id="who" title="Who you are reading as"></button>
-  <button type="button" class="bar-btn" data-open="search" aria-label="Search in the paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><label class="find-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}"><span id="find-count"></span></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+ <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><label class="find-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}"><span id="find-count"></span><svg class="find-line" aria-hidden="true"><line x1="0" y1="5" x2="100%" y2="5"/></svg></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
 </header>
 <main class="page">
@@ -1957,6 +1970,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (open === on) return;
     open = on;
     const row = $('#bar-row'), find = $('#find-row'); if (!row || !find) return;
+    const bar = $('#bar'); if (bar) bar.classList.toggle('searching', on);   // (one blue line at a time: the dial goes grey)
     if (on) {
       row.hidden = true; find.hidden = false; find.classList.remove('closing'); find.classList.add('opening');
       const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);

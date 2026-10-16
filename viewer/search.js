@@ -318,6 +318,7 @@
     if (open === on) return;
     open = on;
     const row = $('#bar-row'), find = $('#find-row'); if (!row || !find) return;
+    const bar = $('#bar'); if (bar) bar.classList.toggle('searching', on);   // (one blue line at a time: the dial goes grey)
     if (on) {
       row.hidden = true; find.hidden = false; find.classList.remove('closing'); find.classList.add('opening');
       const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);

@@ -323,11 +323,10 @@ body = f"""<title>{html.escape(page_title)}</title>
   <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
-  <button type="button" class="bar-pill" data-open="settings" id="who" title="Who you are reading as"></button>
-  <button type="button" class="bar-btn" data-open="search" aria-label="Search in the paper">{ICON_FIND}</button>
+  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper">{ICON_FIND}</button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings">{ICON_SET}</button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><label class="find-field">{ICON_FIND}<input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
+ <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><label class="find-field">{ICON_FIND}<input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span><svg class="find-line" aria-hidden="true"><line x1="0" y1="5" x2="100%" y2="5"/></svg></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
 </header>
 <main class="page">
