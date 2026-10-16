@@ -280,6 +280,8 @@ dfn { font-style: italic; }
 @keyframes peekout { to { transform: translateY(100%); } }
 .peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
 .peek.dragging .peek-head { cursor: grabbing; }
+/* growing into the page, the peek's header goes first: only its text rises into place */
+.peek.expanding .peek-head { opacity: 0; transition: opacity .16s ease-out; }
 .peek-refs h2 { display: none; }
 /* the peek's blocks contained as the page's are (content-visibility contains them there): the same margins, the same
    lines, so that when the peek becomes the page the text under it is the very same */
@@ -354,9 +356,13 @@ dfn { font-style: italic; }
    under the words (fainter at rest, the full blue while typing); the row keeps the bar row's edges and height, the
    back arrow where the logo was and the arrows where the bar's buttons were */
 .find-field { flex: 1; min-width: 0; height: 2.2rem; display: flex; align-items: center; gap: .55rem; padding: 0 .15rem;
-  border-bottom: 2px solid color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); cursor: text; transition: border-color .2s var(--ease-out); }
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); cursor: text; transition: border-color .2s var(--ease-out); }
 .find-field:focus-within { border-bottom-color: var(--accent); }
 .find-field > svg { width: 18px; height: 18px; flex: none; }
+/* the search row drawn in a fine line, as the logo and the circled controls are: its icons and its underline thin,
+   in the full deep blue */
+#find-row svg { stroke-width: 1.5; }
+#find-row .bar-btn { color: var(--accent); }
 #find-input { flex: 1; min-width: 0; height: 100%; font: 400 1rem var(--sans); padding: 0; border: 0; border-radius: 0; background: none; color: var(--fg); outline: none; -webkit-appearance: none; appearance: none; }
 #find-input::placeholder { color: var(--muted); opacity: .8; }
 #find-input::-webkit-search-cancel-button, #find-input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
