@@ -348,6 +348,8 @@ dfn { font-style: italic; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
 .set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .3rem 0 0; }
+.sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 999px; background: var(--bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); pointer-events: none; }
+.sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }   /* (a segmented setting's pill; the dial has its own line) */
 .seg { position: relative; display: flex; background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
 .seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .86rem var(--sans); color: var(--muted); cursor: pointer; }
 .seg button[aria-checked="true"] { color: var(--fg); }
