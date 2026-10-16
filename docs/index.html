@@ -199,12 +199,13 @@ dfn { font-style: italic; }
   display: inline-grid; place-items: center; font: 500 .85rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; box-sizing: border-box; }
 .fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .fold { margin: .1rem 0 1rem; }
-.fold-head { display: flex; align-items: center; gap: .55rem; cursor: pointer; font: 600 .76rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+.fold-head { display: block; cursor: pointer; font: 600 .76rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
   transition: margin-bottom .3s var(--ease-out); }
 .fold-head:hover .fold-name { color: var(--accent); }
-.fold-name { flex: none; }
-.fold-detail { text-transform: none; letter-spacing: 0; font: 400 1.02rem/1.5 var(--serif); color: var(--muted); min-width: 0; }
-.fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem/1.4 var(--sans); color: var(--fg); min-width: 0; }
+.fold-head > .fold-btn { display: inline-grid; vertical-align: middle; position: relative; top: -.08em; margin-right: .55rem; }
+.fold-name { margin-right: .55rem; }
+.fold-detail { text-transform: none; letter-spacing: 0; font: 400 1.02rem/1.5 var(--serif); color: var(--muted); }
+.fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem/1.4 var(--sans); color: var(--fg); }
 .fold-who { font: 400 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-left: .4rem; white-space: nowrap; }
 .fold-bg .fold-name { color: var(--reader); }
 .fold[data-state="open"] > .fold-head { margin-bottom: .45rem; }
