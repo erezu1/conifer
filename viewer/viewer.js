@@ -369,7 +369,13 @@
   function landAt(want, smooth, done) {
     const token = ++landing, page = $('main.page');
     let stop = false;
-    const end = () => { stop = true; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.removeEventListener(t, end)); };
+    // (the reader's own wheel, touch, key or click ends it; not the one that started it, still on its way up to the
+    // window when this is called: Enter in the search would else cancel its own trip to the next match)
+    const begun = performance.now();
+    const end = e => {
+      if (e && e.timeStamp && e.timeStamp <= begun) return;
+      stop = true; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.removeEventListener(t, end));
+    };
     ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.addEventListener(t, end, { passive: true }));
     const live = () => !stop && token === landing;
     const go = y => window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
