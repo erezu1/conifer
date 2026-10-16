@@ -314,19 +314,22 @@
   // ------------------------------------------------------------------ the field in the bar
   let timer = null;
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function show(on) {
+  function show(on) {                              // the search takes the tab row (the lane, viewer.js): the labels give way to the field
     if (open === on) return;
     open = on;
-    const row = $('#bar-row'), find = $('#find-row'); if (!row || !find) return;
-    const bar = $('#bar'); if (bar) bar.classList.toggle('searching', on);   // (one blue line at a time: the dial goes grey)
+    const bar = $('#bar'), find = $('#find-row'); if (!bar || !find) return;
+    const sb = $('.bar-search'); if (sb) sb.setAttribute('aria-label', on ? 'Close the search' : 'Search in the paper');
     if (on) {
-      row.hidden = true; find.hidden = false; find.classList.remove('closing'); find.classList.add('opening');
+      find.hidden = false; void find.offsetWidth;
+      bar.classList.add('searching');
+      if (window.ConiferLane) ConiferLane.search(true);
       const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);
     } else {
       clear(); count();
       const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
-      const done = () => { find.hidden = true; find.classList.remove('closing'); row.hidden = false; row.classList.add('opening'); setTimeout(() => row.classList.remove('opening'), 250); };
-      if (reduced()) done(); else { find.classList.remove('opening'); find.classList.add('closing'); setTimeout(done, 170); }
+      bar.classList.remove('searching');
+      if (window.ConiferLane) ConiferLane.search(false);
+      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 260);
     }
   }
   window.ConiferSearch = {

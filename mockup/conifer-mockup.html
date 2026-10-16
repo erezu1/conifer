@@ -107,7 +107,23 @@ button { font-family: var(--sans); }
 .bar-pill { border: 1px solid var(--rule); background: var(--bg); color: var(--fg); font: 500 .8rem var(--sans); padding: .3rem .6rem; border-radius: 999px; cursor: pointer; white-space: nowrap; flex: none; }
 .bar-pill:hover { background: var(--surface); }
 #back { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); animation: rise .22s var(--ease-out); }
-.dial { position: relative; display: flex; max-width: var(--page-w); margin: 0 auto; padding-bottom: 12px; }
+.lane { position: relative; max-width: var(--page-w); margin: 0 auto; }
+.dial { position: relative; display: flex; padding-bottom: 12px; }
+/* the lane as the search: the field over the labels, above the one line (which only changes its length, viewer.js) */
+#find-row { position: absolute; left: 0; right: 0; top: 0; bottom: 12px; display: flex; align-items: center; gap: .2rem; padding-left: .15rem;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease .1s; }
+.bar.searching #find-row { opacity: 1; pointer-events: auto; }
+#find-row .bar-btn { width: 1.9rem; height: 1.9rem; color: var(--accent); }
+#find-row .bar-btn svg { width: 19px; height: 19px; }
+.bar.searching #dial button { opacity: 0; pointer-events: none; transition: opacity .14s ease; }
+#dial button { transition: color .2s, opacity .18s ease .12s; }
+/* the bar's search button: its magnifier fades into an x while searching (and closes it) */
+.bar-search { position: relative; }
+.bar-search > span { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .2s ease; }
+.bar-search .i-close { opacity: 0; }
+.bar.searching .bar-search .i-find { opacity: 0; }
+.bar.searching .bar-search .i-close { opacity: 1; }
+.bar-search .i-close svg { width: 19px; height: 19px; }
 .dial button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; padding: .35rem .2rem .3rem; cursor: pointer;
   font: 400 .8rem/1.2 var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
 .dial button[aria-checked="true"] { color: var(--accent); font-weight: 600; }   /* (the buttons share the width equally: a bolder label moves no dot) */
@@ -119,13 +135,8 @@ button { font-family: var(--sans); }
 .dial-line .lit { stroke: var(--accent); }
 .dial-line circle { fill: color-mix(in srgb, var(--muted) 45%, transparent); transition: r .2s var(--ease-out), fill .2s ease; }
 .dial-line circle.on { fill: var(--accent); }
-/* ONE BLUE LINE AT A TIME: the bar's focus is the one deep-blue line in it. Reading, it is the depth line; searching,
-   the search's underline, and the dial goes grey where it stands (it keeps its place and its size) */
-.dial-line .lit { transition: stroke .25s ease; }
-.dial button { transition: color .25s ease; }
-.bar.searching .dial button[aria-checked="true"] { color: var(--muted); }
-.bar.searching .dial-line .lit { stroke: color-mix(in srgb, var(--muted) 55%, transparent); }
-.bar.searching .dial-line circle.on { fill: color-mix(in srgb, var(--muted) 70%, transparent); }
+/* ONE LINE: the bar has one line. Reading, it is the depth line under the tabs; searching, the same line, stretched
+   to the field's width, is its underline (viewer.js laneSearch). It never fades or changes colour: only its length. */
 
 /* ---- the title block */
 .kicker { font: 500 .78rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 1.3rem 0 .35rem; }
@@ -377,23 +388,7 @@ dfn { font-style: italic; }
 .colophon { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: .86rem/1.5 var(--sans); color: var(--muted); }
 
 /* ---- search: the field takes the bar; found places are marked, the one you are on more strongly */
-#find-row { display: flex; align-items: center; gap: .4rem; max-width: var(--page-w); margin: 0 auto .4rem; }
-#find-row.opening, .bar-row.opening { animation: fadein .22s var(--ease-out); }
-#find-row.closing { animation: fadeout .17s var(--ease-in) forwards; }
 @keyframes fadeout { to { opacity: 0; } }
-/* the search field in the bar's own language: no box and no glow, a magnifier in the bar's deep blue and one line
-   under the words (fainter at rest, the full blue while typing); the row keeps the bar row's edges and height, the
-   back arrow where the logo was and the arrows where the bar's buttons were */
-.find-field { position: relative; flex: 1; min-width: 0; height: 2.2rem; display: flex; align-items: center; gap: .55rem; padding: 0 .15rem;
-  color: var(--accent); cursor: text; }
-/* its underline is the dial's line: the same 1.25px vector line with round ends (a border would be rounded to 1px) */
-.find-line { position: absolute; left: 0; bottom: -5px; width: 100%; height: 10px; overflow: visible; pointer-events: none; }
-.find-line line { vector-effect: non-scaling-stroke; stroke-width: 1.25px; stroke-linecap: round; stroke: color-mix(in srgb, var(--accent) 55%, transparent); transition: stroke .2s var(--ease-out); }
-.find-field:focus-within .find-line line { stroke: var(--accent); }
-.find-field > svg:not(.find-line) { width: 18px; height: 18px; flex: none; }
-/* the search row drawn in a fine line, as the logo and the circled controls are: its icons and its underline thin,
-   in the full deep blue */
-#find-row .bar-btn { color: var(--accent); }
 #find-input { flex: 1; min-width: 0; height: 100%; font: 400 1rem var(--sans); padding: 0; border: 0; border-radius: 0; background: none; color: var(--fg); outline: none; -webkit-appearance: none; appearance: none; }
 #find-input::placeholder { color: var(--muted); opacity: .8; }
 #find-input::-webkit-search-cancel-button, #find-input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
@@ -626,11 +621,14 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 </svg></button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
-  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper"><span class="i-find"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><span class="i-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg></span></button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><label class="find-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}"><span id="find-count"></span><svg class="find-line" aria-hidden="true"><line x1="0" y1="5" x2="100%" y2="5"/></svg></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
- <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
+ <div class="lane" id="lane">
+  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
+  <div id="find-row" hidden><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}" aria-label="Search in the paper"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+  <svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>
+ </div>
 </header>
 <main class="page">
  <header class="titleblock">
@@ -883,7 +881,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   let dialPos = null, dialAnim = 0, dialTo = null;
   function dialGeo() {
     const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
-    return { dial, svg: $('.dial-line', dial), mids: bs.map(b => b.offsetLeft + b.offsetWidth / 2), levels: bs.map(b => +b.dataset.setlevel) };
+    return { dial, svg: $('#lane .dial-line'), W: dial.clientWidth, mids: bs.map(b => b.offsetLeft + b.offsetWidth / 2), levels: bs.map(b => +b.dataset.setlevel) };
   }
   function dialShow(p) {                             // p: a place among the visible tabs (1.4: 40% of the way from the 2nd to the 3rd)
     const g = dialGeo(); if (!g.svg || !g.mids.length) return;
@@ -891,6 +889,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const x = g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f, y = 5;
     dialPos = p;
     const tr = $('.track', g.svg), lit = $('.lit', g.svg), nodes = $('.nodes', g.svg);
+    if (laneSearching && !laneMorphing) { setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); return; }
     tr.setAttribute('x1', g.mids[0]); tr.setAttribute('x2', g.mids[n]); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
     lit.setAttribute('x1', g.mids[0]); lit.setAttribute('x2', x.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
     if (nodes.children.length !== g.mids.length) nodes.innerHTML = g.mids.map(() => '<circle r="2.1"/>').join('');
@@ -901,6 +900,46 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       c.classList.toggle('on', q >= k - 0.001);
     });
   }
+  // THE LANE: the tab row is also the search's. Searching, the labels give way to the field and the one line stays
+  // where it is and only changes its length: from the lit part of the depth line to the field's whole width (its
+  // underline), the dots shrinking away; closing, back. No fading of the line, no second line.
+  let laneSearching = false, laneMorphing = false, laneAnim = 0, laneToken = 0;
+  function setLit(g, a, b) {
+    const lit = $('.lit', g.svg), y = 5;
+    lit.setAttribute('x1', a.toFixed(1)); lit.setAttribute('x2', b.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
+  }
+  function dialX(g, p) {                             // where the lit line ends at a place p among the tabs
+    const n = g.mids.length - 1, q = Math.max(0, Math.min(n, p)), i = Math.min(Math.max(n - 1, 0), Math.floor(q)), f = q - i;
+    return g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f;
+  }
+  function laneSearch(on) {
+    if (laneSearching === on) return;
+    laneSearching = on;
+    const g = dialGeo(); if (!g.svg || !g.mids.length) return;
+    const nodes = $('.nodes', g.svg), k = g.levels.indexOf(state.level), p = dialPos ?? Math.max(0, k);
+    const read = [g.mids[0], dialX(g, p)], find = [0, g.W];
+    const [A, B] = on ? [read, find] : [find, read];
+    if (on) [...nodes.children].forEach(c => { c.style.r = '0px'; });     // (the dots shrink first, by themselves)
+    cancelAnimationFrame(laneAnim);
+    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
+    laneMorphing = true;
+    const t0 = performance.now(), T = 380, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
+    const finish = () => {
+      if (mine !== laneToken || !laneMorphing) return;
+      cancelAnimationFrame(laneAnim); laneMorphing = false;
+      setLit(g, B[0], B[1]);
+      if (!on) dialShow(p);                          // (back on the tabs: the dot where one reads grows again)
+    };
+    const step = now => {
+      if (mine !== laneToken) return;
+      const t = Math.min(1, (now - t0) / T), e = ease(t);
+      setLit(g, A[0] + (B[0] - A[0]) * e, A[1] + (B[1] - A[1]) * e);
+      if (t < 1) laneAnim = requestAnimationFrame(step); else finish();
+    };
+    laneAnim = requestAnimationFrame(step);
+    setTimeout(finish, T + 80);                      // (a page out of sight gets no frames: it still ends where it should)
+  }
+  window.ConiferLane = { search: laneSearch, isSearching: () => laneSearching };
   function dialGlide(to) {                           // to the tab at this place, from wherever the line is
     if (dialPos == null || reduced()) { cancelAnimationFrame(dialAnim); dialTo = null; dialShow(to); return; }
     if (dialTo === to) return;
@@ -939,7 +978,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
-    if (!dial.querySelector('button')) dial.innerHTML = '<svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
+    if (!dial.querySelector('button')) dial.innerHTML = LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
     $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.hidden = i === SKIM && skimHidden(); });
     document.documentElement.dataset.depth = LEVELS[state.level].key;
     moveInd(dial);
@@ -1419,7 +1458,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (t.matches('.scrim, [data-close]')) { if (t.closest('#pop')) closePop(); else closeSheet(); return; }   // (its own layer only: a peek under it stays)
     if (t.id === 'back') { goBack(); return; }
     if (t.dataset.copy) { copyLink(t.dataset.copy); return; }
-    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } else openSettings(); return; }
+    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { if (window.ConiferSearch && ConiferSearch.isOpen()) ConiferSearch.close(); else { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } } else openSettings(); return; }
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes' || k === 'chips') state[k] = v === 'auto' ? 'auto' : v === 'true'; else if (k === 'theme') state.theme = v;
@@ -1522,6 +1561,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     return { bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
   }
   function swBegin(kind) {
+    if (laneSearching) return null;                  // (the lane is the search: no tabs to swipe)
     const g = swGeo(), cur = g.levels.indexOf(state.level); if (cur < 0) return null;
     const page = $('main.page');
     page.classList.add('swiping'); cancelAnimationFrame(dialAnim); dialTo = null;
@@ -1956,19 +1996,22 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // ------------------------------------------------------------------ the field in the bar
   let timer = null;
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function show(on) {
+  function show(on) {                              // the search takes the tab row (the lane, viewer.js): the labels give way to the field
     if (open === on) return;
     open = on;
-    const row = $('#bar-row'), find = $('#find-row'); if (!row || !find) return;
-    const bar = $('#bar'); if (bar) bar.classList.toggle('searching', on);   // (one blue line at a time: the dial goes grey)
+    const bar = $('#bar'), find = $('#find-row'); if (!bar || !find) return;
+    const sb = $('.bar-search'); if (sb) sb.setAttribute('aria-label', on ? 'Close the search' : 'Search in the paper');
     if (on) {
-      row.hidden = true; find.hidden = false; find.classList.remove('closing'); find.classList.add('opening');
+      find.hidden = false; void find.offsetWidth;
+      bar.classList.add('searching');
+      if (window.ConiferLane) ConiferLane.search(true);
       const f = $('#find-input'); f.value = lastQ; f.focus(); f.select(); if (lastQ) run(lastQ);
     } else {
       clear(); count();
       const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
-      const done = () => { find.hidden = true; find.classList.remove('closing'); row.hidden = false; row.classList.add('opening'); setTimeout(() => row.classList.remove('opening'), 250); };
-      if (reduced()) done(); else { find.classList.remove('opening'); find.classList.add('closing'); setTimeout(done, 170); }
+      bar.classList.remove('searching');
+      if (window.ConiferLane) ConiferLane.search(false);
+      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 260);
     }
   }
   window.ConiferSearch = {

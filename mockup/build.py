@@ -118,6 +118,7 @@ ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
             '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
 ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')
 ICON_EXPAND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/></svg>')
+ICON_CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg>')
 ICON_BACK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>')
 ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>')
 ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
@@ -141,11 +142,14 @@ body = f"""<title>Conifer Reader Mockup</title>
   <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>
   <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
   <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
-  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper">{ICON_FIND}</button>
+  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper"><span class="i-find">{ICON_FIND}</span><span class="i-close">{ICON_CLOSE}</span></button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings">{ICON_SET}</button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><label class="find-field">{ICON_FIND}<input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span><svg class="find-line" aria-hidden="true"><line x1="0" y1="5" x2="100%" y2="5"/></svg></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
- <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
+ <div class="lane" id="lane">
+  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
+  <div id="find-row" hidden><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}" aria-label="Search in the paper"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
+  <svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>
+ </div>
 </header>
 <main class="page">
  <header class="titleblock">

@@ -217,7 +217,7 @@
   let dialPos = null, dialAnim = 0, dialTo = null;
   function dialGeo() {
     const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
-    return { dial, svg: $('.dial-line', dial), mids: bs.map(b => b.offsetLeft + b.offsetWidth / 2), levels: bs.map(b => +b.dataset.setlevel) };
+    return { dial, svg: $('#lane .dial-line'), W: dial.clientWidth, mids: bs.map(b => b.offsetLeft + b.offsetWidth / 2), levels: bs.map(b => +b.dataset.setlevel) };
   }
   function dialShow(p) {                             // p: a place among the visible tabs (1.4: 40% of the way from the 2nd to the 3rd)
     const g = dialGeo(); if (!g.svg || !g.mids.length) return;
@@ -225,6 +225,7 @@
     const x = g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f, y = 5;
     dialPos = p;
     const tr = $('.track', g.svg), lit = $('.lit', g.svg), nodes = $('.nodes', g.svg);
+    if (laneSearching && !laneMorphing) { setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); return; }
     tr.setAttribute('x1', g.mids[0]); tr.setAttribute('x2', g.mids[n]); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
     lit.setAttribute('x1', g.mids[0]); lit.setAttribute('x2', x.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
     if (nodes.children.length !== g.mids.length) nodes.innerHTML = g.mids.map(() => '<circle r="2.1"/>').join('');
@@ -235,6 +236,46 @@
       c.classList.toggle('on', q >= k - 0.001);
     });
   }
+  // THE LANE: the tab row is also the search's. Searching, the labels give way to the field and the one line stays
+  // where it is and only changes its length: from the lit part of the depth line to the field's whole width (its
+  // underline), the dots shrinking away; closing, back. No fading of the line, no second line.
+  let laneSearching = false, laneMorphing = false, laneAnim = 0, laneToken = 0;
+  function setLit(g, a, b) {
+    const lit = $('.lit', g.svg), y = 5;
+    lit.setAttribute('x1', a.toFixed(1)); lit.setAttribute('x2', b.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
+  }
+  function dialX(g, p) {                             // where the lit line ends at a place p among the tabs
+    const n = g.mids.length - 1, q = Math.max(0, Math.min(n, p)), i = Math.min(Math.max(n - 1, 0), Math.floor(q)), f = q - i;
+    return g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f;
+  }
+  function laneSearch(on) {
+    if (laneSearching === on) return;
+    laneSearching = on;
+    const g = dialGeo(); if (!g.svg || !g.mids.length) return;
+    const nodes = $('.nodes', g.svg), k = g.levels.indexOf(state.level), p = dialPos ?? Math.max(0, k);
+    const read = [g.mids[0], dialX(g, p)], find = [0, g.W];
+    const [A, B] = on ? [read, find] : [find, read];
+    if (on) [...nodes.children].forEach(c => { c.style.r = '0px'; });     // (the dots shrink first, by themselves)
+    cancelAnimationFrame(laneAnim);
+    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
+    laneMorphing = true;
+    const t0 = performance.now(), T = 380, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
+    const finish = () => {
+      if (mine !== laneToken || !laneMorphing) return;
+      cancelAnimationFrame(laneAnim); laneMorphing = false;
+      setLit(g, B[0], B[1]);
+      if (!on) dialShow(p);                          // (back on the tabs: the dot where one reads grows again)
+    };
+    const step = now => {
+      if (mine !== laneToken) return;
+      const t = Math.min(1, (now - t0) / T), e = ease(t);
+      setLit(g, A[0] + (B[0] - A[0]) * e, A[1] + (B[1] - A[1]) * e);
+      if (t < 1) laneAnim = requestAnimationFrame(step); else finish();
+    };
+    laneAnim = requestAnimationFrame(step);
+    setTimeout(finish, T + 80);                      // (a page out of sight gets no frames: it still ends where it should)
+  }
+  window.ConiferLane = { search: laneSearch, isSearching: () => laneSearching };
   function dialGlide(to) {                           // to the tab at this place, from wherever the line is
     if (dialPos == null || reduced()) { cancelAnimationFrame(dialAnim); dialTo = null; dialShow(to); return; }
     if (dialTo === to) return;
@@ -273,7 +314,7 @@
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
-    if (!dial.querySelector('button')) dial.innerHTML = '<svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
+    if (!dial.querySelector('button')) dial.innerHTML = LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
     $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.hidden = i === SKIM && skimHidden(); });
     document.documentElement.dataset.depth = LEVELS[state.level].key;
     moveInd(dial);
@@ -753,7 +794,7 @@
     if (t.matches('.scrim, [data-close]')) { if (t.closest('#pop')) closePop(); else closeSheet(); return; }   // (its own layer only: a peek under it stays)
     if (t.id === 'back') { goBack(); return; }
     if (t.dataset.copy) { copyLink(t.dataset.copy); return; }
-    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } else openSettings(); return; }
+    if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { if (window.ConiferSearch && ConiferSearch.isOpen()) ConiferSearch.close(); else { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } } else openSettings(); return; }
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes' || k === 'chips') state[k] = v === 'auto' ? 'auto' : v === 'true'; else if (k === 'theme') state.theme = v;
@@ -856,6 +897,7 @@
     return { bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
   }
   function swBegin(kind) {
+    if (laneSearching) return null;                  // (the lane is the search: no tabs to swipe)
     const g = swGeo(), cur = g.levels.indexOf(state.level); if (cur < 0) return null;
     const page = $('main.page');
     page.classList.add('swiping'); cancelAnimationFrame(dialAnim); dialTo = null;
