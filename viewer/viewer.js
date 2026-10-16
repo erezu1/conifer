@@ -93,7 +93,7 @@
   function secHead(n, ctx, lead, foldKey) {
     const hl = Math.min(1 + depth(n.id), 5);
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
-    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span><span class="sec-t">${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</span></h${hl}>` : '';
   }
   function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;

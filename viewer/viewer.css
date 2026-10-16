@@ -106,6 +106,11 @@ h2.sec-h { font-size: 1.55rem; }
 h3.sec-h { font-size: 1.28rem; }
 h4.sec-h { font-size: 1.15rem; }
 .secnum { color: var(--muted); font-weight: 500; margin-right: .55em; font-variant-numeric: tabular-nums; }
+/* a heading hangs: the circle and the number stand in a gutter, and a title that wraps continues under its first word */
+.sec-h { display: flex; align-items: baseline; }
+.sec-h > .fold-btn { align-self: baseline; flex: none; }
+.sec-h > .secnum { flex: none; }
+.sec-t { min-width: 0; text-wrap: balance; }
 .secnum:empty { display: none; }
 .leaf { position: relative; }
 .kind-theorem, .kind-remark, .kind-definition, .kind-proof { background: var(--surface); border-radius: 8px; padding: .75rem 1rem .1rem; margin: 1rem 0; }
