@@ -83,20 +83,32 @@
     if (!qs.length) return '';
     return `<button type="button" class="qbadge" data-q="${n.id}" data-deep="${deep ? 1 : 0}" title="Questions about this part" aria-label="${qs.length} question${qs.length > 1 ? 's' : ''} about this part">?<span>${qs.length}</span></button>`;
   }
-  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="${act}" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
+  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="toggle" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
 
-  // a fold: its one-line form and its content live together; data-open says which shows, and the content's grid
-  // track eases between nothing and its natural size (no measuring, no redrawing)
+  // THE FOLD PATTERN (one for everything that folds: a section's brief, a background note, an appendix, a proof).
+  // A fold is a head that never moves and a body under it. The head is the same whether the fold is open or closed:
+  // a circled +/− at the left and the title beside it; the whole head is the control. Only the body eases open
+  // (its grid track goes from nothing to its size, so nothing is measured or redrawn) and wears the fold's box (a
+  // rule at the left for a note). The head is a heading when the fold is a section (an appendix, a brief's section).
+  function secHead(n, ctx, lead, foldKey) {
+    const hl = Math.min(1 + depth(n.id), 5);
+    const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
+    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+  }
   function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;
     const bg = n.kind === 'background';
-    const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
-    const detail = bg ? esc(n.title) : n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`;
-    const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
-    const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
-    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
+    const lead = ctx.prefix ? '' : circle('toggle', key, open), fk = ctx.prefix ? '' : key;
+    let head;
+    if (n.kind === 'appendix' && n.children) head = secHead(n, ctx, lead, fk);
+    else {
+      const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
+      const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
+      const detail = bg ? `<span class="fold-title">${esc(n.title)} ${who}</span>` : `<span class="fold-detail">${n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`}</span>`;
+      head = `<div class="fold-head"${fk ? ` data-fold="${fk}"` : ''}>${lead}<span class="fold-name">${name}</span>${detail}${bg ? '' : who}</div>`;
+    }
     const inner = n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
-    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-wrap"><div class="fold-body">${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -114,17 +126,13 @@
   }
   function wrap(n, L, ctx, inFold) {
     const key = ctx.prefix + n.id;
-    const hl = Math.min(1 + depth(n.id), 5);
-    const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
-    const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
     // the section's brief, at Paper depth: a fold under the title, as every fold is (a circled +/− at the left of the
     // title, which folds it as a whole); open by the reader's setting unless this one was folded or opened by hand.
     // In a peek, and inside an appendix (whose title's circle is the appendix's), the brief stands open as it is.
     const briefed = n.brief && L === PAPER && n.id !== DOC.root.id && n.title;
     const ledeKey = ctx.prefix + 'lede:' + n.id, foldable = briefed && !ctx.prefix && !inFold;
     const ledeOpen = foldable ? (ctx.over.has(ledeKey) ? ctx.over.get(ledeKey) >= 3 : ledesOn()) : ledesOn();
-    const toggle = foldable ? circle(ledeOpen ? 'close' : 'open', ledeKey, ledeOpen) : '';
-    const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldable ? ` data-lede="${ledeKey}"` : ''}>${minus}${toggle}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+    const head = inFold ? '' : secHead(n, ctx, foldable ? circle('toggle', ledeKey, ledeOpen) : '', foldable ? ledeKey : '');
     const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ledeBlock(n, ctx)}</div></div></div>`
       : briefed && ledeOpen ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
@@ -210,14 +218,14 @@
     const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`);
     if (!el) { draw(); return; }
     el.dataset.state = open ? 'open' : 'closed';
-    $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
-    $$(`#paper .sec-h > .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {   // a brief's one circle, in the title: it turns
-      b.setAttribute('aria-expanded', String(open)); b.dataset.act = open ? 'close' : 'open'; b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
+    $$(`#paper .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {      // the circle turns: + to −, and back
+      b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
     });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
   }
   const openFoldAt = key => setFold(key, true), closeFoldAt = key => setFold(key, false);
+  const toggleFold = key => { const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`); setFold(key, !(el && el.dataset.state === 'open')); };
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
@@ -441,10 +449,8 @@
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
-    const foldHead = e.target.closest('.fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
-    if (foldHead && !e.target.closest('a, .anchor, .qwords, [data-act]')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
-    const ledeHead = e.target.closest('.sec-h[data-lede]');                     // a section's title folds and opens its brief
-    if (ledeHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-act]')) { const k = ledeHead.dataset.lede; setFold(k, !(state.over.has(k) ? state.over.get(k) >= 3 : ledesOn())); return; }
+    const foldHead = e.target.closest('[data-fold]');                           // the whole head of a fold is its control, open or closed
+    if (foldHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-def]')) { toggleFold(foldHead.dataset.fold); return; }
     const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
@@ -461,7 +467,7 @@
       return;
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
-    if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
+    if (t.dataset.act) { toggleFold(t.dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }

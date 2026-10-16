@@ -64,7 +64,7 @@ a:hover { text-decoration: underline; }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
 .page p { margin: 0 0 1em; }
 .page p, .page li, .sum-body, .lede, #sheet-body p, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
-.gist-list b, .card-label, .fold-line, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
+.gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
 /* a larger text on a wide screen, and the column widens with it (its width is in rem) */
 @media (min-width: 900px) { html { font-size: 112.5%; } }
 @media (min-width: 1400px) { html { font-size: 118.75%; } }
@@ -79,7 +79,7 @@ button { font-family: var(--sans); }
 @keyframes slideout { to { transform: translateX(14px); opacity: 0; } }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } }
 @keyframes flash { 0% { background: color-mix(in srgb, var(--accent) 26%, transparent); box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 26%, transparent); } 60% { background: color-mix(in srgb, var(--accent) 18%, transparent); box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 18%, transparent); } 100% { background: transparent; box-shadow: 0 0 0 8px transparent; } }
-.btn, .ctl, .bar-btn, .bar-pill, .bar-title, .qbadge, .anchor, .fold-btn, .x-btn, .fold-line, .dial button, .seg button, .toc button, .gs, [data-def], .eqno {
+.btn, .ctl, .bar-btn, .bar-pill, .bar-title, .qbadge, .anchor, .fold-btn, .x-btn, .dial button, .seg button, .toc button, .gs, [data-def], .eqno {
   transition: background-color .15s var(--ease-out), color .15s var(--ease-out), border-color .15s var(--ease-out), box-shadow .15s var(--ease-out), opacity .15s var(--ease-out); }
 /* nothing shrinks when pressed: feedback is colour, underline or a fade; the dial's pill glides */
 #paper.swap { animation: fadein .28s var(--ease-out); }
@@ -199,27 +199,24 @@ dfn { font-style: italic; }
   display: inline-grid; place-items: center; font: 500 .85rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; box-sizing: border-box; }
 .fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .fold { margin: .1rem 0 1rem; }
-.fold-closed { display: flex; align-items: center; gap: .55rem; }
-.fold-line { flex: 1; min-width: 0; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: .35rem; text-align: left; background: none; border: 0; padding: 0; cursor: pointer;
-  font: 500 .88rem/1.5 var(--sans); color: var(--muted); border-radius: 4px; }
-.fold-line:hover { color: var(--accent); }
-.fold-name { font-weight: 600; }
-.fold-detail { font: 400 1.02rem/1.5 var(--serif); color: var(--muted); }
-.fold-who { font-size: .72rem; }
-.fold-bg .fold-name, .fold-bg .fold-head > span:first-of-type { color: var(--reader); }
-.fold-head { display: flex; align-items: center; gap: .55rem; font: 600 .76rem/1.15 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1rem 0 .35rem; }
-.fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem var(--sans); color: var(--fg); }
+.fold-head { display: flex; align-items: center; gap: .55rem; cursor: pointer; font: 600 .76rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+  transition: margin-bottom .3s var(--ease-out); }
+.fold-head:hover .fold-name { color: var(--accent); }
+.fold-name { flex: none; }
+.fold-detail { text-transform: none; letter-spacing: 0; font: 400 1.02rem/1.5 var(--serif); color: var(--muted); min-width: 0; }
+.fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem/1.4 var(--sans); color: var(--fg); min-width: 0; }
+.fold-who { font: 400 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-left: .4rem; white-space: nowrap; }
+.fold-bg .fold-name { color: var(--reader); }
+.fold[data-state="open"] > .fold-head { margin-bottom: .45rem; }
+.sec-h[data-fold] { cursor: pointer; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
 .fold[data-state="open"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
-.fold[data-state="open"] .fold-closed { display: none; }
 .fold-body { min-height: 0; min-width: 0; overflow: clip; overflow-clip-margin: 12px; }
 .fold[data-state="closed"] .fold-body { visibility: hidden; transition: visibility 0s .3s; }
 .fold-bg[data-state="open"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
-.sec-h[data-lede] { cursor: pointer; }
 .fold-lede > .fold-wrap > .fold-body { padding-bottom: .1rem; }
-.fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h { cursor: pointer; }
 /* ---- provenance chips and question badges */
 .chip { font: 500 .74rem var(--sans); letter-spacing: .02em; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
 .chip.ai-approved { color: var(--muted); }
@@ -616,20 +613,32 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (!qs.length) return '';
     return `<button type="button" class="qbadge" data-q="${n.id}" data-deep="${deep ? 1 : 0}" title="Questions about this part" aria-label="${qs.length} question${qs.length > 1 ? 's' : ''} about this part">?<span>${qs.length}</span></button>`;
   }
-  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="${act}" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
+  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="toggle" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
 
-  // a fold: its one-line form and its content live together; data-open says which shows, and the content's grid
-  // track eases between nothing and its natural size (no measuring, no redrawing)
+  // THE FOLD PATTERN (one for everything that folds: a section's brief, a background note, an appendix, a proof).
+  // A fold is a head that never moves and a body under it. The head is the same whether the fold is open or closed:
+  // a circled +/− at the left and the title beside it; the whole head is the control. Only the body eases open
+  // (its grid track goes from nothing to its size, so nothing is measured or redrawn) and wears the fold's box (a
+  // rule at the left for a note). The head is a heading when the fold is a section (an appendix, a brief's section).
+  function secHead(n, ctx, lead, foldKey) {
+    const hl = Math.min(1 + depth(n.id), 5);
+    const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
+    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+  }
   function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;
     const bg = n.kind === 'background';
-    const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
-    const detail = bg ? esc(n.title) : n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`;
-    const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
-    const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
-    const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
+    const lead = ctx.prefix ? '' : circle('toggle', key, open), fk = ctx.prefix ? '' : key;
+    let head;
+    if (n.kind === 'appendix' && n.children) head = secHead(n, ctx, lead, fk);
+    else {
+      const name = bg ? 'Background' : n.kind === 'appendix' ? esc('Appendix ' + (n.number || '')) : esc(n.title || BOX[n.kind] || 'More');
+      const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
+      const detail = bg ? `<span class="fold-title">${esc(n.title)} ${who}</span>` : `<span class="fold-detail">${n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`}</span>`;
+      head = `<div class="fold-head"${fk ? ` data-fold="${fk}"` : ''}>${lead}<span class="fold-name">${name}</span>${detail}${bg ? '' : who}</div>`;
+    }
     const inner = n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
-    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-wrap"><div class="fold-body">${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -647,17 +656,13 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   }
   function wrap(n, L, ctx, inFold) {
     const key = ctx.prefix + n.id;
-    const hl = Math.min(1 + depth(n.id), 5);
-    const minus = inFold && !ctx.prefix ? circle('close', key, true) : '';
-    const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
     // the section's brief, at Paper depth: a fold under the title, as every fold is (a circled +/− at the left of the
     // title, which folds it as a whole); open by the reader's setting unless this one was folded or opened by hand.
     // In a peek, and inside an appendix (whose title's circle is the appendix's), the brief stands open as it is.
     const briefed = n.brief && L === PAPER && n.id !== DOC.root.id && n.title;
     const ledeKey = ctx.prefix + 'lede:' + n.id, foldable = briefed && !ctx.prefix && !inFold;
     const ledeOpen = foldable ? (ctx.over.has(ledeKey) ? ctx.over.get(ledeKey) >= 3 : ledesOn()) : ledesOn();
-    const toggle = foldable ? circle(ledeOpen ? 'close' : 'open', ledeKey, ledeOpen) : '';
-    const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldable ? ` data-lede="${ledeKey}"` : ''}>${minus}${toggle}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
+    const head = inFold ? '' : secHead(n, ctx, foldable ? circle('toggle', ledeKey, ledeOpen) : '', foldable ? ledeKey : '');
     const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ledeBlock(n, ctx)}</div></div></div>`
       : briefed && ledeOpen ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
@@ -743,14 +748,14 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`);
     if (!el) { draw(); return; }
     el.dataset.state = open ? 'open' : 'closed';
-    $$('.fold-btn', el).forEach(b => { if (b.closest('.fold') === el) b.setAttribute('aria-expanded', String(open)); });
-    $$(`#paper .sec-h > .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {   // a brief's one circle, in the title: it turns
-      b.setAttribute('aria-expanded', String(open)); b.dataset.act = open ? 'close' : 'open'; b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
+    $$(`#paper .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {      // the circle turns: + to −, and back
+      b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
     });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
   }
   const openFoldAt = key => setFold(key, true), closeFoldAt = key => setFold(key, false);
+  const toggleFold = key => { const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`); setFold(key, !(el && el.dataset.state === 'open')); };
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
@@ -974,10 +979,8 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
-    const foldHead = e.target.closest('.fold[data-state="open"] > .fold-wrap > .fold-body > .fold-head, .fold[data-state="open"] > .fold-wrap > .fold-body > .sec > .sec-h');   // the whole head of an open fold folds it
-    if (foldHead && !e.target.closest('a, .anchor, .qwords, [data-act]')) { closeFoldAt(foldHead.closest('.fold').dataset.key); return; }
-    const ledeHead = e.target.closest('.sec-h[data-lede]');                     // a section's title folds and opens its brief
-    if (ledeHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-act]')) { const k = ledeHead.dataset.lede; setFold(k, !(state.over.has(k) ? state.over.get(k) >= 3 : ledesOn())); return; }
+    const foldHead = e.target.closest('[data-fold]');                           // the whole head of a fold is its control, open or closed
+    if (foldHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-def]')) { toggleFold(foldHead.dataset.fold); return; }
     const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
@@ -994,7 +997,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       return;
     }
     if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
-    if (t.dataset.act) { if (t.dataset.act === 'open') openFoldAt(t.dataset.key); else closeFoldAt(t.dataset.key); return; }
+    if (t.dataset.act) { toggleFold(t.dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }
