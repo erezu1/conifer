@@ -68,7 +68,13 @@ button { font-family: var(--sans); }
 /* nothing shrinks when pressed: feedback is colour, underline or a fade; the dial's pill glides */
 #paper.swap { animation: fadein .28s var(--ease-out); }
 .flash { animation: flash 2.6s var(--ease-out); border-radius: 4px; }
-::highlight(conifer-quote) { background: color-mix(in srgb, var(--accent) 32%, transparent); }
+/* the words a link points to: a marker's band under them, rising and fading (viewer.js flashQuote) */
+.qhost { position: relative; }
+.qmarks { position: absolute; inset: 0; pointer-events: none; }
+.qmark { position: absolute; border-radius: 4px; background: color-mix(in srgb, var(--accent) 22%, transparent); mix-blend-mode: multiply; opacity: 0; animation: qmark 2.6s var(--ease-out) forwards; }
+@keyframes qmark { 0% { opacity: 0; } 12% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .qmark { mix-blend-mode: screen; } }
+:root[data-theme="dark"] .qmark { mix-blend-mode: screen; }
 .qmark { background: color-mix(in srgb, var(--accent) 32%, transparent); border-radius: 2px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -209,7 +215,7 @@ dfn { font-style: italic; }
 #paper .leaf { contain-intrinsic-size: auto 14rem; }
 /* (a skipped block also clips its painting at its edge: the halo of a place one has just jumped to, a search's box
    round a formula and a selection would be cut; such a block, and the blocks round it, are painted whole) */
-#paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking)) { content-visibility: visible; }
+#paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking, .qmarks)) { content-visibility: visible; }
 #paper .display { contain-intrinsic-size: auto 4rem; }
 #paper figure { contain-intrinsic-size: auto 9rem; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }

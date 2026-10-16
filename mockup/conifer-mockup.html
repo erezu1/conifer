@@ -77,7 +77,13 @@ button { font-family: var(--sans); }
 /* nothing shrinks when pressed: feedback is colour, underline or a fade; the dial's pill glides */
 #paper.swap { animation: fadein .28s var(--ease-out); }
 .flash { animation: flash 2.6s var(--ease-out); border-radius: 4px; }
-::highlight(conifer-quote) { background: color-mix(in srgb, var(--accent) 32%, transparent); }
+/* the words a link points to: a marker's band under them, rising and fading (viewer.js flashQuote) */
+.qhost { position: relative; }
+.qmarks { position: absolute; inset: 0; pointer-events: none; }
+.qmark { position: absolute; border-radius: 4px; background: color-mix(in srgb, var(--accent) 22%, transparent); mix-blend-mode: multiply; opacity: 0; animation: qmark 2.6s var(--ease-out) forwards; }
+@keyframes qmark { 0% { opacity: 0; } 12% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .qmark { mix-blend-mode: screen; } }
+:root[data-theme="dark"] .qmark { mix-blend-mode: screen; }
 .qmark { background: color-mix(in srgb, var(--accent) 32%, transparent); border-radius: 2px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
@@ -218,7 +224,7 @@ dfn { font-style: italic; }
 #paper .leaf { contain-intrinsic-size: auto 14rem; }
 /* (a skipped block also clips its painting at its edge: the halo of a place one has just jumped to, a search's box
    round a formula and a selection would be cut; such a block, and the blocks round it, are painted whole) */
-#paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking)) { content-visibility: visible; }
+#paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking, .qmarks)) { content-visibility: visible; }
 #paper .display { contain-intrinsic-size: auto 4rem; }
 #paper figure { contain-intrinsic-size: auto 9rem; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
@@ -900,35 +906,75 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // at an estimated height until they are seen, so where a place is changes while the page scrolls towards it. A long
   // way is therefore taken in one jump and then corrected, frame by frame, until the place stays where it was
   // aimed; a short way scrolls smoothly and is corrected after. The reader's own wheel, touch or key ends it.
-  function landAt(want, smooth) {
-    const far = Math.abs(want() - window.scrollY) > window.innerHeight * 2.5;
-    window.scrollTo({ top: Math.max(0, want()), behavior: smooth && !far && !reduced() ? 'smooth' : 'instant' });
-    let stop = false, n = 0, calm = 0;
+  // A short way is a glide that re-aims every frame (the place it goes to is read anew each time, so the blocks that
+  // take their true height on the way never make it lurch at the end); a long way is a quick fade of the page, the
+  // jump unseen, and the page fading back in at the place. done() runs once the place stays where it was aimed.
+  let landing = 0;
+  function landAt(want, smooth, done) {
+    const token = ++landing, page = $('main.page');
+    let stop = false;
     const end = () => { stop = true; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.removeEventListener(t, end)); };
     ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.addEventListener(t, end, { passive: true }));
-    const fix = () => {
-      if (stop) return;
-      if (++n > 40) { end(); return; }
-      const d = Math.max(0, want()) - window.scrollY;
-      if (Math.abs(d) > 3) { calm = 0; window.scrollTo({ top: Math.max(0, want()), behavior: 'instant' }); } else calm++;
-      if (calm >= 3) { end(); return; }
+    const live = () => !stop && token === landing;
+    const go = y => window.scrollTo({ top: Math.max(0, y), behavior: 'instant' });
+    const settle = () => {                           // until it stays put for three frames (or the reader takes over)
+      let n = 0, calm = 0;
+      const fix = () => {
+        if (!live() || ++n > 40) { end(); if (done) done(); return; }
+        const d = Math.max(0, want()) - window.scrollY;
+        if (Math.abs(d) > 2) { calm = 0; go(want()); } else calm++;
+        if (calm >= 3) { end(); if (done) done(); return; }
+        requestAnimationFrame(fix);
+      };
       requestAnimationFrame(fix);
     };
-    setTimeout(() => requestAnimationFrame(fix), smooth && !far && !reduced() ? 500 : 0);
+    const dist = Math.abs(want() - window.scrollY);
+    if (!smooth || reduced() || dist < 2) { go(want()); settle(); return; }
+    if (dist > window.innerHeight * 2.5) {           // far: the page fades, goes there unseen, and comes back
+      page.style.transition = 'opacity .12s ease-in'; page.style.opacity = '0';
+      setTimeout(() => {
+        go(want());
+        const back = () => { page.style.transition = 'opacity .24s ease-out'; page.style.opacity = ''; setTimeout(() => { page.style.transition = ''; }, 260); };
+        let n = 0; const hold = () => { const d = Math.abs(Math.max(0, want()) - window.scrollY); if (d > 2) go(want()); if ((d <= 2 && n > 1) || ++n > 20) { back(); settle(); } else requestAnimationFrame(hold); };
+        requestAnimationFrame(hold);
+      }, 120);
+      return;
+    }
+    const y0 = window.scrollY, T = Math.min(650, 260 + dist * 0.22), t0 = performance.now();
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const step = now => {
+      if (!live()) { if (done) done(); return; }
+      const t = Math.min(1, (now - t0) / T);
+      go(y0 + (want() - y0) * ease(t));
+      if (t < 1) requestAnimationFrame(step); else settle();
+    };
+    requestAnimationFrame(step);
   }
   window.ConiferScroll = { land: landAt };
-  function scrollTo(el) { landAt(() => el.getBoundingClientRect().top + window.scrollY - barH() - 16, true); }
+  function scrollTo(el, done) { landAt(() => el.getBoundingClientRect().top + window.scrollY - barH() - 16, true, done); }
+  // the words a link points to (where a term is defined): a marker's band laid under them that rises and fades, as
+  // the paragraph's flash does; never the look of a selection, and gone by itself
   function flashQuote(el, quote) {
-    if (!quote) return;
+    if (!quote) return false;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const parts = []; let text = '', node;
     while ((node = walker.nextNode())) { parts.push({ node, start: text.length }); text += node.nodeValue; }
-    const i = text.indexOf(quote); if (i < 0) return;
+    const i = text.indexOf(quote); if (i < 0) return false;
     const at = pos => { let p = parts[0]; for (const q of parts) { if (q.start <= pos) p = q; else break; } return { node: p.node, off: pos - p.start }; };
     const a = at(i), b = at(i + quote.length);
     const r = document.createRange(); r.setStart(a.node, a.off); r.setEnd(b.node, b.off);
-    if (window.Highlight && CSS.highlights) { CSS.highlights.set('conifer-quote', new Highlight(r)); setTimeout(() => CSS.highlights.delete('conifer-quote'), 3000); return; }
-    try { const s = document.createElement('span'); s.className = 'qmark'; r.surroundContents(s); setTimeout(() => s.replaceWith(...s.childNodes), 3000); } catch (e) {}
+    const host = a.node.parentElement.closest('.leaf, p, li, .display, .node') || el;
+    const hr = host.getBoundingClientRect();
+    const box = document.createElement('div'); box.className = 'qmarks'; box.setAttribute('aria-hidden', 'true');
+    for (const q of r.getClientRects()) {
+      if (q.width < 2) continue;
+      const m = document.createElement('span'); m.className = 'qmark';
+      m.style.cssText = `left:${(q.left - hr.left - 2).toFixed(1)}px;top:${(q.top - hr.top + q.height * 0.12).toFixed(1)}px;width:${(q.width + 4).toFixed(1)}px;height:${(q.height * 0.8).toFixed(1)}px`;
+      box.appendChild(m);
+    }
+    host.classList.add('qhost'); host.appendChild(box);
+    setTimeout(() => { box.remove(); host.classList.remove('qhost'); }, 2700);
+    return true;
   }
 
   // ---- travelling: a jump into the paper remembers where the reader was (the pill), and is a history step too
@@ -965,10 +1011,15 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const fromLevel = state.level;
     const origin = { label: fromLevel < PAPER ? LEVELS[fromLevel].label : (curSection && byId.has(curSection) ? shortLabel(byId.get(curSection)) : 'Back'), sn: snapshot() };
     if (opts.push !== false) push(opts.flash || id, { from: fromLevel });
-    if (state.level < PAPER) { state.level = PAPER; state.over.clear(); save(); }
-    ancestors(id).concat([id]).forEach(a => { const n = byId.get(a); if (isFold(n)) state.over.set(a, 3); });
+    const levelChanged = state.level < PAPER;
+    if (levelChanged) { state.level = PAPER; state.over.clear(); save(); }
+    const folds = ancestors(id).concat([id]).filter(a => isFold(byId.get(a)));
     closeAll();
-    draw();
+    if (levelChanged || !locate(id)) { folds.forEach(a => state.over.set(a, 3)); draw(); }
+    else folds.forEach(a => {                       // (the place is in the page: no redrawing; a closed fold on the way opens)
+      const f = $(`#paper .fold[data-key="${CSS.escape(a)}"]`);
+      if (f && f.dataset.state !== 'open') setFold(a, true); else state.over.set(a, 3);
+    });
     if (fromLevel !== state.level) swapIn();
     backStack.push(origin); drawDial();
     const el = locate(id); if (!el) return;
@@ -979,8 +1030,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       landAt(() => pe.getBoundingClientRect().top + window.scrollY - opts.place.y, false);
       commit(); return;
     }
-    scrollTo(target);
-    afterScroll(() => { flash(mark); if (opts.quote) flashQuote(el, opts.quote); commit(); });
+    scrollTo(target, () => { if (opts.quote) { if (!flashQuote(el, opts.quote)) flash(mark); } else flash(mark); commit(); });
   }
   function goBack() {
     const o = backStack.pop(); if (!o) return;
