@@ -111,15 +111,15 @@ button { font-family: var(--sans); }
 .dial { position: relative; display: flex; padding-bottom: 12px; }
 /* the lane as the search: the field over the labels, above the one line (which only changes its length, viewer.js) */
 #find-row { position: absolute; left: 0; right: 0; top: 0; bottom: 12px; display: flex; align-items: center; gap: .2rem; padding-left: .15rem;
-  opacity: 0; pointer-events: none; transition: opacity .2s ease .1s; }
+  opacity: 0; pointer-events: none; transition: opacity .14s ease .05s; }
 .bar.searching #find-row { opacity: 1; pointer-events: auto; }
 #find-row .bar-btn { width: 1.9rem; height: 1.9rem; color: var(--accent); }
 #find-row .bar-btn svg { width: 19px; height: 19px; }
-.bar.searching #dial button { opacity: 0; pointer-events: none; transition: opacity .14s ease; }
-#dial button { transition: color .2s, opacity .18s ease .12s; }
+.bar.searching #dial button { opacity: 0; pointer-events: none; transition: opacity .1s ease; }
+#dial button { transition: color .2s, opacity .14s ease .08s; }
 /* the bar's search button: its magnifier fades into an x while searching (and closes it) */
 .bar-search { position: relative; }
-.bar-search > span { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .2s ease; }
+.bar-search > span { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .14s ease; }
 .bar-search .i-close { opacity: 0; }
 .bar.searching .bar-search .i-find { opacity: 0; }
 .bar.searching .bar-search .i-close { opacity: 1; }
@@ -133,7 +133,7 @@ button { font-family: var(--sans); }
 .dial-line line { vector-effect: non-scaling-stroke; stroke-width: 1.25px; stroke-linecap: round; }
 .dial-line .track { stroke: color-mix(in srgb, var(--muted) 28%, transparent); }
 .dial-line .lit { stroke: var(--accent); }
-.dial-line circle { fill: color-mix(in srgb, var(--muted) 45%, transparent); transition: r .2s var(--ease-out), fill .2s ease; }
+.dial-line circle { fill: color-mix(in srgb, var(--muted) 45%, transparent); transition: r .14s var(--ease-out), fill .14s ease; }
 .dial-line circle.on { fill: var(--accent); }
 /* ONE LINE: the bar has one line. Reading, it is the depth line under the tabs; searching, the same line, stretched
    to the field's width, is its underline (viewer.js laneSearch). It never fades or changes colour: only its length. */
@@ -923,7 +923,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     cancelAnimationFrame(laneAnim);
     if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
     laneMorphing = true;
-    const t0 = performance.now(), T = 380, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
+    const t0 = performance.now(), T = 220, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
     const finish = () => {
       if (mine !== laneToken || !laneMorphing) return;
       cancelAnimationFrame(laneAnim); laneMorphing = false;
@@ -2011,7 +2011,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
       bar.classList.remove('searching');
       if (window.ConiferLane) ConiferLane.search(false);
-      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 260);
+      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 180);
     }
   }
   window.ConiferSearch = {

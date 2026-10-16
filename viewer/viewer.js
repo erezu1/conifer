@@ -259,7 +259,7 @@
     cancelAnimationFrame(laneAnim);
     if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
     laneMorphing = true;
-    const t0 = performance.now(), T = 380, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
+    const t0 = performance.now(), T = 220, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
     const finish = () => {
       if (mine !== laneToken || !laneMorphing) return;
       cancelAnimationFrame(laneAnim); laneMorphing = false;

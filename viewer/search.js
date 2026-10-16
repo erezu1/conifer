@@ -329,7 +329,7 @@
       const f = $('#find-input'); if (f && document.activeElement === f) f.blur();
       bar.classList.remove('searching');
       if (window.ConiferLane) ConiferLane.search(false);
-      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 260);
+      setTimeout(() => { if (!open) find.hidden = true; }, reduced() ? 0 : 180);
     }
   }
   window.ConiferSearch = {
