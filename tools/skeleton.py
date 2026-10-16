@@ -181,7 +181,6 @@ def main():
             {"key": "gist", "label": "Gist", "hint": "the trunk: the three things to know"},
             {"key": "brief", "label": "Summary", "hint": "the branches: one page, every sentence opens"},
             {"key": "paper", "label": "Paper", "hint": "the foliage: the full text, with the roots folded"},
-            {"key": "full", "label": "Everything", "hint": "roots and all: appendices and proofs open"},
         ],
         "audiences": [],
         "root": root, "defs": [], "questions": [],

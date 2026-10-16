@@ -10,9 +10,8 @@
   const DOC = JSON.parse($('#conifer-doc').textContent);
   const LEVELS = DOC.levels;
   const IDX = Object.fromEntries(LEVELS.map((l, i) => [l.key, i]));
-  const GIST = IDX.gist ?? 0, BRIEF = IDX.brief ?? 1, SKIM = IDX.skim, PAPER = IDX.paper ?? LEVELS.length - 2, FULL = IDX.full ?? LEVELS.length - 1;
+  const GIST = IDX.gist ?? 0, BRIEF = IDX.brief ?? 1, SKIM = IDX.skim, PAPER = IDX.paper ?? LEVELS.length - 2, FULL = IDX.full ?? Infinity;      // (no tree declares an Everything level now: a fold opens by itself, never by depth)
   const LEVEL_HASH = LEVELS.map(l => ({ gist: 'gist', brief: 'summary', skim: 'skim', paper: 'paper', full: 'everything' })[l.key] || l.key);
-  const WPM = 230;
   const BOX = { theorem: 'Theorem', definition: 'Definition', remark: 'Remark', proof: 'Proof', lemma: 'Lemma' };
   const HEADED = { references: 'References', footnotes: 'Footnotes', abstract: 'Abstract' };
   const titleOf = n => n.titleHtml || esc(n.title || '');
@@ -49,11 +48,10 @@
   const skimHidden = () => SKIM !== undefined && state.audience === 'student';
   const ledesOn = () => state.ledes === true;                    // briefs are folded unless the reader opens them all
   const chipsOn = () => state.chips === true || (state.chips === 'auto' && state.audience !== 'specialist');
-  function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s) state[k] = s[k]; }); } catch (e) {} }
-  function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience })); } catch (e) {} }
+  function load() { try { const s = JSON.parse(localStorage.getItem('conifer-reader') || '{}'); ['ledes', 'chips', 'level', 'theme', 'audience'].forEach(k => { if (k in s && (k !== 'ledes' || s.lv === 2)) state[k] = s[k]; });
+      if (!(state.level >= 0 && state.level < LEVELS.length)) state.level = Math.min(Math.max(+state.level || 0, 0), LEVELS.length - 1); } catch (e) {} }
+  function save() { try { localStorage.setItem('conifer-reader', JSON.stringify({ lv: 2, level: state.level, ledes: state.ledes, chips: state.chips, theme: state.theme, audience: state.audience })); } catch (e) {} }
   function applyTheme() { const r = document.documentElement; if (state.theme === 'light' || state.theme === 'dark') r.dataset.theme = state.theme; else delete r.dataset.theme; }
-  let EST = [];
-  let estimating = false;
 
   // terms: a mention of a defined term is a link only for the readers it is meant for
   const audienceDefs = html => html.replace(/<a data-def="([^"]+)">([\s\S]*?)<\/a>/g, (m, id, txt) => { const d = defs.get(id); return d && d.audience && !d.audience.includes(state.audience) ? txt : m; });
@@ -97,7 +95,7 @@
     const who = bg ? `<span class="fold-who">for ${esc((n.audience || []).map(a => audLabel(a).toLowerCase() + 's').join(' and '))}</span>` : '';
     const line = `<div class="fold-closed">${circle('open', key, false)}<button type="button" class="fold-line" data-act="open" data-key="${key}"><span class="fold-name">${name}</span><span class="fold-detail">${detail}</span>${who}</button></div>`;
     const head = n.kind === 'appendix' ? '' : `<div class="fold-head">${ctx.prefix ? '' : circle('close', key, true)}<span>${bg ? 'Background' : name}</span>${bg ? `<span class="fold-title">${esc(n.title)}</span>` : ''}</div>`;
-    const inner = ctx.estimate && !open ? '' : n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    const inner = n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
     return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${line}<div class="fold-wrap"><div class="fold-body">${head}${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
@@ -127,7 +125,7 @@
     const ledeOpen = foldable ? (ctx.over.has(ledeKey) ? ctx.over.get(ledeKey) >= 3 : ledesOn()) : ledesOn();
     const toggle = foldable ? circle(ledeOpen ? 'close' : 'open', ledeKey, ledeOpen) : '';
     const head = n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldable ? ` data-lede="${ledeKey}"` : ''}>${minus}${toggle}<span class="secnum">${esc(n.number || '')}</span>${n.number ? ' ' : ''}${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</h${hl}>` : '';
-    const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ctx.estimate && !ledeOpen ? '' : ledeBlock(n, ctx)}</div></div></div>`
+    const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ledeBlock(n, ctx)}</div></div></div>`
       : briefed && ledeOpen ? ledeBlock(n, ctx) : '';
     const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
@@ -144,13 +142,11 @@
     if (!n.children) return leaf(n, ctx);
     return wrap(n, Math.max(inh, PAPER), ctx);
   }
-  function time(l) { const w = EST[l] || 0; const m = Math.max(1, Math.round(w / WPM)); return `≈ ${m} min`; }
   function actions(from) {
-    if (estimating) return '';
     const b = [];
-    if (from < BRIEF) b.push(`<button type="button" class="btn primary" data-setlevel="${BRIEF}">Read the summary <small>${time(BRIEF)}</small></button>`);
-    if (SKIM !== undefined && from < SKIM && !skimHidden()) b.push(`<button type="button" class="btn${from === BRIEF ? ' primary' : ''}" data-setlevel="${SKIM}">Skim the paper <small>${time(SKIM)}</small></button>`);
-    b.push(`<button type="button" class="btn${from >= BRIEF && (SKIM === undefined || from >= SKIM) ? ' primary' : ''}" data-setlevel="${PAPER}">Open the paper <small>${time(PAPER)}</small></button>`);
+    if (from < BRIEF) b.push(`<button type="button" class="btn primary" data-setlevel="${BRIEF}">Read the summary</button>`);
+    if (SKIM !== undefined && from < SKIM && !skimHidden()) b.push(`<button type="button" class="btn${from === BRIEF ? ' primary' : ''}" data-setlevel="${SKIM}">Skim the paper</button>`);
+    b.push(`<button type="button" class="btn${from >= BRIEF && (SKIM === undefined || from >= SKIM) ? ' primary' : ''}" data-setlevel="${PAPER}">Open the paper</button>`);
     return `<div class="gist-actions">${b.join('')}</div>`;
   }
   function renderRoot(n, L, ctx) {
@@ -225,8 +221,8 @@
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
-    if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span><small>${time(i)}</small></button>`).join('');
-    $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.querySelector('small').textContent = time(i); b.hidden = i === SKIM && skimHidden(); });
+    if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
+    $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.hidden = i === SKIM && skimHidden(); });
     document.documentElement.dataset.depth = LEVELS[state.level].key;
     moveInd(dial);
     const who = $('#who'); if (who) who.textContent = audLabel(state.audience) + ' ▾';
@@ -458,7 +454,7 @@
     if (t.dataset.set) {
       const [k, v] = t.dataset.set.split(':');
       if (k === 'ledes' || k === 'chips') state[k] = v === 'auto' ? 'auto' : v === 'true'; else if (k === 'theme') state.theme = v;
-      else if (k === 'audience') { state.audience = v; estimate(); if (skimHidden() && state.level === SKIM) state.level = BRIEF; }
+      else if (k === 'audience') { state.audience = v; if (skimHidden() && state.level === SKIM) state.level = BRIEF; }
       const g = t.closest('.seg'); if (g) { $$('button', g).forEach(b => b.setAttribute('aria-checked', String(b === t))); moveInd(g); }
       applyTheme(); save(); draw();
       if (k === 'audience') { const note = $('#aud-note'); if (note) note.textContent = (AUD.find(a => a.key === v) || {}).hint || ''; }
@@ -521,8 +517,6 @@
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
   if (skimHidden() && state.level === SKIM) state.level = BRIEF;
-  function estimate() { estimating = true; EST = LEVELS.map((l, i) => words(render(DOC.root, i, { prefix: '', over: new Map(), estimate: true }))); estimating = false; }
-  estimate();
   draw();
   const h = decodeURIComponent(location.hash.slice(1));
   if (h) goHash(h, false);

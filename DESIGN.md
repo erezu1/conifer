@@ -281,6 +281,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **A section's brief is a fold (15 Oct).** At Paper depth the "In brief" block under a section title is a fold like every other: a circled +/− at the left of the title, and the whole title folds or opens it (the ¶, the question words and the badge keep their own taps). Folded by default for every reader (Erez, 15 Oct), with a setting to open them all, and each one remembers being folded or opened by hand for the visit. In a peek, and inside an appendix (whose title's circle is the appendix's own), the brief stands as it is.
 
+**Three tabs, no minutes (16 Oct).** The Everything tab is gone: it was the Paper with the appendices, proofs and background notes unfolded, and each of those opens from its own circle. The dial is Gist, Summary, Paper. The minute estimates under the tabs and on the buttons are gone too. A saved Everything position or brief setting from an older visit is ignored.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.
