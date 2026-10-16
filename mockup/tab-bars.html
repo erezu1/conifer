@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conifer tab bars</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --fg: #16191d; --muted: #5a636e; --rule: #d3d9e0; --surface: #eff3f6;
+  --accent: #1d5b98; --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --serif: "Newsreader", Georgia, serif; --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; --bg: #0c0e11; --fg: #e3e6ea; --muted: #9ba4af; --rule: #2d343c; --surface: #171b20; --accent: #8db9ea; }
+}
+:root[data-theme="dark"] { color-scheme: dark; --bg: #0c0e11; --fg: #e3e6ea; --muted: #9ba4af; --rule: #2d343c; --surface: #171b20; --accent: #8db9ea; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: color-mix(in srgb, var(--surface) 60%, var(--bg)); color: var(--fg); font-family: var(--sans); }
+h1 { font: 600 1.15rem var(--sans); margin: 1.6rem 16px .2rem; text-align: center; }
+.lead { font: 400 .92rem/1.5 var(--sans); color: var(--muted); margin: 0 auto 1.4rem; max-width: 46rem; padding: 0 16px; text-align: center; }
+.row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; padding: 0 16px 2.5rem; }
+.col { width: 340px; max-width: 100%; }
+.name { font: 600 .82rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
+.note { font: 400 .84rem/1.45 var(--sans); color: var(--muted); margin: .55rem 0 0; }
+.phone { background: var(--bg); border-radius: 22px; box-shadow: 0 10px 30px rgba(20, 30, 40, .12); overflow: hidden; height: 420px; display: flex; flex-direction: column; }
+.top { display: flex; align-items: center; gap: 8px; padding: 10px 14px 6px; }
+.top svg { width: 22px; height: 22px; color: var(--accent); flex: none; }
+.top svg * { vector-effect: non-scaling-stroke; stroke-width: 1.25px; }
+.title { flex: 1; text-align: center; font: 500 .86rem var(--sans); color: var(--muted); }
+.text { flex: 1; padding: 14px 18px; font: 400 1.02rem/1.55 var(--serif); text-align: justify; hyphens: auto; touch-action: pan-y; user-select: none; overflow: hidden; }
+.text p { margin: 0 0 .8em; transition: opacity .2s; }
+.hint { font: 400 .75rem var(--sans); color: var(--muted); text-align: center; padding: 6px 0 10px; }
+
+/* the current pill (for comparison) */
+.pill { position: relative; display: flex; gap: 2px; background: var(--surface); border-radius: 999px; padding: 3px; margin: 2px 12px 8px; }
+.pill .ind { position: absolute; top: 3px; bottom: 3px; left: 0; border-radius: 999px; background: var(--bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); }
+.pill button { position: relative; z-index: 1; flex: 1; border: 0; background: none; padding: .5rem .2rem; font: 500 .88rem var(--sans); color: var(--muted); cursor: pointer; }
+.pill button[aria-checked="true"] { color: var(--fg); }
+
+/* A. the underline: three quiet labels, one fine line gliding under the one you read */
+.under { position: relative; display: flex; margin: 0 12px; border-bottom: 1px solid color-mix(in srgb, var(--rule) 70%, transparent); }
+.under button { flex: 1; border: 0; background: none; padding: .55rem .2rem .6rem; font: 500 .86rem var(--sans); letter-spacing: .01em; color: var(--muted); cursor: pointer; transition: color .2s; }
+.under button[aria-checked="true"] { color: var(--fg); }
+.under button:hover { color: var(--fg); }
+.under .ind { position: absolute; bottom: -1px; left: 0; height: 2px; border-radius: 2px; background: var(--accent); }
+
+/* B. the depth line: the tree's trunk laid on its side; one node a tab, the line lit up to the depth you read */
+.depth { position: relative; margin: 0 12px; padding-bottom: 14px; }
+.depth .labels { display: flex; }
+.depth button { flex: 1; border: 0; background: none; padding: .45rem .2rem .35rem; font: 500 .84rem var(--sans); letter-spacing: .01em; color: var(--muted); cursor: pointer; transition: color .2s; }
+.depth button[aria-checked="true"] { color: var(--fg); }
+.depth button:hover { color: var(--fg); }
+.depth svg { position: absolute; left: 0; bottom: 4px; width: 100%; height: 12px; overflow: visible; pointer-events: none; }
+.depth .track { stroke: color-mix(in srgb, var(--muted) 35%, transparent); stroke-width: 1.25px; }
+.depth .lit { stroke: var(--accent); stroke-width: 1.25px; stroke-linecap: round; }
+.depth .node { fill: var(--bg); stroke: color-mix(in srgb, var(--muted) 55%, transparent); stroke-width: 1.25px; transition: fill .2s, stroke .2s; }
+.depth .node.on { fill: var(--accent); stroke: var(--accent); }
+.depth .dot { fill: var(--accent); }
+
+/* C. the depth line, lighter still: nodes only, no labels' weight change, the lit line only */
+.quiet { position: relative; margin: 0 12px; padding-bottom: 12px; }
+.quiet .labels { display: flex; }
+.quiet button { flex: 1; border: 0; background: none; padding: .45rem .2rem .3rem; font: 400 .8rem var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: color .2s; }
+.quiet button[aria-checked="true"] { color: var(--accent); }
+.quiet svg { position: absolute; left: 0; bottom: 3px; width: 100%; height: 10px; overflow: visible; pointer-events: none; }
+.quiet .track { stroke: color-mix(in srgb, var(--muted) 28%, transparent); stroke-width: 1.25px; }
+.quiet .lit { stroke: var(--accent); stroke-width: 1.25px; stroke-linecap: round; }
+.quiet .node { fill: color-mix(in srgb, var(--muted) 45%, transparent); }
+.quiet .node.on { fill: var(--accent); }
+.quiet .dot { fill: var(--accent); }
+</style>
+</head>
+<body>
+<h1>Tab bars for Conifer</h1>
+<p class="lead">Tap a tab, or drag sideways on the text below it: the mark follows your finger and settles on the nearest tab, as the reader does. The same fonts, colours and line weight as the reader.</p>
+<div class="row">
+ <div class="col"><p class="name">Now: the pill</p><div class="phone" data-kind="pill"></div><p class="note">A grey track with a raised white button: the heaviest thing on the screen.</p></div>
+ <div class="col"><p class="name">A. The underline</p><div class="phone" data-kind="under"></div><p class="note">Three labels and one fine deep-blue line under the one you read, gliding between them. The search row's underline, in the same family.</p></div>
+ <div class="col"><p class="name">B. The depth line</p><div class="phone" data-kind="depth"></div><p class="note">The icon's trunk laid on its side: a node per tab, the line lit up to how deep you read. Gist is one node; Paper the whole line.</p></div>
+ <div class="col"><p class="name">C. The depth line, quieter</p><div class="phone" data-kind="quiet"></div><p class="note">B with small caps labels and filled dots only, the current label in blue: the least weight that still shows depth.</p></div>
+</div>
+<script>
+(function () {
+  const LABELS = ['Gist', 'Summary', 'Paper'];
+  const TEXT = [
+    'Weakly coupled strings have a regime of highly excited strings; a black hole near the end of its evaporation may become a self-gravitating string star.',
+    'The paper follows the black hole and the string star to the supersymmetric index, where the answer is known exactly, so agreement tests the transition itself. Near the index a new effective theory appears.',
+    'This work centers around the flat space string theory partition function, with inverse temperature β = 2πR, H the Hamiltonian and J an angular momentum generator in the x¹, x² directions. At ν = 0 the partition function is the supersymmetric index.'
+  ];
+  const TOP = '<div class="top"><svg viewBox="0 0 64 64" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M32 9V56"/><path d="M32 20L23 28M32 20L41 28M32 32L17.5 43M32 32L46.5 43M32 44L11 58M32 44L53 58"/></g><g fill="currentColor"><circle cx="32" cy="9" r="4"/><circle cx="32" cy="20" r="2.6"/><circle cx="23" cy="28" r="2.9"/><circle cx="41" cy="28" r="2.9"/><circle cx="32" cy="32" r="2.6"/><circle cx="17.5" cy="43" r="2.9"/><circle cx="46.5" cy="43" r="2.9"/><circle cx="32" cy="44" r="2.6"/><circle cx="11" cy="58" r="2.9"/><circle cx="53" cy="58" r="2.9"/></g></svg><span class="title">2.1 Setup</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></div>';
+  document.querySelectorAll('.phone').forEach(phone => {
+    const kind = phone.dataset.kind;
+    const buttons = LABELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === 1}" data-i="${i}">${l}</button>`).join('');
+    let bar;
+    if (kind === 'pill') bar = `<div class="pill bar"><span class="ind"></span>${buttons}</div>`;
+    else if (kind === 'under') bar = `<div class="under bar">${buttons}<span class="ind"></span></div>`;
+    else bar = `<div class="${kind} bar"><div class="labels">${buttons}</div><svg><line class="track"/><line class="lit"/><g class="nodes"></g><circle class="dot" r="${kind === 'quiet' ? 3.5 : 4.5}"/></svg></div>`;
+    phone.innerHTML = TOP + bar + `<div class="text"><p></p></div><div class="hint">drag sideways on the text</div>`;
+    const el = phone.querySelector('.bar'), bs = [...el.querySelectorAll('button')], para = phone.querySelector('.text p');
+    let cur = 1, pos = 1, anim = null;
+    const geo = () => bs.map(b => { const r = b.getBoundingClientRect(), o = el.getBoundingClientRect(); const s = document.createRange(); s.selectNodeContents(b); const t = s.getBoundingClientRect(); return { left: r.left - o.left, width: r.width, mid: r.left - o.left + r.width / 2, tl: t.left - o.left, tw: t.width }; });
+    function show(p) {
+      pos = p; const g = geo(), n = g.length - 1, q = Math.max(0, Math.min(n, p)), i = Math.min(n - 1, Math.floor(q)), f = q - i, A = g[i], B = g[i + 1] || A;
+      const lerp = (a, b) => a + (b - a) * f;
+      if (kind === 'pill') { const ind = el.querySelector('.ind'); ind.style.transform = `translateX(${lerp(A.left, B.left) + 3}px)`; ind.style.width = lerp(A.width, B.width) - 2 + 'px'; }
+      else if (kind === 'under') { const ind = el.querySelector('.ind'); ind.style.transform = `translateX(${lerp(A.tl, B.tl) - 6}px)`; ind.style.width = lerp(A.tw, B.tw) + 12 + 'px'; }
+      else {
+        const svg = el.querySelector('svg'), y = 6, x = lerp(A.mid, B.mid), first = g[0].mid, last = g[n].mid;
+        const tr = svg.querySelector('.track'); tr.setAttribute('x1', first); tr.setAttribute('x2', last); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
+        const lit = svg.querySelector('.lit'); lit.setAttribute('x1', first); lit.setAttribute('x2', x); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
+        const nodes = svg.querySelector('.nodes');
+        if (!nodes.children.length) nodes.innerHTML = g.map(() => `<circle class="node" r="${kind === 'quiet' ? 2.2 : 3.5}"/>`).join('');
+        [...nodes.children].forEach((c, k) => { c.setAttribute('cx', g[k].mid); c.setAttribute('cy', y); c.classList.toggle('on', g[k].mid <= x + 0.5); });
+        const dot = svg.querySelector('.dot'); dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+      }
+    }
+    function settle(to) {                      // glide to a tab (a spring-free ease, as the reader's)
+      cancelAnimationFrame(anim); const from = pos, t0 = performance.now(), T = 320;
+      const step = now => { const t = Math.min(1, (now - t0) / T), e = 1 - Math.pow(1 - t, 3); show(from + (to - from) * e); if (t < 1) anim = requestAnimationFrame(step); };
+      anim = requestAnimationFrame(step);
+      cur = to; bs.forEach((b, k) => b.setAttribute('aria-checked', String(k === to)));
+      para.style.opacity = 0; setTimeout(() => { para.textContent = TEXT[to]; para.style.opacity = 1; }, 160);
+    }
+    bs.forEach((b, k) => b.addEventListener('click', () => settle(k)));
+    const text = phone.querySelector('.text');
+    text.addEventListener('pointerdown', e => {
+      const x0 = e.clientX, W = text.clientWidth * 0.6; let moved = false;
+      const move = ev => { const dx = ev.clientX - x0; if (!moved && Math.abs(dx) < 8) return; moved = true; cancelAnimationFrame(anim); show(Math.max(-0.2, Math.min(2.2, cur - dx / W))); };
+      const up = () => { document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); if (moved) { const d = pos - cur; settle(Math.max(0, Math.min(2, Math.abs(d) > 0.33 ? cur + Math.sign(d) : cur))); } };
+      document.addEventListener('pointermove', move); document.addEventListener('pointerup', up);
+    });
+    para.textContent = TEXT[1];
+    requestAnimationFrame(() => show(1));
+    window.addEventListener('resize', () => show(pos));
+    document.fonts && document.fonts.ready.then(() => show(pos));
+  });
+})();
+</script>
+</body>
+</html>

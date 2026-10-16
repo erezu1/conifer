@@ -210,7 +210,45 @@
     drawDial(); barTitle();
     if (window.ConiferSearch) ConiferSearch.refresh();
   }
-  function moveInd(group) {                       // the chosen option's pill glides to it (the dial, a segmented setting)
+  // THE DIAL: three quiet labels over a thin line, the tree's trunk laid on its side, with a dot under each tab. The
+  // line is lit from the first dot up to how deep one reads; a dot turns blue and grows only once the line has reached
+  // it, and shrinks back as the line leaves it. The dots never move. While a swipe or a drag holds it the line follows
+  // the finger; let go (or a tap on a tab), it glides there. Drawn by hand each frame (one small picture).
+  let dialPos = null, dialAnim = 0, dialTo = null;
+  function dialGeo() {
+    const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
+    return { dial, svg: $('.dial-line', dial), mids: bs.map(b => b.offsetLeft + b.offsetWidth / 2), levels: bs.map(b => +b.dataset.setlevel) };
+  }
+  function dialShow(p) {                             // p: a place among the visible tabs (1.4: 40% of the way from the 2nd to the 3rd)
+    const g = dialGeo(); if (!g.svg || !g.mids.length) return;
+    const n = g.mids.length - 1, q = Math.max(0, Math.min(n, p)), i = Math.min(Math.max(n - 1, 0), Math.floor(q)), f = q - i;
+    const x = g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f, y = 5;
+    dialPos = p;
+    const tr = $('.track', g.svg), lit = $('.lit', g.svg), nodes = $('.nodes', g.svg);
+    tr.setAttribute('x1', g.mids[0]); tr.setAttribute('x2', g.mids[n]); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
+    lit.setAttribute('x1', g.mids[0]); lit.setAttribute('x2', x.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
+    if (nodes.children.length !== g.mids.length) nodes.innerHTML = g.mids.map(() => '<circle r="2.1"/>').join('');
+    [...nodes.children].forEach((c, k) => {
+      const grow = Math.max(0, 1 - Math.abs(q - k) / 0.14);      // (only where the line has arrived, and only near it)
+      c.setAttribute('cx', g.mids[k]); c.setAttribute('cy', y);
+      c.style.r = (2.1 + 1.6 * grow * (q >= k - 0.001 ? 1 : 0)).toFixed(2) + 'px';   // (it grows and shrinks by itself: viewer.css)
+      c.classList.toggle('on', q >= k - 0.001);
+    });
+  }
+  function dialGlide(to) {                           // to the tab at this place, from wherever the line is
+    if (dialPos == null || reduced()) { cancelAnimationFrame(dialAnim); dialTo = null; dialShow(to); return; }
+    if (dialTo === to) return;
+    cancelAnimationFrame(dialAnim); dialTo = to;
+    const from = dialPos, t0 = performance.now(), T = 340;
+    const step = now => {
+      const t = Math.min(1, (now - t0) / T), e = 1 - Math.pow(1 - t, 3);
+      dialShow(from + (to - from) * e);
+      if (t < 1) dialAnim = requestAnimationFrame(step); else dialTo = null;
+    };
+    dialAnim = requestAnimationFrame(step);
+  }
+  function moveInd(group) {                       // the chosen option's pill glides to it (a segmented setting); the dial's line glides
+    if (group.id === 'dial') { const g = dialGeo(); const k = g.levels.indexOf(state.level); if (k >= 0) { if (dialPos == null) { dialShow(k); } else dialGlide(k); } return; }
     const ind = group.querySelector('.sel-ind'), on = group.querySelector('[aria-checked="true"]');
     if (!ind || !on) return;
     const first = !ind.classList.contains('placed');          // the first placing is a set, not a glide: the pill is where it belongs when the group appears
@@ -235,7 +273,7 @@
   window.ConiferFolds = { open: openFoldAt };
   function drawDial() {
     const dial = $('#dial');
-    if (!dial.querySelector('button')) dial.innerHTML = '<span class="sel-ind" aria-hidden="true"></span>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
+    if (!dial.querySelector('button')) dial.innerHTML = '<svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>' + LEVELS.map((l, i) => `<button type="button" role="radio" aria-checked="${i === state.level}" data-setlevel="${i}" title="${esc(l.hint || '')}"><span>${esc(l.label)}</span></button>`).join('');
     $$('button', dial).forEach((b, i) => { b.setAttribute('aria-checked', String(i === state.level)); b.hidden = i === SKIM && skimHidden(); });
     document.documentElement.dataset.depth = LEVELS[state.level].key;
     moveInd(dial);
@@ -802,7 +840,7 @@
   });
   let ticking = false;
   window.addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { barTitle(); followHash(); ticking = false; }); }, { passive: true });
-  window.addEventListener('resize', () => { $$('.dial, .seg').forEach(moveInd); });
+  window.addEventListener('resize', () => { $$('.seg').forEach(moveInd); if (dialPos != null) dialShow(dialPos); });
 
   // ------------------------------------------------------------------ swiping between the documents
   // A sideways swipe on the page goes to the next document of the dial (to the left: deeper; to the right: back), and
@@ -815,12 +853,12 @@
   let sw = null, swEat = false;
   function swGeo() {
     const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
-    return { ind: $('.sel-ind', dial), bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
+    return { bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
   }
   function swBegin(kind) {
     const g = swGeo(), cur = g.levels.indexOf(state.level); if (cur < 0) return null;
     const page = $('main.page');
-    page.classList.add('swiping'); g.ind.style.transition = 'none';
+    page.classList.add('swiping'); cancelAnimationFrame(dialAnim); dialTo = null;
     return Object.assign(g, { kind, cur, pos: cur, page, W: window.innerWidth, v: 0, lt: 0 });
   }
   const swBand = (x, d) => d * (1 - 1 / (x / d + 1));    // past either end it follows less and less
@@ -830,11 +868,7 @@
     const now = performance.now();                    // (its speed, in tabs a second, smoothed)
     if (sw.lt) sw.v = 0.6 * sw.v + 0.4 * ((pos - sw.pos) / Math.max(1, now - sw.lt) * 1000);
     sw.lt = now; sw.pos = pos;
-    const q = Math.max(0, Math.min(n, p)), i = Math.min(n - 1, Math.floor(q)), f = q - i;
-    const a = sw.bs[Math.max(0, i)], b = sw.bs[Math.min(n, i + 1)] || a;
-    const over = (p - q) * a[1] * 0.4;                 // (at an end, the pill leans a little)
-    sw.ind.style.transform = `translateX(${(a[0] + (b[0] - a[0]) * f + over).toFixed(1)}px)`;
-    sw.ind.style.width = (a[1] + (b[1] - a[1]) * f).toFixed(1) + 'px';
+    dialShow(p);                                      // (the line follows; past an end it stops, the page alone gives)
     const d = p - sw.cur;
     sw.page.style.transform = `translateX(${(-d * sw.W * SWIPE_PAGE * 0.45).toFixed(1)}px)`;
     sw.page.style.opacity = String(1 - Math.min(0.55, Math.abs(d) * 0.6));
@@ -846,14 +880,13 @@
     let to = g.cur;
     if (Math.abs(d) > 0.33 || (Math.abs(g.v) > 1.5 && Math.sign(g.v) === Math.sign(d) && Math.abs(d) > 0.06)) to = Math.max(0, Math.min(n, g.cur + (d > 0 ? 1 : -1)));
     const page = g.page, ease = 'var(--ease-out)';
-    g.ind.style.transition = '';                       // (the pill glides from where the finger left it)
     if (to === g.cur || reduced()) {
       page.style.transition = `transform .26s ${ease}, opacity .26s ${ease}`; page.style.transform = ''; page.style.opacity = '';
-      if (to !== g.cur) setLevel(g.levels[to]); else moveInd($('#dial'));
+      dialGlide(to); if (to !== g.cur) setLevel(g.levels[to]);
       setTimeout(() => { page.style.transition = ''; page.classList.remove('swiping'); }, 280);
       return;
     }
-    const b = g.bs[to]; g.ind.style.transform = `translateX(${b[0]}px)`; g.ind.style.width = b[1] + 'px';
+    dialGlide(to);                                    // (the line glides on from where the finger left it)
     slidePage(page, to > g.cur ? 1 : -1, g.W, () => setLevel(g.levels[to]));
   }
   // the page slides on and out, the next document is drawn (once) and slides in from the other side
@@ -876,7 +909,7 @@
     if (i === state.level || sw) return;
     const g = swGeo(), from = g.levels.indexOf(state.level), to = g.levels.indexOf(i);
     if (reduced() || from < 0 || to < 0) { setLevel(i); return; }
-    const b = g.bs[to]; g.ind.style.transform = `translateX(${b[0]}px)`; g.ind.style.width = b[1] + 'px';
+    dialGlide(to);
     slidePage($('main.page'), to > from ? 1 : -1, window.innerWidth, () => setLevel(i));
   }
   const sideScroller = el => {                         // something under the finger that scrolls sideways itself
