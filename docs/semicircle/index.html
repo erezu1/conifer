@@ -267,10 +267,16 @@ dfn { font-style: italic; }
 /* the peek: a panel rising from the bottom, the page readable above it (no veil); its head a grip that drags its
    height, its body the paper's column */
 .peek { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: 50vh; display: flex; flex-direction: column; background: var(--bg);
-  border-top: 1px solid var(--rule); border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(0, 0, 0, .10); animation: rise .24s var(--ease-out);
-  transition: height .28s var(--ease-out); }
-.peek.closing { animation: fall .18s var(--ease-in) forwards; }
-.peek.dragging { transition: none; }
+  border-top: 1px solid var(--rule); border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(0, 0, 0, .10); animation: peekin .32s var(--ease-out); }
+@keyframes peekin { from { transform: translateY(100%); } }
+@keyframes peekout { to { transform: translateY(100%); } }
+.peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
+.peek.dragging .peek-head { cursor: grabbing; }
+.peek.expanding .peek-body { opacity: 0; transition: opacity .14s ease; }
+.peek.expanding .peek-head { opacity: 0; transition: opacity .19s ease .15s; }
+.page { transition: opacity .2s ease; }
+.page.peek-fade { opacity: 0; transition: opacity .12s ease; }
+.peek-refs h2 { display: none; }
 .peek-head { flex: none; padding: 0 16px; cursor: ns-resize; touch-action: none; -webkit-user-select: none; user-select: none; }
 .peek-grip { display: block; width: 38px; height: 4px; border-radius: 2px; margin: 7px auto 3px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .2s; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
@@ -384,6 +390,9 @@ mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%));
 .qbadge { display: none; }
 
 .bar-logo { width: 26px; height: 26px; color: var(--accent); }
+/* the references: their own numbers ([12]) and no list's numbers beside them */
+ol.refs { list-style: none; padding-left: 0; }
+.refs .refnum { margin-right: .45em; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 
 mjx-container[jax="SVG"] {
@@ -951,7 +960,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (reduced()) { pop.hidden = true; return; }
     pop.classList.add('closing'); setTimeout(() => { pop.hidden = true; pop.classList.remove('closing'); }, 160);
   }
-  function closeAll() { closeSheet(); closePeek(); closePop(); }
+  function closeAll() { closeSheet(); if (!peekExpanding) closePeek(); closePop(); }
 
   // ------------------------------------------------------------------ the peek (after Epsilon's)
   // A second view below the page: a panel rising from the bottom while the reading stays where it is above, with no
@@ -982,46 +991,97 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     $('[data-peekback]', pk).hidden = !peekStack.length;
     if (!peekIsOpen()) { pk.classList.remove('closing'); pk.hidden = false; peekSetH(peekAvail() * peekFrac); }
   }
+  function peekDone() {                              // gone: hidden, and every trace of a drag or a growth undone
+    const pk = $('#peek');
+    pk.hidden = true; pk.classList.remove('closing', 'expanding', 'dragging');
+    pk.style.transition = ''; pk.style.transform = ''; pk.style.opacity = '';
+    document.body.style.paddingBottom = '';
+  }
   function closePeek() {
-    const pk = $('#peek'); if (!peekIsOpen()) return;
+    const pk = $('#peek'); if (!peekIsOpen() || peekExpanding) return;
     $$('.gs.peeking, .skim.peeking').forEach(x => x.classList.remove('peeking'));
     peekStack.length = 0;
-    const done = () => { pk.hidden = true; pk.classList.remove('closing'); document.body.style.paddingBottom = ''; };
-    if (reduced()) { done(); return; }
-    pk.classList.add('closing'); setTimeout(() => { if (pk.classList.contains('closing')) done(); }, 200);
+    if (reduced()) { peekDone(); return; }
+    pk.classList.add('closing'); setTimeout(() => { if (pk.classList.contains('closing')) peekDone(); }, 230);
   }
   function peekBack() {
     const prev = peekStack.pop(); if (!prev) return;
     $('#peek-title').innerHTML = prev.title; $('#peek-body').innerHTML = prev.html; $('#peek-body').scrollTop = prev.y;
     $('[data-peekback]').hidden = !peekStack.length;
   }
-  function peekGo() { const a = $('#peek-title .peek-from'); if (a) a.click(); }    // the peek becomes the page: its title's link
+  // The peek becomes the page (its title's link, or the grip pulled up to the bar), as in Epsilon: it grows up to the
+  // bar while its text fades; halfway, the page, faded out a moment, goes to the place and fades back in, and the
+  // peek fades away over it.
+  let peekExpanding = false;
+  function peekGo() {
+    const a = $('#peek-title .peek-from'), pk = $('#peek'); if (!a || peekExpanding) return;
+    if (reduced() || pk.hidden) { a.click(); return; }
+    peekExpanding = true;
+    // (made as tall as the bar allows at once and slid up by a transform, which the screen runs by itself: the page's
+    // jump halfway, a long frame, does not stall it)
+    const top = pk.getBoundingClientRect().top, page = $('.page'), full = window.innerHeight - barH();
+    pk.style.transition = 'none'; pk.style.height = full + 'px'; pk.style.transform = `translateY(${Math.round(top - barH())}px)`;
+    void pk.offsetWidth;
+    pk.classList.add('expanding');
+    pk.style.transition = 'transform .34s var(--ease-out), opacity .2s ease .2s';
+    pk.style.transform = 'translateY(0)'; pk.style.opacity = '0';
+    page.classList.add('peek-fade');
+    setTimeout(() => {
+      peekExpanding = 'going'; a.click(); peekExpanding = true;   // (the page goes there; closing the peek is left to this)
+      void page.offsetWidth; page.classList.remove('peek-fade');
+    }, 150);
+    setTimeout(() => { peekDone(); peekStack.length = 0; peekExpanding = false; }, 420);
+  }
+  // The grip: while it is held nothing is laid out again (the peek is made as tall as it can be and only slid, a
+  // transform); let go, it springs to a third, a half or two thirds and only then takes that height. Let go low, it
+  // slides away; pulled up to the bar, it becomes the page.
+  const SPRING = 'transform 460ms linear(0, 0.262, 0.470, 0.631, 0.753, 0.843, 0.908, 0.954, 0.984, 1.004, 1.016, 1.022, 1.024, 1.023, 1.022, 1.019, 1.017, 1.014, 1.011, 1.009, 1.007, 1.005, 1.004, 1.003, 1)';
   (function peekDrag() {
     const pk = $('#peek'); if (!pk) return;
-    const head = $('.peek-head', pk); let drag = null;
+    const head = $('.peek-head', pk); let drag = null, settle = null;
+    const slide = (h, max) => { pk.style.transform = `translateY(${Math.round(max - h)}px)`; };
+    const band = (x, d) => d * (1 - 1 / (x * 0.55 / d + 1));          // above the top it follows less and less
+    function rest() {
+      if (!settle) return;
+      clearTimeout(settle.t); const h = settle.h; settle = null;
+      pk.style.transition = 'none'; peekSetH(h); pk.style.transform = ''; void pk.offsetWidth; pk.style.transition = '';
+    }
     head.addEventListener('pointerdown', e => {
-      if (e.button !== 0 || e.target.closest('button, a')) return;
+      if (e.button !== 0 || e.target.closest('button, a') || peekExpanding) return;
       e.preventDefault();
-      drag = { y: e.clientY, h: pk.getBoundingClientRect().height, at: null, id: e.pointerId };
-      pk.classList.add('dragging'); head.setPointerCapture(e.pointerId);
+      if (settle) { clearTimeout(settle.t); settle = null; }
+      const max = peekMax(), h = window.innerHeight - pk.getBoundingClientRect().top;   // where it shows, even mid-spring
+      drag = { y: e.clientY, h, at: h, max, id: e.pointerId };
+      pk.classList.add('dragging'); pk.style.transition = 'none';
+      pk.style.height = max + 'px'; slide(h, max);
+      head.setPointerCapture(e.pointerId);
     });
     head.addEventListener('pointermove', e => {
       if (!drag || e.pointerId !== drag.id) return;
-      if (e.clientY <= barH() + 2) { drag = null; pk.classList.remove('dragging'); peekGo(); return; }   // pulled up to the bar
-      drag.at = Math.max(40, Math.min(peekAvail(), drag.h + drag.y - e.clientY));
-      pk.style.height = drag.at + 'px';
+      const raw = drag.h + drag.y - e.clientY;
+      if (raw > drag.max && e.clientY <= barH() + 2) {               // pulled all the way up: it becomes the page
+        drag = null; pk.classList.remove('dragging'); peekGo(); return;
+      }
+      drag.at = raw > drag.max ? drag.max + band(raw - drag.max, 60) : Math.max(24, raw);
+      slide(drag.at, drag.max);
     });
     const end = e => {
       if (!drag || e.pointerId !== drag.id) return;
-      const h = drag.at == null ? drag.h : drag.at; drag = null; pk.classList.remove('dragging');
+      const h = drag.at, max = drag.max; drag = null; pk.classList.remove('dragging');
       const avail = peekAvail();
-      if (h < avail * 0.17) { closePeek(); return; }                 // let go low: it goes
+      if (h < avail * 0.17) {                                        // let go low: it slides away, quickening
+        $$('.gs.peeking, .skim.peeking').forEach(x => x.classList.remove('peeking')); peekStack.length = 0;
+        pk.style.transition = 'transform .24s cubic-bezier(.5, 0, 1, 1)'; slide(0, max);
+        setTimeout(peekDone, 250); return;
+      }
       peekFrac = PEEK_SNAPS.reduce((a, b) => Math.abs(b * avail - h) < Math.abs(a * avail - h) ? b : a);
       try { localStorage.setItem('conifer-peek', String(peekFrac)); } catch (err) {}
-      peekSetH(avail * peekFrac);
+      const best = Math.max(120, Math.min(max, Math.round(avail * peekFrac)));
+      pk.style.transition = reduced() ? 'none' : SPRING; slide(best, max);
+      settle = { h: best, t: setTimeout(rest, reduced() ? 0 : 470) };
     };
     head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
-    window.addEventListener('resize', () => { if (peekIsOpen()) peekSetH(peekAvail() * peekFrac); });
+    window.addEventListener('resize', () => { if (peekIsOpen() && !drag && !settle) peekSetH(peekAvail() * peekFrac); });
   })();
   const peekCtx = () => ({ prefix: 'peek|', over: new Map(), plain: true, allOpen: true });
   // the paragraphs a sentence stands for
@@ -1040,14 +1100,21 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const n = byId.get(host);
     const tmp = document.createElement('div'); tmp.innerHTML = n.body;
     const el = tmp.querySelector('#' + CSS.escape(a)); if (!el) return false;
-    const link = `<a href="#${esc(a)}" class="peek-from" data-reveal="${host}" data-flash="${esc(a)}" title="Open the paper here">${placeHtml(host)}</a>`;
-    let what, html, mark = null;
+    const place = n.kind === 'references' ? 'the references' : n.kind === 'footnotes' ? 'the notes' : placeHtml(host);
+    const link = `<a href="#${esc(a)}" class="peek-from" data-reveal="${host}" data-flash="${esc(a)}" title="Open the paper here">${place}</a>`;
+    let what, html, mark = null, near = .3;
     if (n.kind === 'footnotes') { what = 'Note ' + esc(a.replace(/^fn/, '')); html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
-    else if (n.kind === 'references') { what = 'Reference'; html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
+    else if (n.kind === 'references') {             // a citation, as in Epsilon: the list of references, at the one cited
+      what = 'Reference ' + esc(((el.querySelector('.refnum') || {}).textContent || '').replace(/[\[\]\s]/g, ''));
+      html = `<div class="peek-refs">${stripIds(n.body)}</div>`; mark = 'peek-' + a; near = 0;
+    }
     else if (n.kind === 'figure' || n.kind === 'table') { what = esc(n.title || 'Figure'); html = stripIds(n.body); }
     else { const d = el.closest('.display') || el; what = 'Equation ' + esc((d.querySelector('.eqno') || {}).textContent || ''); html = render(n, PAPER, peekCtx()); mark = 'peek-' + (d.id || a); }
     openPeek(`<span class="peek-label">${what}</span> <span class="peek-in">in</span> ${link}`, html, inPeek);
-    if (mark) { const m = $('#peek-body #' + CSS.escape(mark)); if (m) { m.scrollIntoView({ block: 'center' }); flash(m); } }
+    if (mark) {                                     // (scrolled within the peek alone: the page stays where it is)
+      const m = $('#peek-body #' + CSS.escape(mark)), body = $('#peek-body');
+      if (m) { body.scrollTop += m.getBoundingClientRect().top - body.getBoundingClientRect().top - (near ? body.clientHeight * near : 12); flash(m); }
+    }
     return true;
   }
   function peekNode(id, inPeek) {
@@ -1130,6 +1197,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }
     if (t.classList.contains('qbadge') || t.classList.contains('qwords')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }
     if (t.dataset.def) { e.preventDefault(); openDef(t.dataset.def, t); return; }
+    if (t.dataset.reveal && t.closest('#peek-title') && !peekExpanding) { e.preventDefault(); peekGo(); return; }   // the peek grows into the page
     if (t.dataset.reveal) { e.preventDefault(); const q = t.dataset.quote, f = t.dataset.flash; reveal(t.dataset.reveal, { quote: q, flash: f }); return; }
     if (t.matches('a[href^="#"]')) {
       const a = decodeURIComponent(t.getAttribute('href').slice(1));
@@ -1152,6 +1220,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function hold(el) {                                // a long press or a right click on a link
     const id = el.dataset.go || decodeURIComponent(el.getAttribute('href').slice(1));
     if (LEVEL_HASH.includes(id)) return false;
+    if (el.closest('.cite') && !el.closest('#peek') && anchorHost.has(id)) { reveal(anchorHost.get(id), { flash: id }); return true; }   // a citation: the page goes to the reference (a tap peeks)
     if (el.closest('#peek')) {                       // from the peek: the page goes there
       if (byId.has(id)) reveal(id); else if (anchorHost.has(id)) reveal(anchorHost.get(id), { flash: id }); else return false;
       return true;

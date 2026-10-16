@@ -277,10 +277,16 @@ dfn { font-style: italic; }
 /* the peek: a panel rising from the bottom, the page readable above it (no veil); its head a grip that drags its
    height, its body the paper's column */
 .peek { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: 50vh; display: flex; flex-direction: column; background: var(--bg);
-  border-top: 1px solid var(--rule); border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(0, 0, 0, .10); animation: rise .24s var(--ease-out);
-  transition: height .28s var(--ease-out); }
-.peek.closing { animation: fall .18s var(--ease-in) forwards; }
-.peek.dragging { transition: none; }
+  border-top: 1px solid var(--rule); border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(0, 0, 0, .10); animation: peekin .32s var(--ease-out); }
+@keyframes peekin { from { transform: translateY(100%); } }
+@keyframes peekout { to { transform: translateY(100%); } }
+.peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
+.peek.dragging .peek-head { cursor: grabbing; }
+.peek.expanding .peek-body { opacity: 0; transition: opacity .14s ease; }
+.peek.expanding .peek-head { opacity: 0; transition: opacity .19s ease .15s; }
+.page { transition: opacity .2s ease; }
+.page.peek-fade { opacity: 0; transition: opacity .12s ease; }
+.peek-refs h2 { display: none; }
 .peek-head { flex: none; padding: 0 16px; cursor: ns-resize; touch-action: none; -webkit-user-select: none; user-select: none; }
 .peek-grip { display: block; width: 38px; height: 4px; border-radius: 2px; margin: 7px auto 3px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .2s; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
@@ -394,6 +400,9 @@ mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%));
 .qbadge { display: none; }
 
 .bar-logo { width: 26px; height: 26px; color: var(--accent); }
+/* the references: their own numbers ([12]) and no list's numbers beside them */
+ol.refs { list-style: none; padding-left: 0; }
+.refs .refnum { margin-right: .45em; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 .cones { list-style: none; padding: 0; margin: 1.5rem 0; display: grid; gap: 1rem; }
 .cone a { display: block; border: 1px solid var(--rule); border-radius: 14px; padding: 1rem 1.2rem; color: var(--fg); text-decoration: none; transition: background .15s, border-color .15s; }
