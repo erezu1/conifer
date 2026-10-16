@@ -159,8 +159,8 @@ body = f"""<title>Conifer Reader Mockup</title>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>
-<aside id="sheet" class="sheet" hidden aria-live="polite"><div class="sheet-head"><h2 id="sheet-title"></h2><button type="button" class="x-btn" data-close aria-label="Close">&times;</button></div><div id="sheet-body"></div></aside>
-<section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="x-btn peek-go" data-peekgo aria-label="Read it in the page" title="Read it in the page">{ICON_EXPAND}</button><button type="button" class="x-btn" data-peekclose aria-label="Close the peek">&times;</button></div></div><div id="peek-body" class="peek-body"></div></section>
+<aside id="sheet" class="sheet" hidden aria-live="polite"><div class="sheet-head"><h2 id="sheet-title"></h2><button type="button" class="x-btn" data-close aria-label="Close"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button></div><div id="sheet-body"></div></aside>
+<section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="x-btn peek-go" data-peekgo aria-label="Read it in the page" title="Read it in the page">{ICON_EXPAND}</button><button type="button" class="x-btn" data-peekclose aria-label="Close the peek"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button></div></div><div id="peek-body" class="peek-body"></div></section>
 <div id="pop" class="pop" hidden></div>
 <div id="toast" role="status" hidden></div>
 {out["cache"]}

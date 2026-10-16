@@ -83,7 +83,13 @@
     if (!qs.length) return '';
     return `<button type="button" class="qbadge" data-q="${n.id}" data-deep="${deep ? 1 : 0}" title="Questions about this part" aria-label="${qs.length} question${qs.length > 1 ? 's' : ''} about this part">?<span>${qs.length}</span></button>`;
   }
-  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="toggle" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? '&minus;' : '+'}</button>`;
+  // the small controls' glyphs, drawn as lines (as every icon is: one 1.25px line, viewer.css), not typed
+  const GL = {
+    plus: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.5v7M2.5 6h7"/></svg>',
+    minus: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7"/></svg>',
+    x: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg>',
+  };
+  const circle = (act, key, open) => `<button type="button" class="fold-btn" data-act="toggle" data-key="${key}" title="${open ? 'Fold' : 'Open'}" aria-label="${open ? 'Fold' : 'Open'}" aria-expanded="${open}">${open ? GL.minus : GL.plus}</button>`;
 
   // THE FOLD PATTERN (one for everything that folds: a section's brief, a background note, an appendix, a proof).
   // A fold is a head that never moves and a body under it. The head is the same whether the fold is open or closed:
@@ -219,7 +225,7 @@
     if (!el) { draw(); return; }
     el.dataset.state = open ? 'open' : 'closed';
     $$(`#paper .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {      // the circle turns: + to −, and back
-      b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? '&minus;' : '+'; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
+      b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? GL.minus : GL.plus; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
     });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
     barTitle();
@@ -660,7 +666,7 @@
     if (window.innerWidth < 760 || !anchor) { openSheet(title, html, cls); return; }
     closeSheet();
     const pop = $('#pop'); pop.classList.remove('closing');
-    pop.innerHTML = `<div class="pop-head"><div class="pop-term">${title}</div><button type="button" class="x-btn" data-close aria-label="Close">&times;</button></div>${html}`;
+    pop.innerHTML = `<div class="pop-head"><div class="pop-term">${title}</div><button type="button" class="x-btn" data-close aria-label="Close">${GL.x}</button></div>${html}`;
     pop.hidden = false;
     const r = anchor.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
     const below = r.bottom + 6 + h < window.innerHeight || r.top - 6 - h < barH();

@@ -272,7 +272,17 @@ dfn { font-style: italic; }
 .sheet-head h2 { font: 600 1.05rem/1.35 var(--sans); margin: 0; min-width: 0; }
 #sheet-body { overflow: auto; min-height: 0; padding-top: .3rem; }
 .x-btn { width: 1.65rem; height: 1.65rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--muted); display: grid; place-items: center; font: 400 1.05rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; }
-.x-btn:hover { background: var(--surface); color: var(--fg); }
+.x-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+/* ONE ICON SYSTEM. Every icon is drawn in one line, 1.25px whatever its size (soft-edged, it reads as the crisp 1px
+   underline of the search does), with round ends: the bar's (the logo too), the search row's, the peek's. The bar's
+   icons are deep blue. The small circled controls (fold +/-, the x of a sheet, a popover or the peek, the peek's
+   expand) are one control: the same thin grey ring and grey glyph, drawn as lines, and on hover the deep blue with
+   its soft ground; two sizes only, in the text (a fold's) and in a header. */
+.bar-btn svg *, #find-row svg *, .x-btn svg *, .fold-btn svg * { vector-effect: non-scaling-stroke; stroke-width: 1.25px; }
+.x-btn svg, .fold-btn svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.x-btn svg { width: 10px; height: 10px; }
+.fold-btn svg { width: 8px; height: 8px; }
+.x-btn, .fold-btn { border: 1px solid color-mix(in srgb, var(--muted) 45%, transparent); color: var(--muted); background: var(--bg); }
 @media (min-width: 960px) {
   .sheet { left: auto; top: 0; bottom: 0; width: 28rem; max-height: none; border-radius: 0; border-top: 0; border-left: 1px solid var(--rule); padding-top: .8rem; animation: slide .24s var(--ease-out); }
   .sheet.closing { animation: slideout .18s var(--ease-in) forwards; }
@@ -301,7 +311,7 @@ dfn { font-style: italic; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
 .peek-row { display: flex; align-items: center; gap: .5rem; max-width: var(--page-w); margin: 0 auto; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); min-height: 2.4rem; }
 .peek-row .bar-btn { width: 1.9rem; height: 1.9rem; }
-.peek-row .peek-go svg { width: 12px; height: 12px; }   /* the expand: a circled control, as the x beside it and the folds' +/- are */
+.peek-row .peek-go svg { width: 10px; height: 10px; }   /* the expand: a circled control, as the x beside it and the folds' +/- are */
 .peek-row .x-btn + .x-btn { margin-left: .1rem; }
 .peek-title .peek-from::after { content: none; }      /* (the button says it; the title's link still goes there too) */
 .peek-title { flex: 1; min-width: 0; font: 600 1.02rem/1.35 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: ns-resize; }
@@ -371,7 +381,6 @@ dfn { font-style: italic; }
 .find-field > svg { width: 18px; height: 18px; flex: none; }
 /* the search row drawn in a fine line, as the logo and the circled controls are: its icons and its underline thin,
    in the full deep blue */
-#find-row svg { stroke-width: 1.5; }
 #find-row .bar-btn { color: var(--accent); }
 #find-input { flex: 1; min-width: 0; height: 100%; font: 400 1rem var(--sans); padding: 0; border: 0; border-radius: 0; background: none; color: var(--fg); outline: none; -webkit-appearance: none; appearance: none; }
 #find-input::placeholder { color: var(--muted); opacity: .8; }
