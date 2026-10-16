@@ -280,7 +280,8 @@ dfn { font-style: italic; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
 .peek-row { display: flex; align-items: center; gap: .5rem; max-width: var(--page-w); margin: 0 auto; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); min-height: 2.4rem; }
 .peek-row .bar-btn { width: 1.9rem; height: 1.9rem; }
-.peek-row .peek-go svg { width: 18px; height: 18px; }   /* the expand: the bar's deep-blue line, as Epsilon's peek has it */
+.peek-row .peek-go svg { width: 12px; height: 12px; }   /* the expand: a circled control, as the x beside it and the folds' +/- are */
+.peek-row .x-btn + .x-btn { margin-left: .1rem; }
 .peek-title .peek-from::after { content: none; }      /* (the button says it; the title's link still goes there too) */
 .peek-title { flex: 1; min-width: 0; font: 600 1.02rem/1.35 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: ns-resize; }
 .peek-title a { cursor: pointer; }
