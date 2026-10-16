@@ -375,7 +375,6 @@
   }
   function closeSheet() {
     const sh = $('#sheet'); if (sh.hidden) return;
-    $$('.gs.peeking, .skim.peeking').forEach(s => s.classList.remove('peeking'));
     if (reduced()) { sh.hidden = true; $('#scrim').hidden = true; return; }
     sh.classList.add('closing'); $('#scrim').classList.add('closing');
     setTimeout(() => { sh.hidden = true; sh.classList.remove('closing'); $('#scrim').hidden = true; $('#scrim').classList.remove('closing'); }, 190);
@@ -385,10 +384,81 @@
     if (reduced()) { pop.hidden = true; return; }
     pop.classList.add('closing'); setTimeout(() => { pop.hidden = true; pop.classList.remove('closing'); }, 160);
   }
-  function closeAll() { closeSheet(); closePop(); }
+  function closeAll() { closeSheet(); closePeek(); closePop(); }
+
+  // ------------------------------------------------------------------ the peek (after Epsilon's)
+  // A second view below the page: a panel rising from the bottom while the reading stays where it is above, with no
+  // veil over it. Its head is a grip: dragged, the peek follows the finger or the mouse, and let go it settles at a
+  // third, a half or two thirds of the screen (and remembers which); let go low it closes, pulled up to the bar it
+  // becomes the page (as its title's link does). A link inside it moves the peek (its back arrow steps back); a long
+  // press or a right click on one goes there in the page. In the page, a long press or a right click on a link opens
+  // the peek; a tap on a summary's sentence, a note or a citation does too.
+  const PEEK_SNAPS = [0.34, 0.5, 0.66];
+  let peekFrac = (() => { try { const v = parseFloat(localStorage.getItem('conifer-peek')); return v > 0.2 && v < 0.9 ? v : 0.5; } catch (e) { return 0.5; } })();
+  const peekStack = [];
+  const peekAvail = () => window.innerHeight - barH();
+  const peekMax = () => peekAvail() - 40;
+  const peekIsOpen = () => { const pk = $('#peek'); return !!pk && !pk.hidden && !pk.classList.contains('closing'); };
+  function peekSetH(h) {
+    h = Math.max(120, Math.min(peekMax(), Math.round(h)));
+    $('#peek').style.height = h + 'px';
+    document.body.style.paddingBottom = (h + 24) + 'px';        // (room under the page, to read its end above the peek)
+    return h;
+  }
+  function openPeek(title, html, inPeek) {
+    closePop();
+    if (!$('#sheet').hidden) closeSheet();
+    const pk = $('#peek'), body = $('#peek-body');
+    if (inPeek && peekIsOpen()) peekStack.push({ title: $('#peek-title').innerHTML, html: body.innerHTML, y: body.scrollTop });
+    else peekStack.length = 0;
+    $('#peek-title').innerHTML = title; body.innerHTML = html; body.scrollTop = 0;
+    $('[data-peekback]', pk).hidden = !peekStack.length;
+    if (!peekIsOpen()) { pk.classList.remove('closing'); pk.hidden = false; peekSetH(peekAvail() * peekFrac); }
+  }
+  function closePeek() {
+    const pk = $('#peek'); if (!peekIsOpen()) return;
+    $$('.gs.peeking, .skim.peeking').forEach(x => x.classList.remove('peeking'));
+    peekStack.length = 0;
+    const done = () => { pk.hidden = true; pk.classList.remove('closing'); document.body.style.paddingBottom = ''; };
+    if (reduced()) { done(); return; }
+    pk.classList.add('closing'); setTimeout(() => { if (pk.classList.contains('closing')) done(); }, 200);
+  }
+  function peekBack() {
+    const prev = peekStack.pop(); if (!prev) return;
+    $('#peek-title').innerHTML = prev.title; $('#peek-body').innerHTML = prev.html; $('#peek-body').scrollTop = prev.y;
+    $('[data-peekback]').hidden = !peekStack.length;
+  }
+  function peekGo() { const a = $('#peek-title .peek-from'); if (a) a.click(); }    // the peek becomes the page: its title's link
+  (function peekDrag() {
+    const pk = $('#peek'); if (!pk) return;
+    const head = $('.peek-head', pk); let drag = null;
+    head.addEventListener('pointerdown', e => {
+      if (e.button !== 0 || e.target.closest('button, a')) return;
+      e.preventDefault();
+      drag = { y: e.clientY, h: pk.getBoundingClientRect().height, at: null, id: e.pointerId };
+      pk.classList.add('dragging'); head.setPointerCapture(e.pointerId);
+    });
+    head.addEventListener('pointermove', e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (e.clientY <= barH() + 2) { drag = null; pk.classList.remove('dragging'); peekGo(); return; }   // pulled up to the bar
+      drag.at = Math.max(40, Math.min(peekAvail(), drag.h + drag.y - e.clientY));
+      pk.style.height = drag.at + 'px';
+    });
+    const end = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const h = drag.at == null ? drag.h : drag.at; drag = null; pk.classList.remove('dragging');
+      const avail = peekAvail();
+      if (h < avail * 0.17) { closePeek(); return; }                 // let go low: it goes
+      peekFrac = PEEK_SNAPS.reduce((a, b) => Math.abs(b * avail - h) < Math.abs(a * avail - h) ? b : a);
+      try { localStorage.setItem('conifer-peek', String(peekFrac)); } catch (err) {}
+      peekSetH(avail * peekFrac);
+    };
+    head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
+    window.addEventListener('resize', () => { if (peekIsOpen()) peekSetH(peekAvail() * peekFrac); });
+  })();
   const peekCtx = () => ({ prefix: 'peek|', over: new Map(), plain: true, allOpen: true });
   // the paragraphs a sentence stands for
-  function peekCovered(span) {
+  function peekCovered(span, inPeek) {
     const ids = span.dataset.covers.split(/\s+/).filter(id => byId.has(id));
     if (!ids.length) return;
     const ctx = peekCtx();
@@ -396,9 +466,9 @@
     const places = [...new Set(ids.map(id => (titled(id) || {}).id).filter(Boolean))];
     const from = places.map(p => `<a href="#${esc(ids.find(i => (titled(i) || {}).id === p))}" class="peek-from" data-reveal="${esc(ids.find(i => (titled(i) || {}).id === p))}" title="Open the paper here">${placeHtml(p)}</a>`).join(', ');
     $$('.gs.peeking').forEach(s => s.classList.remove('peeking')); span.classList.add('peeking');
-    openSheet(`<span class="peek-label">From</span> ${from}`, html, 'sheet-peek');
+    openPeek(`<span class="peek-label">From</span> ${from}`, html, inPeek);
   }
-  function peekAnchor(a) {
+  function peekAnchor(a, inPeek) {
     const host = anchorHost.get(a); if (!host) return false;
     const n = byId.get(host);
     const tmp = document.createElement('div'); tmp.innerHTML = n.body;
@@ -409,14 +479,14 @@
     else if (n.kind === 'references') { what = 'Reference'; html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
     else if (n.kind === 'figure' || n.kind === 'table') { what = esc(n.title || 'Figure'); html = stripIds(n.body); }
     else { const d = el.closest('.display') || el; what = 'Equation ' + esc((d.querySelector('.eqno') || {}).textContent || ''); html = render(n, PAPER, peekCtx()); mark = 'peek-' + (d.id || a); }
-    openSheet(`<span class="peek-label">${what}</span> <span class="peek-in">in</span> ${link}`, html, 'sheet-peek');
-    if (mark) { const m = $('#sheet-body #' + CSS.escape(mark)); if (m) { m.scrollIntoView({ block: 'center' }); flash(m); } }
+    openPeek(`<span class="peek-label">${what}</span> <span class="peek-in">in</span> ${link}`, html, inPeek);
+    if (mark) { const m = $('#peek-body #' + CSS.escape(mark)); if (m) { m.scrollIntoView({ block: 'center' }); flash(m); } }
     return true;
   }
-  function peekNode(id) {
+  function peekNode(id, inPeek) {
     const n = byId.get(id); if (!n) return false;
     const link = `<a href="#${esc(id)}" class="peek-from" data-reveal="${esc(id)}" title="Open the paper here">${placeHtml(id)}</a>`;
-    openSheet(`<span class="peek-label">From</span> ${link}`, render(n, PAPER, peekCtx()), 'sheet-peek');
+    openPeek(`<span class="peek-label">From</span> ${link}`, render(n, PAPER, peekCtx()), inPeek);
     return true;
   }
   function openDef(id, anchor) {
@@ -467,6 +537,8 @@
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
+    const pb = e.target.closest('[data-peekclose], [data-peekback]');
+    if (pb) { if (pb.hasAttribute('data-peekclose')) closePeek(); else peekBack(); return; }
     const foldHead = e.target.closest('[data-fold]');                           // the whole head of a fold is its control, open or closed
     if (foldHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-def]')) { toggleFold(foldHead.dataset.fold); return; }
     const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
@@ -496,25 +568,47 @@
       const a = decodeURIComponent(t.getAttribute('href').slice(1));
       if (LEVEL_HASH.includes(a)) { e.preventDefault(); goHash(a, true); return; }
       if (longPressed) { longPressed = false; e.preventDefault(); return; }
-      if (anchorHost.has(a) && ['footnotes', 'references'].includes(byId.get(anchorHost.get(a)).kind)) { e.preventDefault(); peekAnchor(a); return; }   // a note, a citation: a peek, as in Epsilon
-      if (byId.has(a)) { e.preventDefault(); if (state.level < PAPER && !t.closest('#sheet') && byId.get(a).kind !== 'section' && byId.get(a).kind !== 'appendix') peekNode(a); else reveal(a); return; }
+      const inPeek = !!t.closest('#peek');
+      if (anchorHost.has(a) && ['footnotes', 'references'].includes(byId.get(anchorHost.get(a)).kind)) { e.preventDefault(); peekAnchor(a, inPeek); return; }   // a note, a citation: a peek, as in Epsilon
+      if (byId.has(a)) { e.preventDefault(); if (inPeek) peekNode(a, true); else if (state.level < PAPER && !t.closest('#sheet') && byId.get(a).kind !== 'section' && byId.get(a).kind !== 'appendix') peekNode(a); else reveal(a); return; }
       if (anchorHost.has(a)) {
         e.preventDefault();
-        if (state.level < PAPER || t.closest('#sheet')) { if (!peekAnchor(a)) reveal(anchorHost.get(a), { flash: a }); }
+        if (inPeek) { if (!peekAnchor(a, true)) peekNode(anchorHost.get(a), true); }
+        else if (state.level < PAPER || t.closest('#sheet')) { if (!peekAnchor(a)) reveal(anchorHost.get(a), { flash: a }); }
         else reveal(anchorHost.get(a), { flash: a });               // in the paper a tap travels, as in Epsilon; a long press peeks
       }
       return;
     }
   });
   let longPressed = false, lpTimer = null;
+  const HOLDABLE = '#paper a[href^="#"], #paper [data-go], #peek-body a[href^="#"]';
+  function hold(el) {                                // a long press or a right click on a link
+    const id = el.dataset.go || decodeURIComponent(el.getAttribute('href').slice(1));
+    if (LEVEL_HASH.includes(id)) return false;
+    if (el.closest('#peek')) {                       // from the peek: the page goes there
+      if (byId.has(id)) reveal(id); else if (anchorHost.has(id)) reveal(anchorHost.get(id), { flash: id }); else return false;
+      return true;
+    }
+    if (byId.has(id)) return peekNode(id);
+    if (anchorHost.has(id)) return peekAnchor(id) || peekNode(anchorHost.get(id));
+    return false;
+  }
   document.addEventListener('pointerdown', e => {
-    const a = e.target.closest && e.target.closest('#paper a[href^="#"], #paper [data-go]'); if (!a || e.button !== 0) return;
-    const id = a.dataset.go || decodeURIComponent(a.getAttribute('href').slice(1));
-    clearTimeout(lpTimer);
-    lpTimer = setTimeout(() => { longPressed = true; if (navigator.vibrate) { try { navigator.vibrate(12); } catch (err) {} } if (byId.has(id)) peekNode(id); else if (anchorHost.has(id)) peekAnchor(id); }, 480);
+    const a = e.target.closest && e.target.closest(HOLDABLE); if (!a || e.button !== 0) return;
+    clearTimeout(lpTimer); longPressed = false;
+    const x = e.clientX, y = e.clientY;
+    const move = ev => { if (Math.abs(ev.clientX - x) + Math.abs(ev.clientY - y) > 10) { clearTimeout(lpTimer); document.removeEventListener('pointermove', move); } };
+    document.addEventListener('pointermove', move, { passive: true });
+    lpTimer = setTimeout(() => { document.removeEventListener('pointermove', move); if (hold(a)) { longPressed = true; if (navigator.vibrate) { try { navigator.vibrate(12); } catch (err) {} } } }, 480);
   });
-  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => document.addEventListener(ev, () => clearTimeout(lpTimer)));
-  document.addEventListener('contextmenu', e => { if (e.target.closest && e.target.closest('#paper a[href^="#"]') && longPressed) e.preventDefault(); });
+  ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, () => clearTimeout(lpTimer)));
+  document.addEventListener('contextmenu', e => {      // a right click (or the browser's own long press) on a link peeks
+    const a = e.target.closest && e.target.closest(HOLDABLE); if (!a) return;
+    e.preventDefault();
+    if (longPressed) return;                          // (the long press has opened it already)
+    clearTimeout(lpTimer);
+    hold(a);                                          // (a right click makes no click after it: nothing to swallow)
+  });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeAll();
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && (e.target.classList.contains('gs') || e.target.classList.contains('skim'))) { e.preventDefault(); e.target.click(); }

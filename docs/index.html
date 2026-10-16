@@ -56,14 +56,14 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 /* one rule for everything tappable in the reading text, wherever it is drawn (the page, a peek, the popover): the text's
    colour and a faint dotted line; the accent is kept for the chrome (peek headers, buttons) */
-.page a, #sheet-body a, #pop a, [data-def] { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--dot); border-radius: 3px; }
-.page a:hover, #sheet-body a:hover, #pop a:hover, [data-def]:hover { text-decoration: none; background: var(--accent-soft); }
-.page a[id^="fnref"], .page a.fnref, #sheet-body a[id^="fnref"] { border-bottom: 0; }
+.page a, #sheet-body a, #peek-body a, #pop a, [data-def] { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--dot); border-radius: 3px; }
+.page a:hover, #sheet-body a:hover, #peek-body a:hover, #pop a:hover, [data-def]:hover { text-decoration: none; background: var(--accent-soft); }
+.page a[id^="fnref"], .page a.fnref, #sheet-body a[id^="fnref"], #peek-body a[id^="fnref"] { border-bottom: 0; }
 .peek-from, .peek-from:hover, .sheet-head a, .btn, .ctl { color: var(--accent); border-bottom: 0; }
 .btn.primary { color: var(--on-accent); }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
 .page p { margin: 0 0 1em; }
-.page p, .page li, .sum-body, .lede, #sheet-body p, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
+.page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
 /* a larger text on a wide screen, and the column widens with it (its width is in rem) */
 @media (min-width: 900px) { html { font-size: 112.5%; } }
@@ -163,6 +163,7 @@ a.fnref { font-size: .8em; vertical-align: super; line-height: 0; }
     radial-gradient(farthest-side at 100% 50%, var(--edge), transparent) right center / 9px 100% no-repeat scroll;
   scrollbar-width: none; }
 .eqbody::-webkit-scrollbar { display: none; }
+.flash .eqbody, .eqbody.flash { background: none; }   /* (its edge covers are the page's colour: over a flash they would show as patches) */
 .kind-theorem .eqbody, .kind-remark .eqbody, .kind-definition .eqbody, .kind-proof .eqbody { --fade: var(--surface); }
 .eqno { flex: 0 0 auto; font-variant-numeric: lining-nums tabular-nums; }
 mjx-container[jax="SVG"][display="true"] { margin: 0 !important; }
@@ -222,6 +223,9 @@ dfn { font-style: italic; }
    address hash see every section. */
 #paper p, #paper li, #paper .display, #paper figure, #paper .leaf { content-visibility: auto; contain-intrinsic-size: auto 7rem; }
 #paper .leaf { contain-intrinsic-size: auto 14rem; }
+/* (a skipped block also clips its painting at its edge: the halo of a place one has just jumped to, a search's box
+   round a formula and a selection would be cut; such a block, and the blocks round it, are painted whole) */
+#paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking)) { content-visibility: visible; }
 #paper .display { contain-intrinsic-size: auto 4rem; }
 #paper figure { contain-intrinsic-size: auto 9rem; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
@@ -268,8 +272,23 @@ dfn { font-style: italic; }
 .peek-label, .peek-in { font-weight: 500; color: var(--muted); }
 .peek-from { color: var(--accent); font-weight: 600; }
 .peek-from::after { content: " \2197"; font-weight: 400; opacity: .7; }
-.sheet-peek .sec-h { margin-top: 1rem; font-size: 1.1rem; }
-.sheet-peek .lede { font-size: .93em; }
+.sheet-peek .sec-h, .peek .sec-h { margin-top: 1rem; font-size: 1.1rem; }
+.sheet-peek .lede, .peek .lede { font-size: .93em; }
+/* the peek: a panel rising from the bottom, the page readable above it (no veil); its head a grip that drags its
+   height, its body the paper's column */
+.peek { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; height: 50vh; display: flex; flex-direction: column; background: var(--bg);
+  border-top: 1px solid var(--rule); border-radius: 16px 16px 0 0; box-shadow: 0 -8px 28px rgba(0, 0, 0, .10); animation: rise .24s var(--ease-out);
+  transition: height .28s var(--ease-out); }
+.peek.closing { animation: fall .18s var(--ease-in) forwards; }
+.peek.dragging { transition: none; }
+.peek-head { flex: none; padding: 0 16px; cursor: ns-resize; touch-action: none; -webkit-user-select: none; user-select: none; }
+.peek-grip { display: block; width: 38px; height: 4px; border-radius: 2px; margin: 7px auto 3px; background: color-mix(in srgb, var(--fg) 22%, transparent); transition: background .2s; }
+.peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
+.peek-row { display: flex; align-items: center; gap: .5rem; max-width: var(--page-w); margin: 0 auto; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); min-height: 2.4rem; }
+.peek-row .bar-btn { width: 1.9rem; height: 1.9rem; }
+.peek-title { flex: 1; min-width: 0; font: 600 1.02rem/1.35 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: ns-resize; }
+.peek-title a { cursor: pointer; }
+.peek-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .5rem max(16px, calc((100% - var(--page-w)) / 2)) calc(2rem + env(safe-area-inset-bottom, 0px)); }
 .peek-fn, .peek-eq { font-size: .98em; }
 .pop { position: absolute; z-index: 30; width: min(26rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
   box-shadow: var(--shadow); padding: .6rem .85rem .7rem; font-size: 1rem; line-height: 1.5; animation: rise .2s var(--ease-out); }
@@ -348,7 +367,7 @@ mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transpare
    one by one) and copies as its TeX; under it an unseen picture as wide as its drawing (the build puts a span there),
    which the browser shades in a selection at the line's whole height, as it shades the words round it, with the
    drawing set back over the band */
-#paper mjx-container, #sheet-body mjx-container, #pop mjx-container { -webkit-user-select: all; user-select: all; }
+#paper mjx-container, #sheet-body mjx-container, #peek-body mjx-container, #pop mjx-container { -webkit-user-select: all; user-select: all; }
 ::selection { background-color: color-mix(in srgb, var(--accent) 24%, transparent); }
 mjx-container[style*="--w"] { white-space: nowrap; }
 mjx-container > .mjx-hl { display: inline-block; width: min(var(--w), 100%); height: 1px; pointer-events: none;

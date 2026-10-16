@@ -58,7 +58,7 @@
     if (!sel || sel.isCollapsed || !sel.rangeCount) return;
     const range = sel.getRangeAt(0);
     const within = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
-    if (!within.closest('#paper, #sheet-body, #pop')) return;
+    if (!within.closest('#paper, #sheet-body, #peek-body, #pop')) return;
     const frag = range.cloneContents();
     if (!frag.querySelector('mjx-container')) return;        // plain text copies as the browser does
     const text = textOf(frag).replace(/\n{3,}/g, '\n\n').replace(/[ \t]+\n/g, '\n').trim();
