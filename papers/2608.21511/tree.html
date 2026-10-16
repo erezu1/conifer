@@ -739,9 +739,10 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   function moveInd(group) {                       // the chosen option's pill glides to it (the dial, a segmented setting)
     const ind = group.querySelector('.sel-ind'), on = group.querySelector('[aria-checked="true"]');
     if (!ind || !on) return;
+    const first = !ind.classList.contains('placed');          // the first placing is a set, not a glide: the pill is where it belongs when the group appears
     ind.style.width = on.offsetWidth + 'px';
     ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
-    ind.classList.add('placed');
+    if (first) { void ind.offsetWidth; requestAnimationFrame(() => ind.classList.add('placed')); }
   }
   // a fold opens or closes where it stands: only its state flips, the stylesheet eases the rest
   function setFold(key, open) {
