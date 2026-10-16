@@ -322,7 +322,7 @@ body = f"""<title>{html.escape(page_title)}</title>
   <button type="button" class="bar-btn" data-open="search" aria-label="Search in the paper">{ICON_FIND}</button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings">{ICON_SET}</button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
+ <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search">{ICON_BACK}</button><label class="find-field">{ICON_FIND}<input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}"><span id="find-count"></span></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
 </header>
 <main class="page">

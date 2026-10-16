@@ -315,9 +315,18 @@ dfn { font-style: italic; }
 #find-row.opening, .bar-row.opening { animation: fadein .22s var(--ease-out); }
 #find-row.closing { animation: fadeout .17s var(--ease-in) forwards; }
 @keyframes fadeout { to { opacity: 0; } }
-#find-input { flex: 1; min-width: 0; font: 1rem var(--sans); padding: .4rem .7rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); color: var(--fg); }
-#find-input:focus { outline: none; border-color: color-mix(in srgb, var(--accent) 55%, transparent); box-shadow: 0 0 0 3px var(--accent-soft); }
-#find-count { font: 500 .84rem var(--sans); color: var(--muted); white-space: nowrap; min-width: 3.2rem; text-align: center; font-variant-numeric: tabular-nums; }
+/* the search field in the bar's own language: no box and no glow, a magnifier in the bar's deep blue and one line
+   under the words (fainter at rest, the full blue while typing); the row keeps the bar row's edges and height, the
+   back arrow where the logo was and the arrows where the bar's buttons were */
+.find-field { flex: 1; min-width: 0; height: 2.2rem; display: flex; align-items: center; gap: .55rem; padding: 0 .15rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); cursor: text; transition: border-color .2s var(--ease-out); }
+.find-field:focus-within { border-bottom-color: var(--accent); }
+.find-field > svg { width: 18px; height: 18px; flex: none; }
+#find-input { flex: 1; min-width: 0; height: 100%; font: 400 1rem var(--sans); padding: 0; border: 0; border-radius: 0; background: none; color: var(--fg); outline: none; -webkit-appearance: none; appearance: none; }
+#find-input::placeholder { color: var(--muted); opacity: .8; }
+#find-input::-webkit-search-cancel-button, #find-input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+#find-count { font: 500 .84rem var(--sans); color: var(--muted); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+#find-count:empty { display: none; }
 ::highlight(conifer-find) { background: color-mix(in srgb, #f5c400 45%, transparent); }
 ::highlight(conifer-find-now) { background: color-mix(in srgb, #ff9500 65%, transparent); }
 /* a formula found by its TeX: a soft box round it; a symbol (or a run of them) found inside a formula: a soft box
@@ -504,7 +513,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   <button type="button" class="bar-btn" data-open="search" aria-label="Search in the paper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
   <button type="button" class="bar-btn" data-open="settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></button>
  </div>
- <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+ <div id="find-row" hidden><button type="button" class="bar-btn" data-find="close" aria-label="Close the search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button><label class="find-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \frac{1}{2}"><span id="find-count"></span></label><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button><button type="button" class="bar-btn" data-find="next" aria-label="Next match"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
 </header>
 <main class="page">
