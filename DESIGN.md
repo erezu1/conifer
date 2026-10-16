@@ -313,6 +313,12 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **Searching what is selected (17 Oct).** With text selected, opening the search (its button or Ctrl/Cmd+F) searches the selection at once: words as they are, each formula as its TeX as written (as the search reads formulas). A passage of words and formulas is found as Epsilon finds it: the paper read as one stream, each formula as its normalised TeX between two marks, the words in any case and spacing, so a hit is that passage in order (its formulas boxed), not every place one of its parts occurs.
 
+**A fold reveals, it does not move (17 Oct).** Opening a box (a background note, an appendix, a brief), its text is laid out at its final place from the start and the edge of its body slides down over it, uncovering it line by line; no fade, nothing shifts; closing, the edge slides back up. For that, a note's rule, indent and size are the same open or closed (they changed at the moment of opening, reflowing the text), the gap under a head is inside the part that opens, and the blocks inside an opening box take their true sizes at once (content-visibility would have them at an estimate first). The fold rules are on the fold itself (child combinators), so a closed fold inside an open appendix keeps its state.
+
+**Search sees only what is open; formulas in the words' colours (17 Oct).** Text inside a closed box is left out of the search (its head is not); opening or closing a box searches again where the reader is, without moving. A formula found is marked in exactly the words' two colours, and a passage's formulas take the colour of the match one is on.
+
+**References and notes (17 Oct).** The notes and the references end the paper at its top level (the converter had hung them on the last appendix, where a closed fold hid them); the converter's own heading inside them is hidden (the page heads them); an arXiv number is set in the text's face with lining figures (the browser's monospace was larger than the text around it); a note's number stands beside its text.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

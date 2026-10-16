@@ -228,12 +228,15 @@
   }
 
   // ------------------------------------------------------------------ finding
+  // Only what is open is searched: the text inside a closed box (a background note, an appendix, a section's brief) is
+  // left out, its head is not; opening or closing one searches again (viewer.js setFold).
+  const CLOSED = '.fold[data-state="closed"] > .fold-wrap';
   let hits = [], at = -1, open = false, lastQ = '';
   const main = () => $('#paper');
   function textHits(q) {
     const out = [];
     const root = main(); if (!root) return out;
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentNode.closest('mjx-container, .mjx-hl, .qbadge, .anchor, .fold-btn, button') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentNode.closest('mjx-container, .mjx-hl, .qbadge, .anchor, .fold-btn, button, ' + CLOSED) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
     const parts = []; let text = '', node;
     while ((node = walker.nextNode())) { parts.push({ node, start: text.length }); text += node.nodeValue; }
     const hay = text.toLowerCase();
@@ -256,7 +259,7 @@
     const root = main(); if (!root) return [];
     let text = '', last = null; const pieces = [];
     const walk = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: n => {
-      if (n.nodeType === 1) { if (n.matches('mjx-container[data-tex]')) return NodeFilter.FILTER_ACCEPT; if (n.matches('svg, script, style, button, .mjx-hl, .anchor')) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_SKIP; }
+      if (n.nodeType === 1) { if (n.matches('mjx-container[data-tex]')) return NodeFilter.FILTER_ACCEPT; if (n.matches('svg, script, style, button, .mjx-hl, .anchor') || n.matches(CLOSED)) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_SKIP; }
       return NodeFilter.FILTER_ACCEPT; } });
     for (let n = walk.nextNode(); n; n = walk.nextNode()) {
       const blk = (n.nodeType === 1 ? n : n.parentNode).closest(BLOCKS);
@@ -280,6 +283,7 @@
   function texHits(q) {
     const out = [], seq = glyphsOf(texNorm(q)), single = !!seq && seq.length === 1;
     $$('#paper mjx-container[data-tex]').forEach(f => {
+      if (f.closest(CLOSED)) return;
       // a single symbol: wherever it is drawn (a paper's own macros for it too); more TeX: in formulas whose TeX has it
       if (!single && !texHas(f.dataset.tex, q)) return;
       const runs = seq ? glyphRuns(f, q) : null;
@@ -292,7 +296,7 @@
     const pos = h => h.range ? h.range.startContainer : h.el;
     return list.sort((x, y) => { const a = pos(x), b = pos(y); if (a === b) return 0; return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; });
   }
-  function run(q) {
+  function run(q, keep) {                        // keep: the reader stays where they are (a search again, after a box opened or closed)
     clear();
     lastQ = q;
     const w = what(q);
@@ -305,7 +309,12 @@
     }
     hits = order(list);
     paint();
-    if (hits.length) go(0, true); else count();
+    if (!hits.length) { count(); return; }
+    if (keep) {                                     // the first match from the top of the screen on, marked without moving
+      const bar = $('#bar'), top = (bar ? bar.getBoundingClientRect().bottom : 0);
+      let k = hits.findIndex(h => (h.range ? h.range.getBoundingClientRect() : (h.mark || h.el).getBoundingClientRect()).top >= top);
+      go(k < 0 ? 0 : k, true, true);
+    } else go(0, true);
   }
   function paint() {
     if (window.Highlight && CSS.highlights) {
@@ -323,7 +332,7 @@
     const c = $('#find-count'); if (!c) return;
     c.textContent = !lastQ.trim() ? '' : hits.length ? (at + 1) + ' of ' + hits.length : 'none';
   }
-  function go(k, first) {
+  function go(k, first, still) {
     if (!hits.length) return;
     at = (k + hits.length) % hits.length;
     const h = hits[at];
@@ -331,8 +340,9 @@
     $$('#paper .find-f-now').forEach(f => f.classList.remove('find-f-now'));
     $$('#paper .find-g.now').forEach(g => g.classList.remove('now'));
     if (h.mark) h.mark.classList.add('now'); else if (!h.range) h.el.classList.add('find-f-now');
+    (h.forms || []).forEach(f => f.classList.add('find-f-now'));   // (a passage's formulas are the one you are on too)
     const el = h.range ? (h.range.startContainer.nodeType === 3 ? h.range.startContainer.parentElement : h.range.startContainer) : h.el;
-    const closed = el.closest && el.closest('.fold[data-state="closed"]'); if (closed && window.ConiferFolds) ConiferFolds.open(closed.dataset.key);
+    if (still) { count(); return; }
     const r = h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect();
     const bar = $('#bar'); const top = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;
     if (r.top < top || r.bottom > window.innerHeight - 24) { const rect = () => (h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect()); window.ConiferScroll.land(() => window.scrollY + rect().top - top - window.innerHeight * 0.3, !first); }
@@ -380,7 +390,7 @@
   }
   window.ConiferSearch = {
     open: () => show(true), close: () => show(false), toggle: () => show(!open), isOpen: () => open,
-    refresh: () => { if (open && lastQ) run(lastQ); },
+    refresh: () => { if (open && lastQ) run(lastQ, true); },
   };
   document.addEventListener('input', e => {
     if (e.target.id !== 'find-input') return;

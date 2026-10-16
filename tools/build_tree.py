@@ -115,6 +115,22 @@ if S["meta"].get("abstractHtml"):
     root["children"].insert(0, {"id": "abstract", "kind": "abstract", "title": "Abstract", "body": S["meta"]["abstractHtml"]})
     byid["abstract"] = root["children"][0]
 
+# the notes and the references end the paper, at its top level: LaTeX puts the bibliography after the appendices, and
+# the converter hangs it (and the notes) on the last one, where a closed appendix would hide them
+def _pull(n, kinds, out):
+    keep = []
+    for c in n.get("children", []):
+        if c.get("kind") in kinds and n is not root:
+            out.append(c)
+        else:
+            _pull(c, kinds, out)
+            keep.append(c)
+    if "children" in n:
+        n["children"] = keep
+_ends = []
+_pull(root, ("footnotes", "references"), _ends)
+root["children"].extend(sorted(_ends, key=lambda c: 0 if c["kind"] == "footnotes" else 1))
+
 # ---------------------------------------------------------------- definitions: anchors and mentions
 items = D["math"]["items"]
 

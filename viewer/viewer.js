@@ -307,6 +307,7 @@
       b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? GL.minus : GL.plus; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
     });
     if (!open && el.getBoundingClientRect().top < barH()) scrollTo(el);      // folded from below its top: the line is kept in sight
+    if (window.ConiferSearch) ConiferSearch.refresh();                      // (the search sees only what is open)
     barTitle();
   }
   const openFoldAt = key => setFold(key, true), closeFoldAt = key => setFold(key, false);

@@ -223,7 +223,7 @@ dfn { font-style: italic; }
 .fold-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .fold { margin: .1rem 0 1rem; }
 .fold-head { display: block; cursor: pointer; font: 600 .76rem/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
-  transition: margin-bottom .3s var(--ease-out); }
+  }
 .fold-head:hover .fold-name { color: var(--accent); }
 .fold-head > .fold-btn { display: inline-grid; vertical-align: middle; position: relative; top: -.08em; margin-right: .55rem; }
 .fold-name { margin-right: .55rem; }
@@ -231,7 +231,8 @@ dfn { font-style: italic; }
 .fold-title { text-transform: none; letter-spacing: 0; font: 600 1.02rem/1.4 var(--sans); color: var(--fg); }
 .fold-who { font: 400 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-left: .4rem; white-space: nowrap; }
 .fold-bg .fold-name { color: var(--reader); }
-.fold[data-state="open"] > .fold-head { margin-bottom: .45rem; }
+/* (the gap under a head is inside the part that opens: nothing above the text moves while it does) */
+.fold > .fold-head + .fold-wrap > .fold-body > :first-child { margin-top: .45rem; }   /* (inside the clip: a closed fold keeps no gap) */
 .sec-h[data-fold] { cursor: pointer; }
 /* The page is ~50 000 elements (1 500 drawn formulas). Opening a fold shifts everything below it, and laying out and
    painting all of that cost a quarter of a second in one frame. The blocks of the paper are therefore laid out and
@@ -245,11 +246,16 @@ dfn { font-style: italic; }
 #paper :is(p, li, .display, figure, .leaf):is(.flash, :has(.flash, .find-f, .find-f-now, .peeking, .qmarks)) { content-visibility: visible; }
 #paper .display { contain-intrinsic-size: auto 4rem; }
 #paper figure { contain-intrinsic-size: auto 9rem; }
-.fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
-.fold[data-state="open"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
-.fold-body { min-height: 0; min-width: 0; overflow: clip; overflow-clip-margin: 12px; }
-.fold[data-state="closed"] .fold-body { visibility: hidden; transition: visibility 0s .3s; }
-.fold-bg[data-state="open"] .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
+/* A FOLD REVEALS, IT DOES NOT MOVE: its text is laid out at its final place from the start (the box's rule, indent and
+   size are the same open or closed, and its blocks take their true sizes the moment it opens, content-visibility
+   notwithstanding), and the edge of its body slides down over it, uncovering it line by line; no fade, nothing
+   shifts. Closing, the edge slides back up. (Child combinators: a fold inside an open one keeps its own state.) */
+.fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); transition: grid-template-rows .3s var(--ease-out); }
+.fold[data-state="open"] > .fold-wrap { grid-template-rows: 1fr; }
+.fold-body { min-height: 0; min-width: 0; overflow: clip; }
+.fold[data-state="closed"] > .fold-wrap > .fold-body { visibility: hidden; transition: visibility 0s .3s; }
+.fold-bg > .fold-wrap > .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
+#paper .fold[data-state="open"] > .fold-wrap :is(p, li, .display, figure, .leaf) { content-visibility: visible; }
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
 /* a heading's circle on its capitals: centred on the first line's box, then lifted by the distance from that box's
@@ -394,8 +400,9 @@ dfn { font-style: italic; }
 ::highlight(conifer-find-now) { background: color-mix(in srgb, #ff9500 65%, transparent); }
 /* a formula found by its TeX: a soft box round it; a symbol (or a run of them) found inside a formula: a soft box
    behind just those glyphs, drawn inside the formula's own picture (search.js), so it scrolls and scales with it */
-mjx-container.find-f { background: color-mix(in srgb, #f5c400 30%, transparent); border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, #f5c400 30%, transparent); }
-mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 45%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, #ff9500 45%, transparent); }
+/* (a formula found is marked in exactly the words' two colours: found, and the one you are on) */
+mjx-container.find-f { background: color-mix(in srgb, #f5c400 45%, transparent); border-radius: 2px; box-shadow: 0 0 0 1px color-mix(in srgb, #f5c400 45%, transparent); }
+mjx-container.find-f.find-f-now, mjx-container.find-f-now { background: color-mix(in srgb, #ff9500 65%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, #ff9500 65%, transparent); }
 .find-g { fill: color-mix(in srgb, #f5c400 45%, transparent); stroke: none; transition: opacity .18s ease; }
 .find-g.now { fill: color-mix(in srgb, #ff9500 65%, transparent); }
 
@@ -432,3 +439,14 @@ mjx-container[style*="--w"] > svg { margin-left: calc(-1 * min(var(--w), 100%));
 /* the references: their own numbers ([12]) and no list's numbers beside them */
 ol.refs { list-style: none; padding-left: 0; }
 .refs .refnum { margin-right: .45em; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* an arXiv number in a reference or a note is set in the text's own face, with lining figures (the browser's
+   monospace was wider, heavier and taller than the text around it); other code, in a monospace matched to the text */
+code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .86em; }
+:is(.refs, .fnlist, .peek-fn, .peek-refs, .pop-def) a > code, :is(.refs, .fnlist) code { font-family: inherit; font-size: inherit; font-variant-numeric: lining-nums tabular-nums; letter-spacing: .01em; }
+/* the references and the notes bring a heading of their own from the converter; the page already heads them */
+#paper section.references > h2, #paper section.footnotes > h2 { display: none; }
+/* a note's number beside its text, as a reference's is (the converter gives it a block of its own) */
+#paper .fnlist { padding-left: 0; list-style: none; }
+#paper .fnlist > li { display: flex; align-items: baseline; gap: .55em; }
+#paper .fnlist .fnback { flex: none; min-width: 1.2em; color: var(--muted); font-variant-numeric: tabular-nums; border-bottom: 0; }
+#paper .fnlist .fn-text { flex: 1; min-width: 0; }
