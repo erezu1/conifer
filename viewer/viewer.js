@@ -648,7 +648,7 @@
       if (k === 'audience') { const note = $('#aud-note'); if (note) note.textContent = (AUD.find(a => a.key === v) || {}).hint || ''; }
       return;
     }
-    if (t.dataset.setlevel !== undefined) { setLevel(+t.dataset.setlevel); return; }
+    if (t.dataset.setlevel !== undefined) { slideToLevel(+t.dataset.setlevel); return; }   // (a tab, or a card's button: the page slides there)
     if (t.dataset.act) { toggleFold(t.dataset.key); return; }
     if (t.classList.contains('gs')) { peekCovered(t); return; }
     if (t.dataset.peek) { $$('.skim.peeking').forEach(x => x.classList.remove('peeking')); t.classList.add('peeking'); peekNode(t.dataset.peek); return; }
@@ -775,20 +775,31 @@
       setTimeout(() => { page.style.transition = ''; page.classList.remove('swiping'); }, 280);
       return;
     }
-    const dir = to > g.cur ? 1 : -1;
-    // the pill goes on to its tab at once; the page slides on and out, the next one is drawn and slides in
     const b = g.bs[to]; g.ind.style.transform = `translateX(${b[0]}px)`; g.ind.style.width = b[1] + 'px';
-    page.style.transition = `transform .14s ease-in, opacity .14s ease-in`;
-    page.style.transform = `translateX(${(-dir * g.W * 0.22).toFixed(0)}px)`; page.style.opacity = '0';
+    slidePage(page, to > g.cur ? 1 : -1, g.W, () => setLevel(g.levels[to]));
+  }
+  // the page slides on and out, the next document is drawn (once) and slides in from the other side
+  function slidePage(page, dir, W, change) {
+    page.classList.add('swiping');
+    page.style.transition = 'transform .14s ease-in, opacity .14s ease-in';
+    page.style.transform = `translateX(${(-dir * W * 0.22).toFixed(0)}px)`; page.style.opacity = '0';
     setTimeout(() => {
       page.style.transition = 'none';
-      setLevel(g.levels[to]);
+      change();
       $('#paper').classList.remove('swap');          // (its own fade is this slide's)
-      page.style.transform = `translateX(${(dir * g.W * 0.14).toFixed(0)}px)`; page.style.opacity = '0';
+      page.style.transform = `translateX(${(dir * W * 0.14).toFixed(0)}px)`; page.style.opacity = '0';
       void page.offsetWidth;
-      page.style.transition = `transform .3s ${ease}, opacity .26s ${ease}`; page.style.transform = ''; page.style.opacity = '';
+      page.style.transition = 'transform .3s var(--ease-out), opacity .26s var(--ease-out)'; page.style.transform = ''; page.style.opacity = '';
       setTimeout(() => { page.style.transition = ''; page.classList.remove('swiping'); }, 320);
     }, 140);
+  }
+  // a tap on a tab: the pill glides there and the page slides, as a swipe would have taken it
+  function slideToLevel(i) {
+    if (i === state.level || sw) return;
+    const g = swGeo(), from = g.levels.indexOf(state.level), to = g.levels.indexOf(i);
+    if (reduced() || from < 0 || to < 0) { setLevel(i); return; }
+    const b = g.bs[to]; g.ind.style.transform = `translateX(${b[0]}px)`; g.ind.style.width = b[1] + 'px';
+    slidePage($('main.page'), to > from ? 1 : -1, window.innerWidth, () => setLevel(i));
   }
   const sideScroller = el => {                         // something under the finger that scrolls sideways itself
     for (let e = el; e && e !== document.body; e = e.parentElement) {
