@@ -110,6 +110,8 @@ button { font-family: var(--sans); }
   padding: .35rem .5rem; border-radius: 999px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-title:hover { background: var(--accent-soft); color: var(--fg); }
 .bar-title mjx-container { font-size: 100%; }
+.bar-title { transition: opacity .1s ease; }
+.bar-title.fading { opacity: 0; transition-duration: .09s; }
 .bar-btn { border: 0; background: none; color: var(--accent); width: 2.2rem; height: 2.2rem; border-radius: 999px;
   display: grid; place-items: center; cursor: pointer; flex: none; }
 .bar-btn:hover { background: var(--accent-soft); }

@@ -332,14 +332,28 @@
     if (!silent) commit();
   }
   let curSection = null;
-  function barTitle() {
+  // the bar's title changes with a quick fade: out, the new words, back in; a change during the fade takes the latest
+  // words (a fast scroll past several sections fades once)
+  let titleNow = null, titleNext = null, titleFading = false;
+  function setTitle(html) {
     const t = $('#bar-title');
-    if (state.level === GIST || state.level === BRIEF) { t.innerHTML = esc(DOC.meta.title); curSection = null; return; }   // (the tabs under it say which document)
+    if (titleNow === null) { titleNow = html; t.innerHTML = html; return; }
+    titleNext = html;
+    if (titleFading || html === titleNow) return;
+    if (reduced()) { titleNow = html; t.innerHTML = html; return; }
+    titleFading = true; t.classList.add('fading');
+    setTimeout(() => {
+      titleNow = titleNext; t.innerHTML = titleNow; t.classList.remove('fading');
+      setTimeout(() => { titleFading = false; if (titleNext !== titleNow) setTitle(titleNext); }, 110);
+    }, 90);
+  }
+  function barTitle() {
+    if (state.level === GIST || state.level === BRIEF) { setTitle(esc(DOC.meta.title)); curSection = null; return; }   // (the tabs under it say which document)
     const top = barH() + 12;
     let cur = null;
     $$('#paper .sec-h', $('#paper')).forEach(h => { if (h.getBoundingClientRect().top <= top) cur = h; });
-    if (cur && cur.dataset.node && byId.has(cur.dataset.node)) { const n = byId.get(cur.dataset.node); t.innerHTML = (n.number ? esc(n.number) + ' ' : '') + titleOf(n); curSection = n.id; }
-    else { t.textContent = DOC.meta.title; curSection = null; }
+    if (cur && cur.dataset.node && byId.has(cur.dataset.node)) { const n = byId.get(cur.dataset.node); setTitle((n.number ? esc(n.number) + ' ' : '') + titleOf(n)); curSection = n.id; }
+    else { setTitle(esc(DOC.meta.title)); curSection = null; }
   }
   // the address follows the reader: the section being read, or the document (gist, summary)
   let hashTimer = null;
