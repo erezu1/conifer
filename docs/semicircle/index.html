@@ -200,6 +200,15 @@ dfn { font-style: italic; }
 .fold-bg .fold-name { color: var(--reader); }
 .fold[data-state="open"] > .fold-head { margin-bottom: .45rem; }
 .sec-h[data-fold] { cursor: pointer; }
+/* The page is ~50 000 elements (1 500 drawn formulas). Opening a fold shifts everything below it, and laying out and
+   painting all of that cost a quarter of a second in one frame. The blocks of the paper are therefore laid out and
+   painted only near the screen (content-visibility), each remembering its real size once seen; a fold then opens in
+   frames of a few milliseconds. Headings and fold heads are not skipped, so the contents, the bar's title and the
+   address hash see every section. */
+#paper p, #paper li, #paper .display, #paper figure, #paper .leaf { content-visibility: auto; contain-intrinsic-size: auto 7rem; }
+#paper .leaf { contain-intrinsic-size: auto 14rem; }
+#paper .display { contain-intrinsic-size: auto 4rem; }
+#paper figure { contain-intrinsic-size: auto 9rem; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
 .fold[data-state="open"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
 .fold-body { min-height: 0; min-width: 0; overflow: clip; overflow-clip-margin: 12px; }
@@ -794,10 +803,28 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     setTimeout(go, reduced() ? 50 : 750);
   }
   function flash(el) { if (!el) return; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2600); }
-  function scrollTo(el) {
-    const y = el.getBoundingClientRect().top + window.scrollY - barH() - 16;
-    window.scrollTo({ top: Math.max(0, y), behavior: reduced() ? 'auto' : 'smooth' });
+  // Scrolling to a place. Blocks far from the screen are not laid out (content-visibility, see viewer.css) and stand
+  // at an estimated height until they are seen, so where a place is changes while the page scrolls towards it. A long
+  // way is therefore taken in one jump and then corrected, frame by frame, until the place stays where it was
+  // aimed; a short way scrolls smoothly and is corrected after. The reader's own wheel, touch or key ends it.
+  function landAt(want, smooth) {
+    const far = Math.abs(want() - window.scrollY) > window.innerHeight * 2.5;
+    window.scrollTo({ top: Math.max(0, want()), behavior: smooth && !far && !reduced() ? 'smooth' : 'instant' });
+    let stop = false, n = 0, calm = 0;
+    const end = () => { stop = true; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.removeEventListener(t, end)); };
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.addEventListener(t, end, { passive: true }));
+    const fix = () => {
+      if (stop) return;
+      if (++n > 40) { end(); return; }
+      const d = Math.max(0, want()) - window.scrollY;
+      if (Math.abs(d) > 3) { calm = 0; window.scrollTo({ top: Math.max(0, want()), behavior: 'instant' }); } else calm++;
+      if (calm >= 3) { end(); return; }
+      requestAnimationFrame(fix);
+    };
+    setTimeout(() => requestAnimationFrame(fix), smooth && !far && !reduced() ? 500 : 0);
   }
+  window.ConiferScroll = { land: landAt };
+  function scrollTo(el) { landAt(() => el.getBoundingClientRect().top + window.scrollY - barH() - 16, true); }
   function flashQuote(el, quote) {
     if (!quote) return;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -1359,7 +1386,7 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const closed = el.closest && el.closest('.fold[data-state="closed"]'); if (closed && window.ConiferFolds) ConiferFolds.open(closed.dataset.key);
     const r = h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect();
     const bar = $('#bar'); const top = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;
-    if (r.top < top || r.bottom > window.innerHeight - 24) window.scrollTo({ top: window.scrollY + r.top - top - window.innerHeight * 0.3, behavior: first ? 'auto' : 'smooth' });
+    if (r.top < top || r.bottom > window.innerHeight - 24) { const rect = () => (h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect()); window.ConiferScroll.land(() => window.scrollY + rect().top - top - window.innerHeight * 0.3, !first); }
     count();
   }
 

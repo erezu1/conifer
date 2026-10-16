@@ -307,7 +307,7 @@
     const closed = el.closest && el.closest('.fold[data-state="closed"]'); if (closed && window.ConiferFolds) ConiferFolds.open(closed.dataset.key);
     const r = h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect();
     const bar = $('#bar'); const top = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;
-    if (r.top < top || r.bottom > window.innerHeight - 24) window.scrollTo({ top: window.scrollY + r.top - top - window.innerHeight * 0.3, behavior: first ? 'auto' : 'smooth' });
+    if (r.top < top || r.bottom > window.innerHeight - 24) { const rect = () => (h.range ? h.range.getBoundingClientRect() : (h.mark || el).getBoundingClientRect()); window.ConiferScroll.land(() => window.scrollY + rect().top - top - window.innerHeight * 0.3, !first); }
     count();
   }
 

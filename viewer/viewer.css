@@ -191,6 +191,15 @@ dfn { font-style: italic; }
 .fold-bg .fold-name { color: var(--reader); }
 .fold[data-state="open"] > .fold-head { margin-bottom: .45rem; }
 .sec-h[data-fold] { cursor: pointer; }
+/* The page is ~50 000 elements (1 500 drawn formulas). Opening a fold shifts everything below it, and laying out and
+   painting all of that cost a quarter of a second in one frame. The blocks of the paper are therefore laid out and
+   painted only near the screen (content-visibility), each remembering its real size once seen; a fold then opens in
+   frames of a few milliseconds. Headings and fold heads are not skipped, so the contents, the bar's title and the
+   address hash see every section. */
+#paper p, #paper li, #paper .display, #paper figure, #paper .leaf { content-visibility: auto; contain-intrinsic-size: auto 7rem; }
+#paper .leaf { contain-intrinsic-size: auto 14rem; }
+#paper .display { contain-intrinsic-size: auto 4rem; }
+#paper figure { contain-intrinsic-size: auto 9rem; }
 .fold-wrap { display: grid; grid-template-rows: 0fr; grid-template-columns: minmax(0, 1fr); opacity: 0; transition: grid-template-rows .3s var(--ease-out), opacity .25s var(--ease-out); }
 .fold[data-state="open"] .fold-wrap { grid-template-rows: 1fr; opacity: 1; }
 .fold-body { min-height: 0; min-width: 0; overflow: clip; overflow-clip-margin: 12px; }

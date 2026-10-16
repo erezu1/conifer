@@ -273,10 +273,28 @@
     setTimeout(go, reduced() ? 50 : 750);
   }
   function flash(el) { if (!el) return; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2600); }
-  function scrollTo(el) {
-    const y = el.getBoundingClientRect().top + window.scrollY - barH() - 16;
-    window.scrollTo({ top: Math.max(0, y), behavior: reduced() ? 'auto' : 'smooth' });
+  // Scrolling to a place. Blocks far from the screen are not laid out (content-visibility, see viewer.css) and stand
+  // at an estimated height until they are seen, so where a place is changes while the page scrolls towards it. A long
+  // way is therefore taken in one jump and then corrected, frame by frame, until the place stays where it was
+  // aimed; a short way scrolls smoothly and is corrected after. The reader's own wheel, touch or key ends it.
+  function landAt(want, smooth) {
+    const far = Math.abs(want() - window.scrollY) > window.innerHeight * 2.5;
+    window.scrollTo({ top: Math.max(0, want()), behavior: smooth && !far && !reduced() ? 'smooth' : 'instant' });
+    let stop = false, n = 0, calm = 0;
+    const end = () => { stop = true; ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.removeEventListener(t, end)); };
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(t => window.addEventListener(t, end, { passive: true }));
+    const fix = () => {
+      if (stop) return;
+      if (++n > 40) { end(); return; }
+      const d = Math.max(0, want()) - window.scrollY;
+      if (Math.abs(d) > 3) { calm = 0; window.scrollTo({ top: Math.max(0, want()), behavior: 'instant' }); } else calm++;
+      if (calm >= 3) { end(); return; }
+      requestAnimationFrame(fix);
+    };
+    setTimeout(() => requestAnimationFrame(fix), smooth && !far && !reduced() ? 500 : 0);
   }
+  window.ConiferScroll = { land: landAt };
+  function scrollTo(el) { landAt(() => el.getBoundingClientRect().top + window.scrollY - barH() - 16, true); }
   function flashQuote(el, quote) {
     if (!quote) return;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
