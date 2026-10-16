@@ -45,7 +45,6 @@ a:hover { text-decoration: underline; }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; touch-action: pan-y pinch-zoom; }
 .page.swiping { will-change: transform, opacity; }   /* (a layer of its own only while a swipe holds it) */
 #dial { touch-action: pan-y; }
-html { overscroll-behavior-x: none; }                 /* (a trackpad's sideways swipe is the dial's, not the browser's back) */
 .page p { margin: 0 0 1em; }
 .page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, #peek-body li, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
@@ -281,20 +280,22 @@ dfn { font-style: italic; }
 .peek-head:hover .peek-grip, .peek.dragging .peek-grip { background: var(--accent); }
 .peek-row { display: flex; align-items: center; gap: .5rem; max-width: var(--page-w); margin: 0 auto; padding-bottom: .4rem; border-bottom: 1px solid var(--rule); min-height: 2.4rem; }
 .peek-row .bar-btn { width: 1.9rem; height: 1.9rem; }
+.peek-row .peek-go svg { width: 18px; height: 18px; }   /* the expand: the bar's deep-blue line, as Epsilon's peek has it */
+.peek-title .peek-from::after { content: none; }      /* (the button says it; the title's link still goes there too) */
 .peek-title { flex: 1; min-width: 0; font: 600 1.02rem/1.35 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: ns-resize; }
 .peek-title a { cursor: pointer; }
 /* (room under its text, as Epsilon's: while the grip is held the peek is as tall as it can be, and a short text
    would scroll back and move under the finger; with this room it stays where it is) */
 .peek-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: .5rem max(16px, calc((100% - var(--page-w)) / 2)) 75vh; }
 .peek-fn, .peek-eq { font-size: .98em; }
-.pop { position: absolute; z-index: 30; width: min(26rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
+.pop { position: absolute; z-index: 45; width: min(26rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
   box-shadow: var(--shadow); padding: .6rem .85rem .7rem; font-size: 1rem; line-height: 1.5; animation: rise .2s var(--ease-out); }
 .pop.closing { animation: fall .15s var(--ease-in) forwards; }
 .pop-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .3rem; }
 .pop-term { font: 600 .95rem var(--sans); }
 .pop-sym { font-weight: 400; color: var(--muted); margin-left: .3rem; }
 .pop-foot { font: .8rem var(--sans); color: var(--muted); margin-top: .45rem; }
-.sheet-def .pop-def { font-size: .98em; }
+.sheet-def .pop-def, .sheet-note .pop-def { font-size: .98em; }
 
 /* ---- contents, questions, settings inside sheets */
 .toc { list-style: none; padding: 0; margin: 0; }

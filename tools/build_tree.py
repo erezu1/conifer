@@ -298,6 +298,7 @@ fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=
 ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
 ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')
+ICON_EXPAND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/></svg>')
 ICON_BACK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>')
 ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>')
 ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
@@ -341,7 +342,7 @@ body = f"""<title>{html.escape(page_title)}</title>
 </div>
 <div id="scrim" class="scrim" hidden></div>
 <aside id="sheet" class="sheet" hidden aria-live="polite"><div class="sheet-head"><h2 id="sheet-title"></h2><button type="button" class="x-btn" data-close aria-label="Close">&times;</button></div><div id="sheet-body"></div></aside>
-<section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="x-btn" data-peekclose aria-label="Close the peek">&times;</button></div></div><div id="peek-body" class="peek-body"></div></section>
+<section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="bar-btn peek-go" data-peekgo aria-label="Read it in the page" title="Read it in the page">{ICON_EXPAND}</button><button type="button" class="x-btn" data-peekclose aria-label="Close the peek">&times;</button></div></div><div id="peek-body" class="peek-body"></div></section>
 <div id="pop" class="pop" hidden></div>
 <div id="toast" role="status" hidden></div>
 {M.get("cache", "")}

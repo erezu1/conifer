@@ -341,7 +341,7 @@
   document.addEventListener('keydown', e => {
     if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'f') { e.preventDefault(); show(true); return; }   // Ctrl+F / Cmd+F is this search
     if (!open) return;
-    if (e.key === 'Escape') { e.preventDefault(); show(false); return; }
+    if (e.key === 'Escape') { if (document.querySelector('#pop:not([hidden]), #sheet:not([hidden]), #peek:not([hidden])')) return; e.preventDefault(); show(false); return; }   // (a layer over the page closes first)
     if (e.target.id === 'find-input' && e.key === 'Enter') { e.preventDefault(); go(at + (e.shiftKey ? -1 : 1)); }
   });
   document.addEventListener('click', e => {

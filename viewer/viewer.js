@@ -433,6 +433,12 @@
     if (reduced()) { pop.hidden = true; return; }
     pop.classList.add('closing'); setTimeout(() => { pop.hidden = true; pop.classList.remove('closing'); }, 160);
   }
+  function closeTop() {                             // Escape: the layer on top only (the popover, a sheet, then the peek)
+    if (!$('#pop').hidden) { closePop(); return true; }
+    if (!$('#sheet').hidden) { closeSheet(); return true; }
+    if (peekIsOpen()) { closePeek(); return true; }
+    return false;
+  }
   function closeAll() { closeSheet(); if (!peekExpanding) closePeek(); closePop(); }
 
   // ------------------------------------------------------------------ the peek (after Epsilon's)
@@ -468,7 +474,12 @@
     const pk = $('#peek');
     pk.hidden = true; pk.classList.remove('closing', 'expanding', 'dragging');
     pk.style.transition = ''; pk.style.transform = ''; pk.style.opacity = '';
-    document.body.style.paddingBottom = '';
+    // the room kept under the page for the peek goes, but not the part the page stands on (a place near the paper's
+    // end would else be pulled up by the browser), and what follows a scroll (the bar's title, the address) runs now
+    const pad = parseFloat(document.body.style.paddingBottom) || 0;
+    const need = window.scrollY + window.innerHeight - (document.documentElement.scrollHeight - pad);
+    document.body.style.paddingBottom = need > 0 ? Math.ceil(need) + 'px' : '';
+    barTitle(); followHash();
   }
   function closePeek() {
     const pk = $('#peek'); if (!peekIsOpen() || peekExpanding) return;
@@ -487,7 +498,7 @@
   // lines the peek shows stand at the same height; then the peek fades away over the page, which is already the same
   // text in the same place. Nothing scrolls in sight and nothing flashes: the eye is already on the place.
   let peekExpanding = false;
-  const LINES = 'p, .display, li, .sec-h, figure, .fold-head';
+  const LINES = 'p, .display, li, figure';   // (not headings: the peek draws them smaller than the page does)
   function peekAnchorEl() {                          // the first block of lines the peek shows, and the page's same block
     const body = $('#peek-body'), top = body.getBoundingClientRect().top;
     for (const el of $$(LINES, body)) {
@@ -631,13 +642,29 @@
     const where = at ? `<a href="#${esc(at.id)}" class="peek-from" data-reveal="${at.id}" data-quote="${esc(d.at.quote || '')}" title="Open the paper where this is defined">Defined in ${placeHtml(at.id)}</a>` : '';
     const html = `<div class="pop-def">${d.html}</div>${where ? `<div class="pop-foot">${where}</div>` : ''}`;
     const title = `${esc(d.term)}${d.symbol ? `<span class="pop-sym">${d.symbol}</span>` : ''}`;
-    if (window.innerWidth < 760) { openSheet(title, html, 'sheet-def'); return; }
+    showLayer(title, html, anchor, 'sheet-def');
+  }
+  // a note, as a definition is shown: a popover by its mark on a wide screen, a sheet on a phone; over the page or
+  // over the peek, which stays as it is
+  function openNote(a, anchor) {
+    const host = anchorHost.get(a); const n = byId.get(host); if (!n) return;
+    const tmp = document.createElement('div'); tmp.innerHTML = n.body;
+    const el = tmp.querySelector('#' + CSS.escape(a)); if (!el) return;
+    const num = esc(a.replace(/^fn/, ''));
+    const text = stripIds((el.querySelector('.fn-text') || el).innerHTML);
+    const where = `<a href="#${esc(a)}" class="peek-from" data-reveal="${host}" data-flash="${esc(a)}" title="Open the notes here">In the notes</a>`;
+    const html = `<div class="pop-def peek-fn">${text}</div><div class="pop-foot">${where}</div>`;
+    showLayer(`Note ${num}`, html, anchor, 'sheet-note');
+  }
+  function showLayer(title, html, anchor, cls) {      // (a definition's or a note's: the same small layer)
+    if (window.innerWidth < 760 || !anchor) { openSheet(title, html, cls); return; }
     closeSheet();
     const pop = $('#pop'); pop.classList.remove('closing');
     pop.innerHTML = `<div class="pop-head"><div class="pop-term">${title}</div><button type="button" class="x-btn" data-close aria-label="Close">&times;</button></div>${html}`;
     pop.hidden = false;
-    const r = anchor.getBoundingClientRect(), w = pop.offsetWidth;
-    pop.style.top = (r.bottom + window.scrollY + 6) + 'px';
+    const r = anchor.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    const below = r.bottom + 6 + h < window.innerHeight || r.top - 6 - h < barH();
+    pop.style.top = ((below ? r.bottom + 6 : r.top - 6 - h) + window.scrollY) + 'px';
     pop.style.left = Math.max(8, Math.min(r.left + window.scrollX, document.documentElement.clientWidth - w - 8)) + 'px';
   }
   function openQuestions(id, deep) {
@@ -673,13 +700,13 @@
 
   // ------------------------------------------------------------------ events
   document.addEventListener('click', e => {
-    const pb = e.target.closest('[data-peekclose], [data-peekback]');
-    if (pb) { if (pb.hasAttribute('data-peekclose')) closePeek(); else peekBack(); return; }
+    const pb = e.target.closest('[data-peekclose], [data-peekback], [data-peekgo]');
+    if (pb) { if (pb.hasAttribute('data-peekclose')) closePeek(); else if (pb.hasAttribute('data-peekgo')) peekGo(); else peekBack(); return; }
     const foldHead = e.target.closest('[data-fold]');                           // the whole head of a fold is its control, open or closed
     if (foldHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-def]')) { toggleFold(foldHead.dataset.fold); return; }
     const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
-    if (t.matches('.scrim, [data-close]')) { closeAll(); return; }
+    if (t.matches('.scrim, [data-close]')) { if (t.closest('#pop')) closePop(); else closeSheet(); return; }   // (its own layer only: a peek under it stays)
     if (t.id === 'back') { goBack(); return; }
     if (t.dataset.copy) { copyLink(t.dataset.copy); return; }
     if (t.dataset.open) { if (t.dataset.open === 'contents') openContents(); else if (t.dataset.open === 'search') { closeAll(); if (window.ConiferSearch) ConiferSearch.open(); } else openSettings(); return; }
@@ -706,7 +733,8 @@
       if (LEVEL_HASH.includes(a)) { e.preventDefault(); goHash(a, true); return; }
       if (longPressed) { longPressed = false; e.preventDefault(); return; }
       const inPeek = !!t.closest('#peek');
-      if (anchorHost.has(a) && ['footnotes', 'references'].includes(byId.get(anchorHost.get(a)).kind)) { e.preventDefault(); peekAnchor(a, inPeek); return; }   // a note, a citation: a peek, as in Epsilon
+      if (anchorHost.has(a) && byId.get(anchorHost.get(a)).kind === 'footnotes') { e.preventDefault(); openNote(a, t); return; }   // a note: its own small layer, over the page or the peek
+      if (anchorHost.has(a) && byId.get(anchorHost.get(a)).kind === 'references') { e.preventDefault(); peekAnchor(a, inPeek); return; }   // a citation: the peek, as in Epsilon
       if (byId.has(a)) { e.preventDefault(); if (inPeek) peekNode(a, true); else if (state.level < PAPER && !t.closest('#sheet') && byId.get(a).kind !== 'section' && byId.get(a).kind !== 'appendix') peekNode(a); else reveal(a); return; }
       if (anchorHost.has(a)) {
         e.preventDefault();
@@ -748,7 +776,7 @@
     hold(a);                                          // (a right click makes no click after it: nothing to swallow)
   });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeAll();
+    if (e.key === 'Escape') closeTop();
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && (e.target.classList.contains('gs') || e.target.classList.contains('skim'))) { e.preventDefault(); e.target.click(); }
   });
   document.addEventListener('submit', e => {
@@ -772,13 +800,13 @@
 
   // ------------------------------------------------------------------ swiping between the documents
   // A sideways swipe on the page goes to the next document of the dial (to the left: deeper; to the right: back), and
-  // the dial's pill follows the finger all the way; the pill can be dragged along the dial too, and a trackpad's
-  // sideways swipe does the same. While it is held only the pill and the page's one layer move (transforms, against
+  // the dial's pill follows the finger all the way; the pill can be dragged along the dial too (a trackpad's
+  // sideways swipe is not taken: on a desktop it is the browser's back and forward). While it is held only the pill and the page's one layer move (transforms, against
   // positions read once at the start): nothing is laid out or drawn. Let go past a third of the way (or flicked), the
   // page slides on and out, the next document is drawn once and slides in from the other side; else both spring back.
   // A swipe that starts in a wide equation (or anything else that scrolls sideways) scrolls it instead.
   const SWIPE_PAGE = 0.6;                             // a whole step is a swipe of 60% of the screen
-  let sw = null, swEat = false, wheelAcc = 0, wheelTimer = null, wheelRest = 0;
+  let sw = null, swEat = false;
   function swGeo() {
     const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
     return { ind: $('.sel-ind', dial), bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
@@ -893,19 +921,7 @@
   // (a swipe or a drag is not a tap: the click that ends it does nothing)
   document.addEventListener('click', e => { if (swEat) { swEat = false; e.preventDefault(); e.stopImmediatePropagation(); } }, true);
   document.addEventListener('pointerdown', () => { swEat = false; }, true);
-  // a trackpad's sideways swipe (its momentum, after a step, is let go by)
-  document.addEventListener('wheel', e => {
-    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 1.2 || e.ctrlKey) return;
-    const t = e.target; if (!t.closest || !t.closest('main.page, #dial') || sideScroller(t)) return;
-    if (performance.now() < wheelRest) { e.preventDefault(); return; }
-    e.preventDefault();
-    if (!sw) { sw = swBegin('wheel'); if (!sw) return; wheelAcc = 0; }
-    if (sw.kind !== 'wheel') return;
-    wheelAcc += e.deltaX;
-    swShow(sw.cur + wheelAcc / (sw.W * SWIPE_PAGE));
-    clearTimeout(wheelTimer);
-    wheelTimer = setTimeout(() => { if (sw && sw.kind === 'wheel') { const moved = Math.abs(sw.pos - sw.cur) > 0.33; swEnd(); if (moved) wheelRest = performance.now() + 450; } }, 120);
-  }, { passive: false });
+  // (a trackpad's sideways swipe is left to the browser: on a desktop it is back and forward)
 
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
