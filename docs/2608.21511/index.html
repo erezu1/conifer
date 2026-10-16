@@ -61,7 +61,10 @@ a:hover { text-decoration: underline; }
 .page a[id^="fnref"], .page a.fnref, #sheet-body a[id^="fnref"], #peek-body a[id^="fnref"] { border-bottom: 0; }
 .peek-from, .peek-from:hover, .sheet-head a, .btn, .ctl { color: var(--accent); border-bottom: 0; }
 .btn.primary { color: var(--on-accent); }
-.page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
+.page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; touch-action: pan-y pinch-zoom; }
+.page.swiping { will-change: transform, opacity; }   /* (a layer of its own only while a swipe holds it) */
+#dial { touch-action: pan-y; }
+html { overscroll-behavior-x: none; }                 /* (a trackpad's sideways swipe is the dial's, not the browser's back) */
 .page p { margin: 0 0 1em; }
 .page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, #peek-body li, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
@@ -1312,6 +1315,132 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   let ticking = false;
   window.addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { barTitle(); followHash(); ticking = false; }); }, { passive: true });
   window.addEventListener('resize', () => { $$('.dial, .seg').forEach(moveInd); });
+
+  // ------------------------------------------------------------------ swiping between the documents
+  // A sideways swipe on the page goes to the next document of the dial (to the left: deeper; to the right: back), and
+  // the dial's pill follows the finger all the way; the pill can be dragged along the dial too, and a trackpad's
+  // sideways swipe does the same. While it is held only the pill and the page's one layer move (transforms, against
+  // positions read once at the start): nothing is laid out or drawn. Let go past a third of the way (or flicked), the
+  // page slides on and out, the next document is drawn once and slides in from the other side; else both spring back.
+  // A swipe that starts in a wide equation (or anything else that scrolls sideways) scrolls it instead.
+  const SWIPE_PAGE = 0.6;                             // a whole step is a swipe of 60% of the screen
+  let sw = null, swEat = false, wheelAcc = 0, wheelTimer = null, wheelRest = 0;
+  function swGeo() {
+    const dial = $('#dial'), bs = $$('button', dial).filter(b => !b.hidden);
+    return { ind: $('.sel-ind', dial), bs: bs.map(b => [b.offsetLeft, b.offsetWidth]), levels: bs.map(b => +b.dataset.setlevel) };
+  }
+  function swBegin(kind) {
+    const g = swGeo(), cur = g.levels.indexOf(state.level); if (cur < 0) return null;
+    const page = $('main.page');
+    page.classList.add('swiping'); g.ind.style.transition = 'none';
+    return Object.assign(g, { kind, cur, pos: cur, page, W: window.innerWidth, v: 0, lt: 0 });
+  }
+  const swBand = (x, d) => d * (1 - 1 / (x / d + 1));    // past either end it follows less and less
+  function swShow(pos) {                               // the pill at a fractional place among the tabs; the page moved by as much
+    const n = sw.bs.length - 1;
+    const p = pos < 0 ? -swBand(-pos, 0.25) : pos > n ? n + swBand(pos - n, 0.25) : pos;
+    const now = performance.now();                    // (its speed, in tabs a second, smoothed)
+    if (sw.lt) sw.v = 0.6 * sw.v + 0.4 * ((pos - sw.pos) / Math.max(1, now - sw.lt) * 1000);
+    sw.lt = now; sw.pos = pos;
+    const q = Math.max(0, Math.min(n, p)), i = Math.min(n - 1, Math.floor(q)), f = q - i;
+    const a = sw.bs[Math.max(0, i)], b = sw.bs[Math.min(n, i + 1)] || a;
+    const over = (p - q) * a[1] * 0.4;                 // (at an end, the pill leans a little)
+    sw.ind.style.transform = `translateX(${(a[0] + (b[0] - a[0]) * f + over).toFixed(1)}px)`;
+    sw.ind.style.width = (a[1] + (b[1] - a[1]) * f).toFixed(1) + 'px';
+    const d = p - sw.cur;
+    sw.page.style.transform = `translateX(${(-d * sw.W * SWIPE_PAGE * 0.45).toFixed(1)}px)`;
+    sw.page.style.opacity = String(1 - Math.min(0.55, Math.abs(d) * 0.6));
+  }
+  function swEnd() {
+    if (!sw) return;
+    const g = sw; sw = null;
+    const d = g.pos - g.cur, n = g.bs.length - 1;
+    let to = g.cur;
+    if (Math.abs(d) > 0.33 || (Math.abs(g.v) > 1.5 && Math.sign(g.v) === Math.sign(d) && Math.abs(d) > 0.06)) to = Math.max(0, Math.min(n, g.cur + (d > 0 ? 1 : -1)));
+    const page = g.page, ease = 'var(--ease-out)';
+    g.ind.style.transition = '';                       // (the pill glides from where the finger left it)
+    if (to === g.cur || reduced()) {
+      page.style.transition = `transform .26s ${ease}, opacity .26s ${ease}`; page.style.transform = ''; page.style.opacity = '';
+      if (to !== g.cur) setLevel(g.levels[to]); else moveInd($('#dial'));
+      setTimeout(() => { page.style.transition = ''; page.classList.remove('swiping'); }, 280);
+      return;
+    }
+    const dir = to > g.cur ? 1 : -1;
+    // the pill goes on to its tab at once; the page slides on and out, the next one is drawn and slides in
+    const b = g.bs[to]; g.ind.style.transform = `translateX(${b[0]}px)`; g.ind.style.width = b[1] + 'px';
+    page.style.transition = `transform .14s ease-in, opacity .14s ease-in`;
+    page.style.transform = `translateX(${(-dir * g.W * 0.22).toFixed(0)}px)`; page.style.opacity = '0';
+    setTimeout(() => {
+      page.style.transition = 'none';
+      setLevel(g.levels[to]);
+      $('#paper').classList.remove('swap');          // (its own fade is this slide's)
+      page.style.transform = `translateX(${(dir * g.W * 0.14).toFixed(0)}px)`; page.style.opacity = '0';
+      void page.offsetWidth;
+      page.style.transition = `transform .3s ${ease}, opacity .26s ${ease}`; page.style.transform = ''; page.style.opacity = '';
+      setTimeout(() => { page.style.transition = ''; page.classList.remove('swiping'); }, 320);
+    }, 140);
+  }
+  const sideScroller = el => {                         // something under the finger that scrolls sideways itself
+    for (let e = el; e && e !== document.body; e = e.parentElement) {
+      if (e.scrollWidth > e.clientWidth + 1) { const o = getComputedStyle(e).overflowX; if (o === 'auto' || o === 'scroll') return true; }
+    }
+    return false;
+  };
+  // touch and pen on the page
+  document.addEventListener('pointerdown', e => {
+    if (sw || (e.pointerType !== 'touch' && e.pointerType !== 'pen')) return;
+    const t = e.target; if (!t.closest || !t.closest('main.page') || t.closest('input, textarea, .eqbody, pre, table') || sideScroller(t)) return;
+    const st = { x: e.clientX, y: e.clientY, id: e.pointerId, lock: null };
+    const move = ev => {
+      if (ev.pointerId !== st.id) return;
+      const dx = ev.clientX - st.x, dy = ev.clientY - st.y;
+      if (!st.lock) {
+        if (Math.abs(dx) + Math.abs(dy) < 10) return;
+        st.lock = Math.abs(dx) > Math.abs(dy) * 1.3 ? 'x' : 'y';
+        if (st.lock === 'y') { done(); return; }
+        sw = swBegin('touch'); if (!sw) { done(); return; }
+        clearTimeout(lpTimer); swEat = true; setTimeout(() => { swEat = false; }, 600);
+      }
+      swShow(sw.cur - dx / (sw.W * SWIPE_PAGE));
+    };
+    const up = ev => { if (ev.pointerId !== st.id) return; done(); if (sw) swEnd(); };
+    const done = () => { document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up); };
+    document.addEventListener('pointermove', move, { passive: true });
+    document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+  }, { passive: true });
+  // the pill dragged along the dial (any pointer); a press that does not move stays a tap on a tab
+  document.addEventListener('pointerdown', e => {
+    if (sw || e.button !== 0) return;
+    const dial = e.target.closest && e.target.closest('#dial'); if (!dial) return;
+    const st = { x: e.clientX, id: e.pointerId, moved: false };
+    const move = ev => {
+      if (ev.pointerId !== st.id) return;
+      const dx = ev.clientX - st.x;
+      if (!st.moved) { if (Math.abs(dx) < 6) return; st.moved = true; sw = swBegin('dial'); if (!sw) { done(); return; } swEat = true; setTimeout(() => { swEat = false; }, 600); try { dial.setPointerCapture(st.id); } catch (err) {} }
+      const span = sw.bs.length > 1 ? (sw.bs[sw.bs.length - 1][0] - sw.bs[0][0]) / (sw.bs.length - 1) : 1;
+      swShow(sw.cur + dx / span);
+    };
+    const up = ev => { if (ev.pointerId !== st.id) return; done(); if (sw && sw.kind === 'dial') swEnd(); };
+    const done = () => { document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up); };
+    document.addEventListener('pointermove', move, { passive: true });
+    document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+  });
+  // (a swipe or a drag is not a tap: the click that ends it does nothing)
+  document.addEventListener('click', e => { if (swEat) { swEat = false; e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+  document.addEventListener('pointerdown', () => { swEat = false; }, true);
+  // a trackpad's sideways swipe (its momentum, after a step, is let go by)
+  document.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 1.2 || e.ctrlKey) return;
+    const t = e.target; if (!t.closest || !t.closest('main.page, #dial') || sideScroller(t)) return;
+    if (performance.now() < wheelRest) { e.preventDefault(); return; }
+    e.preventDefault();
+    if (!sw) { sw = swBegin('wheel'); if (!sw) return; wheelAcc = 0; }
+    if (sw.kind !== 'wheel') return;
+    wheelAcc += e.deltaX;
+    swShow(sw.cur + wheelAcc / (sw.W * SWIPE_PAGE));
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => { if (sw && sw.kind === 'wheel') { const moved = Math.abs(sw.pos - sw.cur) > 0.33; swEnd(); if (moved) wheelRest = performance.now() + 450; } }, 120);
+  }, { passive: false });
 
   // ------------------------------------------------------------------ boot
   load(); applyTheme();

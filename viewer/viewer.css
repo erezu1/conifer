@@ -42,7 +42,10 @@ a:hover { text-decoration: underline; }
 .page a[id^="fnref"], .page a.fnref, #sheet-body a[id^="fnref"], #peek-body a[id^="fnref"] { border-bottom: 0; }
 .peek-from, .peek-from:hover, .sheet-head a, .btn, .ctl { color: var(--accent); border-bottom: 0; }
 .btn.primary { color: var(--on-accent); }
-.page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; }
+.page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; touch-action: pan-y pinch-zoom; }
+.page.swiping { will-change: transform, opacity; }   /* (a layer of its own only while a swipe holds it) */
+#dial { touch-action: pan-y; }
+html { overscroll-behavior-x: none; }                 /* (a trackpad's sideways swipe is the dial's, not the browser's back) */
 .page p { margin: 0 0 1em; }
 .page p, .page li, .sum-body, .lede, #sheet-body p, #peek-body p, #peek-body li, .pop-def, figcaption { text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto; }
 .gist-list b, .card-label, .toc, .q, .qa-foot { text-align: left; hyphens: manual; }
