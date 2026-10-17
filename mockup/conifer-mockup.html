@@ -389,14 +389,14 @@ dfn { font-style: italic; }
 .ask-note { font: .82rem/1.45 var(--sans); color: var(--muted); margin: .6rem 0 0; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
-.set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .45rem 0 0; text-align: left; hyphens: manual; }
-/* A SETTING'S CHOICES, in the dial's language: the options' words over one thin grey line, and a deep-blue stretch of
-   the same line under the chosen one, which glides when the choice changes (viewer.js moveInd). No pill, no box. */
-.seg { position: relative; display: flex; padding-bottom: 6px; }
-.seg::before { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1.25px; border-radius: 1px; background: color-mix(in srgb, var(--muted) 28%, transparent); }
-.sel-ind { position: absolute; bottom: 2px; left: 0; width: 0; height: 1.25px; border-radius: 1px; background: var(--accent); pointer-events: none; }
+#sheet-body .set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .45rem 0 0; text-align: left; hyphens: manual; -webkit-hyphens: manual; }
+/* A SETTING'S CHOICES (Erez, 17 Oct): the row is a faint grey rounded rectangle, and the chosen option wears a deep-blue
+   one that glides to a new choice (viewer.js moveInd); both drawn in the icons' line, 1.25px, nothing filled. Never an
+   underline: under a word a line reads as a title or a link, not as a button. */
+.seg { position: relative; display: flex; gap: 2px; padding: 3px; border-radius: 12px; box-shadow: inset 0 0 0 1.25px color-mix(in srgb, var(--muted) 28%, transparent); }
+.sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 9px; box-shadow: inset 0 0 0 1.25px var(--accent); pointer-events: none; }
 .sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }
-.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; padding: .4rem .3rem .35rem; font: 400 .88rem var(--sans); color: var(--muted); cursor: pointer; transition: color .2s; }
+.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 9px; padding: .4rem .3rem; font: 400 .88rem var(--sans); color: var(--muted); cursor: pointer; transition: color .2s; }
 .seg button[aria-checked="true"] { color: var(--accent); font-weight: 600; }   /* (the options share the width equally: a bolder word moves nothing) */
 .seg button:hover:not([aria-checked="true"]) { color: var(--fg); }
 .legend { display: grid; gap: .35rem; font: .82rem/1.4 var(--sans); color: var(--muted); }
