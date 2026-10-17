@@ -820,6 +820,7 @@
     const pop = $('#pop'); pop.classList.remove('closing');
     pop.innerHTML = `<div class="pop-head"><div class="pop-term">${title}</div><button type="button" class="x-btn" data-close aria-label="Close">${GL.x}</button></div>${html}`;
     pop.hidden = false; layersChanged();
+    pop.classList.toggle('in-page', !anchor.closest('#peek'));   // (in the page it scrolls with the text, under the bar)
     const r = anchor.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
     const below = r.bottom + 6 + h < window.innerHeight || r.top - 6 - h < barH();
     pop.style.top = ((below ? r.bottom + 6 : r.top - 6 - h) + window.scrollY) + 'px';

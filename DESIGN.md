@@ -339,6 +339,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **Numbered lists keep their numbers (17 Oct).** An enumerate in the paper showed no numbers: list items were among the blocks drawn only near the screen (content-visibility), which clips whatever is painted outside the box, and a list's number is painted in the margin. Only the references and the notes, which are many and draw no numbers, are treated so now.
 
+**A popover passes under the bar (17 Oct).** A definition's popover belongs to its place in the text and scrolls with it, but it was drawn above the bar, so scrolling carried it over the bar's title and tabs. A popover from the page now lies under the bar, as the text does; one opened from the peek stays over the peek.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

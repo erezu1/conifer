@@ -359,6 +359,8 @@ dfn { font-style: italic; }
 .peek-fn, .peek-eq { font-size: .98em; }
 .pop { position: absolute; z-index: 45; width: min(26rem, calc(100vw - 32px)); background: var(--bg); border: 1px solid var(--rule); border-radius: 10px;
   box-shadow: var(--shadow); padding: .6rem .85rem .7rem; font-size: 1rem; line-height: 1.5; animation: rise .2s var(--ease-out); }
+.pop.in-page { z-index: 19; }   /* (a popover from the page scrolls with its text and slides under the bar, as the text does;
+   one from the peek stays over the peek) */
 .pop.closing { animation: fall .15s var(--ease-in) forwards; }
 .pop-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .3rem; }
 .pop-term { font: 600 .95rem var(--sans); }
