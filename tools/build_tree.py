@@ -24,6 +24,7 @@ import subprocess
 import sys
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
 import loader  # noqa: E402
+from slim import slim  # noqa: E402
 import tempfile
 import urllib.parse
 from pathlib import Path
@@ -271,10 +272,37 @@ else:
     new_svgs = []
 print("layers' formulas drawn:", len(new_items))
 
-images = {}
-for f in (doc / "images").iterdir():
+# the figures: no wider than WEB_W pixels (a page shows a figure at most ~700px wide, so this is sharp on a 2x screen;
+# the papers' plots came at 2400px, 0.6 MB each), each with its size, so that its room is known before it is drawn
+WEB_W = 1400
+images, img_files, img_size = {}, {}, {}
+img_cache = paper / ".img"
+
+
+def px(f):
+    r = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(f)], capture_output=True, text=True).stdout
+    w, h = re.search(r"pixelWidth: (\d+)", r), re.search(r"pixelHeight: (\d+)", r)
+    return (int(w.group(1)), int(h.group(1))) if w and h else (None, None)
+
+
+for f in sorted((doc / "images").iterdir()):
     mime = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "svg": "image/svg+xml", "gif": "image/gif", "webp": "image/webp"}.get(f.suffix[1:].lower(), "application/octet-stream")
-    images[f.name] = "data:%s;base64,%s" % (mime, base64.b64encode(f.read_bytes()).decode())
+    src = f
+    if f.suffix.lower() == ".png" or (f.suffix.lower() in (".jpg", ".jpeg") and px(f)[0] and px(f)[0] > WEB_W):
+        img_cache.mkdir(exist_ok=True)
+        out = img_cache / f.name
+        if not out.exists() or out.stat().st_mtime < f.stat().st_mtime:
+            venv = HERE / ".venv" / "bin" / "python"
+            if venv.exists() and f.suffix.lower() == ".png":       # resized and, for line art, a palette (tools/figures.py)
+                subprocess.run([str(venv), str(HERE / "tools" / "figures.py"), str(f), str(out), str(WEB_W)], capture_output=True)
+            elif (px(f)[0] or 0) > WEB_W:                          # without Pillow: resized only
+                subprocess.run(["sips", "--resampleWidth", str(WEB_W), str(f), "--out", str(out)], capture_output=True)
+        if out.exists() and out.stat().st_size < f.stat().st_size:
+            src = out
+    if f.suffix.lower() in (".png", ".jpg", ".jpeg"):
+        img_size[f.name] = px(src)
+    img_files[f.name] = src
+    images[f.name] = "data:%s;base64,%s" % (mime, base64.b64encode(src.read_bytes()).decode())
 
 
 HL = '<span class="mjx-hl" aria-hidden="true"></span>'
@@ -291,7 +319,7 @@ def with_band(svg):
 
 
 def with_tex(svg, tex):
-    return with_band(svg.replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(tex.strip(), quote=True), 1))
+    return with_band(slim(svg).replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(tex.strip(), quote=True), 1))
 
 
 def fill(o):
@@ -302,7 +330,9 @@ def fill(o):
     if isinstance(o, str):
         o = re.sub(r'<l2m-math n="(\d+)"></l2m-math>', lambda m: with_tex(svgs[int(m.group(1))], items[int(m.group(1))]["tex"]), o)
         o = re.sub("\x00(\\d+)\x00", lambda m: with_tex(new_svgs[int(m.group(1))], new_items[int(m.group(1))]["tex"]), o)
-        o = re.sub(r'src="images/([^"]+)"', lambda m: 'src="%s"' % images.get(m.group(1), "images/" + m.group(1)), o)
+        o = re.sub(r'src="images/([^"]+)"', lambda m: 'src="%s"%s loading="lazy" decoding="async"' % (
+            images.get(m.group(1), "images/" + m.group(1)),
+            ' width="%d" height="%d"' % img_size[m.group(1)] if img_size.get(m.group(1), (None,))[0] else ""), o)
         return o
     return o
 
@@ -316,8 +346,10 @@ js += "\n" + (HERE / "viewer" / "search.js").read_text()
 js += "\n" + (HERE / "viewer" / "copy.js").read_text()
 meta = page_doc["meta"]
 data = json.dumps(page_doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
-fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;'
-         '0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
+fonts = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
+         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+         # (not render-blocking: media="print" until the viewer switches it on, so the loader paints at once)
+         '<link rel="stylesheet" data-font media="print" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
 ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
 ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')
@@ -389,4 +421,13 @@ page = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n
         "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content\">\n" + favicon
         + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + SW + "\n</body>\n</html>\n")
 (paper / "tree.html").write_text(page)
-print("wrote tree.html (%d KB) and cone.artifact.html%s" % (len(page.encode()) // 1024, "; %d problems" % len(problems) if problems else ""))
+# the site's page: the same, with each figure a file of its own beside it, fetched only when it comes near the screen
+# (the self-contained tree.html and the artifact keep them inside)
+web = paper / "web"
+(web / "img").mkdir(parents=True, exist_ok=True)
+page_web = page
+for name, uri in images.items():
+    page_web = page_web.replace(uri, "img/" + name)
+    (web / "img" / name).write_bytes(img_files[name].read_bytes())
+(web / "index.html").write_text(page_web)
+print("wrote tree.html (%d KB), web/index.html (%d KB) and the artifact%s" % (len(page.encode()) // 1024, len(page_web.encode()) // 1024, "; %d problems" % len(problems) if problems else ""))

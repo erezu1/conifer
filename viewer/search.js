@@ -297,6 +297,7 @@
     return list.sort((x, y) => { const a = pos(x), b = pos(y); if (a === b) return 0; return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1; });
   }
   function run(q, keep) {                        // keep: the reader stays where they are (a search again, after a box opened or closed)
+    if (window.ConiferPaper) ConiferPaper.complete();   // (a Paper still being drawn in slices is finished first: viewer.js)
     clear();
     lastQ = q;
     const w = what(q);

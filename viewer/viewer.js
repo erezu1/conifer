@@ -4,10 +4,14 @@
 // travelling leaves a way back. Inline expansion exists only for folds (appendices, proofs, background notes).
 (function () {
   'use strict';
+  const mark = n => { try { performance.mark('conifer:' + n); } catch (e) {} };   // (startup phases, for measuring: see DESIGN.md)
+  mark('start');
+  document.querySelectorAll('link[data-font]').forEach(l => { l.media = 'all'; });   // the fonts, not blocking the first paint (build)
   const $ = (s, el) => (el || document).querySelector(s);
   const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
   const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const DOC = JSON.parse($('#conifer-doc').textContent);
+  mark('parsed');
   const LEVELS = DOC.levels;
   const IDX = Object.fromEntries(LEVELS.map((l, i) => [l.key, i]));
   const GIST = IDX.gist ?? 0, BRIEF = IDX.brief ?? 1, SKIM = IDX.skim, PAPER = IDX.paper ?? LEVELS.length - 2, FULL = IDX.full ?? Infinity;      // (no tree declares an Everything level now: a fold opens by itself, never by depth)
@@ -37,6 +41,7 @@
   function placeHtml(id) { const t = titled(id); if (!t) return esc(id); return (t.number ? esc(shortLabel(t)) + ' ' : '') + titleOf(t); }
   const isFold = n => !!n.fold || n.kind === 'background';
 
+  mark('indexed');
   // ------------------------------------------------------------------ the state
   const AUD = DOC.audiences || [];
   const state = { level: 0, over: new Map(), ledes: 'auto', chips: 'auto', theme: 'system',
@@ -116,8 +121,11 @@
       const detail = bg ? `<span class="fold-title">${esc(n.title)} ${who}</span>` : `<span class="fold-detail">${n.kind === 'appendix' ? titleOf(n) : n.gist ? pick(n.gist).html : `${words(n.body || '')} words`}</span>`;
       head = `<div class="fold-head"${fk ? ` data-fold="${fk}"` : ''}>${lead}<span class="fold-name">${name}</span>${detail}${bg ? '' : who}</div>`;
     }
-    const inner = n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
-    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}" data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-wrap"><div class="fold-body">${inner}</div></div></div>`;
+    // a closed fold in the page holds nothing until it is first opened (fillFold): the appendices, folded by default,
+    // were a third of the Paper's elements, built and never seen by most readers
+    const lazy = !open && !ctx.prefix && !ctx.shell;
+    const inner = lazy ? '' : n.children ? wrap(n, L, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    return `<div class="node fold${bg ? ' fold-bg' : ''}" data-state="${open ? 'open' : 'closed'}"${lazy ? ' data-lazy="1"' : ''} data-id="${n.id}" data-key="${key}"${ctx.prefix ? '' : ` id="${n.id}"`}>${head}<div class="fold-wrap"><div class="fold-body">${inner}</div></div></div>`;
   }
   function leaf(n, ctx, headless) {
     const key = ctx.prefix + n.id;
@@ -144,7 +152,7 @@
     const head = inFold ? '' : secHead(n, ctx, foldable ? circle('toggle', ledeKey, ledeOpen) : '', foldable ? ledeKey : '');
     const lede = foldable ? `<div class="node fold fold-lede" data-state="${ledeOpen ? 'open' : 'closed'}" data-key="${ledeKey}"><div class="fold-wrap"><div class="fold-body">${ledeBlock(n, ctx)}</div></div></div>`
       : briefed && ledeOpen ? ledeBlock(n, ctx) : '';
-    const inner = (n.children || []).map(c => render(c, L, ctx)).join('');
+    const inner = ctx.shell ? '' : (n.children || []).map(c => render(c, L, ctx)).join('');   // (shell: drawn in slices, viewer.js draw)
     return `<section class="node sec kind-${n.kind}" data-id="${n.id}" data-key="${key}"${ctx.prefix || inFold ? '' : ` id="${n.id}"`}>${head}${lede}${inner}</section>`;
   }
   function render(n, inh, ctx) {
@@ -201,17 +209,91 @@
   }
 
   // ------------------------------------------------------------------ drawing the page
-  const locate = key => $(`#paper [data-key="${CSS.escape(key)}"]`);
+  const find1 = key => $(`#paper [data-key="${CSS.escape(key)}"]`);
+  const locate = key => find1(key) || (slices && drawUntil(key) && find1(key)) || (fillAround(key) && find1(key)) || null;
+  function fillFold(el) {                             // a closed fold's body, built when it is first wanted
+    if (!el || !el.dataset.lazy) return;
+    const n = byId.get(el.dataset.id), body = el.querySelector(':scope > .fold-wrap > .fold-body');
+    const ctx = { prefix: '', over: state.over };
+    if (n && body) body.innerHTML = n.children ? wrap(n, PAPER, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    delete el.dataset.lazy;
+  }
+  function fillAround(key) {                          // the folds a place lies in, built (outermost first)
+    if (!byId.has(key)) return false;
+    let any = false;
+    ancestors(key).concat([key]).forEach(a => { const f = $(`#paper .fold[data-lazy][data-key="${CSS.escape(a)}"]`); if (f) { fillFold(f); any = true; } });
+    return any;
+  }
   const barH = () => ($('#bar') ? $('#bar').getBoundingClientRect().bottom : 0);
+  // THE PAPER, DRAWN FAST (17 Oct). The Paper is ~50 000 elements, and building it in one go froze the page for 50 to
+  // 180 ms on a laptop (a phone is several times slower) at every switch into it. Two things: (1) leaving the Paper
+  // keeps it, with which folds were open, and coming back puts it back as it was instead of building it again;
+  // (2) a Paper built afresh is drawn a top-level section at a time, the first at once and the rest in later tasks,
+  // so the reader can scroll and tap while it completes. Whatever needs a part not yet drawn (a link to a place, the
+  // search, the peek growing into the page) finishes the drawing first (drawUntil, drawAll).
+  let slices = null, kept = null;
+  const paperSig = () => [state.audience, state.ledes, state.chips].join('|');
+  const sameOver = (a, b) => a.size === b.size && [...a].every(([k, v]) => b.get(k) === v);
+  function sliceStep() {
+    if (!slices) return;
+    const t0 = performance.now();
+    do drawSlice(); while (slices && performance.now() - t0 < 8);
+    if (slices) slices.timer = setTimeout(sliceStep, 0);
+  }
+  function drawSlice() {                            // one piece: a section's head (its paragraphs follow as pieces), or a block
+    const sl = slices; if (!sl) return false;
+    const { n, into } = sl.queue.shift(), host = into || sl.main;
+    const plain = n.children && !isFold(n) && !HEADED[n.kind] && n.kind !== 'background';
+    if (plain) {
+      host.insertAdjacentHTML('beforeend', wrap(n, PAPER, Object.assign({}, sl.ctx, { shell: true })));
+      const el = host.lastElementChild;
+      sl.queue.unshift(...n.children.map(c => ({ n: c, into: el })));
+    } else host.insertAdjacentHTML('beforeend', render(n, PAPER, sl.ctx));
+    if (!sl.queue.length) { clearTimeout(sl.timer); slices = null; try { performance.measure('conifer:paper-complete', { start: sl.t0 }); } catch (e) {} if (window.ConiferSearch) ConiferSearch.refresh(); }
+    return true;
+  }
+  function drawUntil(key) { while (slices && !$(`#paper [data-key="${CSS.escape(key)}"]`)) drawSlice(); return true; }
+  function drawAll() { while (slices) drawSlice(); }
+  window.ConiferPaper = { complete: drawAll };
   function draw(keepKey) {
+    const t0 = performance.now();
     const main = $('#paper');
     const ctx = { prefix: '', over: state.over };
     const before = keepKey ? locate(keepKey) : null;
     const y0 = before ? before.getBoundingClientRect().top : null;
-    main.innerHTML = render(DOC.root, state.level, ctx);
+    let showing = main.dataset.shown;
+    if (slices) { clearTimeout(slices.timer); slices = null; main.dataset.shown = showing = ''; }   // (a Paper half drawn is not kept)
+    else if (showing === 'paper' && state.level !== PAPER) {
+      // the Paper stays in the page, held: its element gives the id to another and is hidden (content-visibility keeps
+      // what the browser worked out for it, so showing it again is cheap); moving 50 000 elements out and back in was not
+      const held = $('#paper-held'), next = held || document.createElement('div');
+      main.id = 'paper-held'; main.classList.remove('swap');
+      next.id = 'paper'; next.className = main.className; next.replaceChildren();
+      if (!held) main.after(next); else main.after(next);
+      kept = { sig: main.dataset.sig, over: main._over, el: main };
+      return draw(keepKey);
+    }
+    if (state.level === PAPER && kept && kept.sig === paperSig() && (!state.over.size || sameOver(state.over, kept.over)) && showing !== 'paper') {
+      const other = main; other.id = 'paper-held'; other.replaceChildren(); other.dataset.shown = '';
+      kept.el.id = 'paper'; state.over = kept.over; const el = kept.el; kept = null;
+      try { performance.measure('conifer:draw', { start: t0, detail: 'paper (kept)' }); } catch (e) {}
+      drawDial(); barTitle(); if (window.ConiferSearch) ConiferSearch.refresh();
+      return el;
+    } else if (state.level === PAPER) {
+      if (kept) { kept.el.replaceChildren(); kept = null; }
+      main.replaceChildren();
+      slices = { main, ctx, queue: (DOC.root.children || []).map(n => ({ n, into: null })), t0, timer: 0 };
+      if (keepKey) drawUntil(keepKey);
+      const tf = performance.now();
+      do drawSlice(); while (slices && performance.now() - tf < 10);
+      if (slices) slices.timer = setTimeout(sliceStep, 0);
+    } else main.innerHTML = render(DOC.root, state.level, ctx);
+    main.dataset.shown = state.level === PAPER ? 'paper' : LEVELS[state.level].key;
+    if (state.level === PAPER) { main.dataset.sig = paperSig(); main._over = state.over; }
     if (y0 != null) { const after = locate(keepKey); if (after) window.scrollBy(0, after.getBoundingClientRect().top - y0); }
     drawDial(); barTitle();
     if (window.ConiferSearch) ConiferSearch.refresh();
+    try { performance.measure('conifer:draw', { start: t0, detail: LEVELS[state.level].key }); } catch (e) {}
   }
   // THE DIAL: three quiet labels over a thin line, the tree's trunk laid on its side, with a dot under each tab. The
   // line is lit from the first dot up to how deep one reads; a dot turns blue and grows only once the line has reached
@@ -308,6 +390,7 @@
     state.over.set(key, open ? 3 : 2); commit();
     const el = $(`#paper .fold[data-key="${CSS.escape(key)}"]`);
     if (!el) { draw(); return; }
+    if (open) fillFold(el);
     el.dataset.state = open ? 'open' : 'closed';
     $$(`#paper .fold-btn[data-key="${CSS.escape(key)}"]`).forEach(b => {      // the circle turns: + to −, and back
       b.setAttribute('aria-expanded', String(open)); b.innerHTML = open ? GL.minus : GL.plus; b.title = b.ariaLabel = open ? 'Fold' : 'Open';
@@ -333,7 +416,7 @@
     if (i === state.level) return;
     if (!silent) push(LEVEL_HASH[i]);
     backStack = [];
-    state.level = i; state.over.clear(); closeAll(); save(); draw(); swapIn();
+    state.level = i; state.over = new Map(); closeAll(); save(); draw(); swapIn();
     window.scrollTo({ top: 0, behavior: 'auto' });
     if (!silent) commit();
   }
@@ -483,7 +566,7 @@
     if (open && !guarded) { commit(); try { history.pushState(Object.assign(snapshot(history.state && { from: history.state.from }), { layer: true }), '', location.hash || location.pathname + location.search); guarded = true; } catch (e) {} }
     else if (!open && guarded) { guarded = false; unguarding++; try { history.back(); } catch (e) { unguarding--; } }
   }
-  function restore(sn) { state.level = sn.level; state.over = new Map(sn.over); save(); draw(); window.scrollTo(0, sn.y || 0); }
+  function restore(sn) { state.level = sn.level; state.over = new Map(sn.over); save(); draw(); drawAll(); window.scrollTo(0, sn.y || 0); }
   try { history.scrollRestoration = 'manual'; } catch (e) {}
   window.addEventListener('popstate', e => {
     if (unguarding) { unguarding--; return; }        // (a layer closed by hand took its step away)
@@ -515,10 +598,11 @@
     const origin = { label: fromLevel < PAPER ? LEVELS[fromLevel].label : (curSection && byId.has(curSection) ? shortLabel(byId.get(curSection)) : 'Back'), sn: snapshot() };
     if (opts.push !== false) push(opts.flash || id, { from: fromLevel });
     const levelChanged = state.level < PAPER;
-    if (levelChanged) { state.level = PAPER; state.over.clear(); save(); }
+    const reused = levelChanged && kept && kept.sig === paperSig();   // (the Paper as it was left: no building)
+    if (levelChanged) { state.level = PAPER; state.over = new Map(); save(); if (reused) draw(); }
     const folds = ancestors(id).concat([id]).filter(a => isFold(byId.get(a)));
     closeAll();
-    if (levelChanged || !locate(id)) { folds.forEach(a => state.over.set(a, 3)); draw(); }
+    if ((levelChanged && !reused) || !locate(id)) { folds.forEach(a => state.over.set(a, 3)); draw(); }
     else folds.forEach(a => {                       // (the place is in the page: no redrawing; a closed fold on the way opens)
       const f = $(`#paper .fold[data-key="${CSS.escape(a)}"]`);
       if (f && f.dataset.state !== 'open') setFold(a, true); else state.over.set(a, 3);
@@ -766,10 +850,14 @@
     $$('.gs.peeking').forEach(s => s.classList.remove('peeking')); span.classList.add('peeking');
     openPeek(`<span class="peek-label">From</span> ${from}`, html, inPeek);
   }
+  // a body parsed once, and its copy for the peek made once (a citation's peek is the whole list of references)
+  const parsedBody = new Map(), peekBody = new Map();
+  const parsed = n => { if (!parsedBody.has(n.id)) { const d = document.createElement('div'); d.innerHTML = n.body; parsedBody.set(n.id, d); } return parsedBody.get(n.id); };
+  const peekCopy = n => { if (!peekBody.has(n.id)) peekBody.set(n.id, stripIds(n.body)); return peekBody.get(n.id); };
   function peekAnchor(a, inPeek) {
     const host = anchorHost.get(a); if (!host) return false;
     const n = byId.get(host);
-    const tmp = document.createElement('div'); tmp.innerHTML = n.body;
+    const tmp = parsed(n);
     const el = tmp.querySelector('#' + CSS.escape(a)); if (!el) return false;
     const place = n.kind === 'references' ? 'the references' : n.kind === 'footnotes' ? 'the notes' : placeHtml(host);
     const link = `<a href="#${esc(a)}" class="peek-from" data-reveal="${host}" data-flash="${esc(a)}" title="Open the paper here">${place}</a>`;
@@ -777,7 +865,7 @@
     if (n.kind === 'footnotes') { what = 'Note ' + esc(a.replace(/^fn/, '')); html = `<div class="peek-fn">${stripIds(el.innerHTML)}</div>`; }
     else if (n.kind === 'references') {             // a citation, as in Epsilon: the list of references, at the one cited
       what = 'Reference ' + esc(((el.querySelector('.refnum') || {}).textContent || '').replace(/[\[\]\s]/g, ''));
-      html = `<div class="peek-refs">${stripIds(n.body)}</div>`; mark = 'peek-' + a; near = 0;
+      html = `<div class="peek-refs">${peekCopy(n)}</div>`; mark = 'peek-' + a; near = 0;
     }
     else if (n.kind === 'figure' || n.kind === 'table') { what = esc(n.title || 'Figure'); html = stripIds(n.body); }
     else { const d = el.closest('.display') || el; what = 'Equation ' + esc((d.querySelector('.eqno') || {}).textContent || ''); html = render(n, PAPER, peekCtx()); mark = 'peek-' + (d.id || a); }
@@ -1081,10 +1169,10 @@
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
   if (skimHidden() && state.level === SKIM) state.level = BRIEF;
-  draw();
+  draw(); mark('drawn');
   const h = decodeURIComponent(location.hash.slice(1));
   if (h) goHash(h, false);
-  commit();
+  commit(); mark('ready');
   // the page is ready: the growing tree that stood while it loaded fades away (tools/loader.py)
   const ld = document.getElementById('loader');
   if (ld) { ld.classList.add('done'); setTimeout(() => ld.remove(), 400); }

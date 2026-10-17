@@ -6,3 +6,6 @@ __pycache__/
 .claude/
 mockup/.claude/
 mockup/cone-*.html
+papers/*/.img/
+papers/*/web/
+.venv/

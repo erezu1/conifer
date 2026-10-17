@@ -18,6 +18,7 @@ import subprocess
 import sys
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent.parent / 'tools'))
 import loader  # noqa: E402
+from slim import slim  # noqa: E402
 import tempfile
 import urllib.parse
 from pathlib import Path
@@ -98,7 +99,7 @@ def fill(o):
     if isinstance(o, list):
         return [fill(v) for v in o]
     if isinstance(o, str) and "\x00" in o:
-        return re.sub("\x00(\\d+)\x00", lambda m: with_band(svgs[int(m.group(1))].replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(items[int(m.group(1))]["tex"].strip(), quote=True), 1)), o)
+        return re.sub("\x00(\\d+)\x00", lambda m: with_band(slim(svgs[int(m.group(1))]).replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(items[int(m.group(1))]["tex"].strip(), quote=True), 1)), o)
     return o
 
 
@@ -112,8 +113,10 @@ js += "\n" + (HERE.parent / "viewer" / "search.js").read_text()
 js += "\n" + (HERE.parent / "viewer" / "copy.js").read_text()
 meta = doc["meta"]
 data = json.dumps(doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
-fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;'
-         '0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
+fonts = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
+         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+         # (not render-blocking: media="print" until the viewer switches it on, so the loader paints at once)
+         '<link rel="stylesheet" data-font media="print" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
 ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
 ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')

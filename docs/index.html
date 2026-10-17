@@ -62,6 +62,8 @@ a:hover { text-decoration: underline; }
 .peek-from, .peek-from:hover, .sheet-head a, .btn, .ctl { color: var(--accent); border-bottom: 0; }
 .btn.primary { color: var(--on-accent); }
 .page { max-width: var(--page-w); margin: 0 auto; padding-block: .6rem 4rem; touch-action: pan-y pinch-zoom; }
+/* the Paper while another document is read: kept in the page, not drawn, taking no room (viewer.js draw) */
+#paper-held { content-visibility: hidden; height: 0; padding: 0; margin: 0; overflow: hidden; }
 .page.swiping { will-change: transform, opacity; }   /* (a layer of its own only while a swipe holds it) */
 #dial { touch-action: pan-y; }
 .page p { margin: 0 0 1em; }
@@ -206,6 +208,8 @@ a.fnref { font-size: .8em; vertical-align: super; line-height: 0; }
 .flash .eqbody, .eqbody.flash { background: none; }   /* (its edge covers are the page's colour: over a flash they would show as patches) */
 .kind-theorem .eqbody, .kind-remark .eqbody, .kind-definition .eqbody, .kind-proof .eqbody { --fade: var(--surface); }
 .eqno { flex: 0 0 auto; font-variant-numeric: lining-nums tabular-nums; }
+/* (the outer group's stroke and fill, set here once instead of on every formula: tools/slim.py) */
+mjx-container > svg { stroke: currentColor; fill: currentColor; stroke-width: 0; }
 mjx-container[jax="SVG"][display="true"] { margin: 0 !important; }
 mjx-container[jax="SVG"][display="true"]:not([width="full"]) { display: inline-block !important; }
 mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }

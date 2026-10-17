@@ -17,8 +17,9 @@ DOCS = HERE / "docs"
 DOCS.mkdir(exist_ok=True)
 
 cones = [
-    {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "tree.html", "data": HERE / "papers" / "2608.21511" / "tree.json"},
-    {"key": "2406.14605", "page": HERE / "papers" / "2406.14605" / "tree.html", "data": HERE / "papers" / "2406.14605" / "tree.json"},
+    # (a tree's web/ page: its figures are files beside it, fetched when they come near the screen: tools/build_tree.py)
+    {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "web" / "index.html", "data": HERE / "papers" / "2608.21511" / "tree.json"},
+    {"key": "2406.14605", "page": HERE / "papers" / "2406.14605" / "web" / "index.html", "data": HERE / "papers" / "2406.14605" / "tree.json"},
     {"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json"},
 ]
 rows = []
@@ -28,6 +29,9 @@ for c in cones:
     d = json.loads(c["data"].read_text())
     (DOCS / c["key"]).mkdir(exist_ok=True)
     shutil.copyfile(c["page"], DOCS / c["key"] / "index.html")
+    if (c["page"].parent / "img").is_dir():
+        shutil.rmtree(DOCS / c["key"] / "img", ignore_errors=True)
+        shutil.copytree(c["page"].parent / "img", DOCS / c["key"] / "img")
     m = d["meta"]
     gist = re.sub(r"<[^>]+>", " ", (d["root"].get("gist") or {}).get("html", ""))
     def tex_text(m):                                                 # (the index draws no formulas: a simple one is kept
