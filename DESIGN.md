@@ -347,6 +347,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **The peek's expand, accelerating (17 Oct, Erez).** It used to grow to the bar easing out (arriving at zero speed), and only then did the page jump underneath and the peek fade, some 600 ms in all. Now the panel fills the screen accelerating, fastest as it reaches the bar (cubic-bezier(.55, 0, .9, .55), 300 ms); its header is gone within 100 ms; the page fades out in the strip above the peek at once and goes to the place unseen, set so that the peek's lines will stand on its own; and from 70 ms before the peek arrives it fades out as the page fades in, so that at arrival the two are half and half and by 360 ms only the page is there. Checked frame by frame (the last 20 ms of the growth are the fastest) and in real time (the equation the peek showed lands at the same height in the page, to the pixel).
 
+**The peek's closing zone (17 Oct, Erez).** Dragging the peek down, once letting go would close it (below 17% of the room under the bar), the peek is drawn down by itself to a 26px sliver at the bottom edge and stays there however far the finger goes, its grip turning deep blue, with a short tick where the phone can vibrate; so the hand knows before letting go that the peek will go away. Dragged back up past the zone (with 24px to spare, so it does not flicker at the edge), it returns to the finger.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

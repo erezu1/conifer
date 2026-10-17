@@ -361,6 +361,7 @@ dfn { font-style: italic; }
 @keyframes peekout { to { transform: translateY(100%); } }
 .peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
 .peek.dragging .peek-head { cursor: grabbing; }
+.peek.closing-zone .peek-grip { background: var(--accent); }   /* (in the closing zone: viewer.js peekDrag) */
 /* growing into the page, the peek's header goes first: only its text rises into place */
 .peek.expanding .peek-head { opacity: 0; transition: opacity .1s ease-out; }   /* (gone well before the peek is full) */
 .peek-refs h2 { display: none; }

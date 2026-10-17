@@ -813,12 +813,29 @@
       if (raw > drag.max && e.clientY <= barH() + 2) {               // pulled all the way up: it becomes the page
         drag = null; pk.classList.remove('dragging'); peekGo(); return;
       }
+      // THE CLOSING ZONE (Erez, 17 Oct): dragged low enough that letting go would close it, the peek is drawn down by
+      // itself to a sliver at the bottom edge and stays there (a tick under the finger, where the phone can), so the
+      // hand knows before letting go that it will go away; dragged back up past the zone, it comes back to the finger
+      const Z = peekAvail() * 0.17, SLIVER = 26;
+      if (raw < (drag.closing ? Z + 24 : Z)) {
+        if (!drag.closing) {
+          drag.closing = true; pk.classList.add('closing-zone');
+          pk.style.transition = 'transform .16s cubic-bezier(.3, 0, .2, 1)';
+          try { if (navigator.vibrate) navigator.vibrate(8); } catch (err) {}
+        }
+        drag.at = SLIVER; slide(SLIVER, drag.max); return;
+      }
+      if (drag.closing) {
+        drag.closing = false; pk.classList.remove('closing-zone');
+        pk.style.transition = 'transform .14s ease-out';
+        clearTimeout(drag.free); drag.free = setTimeout(() => { if (drag && !drag.closing) pk.style.transition = 'none'; }, 150);
+      }
       drag.at = raw > drag.max ? drag.max + band(raw - drag.max, 60) : Math.max(24, raw);
       slide(drag.at, drag.max);
     });
     const end = e => {
       if (!drag || e.pointerId !== drag.id) return;
-      const h = drag.at, max = drag.max; drag = null; pk.classList.remove('dragging');
+      const h = drag.at, max = drag.max; clearTimeout(drag.free); drag = null; pk.classList.remove('dragging', 'closing-zone');
       const avail = peekAvail();
       if (h < avail * 0.17) {                                        // let go low: it slides away, quickening
         $$('.gs.peeking, .skim.peeking').forEach(x => x.classList.remove('peeking')); peekStack.length = 0;
