@@ -362,7 +362,7 @@ dfn { font-style: italic; }
 .peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
 .peek.dragging .peek-head { cursor: grabbing; }
 /* growing into the page, the peek's header goes first: only its text rises into place */
-.peek.expanding .peek-head { opacity: 0; transition: opacity .16s ease-out; }
+.peek.expanding .peek-head { opacity: 0; transition: opacity .1s ease-out; }   /* (gone well before the peek is full) */
 .peek-refs h2 { display: none; }
 /* the peek's blocks contained as the page's are (content-visibility contains them there): the same margins, the same
    lines, so that when the peek becomes the page the text under it is the very same */

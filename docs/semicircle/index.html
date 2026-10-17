@@ -352,7 +352,7 @@ dfn { font-style: italic; }
 .peek.closing { animation: peekout .22s cubic-bezier(.5, 0, 1, 1) forwards; }
 .peek.dragging .peek-head { cursor: grabbing; }
 /* growing into the page, the peek's header goes first: only its text rises into place */
-.peek.expanding .peek-head { opacity: 0; transition: opacity .16s ease-out; }
+.peek.expanding .peek-head { opacity: 0; transition: opacity .1s ease-out; }   /* (gone well before the peek is full) */
 .peek-refs h2 { display: none; }
 /* the peek's blocks contained as the page's are (content-visibility contains them there): the same margins, the same
    lines, so that when the peek becomes the page the text under it is the very same */
@@ -1479,26 +1479,23 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     // where its lines stand once grown (taller, a short text scrolls back): measured now, in the grown peek
     const anchor = peekAnchorEl(), bt = body.getBoundingClientRect().top, inset = bt - pk.getBoundingClientRect().top;
     const off = anchor ? anchor.el.getBoundingClientRect().top - bt : 0;
+    // THE EXPAND (Erez, 17 Oct): the panel fills the screen accelerating, fastest as it reaches the bar (no gliding to
+    // a stop); its header is gone at once; the page, faded out in the strip above the peek, goes to the place unseen,
+    // set so that the peek's lines will stand on its own; in the last moments of the growth the peek fades out as the
+    // page fades in, so that it hands over to the full text rather than arriving and then fading.
+    const page = $('main.page'), T = 300, FADE = 110, AT = T - 70;
     pk.classList.add('expanding');
-    pk.style.transition = 'transform .32s var(--ease-out)'; pk.style.transform = 'translateY(0)';
-    setTimeout(() => {                               // grown: the page goes there, unseen
-      const y = barH() + inset + off;
+    pk.style.transition = `transform ${T}ms cubic-bezier(.55, 0, .9, .55), opacity ${FADE}ms ease-in ${AT}ms`;
+    pk.style.transform = 'translateY(0)'; pk.style.opacity = '0';
+    page.style.transition = 'opacity 110ms ease-in'; page.style.opacity = '0';
+    const y = barH() + inset + off;
+    setTimeout(() => {                               // unseen: the page goes to the place (and keeps it, landAt)
       peekExpanding = 'going';
       reveal(a.dataset.reveal, { flash: a.dataset.flash, place: anchor ? { find: anchor.find, y } : { find: () => null, y } });
       peekExpanding = true;
-      // the peek fades only once the page has held the place for two frames (the page's far blocks take their true
-      // heights as they are drawn, and the place is corrected meanwhile, unseen under the peek)
-      const pe = anchor ? anchor.find() : null; let calm = 0, n = 0;
-      const fade = () => {
-        pk.style.transition = 'opacity .22s ease'; pk.style.opacity = '0';
-        setTimeout(() => { peekDone(); peekStack.length = 0; peekExpanding = false; }, 240);
-      };
-      const settle = () => {
-        calm = !pe || Math.abs(pe.getBoundingClientRect().top - y) < 1.5 ? calm + 1 : 0;
-        if (calm >= 2 || ++n > 40) fade(); else requestAnimationFrame(settle);
-      };
-      requestAnimationFrame(settle);
-    }, 330);
+    }, 120);
+    setTimeout(() => { page.style.transition = `opacity ${FADE}ms ease-out`; page.style.opacity = ''; }, AT);
+    setTimeout(() => { page.style.transition = ''; peekDone(); peekStack.length = 0; peekExpanding = false; }, AT + FADE + 20);
   }
   // The grip: while it is held nothing is laid out again (the peek is made as tall as it can be and only slid, a
   // transform); let go, it springs to a third, a half or two thirds and only then takes that height. Let go low, it
