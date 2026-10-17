@@ -400,13 +400,13 @@ dfn { font-style: italic; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
 #sheet-body .set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .45rem 0 0; text-align: left; hyphens: manual; -webkit-hyphens: manual; }
-/* A SETTING'S CHOICES (Erez, 17 Oct): the row is a faint grey rounded rectangle, and the chosen option wears a deep-blue
-   one that glides to a new choice (viewer.js moveInd); both drawn in the icons' line, 1.25px, nothing filled. Never an
+/* A SETTING'S CHOICES (Erez, 17 Oct): the row is a faint grey outline as round as it goes, and the chosen option wears a
+   deep-blue one that lies on the row's own outline (no inset) and glides to a new choice (viewer.js moveInd); both drawn in the icons' line, 1.25px, nothing filled. Never an
    underline: under a word a line reads as a title or a link, not as a button. */
-.seg { position: relative; display: flex; gap: 2px; padding: 3px; border-radius: 12px; box-shadow: inset 0 0 0 1.25px color-mix(in srgb, var(--muted) 28%, transparent); }
-.sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 9px; box-shadow: inset 0 0 0 1.25px var(--accent); pointer-events: none; }
+.seg { position: relative; display: flex; border-radius: 999px; box-shadow: inset 0 0 0 1.25px color-mix(in srgb, var(--muted) 28%, transparent); }
+.sel-ind { position: absolute; top: 0; bottom: 0; left: 0; width: 0; border-radius: 999px; box-shadow: inset 0 0 0 1.25px var(--accent); pointer-events: none; }
 .sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }
-.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 9px; padding: .4rem .3rem; font: 400 .88rem var(--sans); color: var(--muted); cursor: pointer; transition: color .2s; }
+.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .5rem .3rem; font: 400 .88rem var(--sans); color: var(--muted); cursor: pointer; transition: color .2s; }
 .seg button[aria-checked="true"] { color: var(--accent); font-weight: 600; }   /* (the options share the width equally: a bolder word moves nothing) */
 .seg button:hover:not([aria-checked="true"]) { color: var(--fg); }
 .legend { display: grid; gap: .35rem; font: .82rem/1.4 var(--sans); color: var(--muted); }

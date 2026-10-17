@@ -462,10 +462,29 @@
   let backStack = [];
   const snapshot = extra => Object.assign({ conifer: true, level: state.level, over: [...state.over], y: window.scrollY, from: null }, extra || {});
   function commit() { try { history.replaceState(snapshot(history.state && { from: history.state.from }), '', location.hash || ' '); } catch (e) {} }
-  function push(hash, extra) { commit(); try { history.pushState(snapshot(extra), '', hash ? '#' + hash : (location.hash || location.pathname + location.search)); } catch (e) {} }
+  function push(hash, extra) {
+    const url = hash ? '#' + hash : (location.hash || location.pathname + location.search);
+    if (guarded) { guarded = false; try { history.replaceState(snapshot(extra), '', url); } catch (e) {} return; }   // (the layer's step becomes the jump)
+    commit(); try { history.pushState(snapshot(extra), '', url); } catch (e) {}
+  }
+  // BACK CLOSES A LAYER (Erez, 17 Oct). While anything lies over the page (a sheet: a question, a note, a definition, the
+  // contents, settings; a popover; the peek), the history has one step of its own on top, so the phone's or the
+  // browser's Back closes the layer on top and does nothing else; with another still open, the step is put back. Closed
+  // any other way (the x, Escape, a tap outside), the last layer takes its step away unseen; a link that jumps from a
+  // layer into the paper reuses the step, so no dead steps are left behind.
+  let guarded = false, unguarding = 0;
+  const layerOpen = () => !!(($('#pop') && !$('#pop').hidden && !$('#pop').classList.contains('closing')) ||
+    ($('#sheet') && !$('#sheet').hidden && !$('#sheet').classList.contains('closing')) || (peekIsOpen() && !peekExpanding));   // (a peek becoming the page is no layer)
+  function layersChanged() {
+    const open = layerOpen();
+    if (open && !guarded) { commit(); try { history.pushState(Object.assign(snapshot(history.state && { from: history.state.from }), { layer: true }), '', location.hash || location.pathname + location.search); guarded = true; } catch (e) {} }
+    else if (!open && guarded) { guarded = false; unguarding++; try { history.back(); } catch (e) { unguarding--; } }
+  }
   function restore(sn) { state.level = sn.level; state.over = new Map(sn.over); save(); draw(); window.scrollTo(0, sn.y || 0); }
   try { history.scrollRestoration = 'manual'; } catch (e) {}
   window.addEventListener('popstate', e => {
+    if (unguarding) { unguarding--; return; }        // (a layer closed by hand took its step away)
+    if (guarded) { guarded = false; closeTop(); return; }   // Back with a layer open: that layer closes, nothing else
     backStack = [];
     if (e.state && e.state.conifer) { restore(e.state); return; }
     const h = decodeURIComponent(location.hash.slice(1));
@@ -531,17 +550,18 @@
     sh.className = 'sheet ' + (cls || ''); sh.hidden = false; $('#scrim').hidden = false;
     $('#sheet-body').scrollTop = 0;
     const box = $('#link-box'); if (box) { box.focus(); box.select(); }
+    layersChanged();
   }
   function closeSheet() {
     const sh = $('#sheet'); if (sh.hidden) return;
-    if (reduced()) { sh.hidden = true; $('#scrim').hidden = true; return; }
-    sh.classList.add('closing'); $('#scrim').classList.add('closing');
-    setTimeout(() => { sh.hidden = true; sh.classList.remove('closing'); $('#scrim').hidden = true; $('#scrim').classList.remove('closing'); }, 190);
+    if (reduced()) { sh.hidden = true; $('#scrim').hidden = true; layersChanged(); return; }
+    sh.classList.add('closing'); $('#scrim').classList.add('closing'); layersChanged();
+    setTimeout(() => { if (!sh.classList.contains('closing')) return; sh.hidden = true; sh.classList.remove('closing'); $('#scrim').hidden = true; $('#scrim').classList.remove('closing'); }, 190);
   }
   function closePop() {
     const pop = $('#pop'); if (pop.hidden) return;
-    if (reduced()) { pop.hidden = true; return; }
-    pop.classList.add('closing'); setTimeout(() => { pop.hidden = true; pop.classList.remove('closing'); }, 160);
+    if (reduced()) { pop.hidden = true; layersChanged(); return; }
+    pop.classList.add('closing'); layersChanged(); setTimeout(() => { if (!pop.classList.contains('closing')) return; pop.hidden = true; pop.classList.remove('closing'); }, 160);
   }
   function closeTop() {                             // Escape: the layer on top only (the popover, a sheet, then the peek)
     if (!$('#pop').hidden) { closePop(); return true; }
@@ -579,6 +599,7 @@
     $('#peek-title').innerHTML = title; body.innerHTML = html; body.scrollTop = 0; body.dataset.extra = 0; body.style.removeProperty('--peek-room');
     $('[data-peekback]', pk).hidden = !peekStack.length;
     if (!peekIsOpen()) { pk.classList.remove('closing'); pk.hidden = false; peekSetH(peekAvail() * peekFrac); }
+    layersChanged();
   }
   // the room under the peek's text: as much as keeps it still at a coming height (a taller peek would scroll a short
   // text back), and no more; 2rem when nothing is needed
@@ -600,14 +621,14 @@
     const pad = parseFloat(document.body.style.paddingBottom) || 0;
     const need = window.scrollY + window.innerHeight - (document.documentElement.scrollHeight - pad);
     document.body.style.paddingBottom = need > 0 ? Math.ceil(need) + 'px' : '';
-    barTitle(); followHash();
+    barTitle(); followHash(); layersChanged();
   }
   function closePeek() {
     const pk = $('#peek'); if (!peekIsOpen() || peekExpanding) return;
     $$('.gs.peeking, .skim.peeking').forEach(x => x.classList.remove('peeking'));
     peekStack.length = 0;
-    if (reduced()) { peekDone(); return; }
-    pk.classList.add('closing'); setTimeout(() => { if (pk.classList.contains('closing')) peekDone(); }, 230);
+    if (reduced()) { peekDone(); layersChanged(); return; }
+    pk.classList.add('closing'); layersChanged(); setTimeout(() => { if (pk.classList.contains('closing')) peekDone(); }, 230);
   }
   function peekBack() {
     const prev = peekStack.pop(); if (!prev) return;
@@ -795,7 +816,7 @@
     closeSheet();
     const pop = $('#pop'); pop.classList.remove('closing');
     pop.innerHTML = `<div class="pop-head"><div class="pop-term">${title}</div><button type="button" class="x-btn" data-close aria-label="Close">${GL.x}</button></div>${html}`;
-    pop.hidden = false;
+    pop.hidden = false; layersChanged();
     const r = anchor.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
     const below = r.bottom + 6 + h < window.innerHeight || r.top - 6 - h < barH();
     pop.style.top = ((below ? r.bottom + 6 : r.top - 6 - h) + window.scrollY) + 'px';
