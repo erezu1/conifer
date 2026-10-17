@@ -67,7 +67,14 @@ whole Paper was built again. At Gist depth the page was ready in 7 ms.
 | Elements in the Paper | 47 899 | **26 556** |
 | Script memory | 34 MB | **19 MB** |
 
-## 4. What is left
+## 4. Afterwards: scrolling after a link
+
+Erez saw the place jump when he scrolled after following a link. Measured: the far landing's hold did not yield to the
+reader, and blocks drawn for the first time at the screen's edge sometimes moved the text despite scroll anchoring
+(3 of 25 small steps off by up to 157 px). Fixed by yielding, and by drawing blocks within two screens ahead
+(`near`, viewer.js `watch`); after, 0 of 75 steps were off. Startup is unchanged (34 ms).
+
+## 5. What is left
 
 - **A real phone.** These are laptop numbers; the next step is to open the site on a phone with remote debugging and
   read the same marks.

@@ -271,6 +271,7 @@ dfn { font-style: italic; }
 .fold[data-state="closed"] > .fold-wrap > .fold-body { visibility: hidden; transition: visibility 0s .3s; }
 .fold-bg > .fold-wrap > .fold-body { border-left: 3px solid color-mix(in srgb, var(--reader) 45%, transparent); padding-left: .9rem; font-size: .96em; }
 #paper .fold[data-state="open"] > .fold-wrap :is(p, li, .display, figure, .leaf) { content-visibility: visible; }
+#paper .near { content-visibility: visible; }   /* (within two screens: drawn ahead, viewer.js watch) */
 .fold .kind-proof { margin-top: .2rem; }
 .sec-h .fold-btn { margin-right: .5rem; vertical-align: middle; position: relative; top: -.1em; }
 /* a heading's circle on its capitals: centred on the first line's box, then lifted by the distance from that box's

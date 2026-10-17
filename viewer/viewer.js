@@ -215,7 +215,7 @@
     if (!el || !el.dataset.lazy) return;
     const n = byId.get(el.dataset.id), body = el.querySelector(':scope > .fold-wrap > .fold-body');
     const ctx = { prefix: '', over: state.over };
-    if (n && body) body.innerHTML = n.children ? wrap(n, PAPER, ctx, true) : leaf(n, ctx, n.kind === 'proof');
+    if (n && body) { body.innerHTML = n.children ? wrap(n, PAPER, ctx, true) : leaf(n, ctx, n.kind === 'proof'); watch(body); }
     delete el.dataset.lazy;
   }
   function fillAround(key) {                          // the folds a place lies in, built (outermost first)
@@ -232,6 +232,14 @@
   // so the reader can scroll and tap while it completes. Whatever needs a part not yet drawn (a link to a place, the
   // search, the peek growing into the page) finishes the drawing first (drawUntil, drawAll).
   let slices = null, kept = null;
+  // DRAWN AHEAD (17 Oct). A block not yet drawn stands at an estimated height (viewer.css); drawn for the first time
+  // at the edge of the screen, its true height could move the text under the reader (the browser's scroll anchoring
+  // missed some of these). So a block within two screens above or below is drawn ahead of time, where a change of
+  // height moves nothing in sight; once drawn, the browser remembers its size.
+  const NEAR_SEL = 'p, .display, figure, .leaf, .refs > li, .fnlist > li';
+  const near = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('near', e.isIntersecting)), { rootMargin: '200% 0px' }) : null;
+  function watch(root) { if (near && root) root.querySelectorAll(NEAR_SEL).forEach(b => near.observe(b)); }
+  function watchPaper() { if (!near) return; near.disconnect(); watch($('#paper')); }
   const paperSig = () => [state.audience, state.ledes, state.chips].join('|');
   const sameOver = (a, b) => a.size === b.size && [...a].every(([k, v]) => b.get(k) === v);
   function sliceStep() {
@@ -247,8 +255,9 @@
     if (plain) {
       host.insertAdjacentHTML('beforeend', wrap(n, PAPER, Object.assign({}, sl.ctx, { shell: true })));
       const el = host.lastElementChild;
+      watch(el);
       sl.queue.unshift(...n.children.map(c => ({ n: c, into: el })));
-    } else host.insertAdjacentHTML('beforeend', render(n, PAPER, sl.ctx));
+    } else { host.insertAdjacentHTML('beforeend', render(n, PAPER, sl.ctx)); const el = host.lastElementChild; if (el) { watch(el); if (el.matches(NEAR_SEL) && near) near.observe(el); } }
     if (!sl.queue.length) { clearTimeout(sl.timer); slices = null; try { performance.measure('conifer:paper-complete', { start: sl.t0 }); } catch (e) {} if (window.ConiferSearch) ConiferSearch.refresh(); }
     return true;
   }
@@ -275,19 +284,19 @@
     }
     if (state.level === PAPER && kept && kept.sig === paperSig() && (!state.over.size || sameOver(state.over, kept.over)) && showing !== 'paper') {
       const other = main; other.id = 'paper-held'; other.replaceChildren(); other.dataset.shown = '';
-      kept.el.id = 'paper'; state.over = kept.over; const el = kept.el; kept = null;
+      kept.el.id = 'paper'; state.over = kept.over; const el = kept.el; kept = null; watchPaper();
       try { performance.measure('conifer:draw', { start: t0, detail: 'paper (kept)' }); } catch (e) {}
       drawDial(); barTitle(); if (window.ConiferSearch) ConiferSearch.refresh();
       return el;
     } else if (state.level === PAPER) {
       if (kept) { kept.el.replaceChildren(); kept = null; }
-      main.replaceChildren();
+      main.replaceChildren(); if (near) near.disconnect();
       slices = { main, ctx, queue: (DOC.root.children || []).map(n => ({ n, into: null })), t0, timer: 0 };
       if (keepKey) drawUntil(keepKey);
       const tf = performance.now();
       do drawSlice(); while (slices && performance.now() - tf < 10);
       if (slices) slices.timer = setTimeout(sliceStep, 0);
-    } else main.innerHTML = render(DOC.root, state.level, ctx);
+    } else { main.innerHTML = render(DOC.root, state.level, ctx); watchPaper(); }
     main.dataset.shown = state.level === PAPER ? 'paper' : LEVELS[state.level].key;
     if (state.level === PAPER) { main.dataset.sig = paperSig(); main._over = state.over; }
     if (y0 != null) { const after = locate(keepKey); if (after) window.scrollBy(0, after.getBoundingClientRect().top - y0); }
@@ -502,7 +511,8 @@
       setTimeout(() => {
         go(want());
         const back = () => { page.style.transition = 'opacity .24s ease-out'; page.style.opacity = ''; setTimeout(() => { page.style.transition = ''; }, 260); };
-        let n = 0; const hold = () => { const d = Math.abs(Math.max(0, want()) - window.scrollY); if (d > 2) go(want()); if ((d <= 2 && n > 1) || ++n > 20) { back(); settle(); } else requestAnimationFrame(hold); };
+        // (the reader's own scroll ends it here too: a hold that kept re-aiming pulled the page back under a wheel)
+        let n = 0; const hold = () => { if (!live()) { back(); end(); if (done) done(); return; } const d = Math.abs(Math.max(0, want()) - window.scrollY); if (d > 2) go(want()); if ((d <= 2 && n > 1) || ++n > 20) { back(); settle(); } else requestAnimationFrame(hold); };
         requestAnimationFrame(hold);
       }, 120);
       return;
