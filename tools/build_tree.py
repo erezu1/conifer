@@ -386,7 +386,7 @@ favicon = ('<link rel="icon" href="../favicon.ico" sizes="any">\n<link rel="icon
            '<meta name="description" content="' + html.escape(meta["title"]) + ', as a Conifer tree: read it at any depth.">\n')
 SW = '<script>if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("../sw.js").catch(function () {});</script>\n'
 page = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n" + favicon
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content\">\n" + favicon
         + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + SW + "\n</body>\n</html>\n")
 (paper / "tree.html").write_text(page)
 print("wrote tree.html (%d KB) and cone.artifact.html%s" % (len(page.encode()) // 1024, "; %d problems" % len(problems) if problems else ""))

@@ -177,7 +177,7 @@ page = f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 {body}
 </head>
 <body></body>
@@ -186,7 +186,7 @@ page = f"""<!doctype html>
 # the full page: the fragment's title/style/link belong in <head>; everything else in <body>
 head_end = body.index("</style>") + len("</style>")
 page = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content\">\n"
         + '<link rel="icon" href="data:image/svg+xml,' + urllib.parse.quote((HERE.parent / "logo" / "conifer-icon.svg").read_text().replace("currentColor", "#1d5b98")) + '">\n'
         + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + "\n</body>\n</html>\n")
 (HERE / "conifer-mockup.html").write_text(page)

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%20width%3D%2264%22%20height%3D%2264%22%20role%3D%22img%22%20aria-label%3D%22Conifer%22%3E%0A%20%20%3C%21--%20a%20conifer%20drawn%20as%20a%20hierarchical%20graph%3A%20the%20apex%20node%20is%20the%20gist%2C%20each%20lower%20bough%20a%20deeper%20level%20--%3E%0A%20%20%3Cg%20fill%3D%22none%22%20stroke%3D%22%231d5b98%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%209%20V%2056%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%2020%20L%2023%2028%20M32%2020%20L%2041%2028%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%2032%20L%2017.5%2043%20M32%2032%20L%2046.5%2043%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M32%2044%20L%2011%2058%20M32%2044%20L%2053%2058%22/%3E%0A%20%20%3C/g%3E%0A%20%20%3Cg%20fill%3D%22%231d5b98%22%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%229%22%20r%3D%224%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2220%22%20r%3D%222.6%22/%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%2228%22%20r%3D%222.9%22/%3E%3Ccircle%20cx%3D%2241%22%20cy%3D%2228%22%20r%3D%222.9%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%222.6%22/%3E%3Ccircle%20cx%3D%2217.5%22%20cy%3D%2243%22%20r%3D%222.9%22/%3E%3Ccircle%20cx%3D%2246.5%22%20cy%3D%2243%22%20r%3D%222.9%22/%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2244%22%20r%3D%222.6%22/%3E%3Ccircle%20cx%3D%2211%22%20cy%3D%2258%22%20r%3D%222.9%22/%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2258%22%20r%3D%222.9%22/%3E%0A%20%20%3C/g%3E%0A%3C/svg%3E%0A">
 <title>Conifer Reader Mockup</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -383,12 +383,16 @@ dfn { font-style: italic; }
 .ask-note { font: .82rem/1.45 var(--sans); color: var(--muted); margin: .6rem 0 0; }
 .ask-note .btn { margin-top: .4rem; }
 .set-group { margin-bottom: 1.1rem; }
-.set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .3rem 0 0; }
-.sel-ind { position: absolute; top: 3px; bottom: 3px; left: 0; width: 0; border-radius: 999px; background: var(--bg); box-shadow: 0 1px 3px rgba(0, 0, 0, .16); pointer-events: none; }
-.sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }   /* (a segmented setting's pill; the dial has its own line) */
-.seg { position: relative; display: flex; background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
-.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; border-radius: 999px; padding: .35rem .3rem; font: 500 .86rem var(--sans); color: var(--muted); cursor: pointer; }
-.seg button[aria-checked="true"] { color: var(--fg); }
+.set-note { font: .84rem/1.4 var(--sans); color: var(--muted); margin: .45rem 0 0; text-align: left; hyphens: manual; }
+/* A SETTING'S CHOICES, in the dial's language: the options' words over one thin grey line, and a deep-blue stretch of
+   the same line under the chosen one, which glides when the choice changes (viewer.js moveInd). No pill, no box. */
+.seg { position: relative; display: flex; padding-bottom: 6px; }
+.seg::before { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1.25px; border-radius: 1px; background: color-mix(in srgb, var(--muted) 28%, transparent); }
+.sel-ind { position: absolute; bottom: 2px; left: 0; width: 0; height: 1.25px; border-radius: 1px; background: var(--accent); pointer-events: none; }
+.sel-ind.placed { transition: transform .32s var(--ease-out), width .32s var(--ease-out); }
+.seg button { position: relative; z-index: 1; flex: 1; min-width: 0; border: 0; background: none; padding: .4rem .3rem .35rem; font: 400 .88rem var(--sans); color: var(--muted); cursor: pointer; transition: color .2s; }
+.seg button[aria-checked="true"] { color: var(--accent); font-weight: 600; }   /* (the options share the width equally: a bolder word moves nothing) */
+.seg button:hover:not([aria-checked="true"]) { color: var(--fg); }
 .legend { display: grid; gap: .35rem; font: .82rem/1.4 var(--sans); color: var(--muted); }
 .legend div { display: flex; align-items: center; gap: .5rem; }
 .ctl { font: 500 .78rem var(--sans); color: var(--accent); background: none; border: 0; padding: .15rem .1rem; cursor: pointer; border-radius: 4px; }
@@ -914,7 +918,10 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const x = g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f, y = 5;
     dialPos = p;
     const tr = $('.track', g.svg), lit = $('.lit', g.svg), nodes = $('.nodes', g.svg);
-    if (laneSearching && !laneMorphing) { setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); return; }
+    if (laneSearching || laneMorphing) {             // the search owns the line (and while it changes length, the morph does):
+      if (laneSearching) { if (!laneMorphing) setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); }
+      return;                                        // (a resize here, the keyboard rising, once drew the dots back into the search)
+    }
     tr.setAttribute('x1', g.mids[0]); tr.setAttribute('x2', g.mids[n]); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
     lit.setAttribute('x1', g.mids[0]); lit.setAttribute('x2', x.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
     if (nodes.children.length !== g.mids.length) nodes.innerHTML = g.mids.map(() => '<circle r="2.1"/>').join('');
@@ -946,14 +953,14 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
     const [A, B] = on ? [read, find] : [find, read];
     if (on) [...nodes.children].forEach(c => { c.style.r = '0px'; });     // (the dots shrink first, by themselves)
     cancelAnimationFrame(laneAnim);
-    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
+    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(dialPos ?? p); return; }
     laneMorphing = true;
     const t0 = performance.now(), T = 220, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
     const finish = () => {
       if (mine !== laneToken || !laneMorphing) return;
       cancelAnimationFrame(laneAnim); laneMorphing = false;
       setLit(g, B[0], B[1]);
-      if (!on) dialShow(p);                          // (back on the tabs: the dot where one reads grows again)
+      if (!on) dialShow(dialPos ?? p);               // (back on the tabs: the dot where one reads grows again)
     };
     const step = now => {
       if (mine !== laneToken) return;
@@ -1403,7 +1410,18 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       settle = { h: best, t: setTimeout(rest, reduced() ? 0 : 470) };
     };
     head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
-    window.addEventListener('resize', () => { if (peekIsOpen() && !drag && !settle) peekSetH(peekAvail() * peekFrac); });
+    // the keyboard: the page's layout shrinks with it (interactive-widget=resizes-content), so the bar stays on top; where a
+  // browser ignores that (iOS), the visible part can still slide down the page while one types, and the bar follows it
+  if (window.visualViewport) {
+    const vv = window.visualViewport, bar = $('#bar');
+    const follow = () => {
+      const typing = document.activeElement && document.activeElement.matches('input, textarea');
+      const y = typing ? Math.max(0, vv.offsetTop) : 0;
+      bar.style.translate = y > 0.5 ? `0 ${y.toFixed(1)}px` : '';
+    };
+    vv.addEventListener('scroll', follow); vv.addEventListener('resize', follow); document.addEventListener('focusout', () => setTimeout(follow, 0));
+  }
+  window.addEventListener('resize', () => { if (peekIsOpen() && !drag && !settle) peekSetH(peekAvail() * peekFrac); });
   })();
   const peekCtx = () => ({ prefix: 'peek|', over: new Map(), plain: true, allOpen: true });
   // the paragraphs a sentence stands for

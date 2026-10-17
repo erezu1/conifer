@@ -225,7 +225,10 @@
     const x = g.mids[i] + ((g.mids[i + 1] ?? g.mids[i]) - g.mids[i]) * f, y = 5;
     dialPos = p;
     const tr = $('.track', g.svg), lit = $('.lit', g.svg), nodes = $('.nodes', g.svg);
-    if (laneSearching && !laneMorphing) { setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); return; }
+    if (laneSearching || laneMorphing) {             // the search owns the line (and while it changes length, the morph does):
+      if (laneSearching) { if (!laneMorphing) setLit(g, 0, g.W); [...nodes.children].forEach(c => { c.style.r = '0px'; }); }
+      return;                                        // (a resize here, the keyboard rising, once drew the dots back into the search)
+    }
     tr.setAttribute('x1', g.mids[0]); tr.setAttribute('x2', g.mids[n]); tr.setAttribute('y1', y); tr.setAttribute('y2', y);
     lit.setAttribute('x1', g.mids[0]); lit.setAttribute('x2', x.toFixed(1)); lit.setAttribute('y1', y); lit.setAttribute('y2', y);
     if (nodes.children.length !== g.mids.length) nodes.innerHTML = g.mids.map(() => '<circle r="2.1"/>').join('');
@@ -257,14 +260,14 @@
     const [A, B] = on ? [read, find] : [find, read];
     if (on) [...nodes.children].forEach(c => { c.style.r = '0px'; });     // (the dots shrink first, by themselves)
     cancelAnimationFrame(laneAnim);
-    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(p); return; }
+    if (reduced()) { setLit(g, B[0], B[1]); if (!on) dialShow(dialPos ?? p); return; }
     laneMorphing = true;
     const t0 = performance.now(), T = 220, ease = t => 1 - Math.pow(1 - t, 3), mine = ++laneToken;
     const finish = () => {
       if (mine !== laneToken || !laneMorphing) return;
       cancelAnimationFrame(laneAnim); laneMorphing = false;
       setLit(g, B[0], B[1]);
-      if (!on) dialShow(p);                          // (back on the tabs: the dot where one reads grows again)
+      if (!on) dialShow(dialPos ?? p);               // (back on the tabs: the dot where one reads grows again)
     };
     const step = now => {
       if (mine !== laneToken) return;
@@ -714,7 +717,18 @@
       settle = { h: best, t: setTimeout(rest, reduced() ? 0 : 470) };
     };
     head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
-    window.addEventListener('resize', () => { if (peekIsOpen() && !drag && !settle) peekSetH(peekAvail() * peekFrac); });
+    // the keyboard: the page's layout shrinks with it (interactive-widget=resizes-content), so the bar stays on top; where a
+  // browser ignores that (iOS), the visible part can still slide down the page while one types, and the bar follows it
+  if (window.visualViewport) {
+    const vv = window.visualViewport, bar = $('#bar');
+    const follow = () => {
+      const typing = document.activeElement && document.activeElement.matches('input, textarea');
+      const y = typing ? Math.max(0, vv.offsetTop) : 0;
+      bar.style.translate = y > 0.5 ? `0 ${y.toFixed(1)}px` : '';
+    };
+    vv.addEventListener('scroll', follow); vv.addEventListener('resize', follow); document.addEventListener('focusout', () => setTimeout(follow, 0));
+  }
+  window.addEventListener('resize', () => { if (peekIsOpen() && !drag && !settle) peekSetH(peekAvail() * peekFrac); });
   })();
   const peekCtx = () => ({ prefix: 'peek|', over: new Map(), plain: true, allOpen: true });
   // the paragraphs a sentence stands for
