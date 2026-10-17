@@ -70,10 +70,81 @@ gv.update({k: html_of(v) for k, v in (rg.get("variants") or {}).items()} if isin
 R["root_gist_words"] = {k: words(v) for k, v in gv.items()}
 for k, v in gv.items():
     w, f = words(v), formulas(v)
-    lim = {"student": 110, "specialist": 135}.get(k, 90)
+    many = len(getattr(L, "CONTRIBUTIONS", None) or []) > 2
+    lim = {"student": 110, "specialist": 150 if many else 135}.get(k, 110 if many else 90)
     if w > lim: issue("root gist/" + k, "%d words (limit %d)" % (w, lim))
     if f > (4 if k == "specialist" else 1): issue("root gist/" + k, "%d formulas (limit %d)" % (f, 4 if k == "specialist" else 1))
     if re.search(r"\(\d+\.\d+\)|§|appendix [A-Z]|section \d", plain(v), re.I): issue("root gist/" + k, "cites an equation, section or appendix")
+
+# ---- the paper's contributions, and the gist's three jobs (skill sections 2 and 3)
+C = getattr(L, "CONTRIBUTIONS", None) or []
+R["contributions"] = len(C)
+top = [c for c in S["root"].get("children", [])]
+def below(nid):
+    out = {nid}
+    for c in kids.get(nid, []): out |= below(c)
+    return out
+framing = {"abstract"}                       # where Context and Why it matters may stand: the introduction, the discussion
+if top: framing |= below(top[0]["id"])
+for t in top:
+    if re.search(r"discussion|conclusion|summary|outlook", t.get("title") or "", re.I): framing |= below(t["id"])
+claimed_text = " ".join([plain(S["meta"].get("abstractHtml") or "")] + [txt for nid, txt in order if nid in framing])
+norm = lambda t: re.sub(r"\s+", " ", t).strip().lower()
+ids_c = {c["id"] for c in C}
+if not C: issue("contributions", "no CONTRIBUTIONS: list the paper's own results first (skill section 2)")
+elif not 2 <= len(C) <= 6: issue("contributions", "%d items (2-6)" % len(C))
+for c in C:
+    if norm(c.get("quote", "")) not in norm(claimed_text): issue("contribution " + c["id"], "its quote is not in the abstract or the introduction")
+    for w in c.get("where", []):
+        if w not in kind: issue("contribution " + c["id"], "unknown node %s" % w)
+    if not c.get("where"): issue("contribution " + c["id"], "no 'where'")
+abstract_text = norm(plain(S["meta"].get("abstractHtml") or ""))
+in_abstract = {c["id"] for c in C if norm(c.get("quote", "")) in abstract_text}   # these every version of the gist states
+R["contributions_in_abstract"] = len(in_abstract)
+VAGUE = re.compile(r"\b(poses? (a |an )?(possible )?(issue|problem|question|puzzle)s?|has implications|have implications|sheds? light|is discussed|are discussed|is also studied|are also studied|interesting)\b", re.I)
+def list_items(h, level=1):                  # (opening tag, inner html) of each <li> at this depth of nested lists
+    out, depth, start = [], 0, None
+    for m in re.finditer(r"<(/?)(ul|ol|li)\b[^>]*>", h):
+        close, tag = m.group(1), m.group(2)
+        if tag in ("ul", "ol"):
+            depth += -1 if close else 1
+        elif depth == level and not close and start is None:
+            start = m
+        elif depth == level and close and start is not None:
+            out.append((start.group(0), h[start.end():m.start()])); start = None
+    return out
+claims_of = lambda h: set(" ".join(re.findall(r'data-claims="([^"]+)"', h)).split())
+covers_of = lambda h: set(" ".join(re.findall(r'data-covers="([^"]+)"', h)).split())
+R["gist_points"] = {}
+for k, v in gv.items():
+    parts = {}
+    for tag, inner in list_items(v):
+        lab = re.search(r"<b>(.*?)</b>", inner)
+        if lab: parts[re.sub(r"\s+", " ", lab.group(1)).strip().lower()] = (tag, inner)
+    if set(parts) != {"context", "result", "why it matters"}:
+        issue("root gist/" + k, "needs exactly the bullets Context, Result, Why it matters"); continue
+    points = list_items(parts["result"][1])
+    R["gist_points"][k] = len(points)
+    if not points: issue("root gist/" + k, "Result is not a list of points, one per contribution")
+    got = set()
+    for tag, inner in points:
+        c = claims_of(tag + inner)
+        if len(c) != 1: issue("root gist/" + k, "a point claims %s; each point states exactly one contribution" % (", ".join(sorted(c)) or "nothing"))
+        if c & got: issue("root gist/" + k, "%s has two points" % ", ".join(sorted(c & got)))
+        got |= c
+        n = words(inner); lim_p = 40 if k == "specialist" else 30
+        if n > lim_p: issue("root gist/" + k, "a point of %d words (about 25, at most %d): %s…" % (n, lim_p, plain(inner)[:50]))
+        for m in VAGUE.finditer(plain(inner)): issue("root gist/" + k, "a point says only that something was found: '%s'" % m.group(0))
+    need = in_abstract
+    if need - got: issue("root gist/" + k, "Result does not state %s" % ", ".join(sorted(need - got)))
+    if got - ids_c: issue("root gist/" + k, "Result claims unknown %s" % ", ".join(sorted(got - ids_c)))
+    for lab in ("context", "why it matters"):
+        inner = parts[lab][1]
+        if claims_of(inner): issue("root gist/" + k, "%s states a result (%s): it belongs under Result" % (lab.capitalize(), ", ".join(sorted(claims_of(inner)))))
+        cv = covers_of(inner)
+        if not cv: issue("root gist/" + k, "%s is not grounded (data-covers)" % lab.capitalize())
+        elif cv - framing: issue("root gist/" + k, "%s is grounded outside the introduction and discussion: %s" % (lab.capitalize(), ", ".join(sorted(cv - framing))))
+R["gist_claims"] = {k: len(set(" ".join(re.findall(r'data-claims="([^"]+)"', v)).split())) for k, v in gv.items()}
 
 # ---- root brief
 rb = html_of(L.ROOT_BRIEF)
@@ -88,6 +159,9 @@ for k, p in enumerate(paras, 1):          # (one relation per paragraph)
 for s in long_sentences(rb): issue("root brief", "long sentence (%d words): %s…" % (len(s.split()), s[:70]))
 if re.search(r"\bthe (discussion|paper|section) (summari[sz]es|concludes)", plain(rb), re.I): issue("root brief", "meta sentence")
 
+rb_cov = set(" ".join(re.findall(r'data-covers="([^"]+)"', rb)).split())
+for c in C:
+    if not set(c.get("where", [])) & rb_cov: issue("root brief", "does not ground contribution %s in any of its paragraphs" % c["id"])
 # ---- grounding: a span should cover paragraphs, not whole sections
 coarse = 0
 for h in [rb] + [html_of(v) for v in L.BRIEF.values()]:

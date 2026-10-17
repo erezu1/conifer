@@ -27,23 +27,66 @@ AUDIENCES = [
 
 ROOT_STATUS = "ai-draft"
 
+# The paper's own results (skill section 2), from the abstract and the introduction's list (section-1-p4 to p7).
+# The tension with a BPS small black hole (abstract's last sentence, section-1-p6 "Thus, we argue") is drawn from the
+# decoupling results, so it is listed as why they matter, not as a contribution.
+CONTRIBUTIONS = [
+    {"id": "c-eft", "headline": True,
+     "claim": r"Near the heterotic index the Atick–Witten effective theory is replaced by a Higgsed $SU(2)_L\times U(1)_R$ supergravity in which the winding mode is the W boson, and the Hagedorn instability appears as Ambjørn–Olesen condensation of that W boson in the magnetic field set by the rotation.",
+     "quote": "a new high-temperature description emerges near the index",
+     "where": ["subsec-worldsheet-p5", "subsec-mag_spectrum-p4", "subsec-electroweak-p2"]},
+    {"id": "c-wstar", "headline": True,
+     "claim": r"Slightly off the index the W boson forms a self-gravitating condensate, the “W star”, similar to the Horowitz–Polchinski string star and very likely on the same family; it decouples at the index, as the weakly curved (rotating) black hole does.",
+     "quote": "a string star solution is found, similar to the Horowitz-Polchinski solution, but decouples at the index",
+     "where": ["sec-W_star_prop-p3", "sec-W_star_prop-p4", "subsec-bh_w_trans-p7"]},
+    {"id": "c-charged",
+     "claim": r"Charged W stars appear to interpolate between charged rotating black holes and the free string phase and approach the microscopic index, unlike a naive continuation of the charged black hole; exactly at the index both the charged black hole and the charged W star decouple.",
+     "quote": "the string star appears to interpolate between charged black holes and the free string phase",
+     "where": ["subsec-charged_w_stars-p3", "subsec-charged_w_stars-p6", "subsec-charged_w_stars-p7"]},
+    {"id": "c-typeii",
+     "claim": r"For type II a tower of winding strings becomes light near the index, opening a dimension in the T-dual picture, and the paper argues that string stars with properties similar to the W star exist there and likewise decouple at the index.",
+     "quote": "a tower of winding strings becomes light near the index",
+     "where": ["subsec-ii_worldsheet-p2", "subsec-ii_eft_etc-p4", "subsec-ii_charged-p3"]},
+    {"id": "c-bosonic",
+     "claim": r"For bosonic strings the black hole free energy has a kink in the imaginary rotation that the string star's lacks: a possible issue for the black hole/string transition, which the paper leaves open.",
+     "quote": "explain a possible issue with the black hole/string transition",
+     "where": ["sec-bosonic-p2", "sec-bosonic-p3"]},
+]
+
+# Every version states the four contributions the abstract claims (c-eft, c-wstar, c-typeii, c-charged); c-bosonic,
+# claimed only in the introduction, is in the summary and not in the gist (skill section 3).
 ROOT_GIST = {
     "html": r"""<ul class="gist-list">
-<li><b>Context</b> Does a string-scale black hole become a self-gravitating “string star”? The supersymmetric index, at imaginary angular velocity $\beta\Omega=2\pi i$, gives a sharper test.</li>
-<li><b>Result</b> Near the heterotic index the Hagedorn instability is Ambjørn–Olesen condensation of a W boson in a magnetic field, and string stars become “W stars”. Charged W stars approach the microscopic entropy $S_\text{micro}$ near the BPS bound, yet W stars and black holes all decouple at the index.</li>
-<li><b>Why it matters</b> If the phases connect, only BPS strings remain, against a proposed small black hole.</li>
+<li><b>Context</b> <span data-covers="section-1-p1 section-1-p2">Do string-scale black holes become self-gravitating “string stars”? The exact supersymmetric index $\beta\Omega=2\pi i$ could tell.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-eft"><span data-covers="subsec-worldsheet-p5 subsec-worldsheet-p7">Near the heterotic index a Higgsed $SU(2)_L\times U(1)_R$ supergravity replaces Atick–Witten;</span> <span data-covers="subsec-mag_spectrum-p4 subsec-electroweak-p2">the Hagedorn instability is its winding W boson's Ambjørn–Olesen condensation in a magnetic field.</span></li>
+  <li data-claims="c-wstar"><span data-covers="sec-W_star_prop-p3">W-boson condensates, “W stars”, resemble Horowitz–Polchinski stars</span> <span data-covers="sec-W_star_prop-p4 subsec-bh_w_trans-p7">but decouple at the index, growing until no reliable regime remains.</span></li>
+  <li data-claims="c-typeii"><span data-covers="subsec-ii_worldsheet-p2 subsec-ii_eft_etc-p2">Type II's light winding tower opens a T-dual dimension;</span> <span data-covers="subsec-ii_eft_etc-p4 subsec-ii_charged-p3">its similar string star also decouples.</span></li>
+  <li data-claims="c-charged"><span data-covers="subsec-charged_w_stars-p2 subsec-charged_w_stars-p5">Charged string stars appear to link charged black holes to free strings;</span> <span data-covers="subsec-charged_w_stars-p6">at the index both decouple.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="section-1-p6 sec-discussion-p3">This suggests tension between a smooth black hole/string transition and a proposed BPS small black hole.</span></li>
 </ul>""",
     "status": "ai-draft",
     "variants": {
         "specialist": {"html": r"""<ul class="gist-list">
-<li><b>Context</b> Near the half-BPS index $\beta\Omega=2\pi i$ the Atick–Witten EFT fails; for heterotic strings a Higgsed $SU(2)_L\times U(1)_R$ half-maximal supergravity takes over, written here to all orders in the fields at two derivatives.</li>
-<li><b>Result</b> The winding mode is the W boson, tachyonic below $R_H(\nu)=1+\sqrt{\nu/2}+\dots$ by Ambjørn–Olesen condensation in the Melvin field. W stars exist in three to five spatial dimensions with $I\sim m^{6-d}/(G_N\nu\log(\nu/m^2))$, Horowitz–Polchinski up to the logarithm, and decouple at the index like Myers–Perry black holes. Charged, $S_\nu\approx2\pi\sqrt{M^2-Q_L^2}$ nears $S_\text{micro}$ close to BPS, but its reliable window closes at the index. For type II the zero-twist and large-mass limits do not commute, removing an apparent zero index.</li>
-<li><b>Why it matters</b> If W stars and black holes connect, only BPS strings survive, against the small black hole saddles of Chowdhury–Sen–Shanmugapriya–Virmani and Chen–Murthy–Turiaci.</li>
+<li><b>Context</b> <span data-covers="section-1-p1 section-1-p2">Do string-scale black holes become Horowitz–Polchinski stars? The two are never reliable together; the half-BPS index $\beta\Omega=2\pi i$ is known exactly.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-eft"><span data-covers="subsec-worldsheet-p5 subsec-worldsheet-p7">Near the heterotic index Atick–Witten fails and a Higgsed $SU(2)_L\times U(1)_R$ supergravity takes over, its W boson the winding mode;</span> <span data-covers="subsec-mag_spectrum-p4 subsec-electroweak-p2 subsec-electroweak-p3">in the Melvin field its mass $m^2=(R-1/R)^2-2\nu/R^2$ turns tachyonic near $R=1$: Ambjørn–Olesen condensation.</span></li>
+  <li data-claims="c-wstar"><span data-covers="sec-W_star_prop-p1 sec-W_star_prop-p3">W stars exist for $2<d<6$ with $I\sim m^{6-d}/(G_N\nu\log(\nu/m^2))$, Horowitz–Polchinski up to the logarithm,</span> <span data-covers="subsec-bh_w_trans-p7">and, like weakly curved black holes, decouple at the index.</span></li>
+  <li data-claims="c-typeii"><span data-covers="subsec-ii_worldsheet-p2 subsec-ii_eft_etc-p2">For type II a light winding tower opens a T-dual dimension</span> <span data-covers="subsec-ii_eft_etc-p4 subsec-ii_charged-p3">with a similar string star that also decouples.</span></li>
+  <li data-claims="c-charged"><span data-covers="subsec-charged_w_stars-p1 subsec-charged_w_stars-p3">Charged W stars have $S_\nu\approx2\pi\sqrt{M^2-Q_L^2}$, reaching $S_\text{micro}$ near BPS;</span> <span data-covers="subsec-charged_w_stars-p2 subsec-charged_w_stars-p5">they appear to interpolate between charged black holes and free strings,</span> <span data-covers="subsec-charged_w_stars-p6">and, like charged black holes, decouple at the index.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="section-1-p6 sec-discussion-p3">This suggests a tension between a smooth black hole/string transition and the BPS small black hole of Chowdhury–Sen–Shanmugapriya–Virmani and Chen–Murthy–Turiaci.</span></li>
 </ul>""", "status": "ai-draft"},
         "student": {"html": r"""<ul class="gist-list">
-<li><b>Context</b> Very heavy states in string theory are black holes or long excited strings. An old idea says a shrinking black hole becomes a ball of string held by its own gravity, a “string star”. The supersymmetric index, a temperature-independent count of special states, could test this.</li>
-<li><b>Result</b> Near the index, a string wrapped around the imaginary-time circle acts like a W boson in a magnetic field. Its condensate, a “W star”, and the black hole both “decouple”: they grow without bound, so their contribution to the count falls to zero.</li>
-<li><b>Why it matters</b> If the two are connected, only free strings remain, against a proposed small black hole.</li>
+<li><b>Context</b> <span data-covers="section-1-p1 section-1-p2">Do very hot black holes become self-gravitating “string stars”? The exact supersymmetric index could tell.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-eft"><span data-covers="subsec-worldsheet-p5 subsec-worldsheet-p7">Near the heterotic index Atick–Witten fails: the wound string becomes the W boson of a Higgsed $SU(2)$ supergravity,</span> <span data-covers="subsec-mag_spectrum-p4 subsec-electroweak-p2">condensing in a magnetic field (the Hagedorn instability).</span></li>
+  <li data-claims="c-wstar"><span data-covers="sec-W_star_prop-p3">W-boson condensates, “W stars”, resemble Horowitz–Polchinski string stars</span> <span data-covers="sec-W_star_prop-p4 subsec-bh_w_trans-p7">but decouple at the index, growing arbitrarily large.</span></li>
+  <li data-claims="c-typeii"><span data-covers="subsec-ii_worldsheet-p2 subsec-ii_eft_etc-p2">Type II's light wound strings open a T-dual dimension;</span> <span data-covers="subsec-ii_eft_etc-p4 subsec-ii_charged-p3">its similar string star also decouples.</span></li>
+  <li data-claims="c-charged"><span data-covers="subsec-charged_w_stars-p2 subsec-charged_w_stars-p5">Charged stars appear to interpolate between charged black holes and free strings;</span> <span data-covers="subsec-charged_w_stars-p6">at the index both decouple.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="section-1-p6 sec-discussion-p3">This suggests tension between a smooth black hole–string transition and a stringy two-charge BPS black hole.</span></li>
 </ul>""", "status": "ai-draft"},
     },
 }
@@ -53,7 +96,7 @@ ROOT_BRIEF = {
 <p><span data-covers="subsec-worldsheet-p2 subsec-worldsheet-p3">The usual string star's effective theory fails at rotations of order one, because the twist opens string-scale gaps.</span> <span data-covers="subsec-worldsheet-p4 subsec-worldsheet-p5">Near the heterotic index the lightest winding state is instead a vector, massless at the self-dual radius: the W boson of an enhanced $SU(2)_L\times U(1)_R$, Higgsed by the circle's radius $R$.</span> <span data-covers="subsec-su2_sugra-p2 subsec-su2_sugra-p3">The paper writes this supergravity to all orders in the fields at two derivatives.</span> <span data-covers="subsec-setup-p3 subsec-mag_spectrum-p3">Off the index the twist $\nu$ acts as a magnetic field, which quantises the W's motion in the rotation plane into Landau levels spaced by order $\nu$.</span> <span data-covers="subsec-mag_spectrum-p4 subsec-worldsheet-p6">Through its spin one W mode drops below them, to $m^2=(R-1/R)^2-2\nu/R^2$, so it is tachyonic below $R_H(\nu)=1+\sqrt{\nu/2}+\dots$</span> <span data-covers="subsec-electroweak-p2">This Ambjørn–Olesen instability of electroweak W bosons is here the string's Hagedorn instability.</span></p>
 <p><span data-covers="sec-w_stars-p3">Exactly at the index the effective action is positive, so no localised condensate exists.</span> <span data-covers="subsec-low_e_eft-p4 subsec-lower_E_EFT-p4">Slightly away, gravity and magnetic forces bind the W condensate into a “W star” in three to five spatial dimensions.</span> <span data-covers="sec-W_star_prop-p1">Its $S_\nu$ (the entropy at $\nu=1$, the exponent of the index at $\nu=0$) obeys $S_\nu=2\pi l_sE$: Hagedorn growth beside an index that has no Hagedorn temperature.</span> <span data-covers="sec-W_star_prop-p3">It scales like the Horowitz–Polchinski string star up to a logarithm, suggesting one family of string stars.</span> <span data-covers="sec-W_star_prop-p4 sec-W_star_prop-p5">Near the index it does not dissolve but decouples: at fixed temperature its size and action diverge, and at fixed energy its transition to free strings recedes to infinite energy.</span> <span data-covers="subsec-bh_w_trans-p4 subsec-bh_w_trans-p5">Rotating black holes decouple too, because their horizons diverge.</span></p>
 <p><span data-covers="subsec-charged_setup-p1 subsec-charged_setup-p2 subsec-charged_setup-p4">Momentum and winding charges make the index non-trivial, with free-string entropy $S_\text{micro}=4\pi\sqrt{|Q_nQ_w|}$, and a classical duality adds them to any neutral saddle, exactly in $\alpha'$.</span> <span data-covers="subsec-charged_bh-p6 subsec-charged_bh-p7">Charged black holes reach the BPS bound only through string-scale curvature, and the reliable ones recede from it as the index nears.</span> <span data-covers="subsec-charged_w_stars-p1 subsec-charged_w_stars-p3">Charged W stars do better: near the heterotic index $S_\nu\approx2\pi\sqrt{M^2-Q_L^2}$, which approaches $S_\text{micro}$ close to the BPS bound.</span> <span data-covers="subsec-charged_w_stars-p5 subsec-charged_w_stars-p6">But only within a temperature window, between black-hole and free-string transitions, that closes at the index, so they decouple too.</span> <span data-covers="subsec-charged_w_stars-p7">At the free-string transition their size matches a typical BPS string's, suggesting a smooth passage to BPS strings.</span></p>
-<p><span data-covers="subsec-ii_worldsheet-p1 subsec-ii_worldsheet-p2 subsec-ii_eft_etc-p2">For type II strings the winding mass vanishes only at zero radius, so near the index a tower of windings is light. T-dual, they are momentum modes in one more dimension, where a similar string star is argued to exist.</span> <span data-covers="subsec-ii_charged-p1 subsec-ii_charged-p2">Its charged entropy carries a factor $\sqrt\nu$ and seems to vanish at the index. That zero is an artifact of the order of limits: heavy strings at fixed twist are far from BPS, but those lighter than about $1/\nu$ are nearly BPS.</span> <span data-covers="sec-bosonic-p2 sec-bosonic-p3">For bosonic strings the black hole free energy has a kink in the rotation that the string star's lacks, an open tension.</span></p>
+<p><span data-covers="subsec-ii_worldsheet-p2 subsec-ii_eft_etc-p2 subsec-ii_eft_etc-p4">For type II strings the winding mass vanishes only at zero radius, so near the index a tower of windings is light. T-dual, they are momentum modes in one more dimension, where a similar string star is argued to exist.</span> <span data-covers="subsec-ii_charged-p1 subsec-ii_charged-p2">Its charged entropy carries a factor $\sqrt\nu$ and seems to vanish at the index. That zero is an artifact of the order of limits: heavy strings at fixed twist are far from BPS, but those lighter than about $1/\nu$ are nearly BPS.</span> <span data-covers="sec-bosonic-p2 sec-bosonic-p3">For bosonic strings the black hole free energy has a kink in the rotation that the string star's lacks, an open tension.</span></p>
 <p><span data-covers="subsec-lower_E_EFT-p1 sec-discussion-p5 subsec-ii_eft_etc-p4">The W star is built only far below the Landau spacing, and for type II its couplings are assumed, not derived.</span> <span data-covers="subsec-bh_w_trans-p6">The black hole comparison extrapolates both saddles to the string scale, where their divergences carry different powers of $\nu$.</span> <span data-covers="subsec-charged_w_stars-p8">Above all, the paper does not show that W stars and black holes are connected; if they are not, a small black hole could still contribute.</span></p>""",
     "status": "ai-draft",
 }

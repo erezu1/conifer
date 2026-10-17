@@ -30,7 +30,14 @@ for c in cones:
     shutil.copyfile(c["page"], DOCS / c["key"] / "index.html")
     m = d["meta"]
     gist = re.sub(r"<[^>]+>", " ", (d["root"].get("gist") or {}).get("html", ""))
-    gist = re.sub(r"\$[^$]*\$", "", gist)                       # (the index shows no formulas)
+    def tex_text(m):                                                 # (the index draws no formulas: a simple one is kept
+        t = m.group(1)                                               #  as plain text, AdS_3\times S^3 as AdS3×S3)
+        for k, v in ((r"\times", "×"), (r"\propto", "∝"), (r"\sim", "∼"), (r"\to", "→"), (r"\beta", "β"), (r"\Omega", "Ω"),
+                     (r"\pi", "π"), (r"\nu", "ν"), (r"\mathrm", ""), (r"\hat", ""), (r"\,", " ")):
+            t = t.replace(k, v)
+        t = re.sub(r"\\[A-Za-z]+", "", t)
+        return re.sub(r"[{}^_ ]", "", t)
+    gist = re.sub(r"\$([^$]*)\$", tex_text, gist)
     gist = re.sub(r"\s+", " ", gist).strip()
     first = re.split(r"(?<=[.!?])\s+(?=Result)", gist)[0].replace("Context ", "", 1)
     rows.append((c["key"], m["title"], ", ".join(m.get("authors", [])), m.get("kicker") or "", first))

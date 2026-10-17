@@ -203,8 +203,13 @@ dfn { font-style: italic; }
 .gist-card { border: 1px solid var(--rule); border-radius: 14px; padding: 1.1rem 1.25rem 1rem; margin-top: .4rem; }
 .card-label { font: 600 .78rem var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: .6rem; }
 .card-label .muted { text-transform: none; letter-spacing: 0; font-weight: 400; }
-.gist-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .65rem; }
+.gist-list, .page .gist-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .65rem; }   /* (the page's lists are indented; the gist is not) */
 .gist-list b { font: 600 .8rem var(--sans); letter-spacing: .07em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .12rem; }
+/* the Result's points, one per result: a small deep-blue dot, the tree's and the dial's own, before each */
+#paper .gist-list li, .gist-list li { text-align: left; hyphens: manual; -webkit-hyphens: manual; }   /* (short lines justified open wide gaps) */
+.gist-list ul { list-style: none; margin: .1rem 0 0; padding: 0; display: grid; gap: .35rem; }
+.gist-list ul > li { position: relative; padding-left: 1.05rem; }
+.gist-list ul > li::before { content: ""; position: absolute; left: .2rem; top: .62em; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 .gist-eq { margin: .9rem 0 .2rem; }
 .gist-fig { margin: .3rem 0 .4rem; }
 .gist-fig figure { margin: .4rem 0 0; }
@@ -243,7 +248,9 @@ dfn { font-style: italic; }
    painted only near the screen (content-visibility), each remembering its real size once seen; a fold then opens in
    frames of a few milliseconds. Headings and fold heads are not skipped, so the contents, the bar's title and the
    address hash see every section. */
-#paper p, #paper li, #paper .display, #paper figure, #paper .leaf { content-visibility: auto; contain-intrinsic-size: auto 7rem; }
+#paper p, #paper :is(.refs, .fnlist) > li, #paper .display, #paper figure, #paper .leaf { content-visibility: auto; contain-intrinsic-size: auto 7rem; }
+/* (not an item of the paper's own lists: content-visibility clips what is painted outside the box, and a list's number is
+   painted in the margin, so an enumerate lost its numbers; the references and the notes, which are many, draw none) */
 #paper .leaf { contain-intrinsic-size: auto 14rem; }
 /* (a skipped block also clips its painting at its edge: the halo of a place one has just jumped to, a search's box
    round a formula and a selection would be cut; such a block, and the blocks round it, are painted whole) */

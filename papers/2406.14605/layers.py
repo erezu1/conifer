@@ -29,21 +29,39 @@ ROOT_STATUS = "ai-draft"
 
 ROOT_GIST = {
     "html": r"""<ul class="gist-list">
-<li><b>Context</b> With one unit of NS5-brane flux, strings on $AdS_3\times S^3\times T^4$ match the free symmetric orbifold of $N$ tori, yet were suggested to describe an ensemble over $N$.</li>
-<li><b>Result</b> Orbifold correlators are sums over covering surfaces, the worldsheets. Summed over $N$ with weight $p^N$, these exponentiate into connected covers: an exact all-genus string expansion, $g_s^{-2}\propto p$, unlike at fixed $N$.</li>
-<li><b>Why it matters</b> It shows how strings compute a CFT ensemble. The orbifold also sees strong string coupling, and the CFT's extra torus is a decoupled Chern–Simons sector.</li>
+<li><b>Context</b> <span data-covers="sec-intro-p1 sec-intro-p4">With one NS5-brane, strings on $AdS_3\times S^3\times T^4$ were suggested to match an ensemble of free $T^{4N}/S_N$ orbifolds.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-genus"><span data-covers="sec-grand-p4 sec-grand-p6">Summed over $N$ with weight $p^N$, orbifold generating functions exponentiate into connected covers: an exact genus expansion, $g_s^{-2}\propto p$.</span></li>
+  <li data-claims="c-breakdown"><span data-covers="section-4.1-p1 section-4.1-p2">The orbifold sees NS-NS strong coupling even at large $N$: its $1/N$ expansion fails near torus volume $N$.</span></li>
+  <li data-claims="c-rr"><span data-covers="section-4.1-p4">It is argued to lack a weakly coupled R-R description.</span></li>
+  <li data-claims="c-decoupled"><span data-covers="sec-q5_1_dec_sector-p9 section-5.3-p3">An extra torus, at all fluxes, is decoupled from perturbative string theory.</span></li>
+  <li data-claims="c-jjbar"><span data-covers="section-5.2-p8 section-5.2-p10">Its current–current mixing with the orbifold, towards other fluxes, is exact;</span> <span data-covers="section-5.2-p11">the blow-up is leading-order only.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="sec-intro-p4">This supports strings being dual to an ensemble of CFTs.</span></li>
 </ul>""",
     "status": "ai-draft",
     "variants": {
         "specialist": {"html": r"""<ul class="gist-list">
-<li><b>Context</b> For $Q_5=1$ the NS-NS string matches $\mathrm{Sym}_N(T^4)\times\hat T^4$, yet its worldsheet computes an ensemble over $Q_1$.</li>
-<li><b>Result</b> With $\sigma_w$ counting each permutation once, $\log Z_p[J]$, for $Z_p=\sum_N p^N Z_N$, is exactly a sum over connected covers weighted by $p^{N_c}/N_c$. Rescaling $\sigma_w$ by $p^{-w/2}$ gives an exact genus expansion, $g_s^{-2}\propto p$, extending Eberhardt's partition-function result. Fixed $N$ with $g_s^2=1/N$ fails beyond leading order, and Kim–Porrati's Legendre transform is only leading-order, here and, conjecturally, at higher $Q_5$.</li>
-<li><b>Why it matters</b> Genus-$g$ terms carry $(V/N)^g$, so the expansion fails at large volume, where the R-R dual is never weakly coupled. For all $Q_5$ the R-R currents seem to lack vertex operators. The $J\bar J$ deformations to other coprime $(Q_1,Q_5)$ are exact, with the free orbifold at vanishing R-R scalars, unlike Larsen–Martinec.</li>
+<li><b>Context</b> <span data-covers="sec-intro-p4">The $Q_5=1$ string matches $\mathrm{Sym}_N(T^4)\times\hat T^4$, suggested to be summed grand-canonically over $Q_1$.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-genus"><span data-covers="sec-genus_exp-p2 sec-grand-p4 sec-grand-p6">With $\sigma_w$ counting each permutation once, $\log Z_p[J]$ exactly sums connected covers weighted $p^{N_c}/N_c$; rescaling $\sigma_w$ by $p^{-w/2}$ gives $g_s^{-2}\propto p$ to all genera.</span></li>
+  <li data-claims="c-breakdown"><span data-covers="section-4.1-p2">NS-NS strong coupling arises in the orbifold even at large $N$: for $V\gg1$ genus-$g$ terms carry $(V/N)^g$, so the expansion fails at $V\sim N$.</span></li>
+  <li data-claims="c-rr"><span data-covers="section-4.1-p3 section-4.1-p4">For $V\gg N$ the S-dual R-R string only looks weakly coupled: $G_N^{(10)}/R^8=V/N$ is large, the paper argues.</span></li>
+  <li data-claims="c-decoupled"><span data-covers="sec-q5_1_dec_sector-p8 sec-q5_1_dec_sector-p9 section-5.3-p3">$\hat T^4$ decouples from perturbative string theory for all $Q_5$: a topological Chern–Simons sector whose currents seem to lack a worldsheet vertex.</span></li>
+  <li data-claims="c-jjbar"><span data-covers="section-5.2-p8 section-5.2-p10">The $J\bar J$ deformations mixing $\hat T^4$ with the orbifold towards other coprime $(Q_1,Q_5)$ are found exactly;</span> <span data-covers="section-5.2-p11">the coset's blow-up is known only to leading order.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="sec-intro-p4">This backs the suggestion of an ensemble: only the grand-canonical $1/N$ expansion maps directly to strings.</span></li>
 </ul>""", "status": "ai-draft"},
         "student": {"html": r"""<ul class="gist-list">
-<li><b>Context</b> Strings on $AdS_3\times S^3\times T^4$ with one unit of NS5-brane flux match $N$ copies of a free 2d theory on a four-torus, with their permutations gauged. Yet they may describe a weighted sum over $N$.</li>
-<li><b>Result</b> The theory's correlators sum over ways of gluing copies into surfaces, the string worldsheets. Summed over $N$, the gluings split into connected pieces, giving exact sums over worldsheets of every genus (number of handles), with coupling $g_s^{-2}\propto p$ for weight $p$ per copy.</li>
-<li><b>Why it matters</b> This shows how strings can be dual to an ensemble of CFTs. It also shows where strings become strongly coupled, and why an extra torus is invisible.</li>
+<li><b>Context</b> <span data-covers="sec-intro-p1 sec-intro-p4">With one NS5-brane, strings on $AdS_3\times S^3\times T^4$ were suggested to match $N$ permuted free tori, summed over $N$.</span></li>
+<li><b>Result</b><ul>
+  <li data-claims="c-genus"><span data-covers="sec-grand-p4 sec-grand-p6">Summed over $N$ with weight $p$ per copy, the generating function exponentiates into connected gluings, all-genus worldsheets with $g_s^{-2}\propto p$.</span></li>
+  <li data-claims="c-breakdown"><span data-covers="section-4.1-p2">The fixed-$N$ $1/N$ expansion fails, even at large $N$, near torus volume $N$, where strings couple strongly.</span></li>
+  <li data-claims="c-rr"><span data-covers="section-4.1-p4">S-dual strings with Ramond–Ramond flux are argued never weakly coupled.</span></li>
+  <li data-claims="c-decoupled"><span data-covers="sec-q5_1_dec_sector-p9 section-5.3-p3">An extra torus, at every flux, decouples from perturbative string theory.</span></li>
+  <li data-claims="c-jjbar"><span data-covers="section-5.2-p8 section-5.2-p10">Exact current–current deformations mix it with the copies towards other fluxes,</span> <span data-covers="section-5.2-p11">besides an approximate blow-up.</span></li>
+</ul></li>
+<li><b>Why it matters</b> <span data-covers="sec-intro-p4">This supports strings describing an ensemble: a weighted sum of CFTs.</span></li>
 </ul>""", "status": "ai-draft"},
     },
 }
@@ -71,4 +89,31 @@ FLAGS = [
     {"node": "section-5.2-p7", "note": "'For the canonical background (5.12) the two are related by' presumably means the canonical background (5.17), with $\\tau,\\tilde\\tau$ related by the attractor equation (5.12)."},
     {"node": "fig-N30_moduli", "note": "The caption defines $\\tau_\\text{RR}=\\chi+i/g_{10}$ in R-R-frame variables, section 5.2 defines $\\tau_\\text{RR}=-1/\\tau$ from the NS-NS-frame $\\tau$. Consistent. Checked the arc endpoints in the caption ((15,2): 1/2 and 7/15; (10,3): 1/3 and 3/10; (6,5): 1/5 and 1/6) against $\\pm b/Q_5$, $\\pm a/Q_1$ with $aQ_5-bQ_1=1$: they agree for $(a,b)=(-7,-1),(-3,-1),(-1,-1)$. The figure is not in KEY because it does not carry the headline result; the author may prefer to add it."},
     {"node": "sec-intro-p5", "note": "The abstract says the strong-coupling limit of the NS-NS string 'arises (even at large N)' in the orbifold; section 4.1 shows this as a breakdown of the $1/N$ expansion at $V\\sim N$. The layers phrase it as a breakdown, not as the orbifold producing a new description."},
+]
+
+# The paper's own results (skill section 2), from the abstract and the introduction; "where" names the body
+# paragraphs that establish each. The introduction calls (3.12) "the main result", so only c-genus is a headline.
+# Section 4.2 (breakdown at high energies) and the Q5>1 ensemble of section 3.5 are not claimed in the abstract or
+# the introduction's list, so they are not contributions; the summary still reports them.
+CONTRIBUTIONS = [
+    {"id": "c-genus", "headline": True,
+     "claim": r"In the grand-canonical ensemble over $N$, the free symmetric orbifold's correlation functions exponentiate into connected covering surfaces and give an exact all-genus string expansion, with $g_s^{-2}\propto p$.",
+     "quote": "We show how the string genus expansion emerges to all orders",
+     "where": ["sec-grand-p4", "sec-grand-p6"]},
+    {"id": "c-breakdown",
+     "claim": r"Although the orbifold is free for any torus volume $V$, its $1/N$ expansion breaks down once $V$ reaches $N$, where the NS-NS string becomes strongly coupled.",
+     "quote": "the strong coupling limit of the NS-NS string theory arises",
+     "where": ["section-4.1-p1", "section-4.1-p2"]},
+    {"id": "c-rr",
+     "claim": r"The paper argues that the S-dual R-R description of this limit is never weakly coupled: its AdS radius is below the string scale and Newton's constant in AdS units is large.",
+     "quote": "argue why this limit does not have a weakly coupled R-R description",
+     "where": ["section-4.1-p3", "section-4.1-p4"]},
+    {"id": "c-decoupled",
+     "claim": r"The CFT's extra $\hat T^4$, present for all $Q_5$, is decoupled from perturbative string theory: in the bulk it is a topological Chern-Simons sector, and its currents seem to have no worldsheet vertex operator.",
+     "quote": "factor that is decoupled from perturbative string theory",
+     "where": ["sec-q5_1_dec_sector-p8", "sec-q5_1_dec_sector-p9", "section-5.3-p3"]},
+    {"id": "c-jjbar",
+     "claim": r"The exactly marginal deformations relating the free orbifold to backgrounds with other coprime $(Q_1,Q_5)$ include $J\bar J$ deformations mixing $\hat T^4$ with the orbifold, which the paper finds exactly (the blow-up part only at leading order).",
+     "quote": "We discuss the exactly marginal deformations that relate the different values of",
+     "where": ["section-5.2-p8", "section-5.2-p10"]},
 ]
