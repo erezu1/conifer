@@ -84,6 +84,7 @@ for nid, v in getattr(L, "VARIANTS", {}).items():
             problems.append("variants for missing %s of %s" % (key, nid))
             continue
         target[key]["variants"] = {k: rendition(t) for k, t in variants.items()}
+_placed = {}                                     # notes after one node keep the order of the list
 for bg in getattr(L, "BACKGROUND", []):
     after = byid.get(bg["after"])
     if not after:
@@ -91,7 +92,8 @@ for bg in getattr(L, "BACKGROUND", []):
         continue
     parent = next(p for p in byid.values() if after in p.get("children", []))
     node = {"id": bg["id"], "kind": "background", "title": bg["title"], "audience": bg["audience"], "fold": True, "body": bg["body"]}
-    parent["children"].insert(parent["children"].index(after) + 1, node)
+    parent["children"].insert(parent["children"].index(after) + 1 + _placed.get(bg["after"], 0), node)
+    _placed[bg["after"]] = _placed.get(bg["after"], 0) + 1
     byid[node["id"]] = node
 
 # every grounding span must point at nodes that exist
@@ -110,6 +112,11 @@ for n in list(byid.values()) + [root]:
                     if cid not in byid:
                         problems.append("%s/%s of %s covers unknown node %s" % (key, k, n["id"], cid))
 
+# the key equation and figure must be anchors in the paper
+_bodies = "".join(n.get("body", "") for n in byid.values())
+for _k, _id in (getattr(L, "KEY", {}) or {}).items():
+    if 'id="%s"' % _id not in _bodies:
+        problems.append("KEY %s %s is not in the paper" % (_k, _id))
 # the abstract becomes the first node of the paper
 if S["meta"].get("abstractHtml"):
     root["children"].insert(0, {"id": "abstract", "kind": "abstract", "title": "Abstract", "body": S["meta"]["abstractHtml"]})

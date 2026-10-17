@@ -1036,13 +1036,14 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
       setTimeout(() => { titleFading = false; if (titleNext !== titleNow) setTitle(titleNext); }, 110);
     }, 90);
   }
+  const paperTitle = DOC.meta.titleHtml || esc(DOC.meta.title);      // with its formulas drawn, when the title has any
   function barTitle() {
-    if (state.level === GIST || state.level === BRIEF) { setTitle(esc(DOC.meta.title)); curSection = null; return; }   // (the tabs under it say which document)
+    if (state.level === GIST || state.level === BRIEF) { setTitle(paperTitle); curSection = null; return; }   // (the tabs under it say which document)
     const top = barH() + 12;
     let cur = null;
     $$('#paper .sec-h', $('#paper')).forEach(h => { if (h.getBoundingClientRect().top <= top) cur = h; });
     if (cur && cur.dataset.node && byId.has(cur.dataset.node)) { const n = byId.get(cur.dataset.node); setTitle((n.number ? esc(n.number) + ' ' : '') + titleOf(n)); curSection = n.id; }
-    else { setTitle(esc(DOC.meta.title)); curSection = null; }
+    else { setTitle(paperTitle); curSection = null; }
   }
   // the address follows the reader: the section being read, or the document (gist, summary)
   let hashTimer = null;

@@ -18,10 +18,13 @@ DOCS.mkdir(exist_ok=True)
 
 cones = [
     {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "tree.html", "data": HERE / "papers" / "2608.21511" / "tree.json"},
+    {"key": "2406.14605", "page": HERE / "papers" / "2406.14605" / "tree.html", "data": HERE / "papers" / "2406.14605" / "tree.json"},
     {"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json"},
 ]
 rows = []
 for c in cones:
+    if not c["data"].exists():                                  # a tree not built yet
+        continue
     d = json.loads(c["data"].read_text())
     (DOCS / c["key"]).mkdir(exist_ok=True)
     shutil.copyfile(c["page"], DOCS / c["key"] / "index.html")

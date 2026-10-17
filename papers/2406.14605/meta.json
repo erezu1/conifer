@@ -1,0 +1,15 @@
+{
+ "id": "2406.14605",
+ "version": "2",
+ "title": "On type II string theory on $AdS_3\\times S^3\\times T^4$ and symmetric orbifolds",
+ "authors": [
+  "Ofer Aharony",
+  "Erez Y. Urbach"
+ ],
+ "abstract": "We discuss in detail the $1+1$-dimensional superconformal field theory dual to type II string theory on $AdS_3\\times S^3\\times T^4$, emphasizing the string theoretic aspects of this duality. For one unit of NS-NS 5-brane flux ($Q_5=1$), this string theory has been suggested to be dual to a grand-canonical ensemble of $T^{4N}/S_N$ free symmetric orbifold CFTs. We show how the string genus expansion emerges to all orders for the free orbifold grand-canonical correlation functions. We also discuss how the strong coupling limit of the NS-NS string theory arises (even at large $N$) in the free orbifold description, and argue why this limit does not have a weakly coupled R-R description. The dual CFT includes (for all values of $Q_5$) an extra $T^4$ factor that is decoupled from perturbative string theory. We discuss the exactly marginal deformations that relate the different values of $Q_5$, including the precise $J{\\bar J}$ deformations mixing this extra $T^4$ with the symmetric orbifold.",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th"
+ ],
+ "published": "2024-06-20"
+}
