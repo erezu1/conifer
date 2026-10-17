@@ -139,7 +139,7 @@ h1.title { font: 600 2.15rem/1.12 var(--serif); margin: 0 0 .5rem; text-wrap: ba
 .logo { width: 22px; height: 22px; vertical-align: -6px; margin-right: .3rem; color: var(--accent); }
 
 /* ---- headings and body */
-.sec-h { font-weight: 600; line-height: 1.25; margin: 2.1rem 0 .7rem; text-wrap: balance; }
+.sec-h { font-weight: 600; line-height: 1.25; margin: 2.1rem 0 .7rem; text-wrap: pretty; }
 h2.sec-h { font-size: 1.55rem; }
 h3.sec-h { font-size: 1.28rem; }
 h4.sec-h { font-size: 1.15rem; }
@@ -148,8 +148,10 @@ h4.sec-h { font-size: 1.15rem; }
 .sec-h { display: flex; align-items: baseline; }
 .sec-h > .fold-btn { align-self: baseline; flex: none; }
 .sec-h > .secnum { flex: none; }
-.sec-t { min-width: 0; text-wrap: balance; }
+.sec-t { min-width: 0; text-wrap: pretty; }   /* (a title fills its lines and leaves no word alone on the last: balanced, a
+   two-line title broke well before the edge, Erez 17 Oct) */
 .secnum:empty { display: none; }
+.sec-last { white-space: nowrap; }
 .leaf { position: relative; }
 .kind-theorem, .kind-remark, .kind-definition, .kind-proof { background: var(--surface); border-radius: 8px; padding: .75rem 1rem .1rem; margin: 1rem 0; }
 .kind-theorem p { font-style: italic; }

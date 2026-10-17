@@ -99,7 +99,10 @@
   function secHead(n, ctx, lead, foldKey) {
     const hl = Math.min(1 + depth(n.id), 5);
     const anchor = ctx.prefix ? '' : `<button type="button" class="anchor" data-copy="${n.id}" title="Copy a link to this section" aria-label="Copy a link to this section">&#182;</button>`;
-    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span><span class="sec-t">${titleOf(n)}${qbadge(n, false, ctx)}${anchor}</span></h${hl}>` : '';
+    // the title's last word and what follows it (a question badge, the ¶) never part: a ¶ alone on a line reads as a stray mark
+    const t = titleOf(n), tail = qbadge(n, false, ctx) + anchor, m = t.match(/^([\s\S]*?)(\S+)$/);
+    const title = m && !/[<>]/.test(m[2]) ? `${m[1]}<span class="sec-last">${m[2]}${tail}</span>` : `${t}<span class="sec-last">${tail}</span>`;
+    return n.title ? `<h${hl} class="sec-h" data-node="${n.id}"${foldKey ? ` data-fold="${foldKey}"` : ''}>${lead}<span class="secnum">${esc(n.number || '')}</span><span class="sec-t">${title}</span></h${hl}>` : '';
   }
   function foldBlock(n, open, L, ctx) {
     const key = ctx.prefix + n.id;

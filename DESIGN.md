@@ -333,6 +333,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **Back closes a layer (17 Oct, Erez).** With a question, a note, a definition, the contents, Settings, a popover or the peek open, the phone's Back (or the browser's) closes the layer on top and does nothing else: the page stays where it is, and with a note open over the peek, a first Back closes the note and a second the peek. For this, a layer opening over the page adds one step of its own to the history; Back takes it and closes the top layer, putting the step back if another layer is still open. Closed any other way (the x, Escape, a tap outside), the last layer takes its step away unseen, and a link that jumps from a layer into the paper (a definition's "Defined in §2") reuses the step, so Back from there returns in one step to where one was reading. A peek growing into the page is not a layer.
 
+**Section titles fill their lines (17 Oct, Erez).** Titles were balanced (the browser evened out the lengths of a title's lines), so on a phone a two-line title broke well before the edge ("String dualities and exact / CFT deformations"). They now fill each line and only avoid leaving a word alone on the last (`text-wrap: pretty`), and a title's last word stays with its question badge and its ¶, which had been left alone on a line of their own.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.
