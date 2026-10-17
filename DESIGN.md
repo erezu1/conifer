@@ -329,6 +329,8 @@ An agent read and used the live site for a quarter of an hour, at desktop and ph
 
 **The search and the phone's keyboard (17 Oct).** Two faults Erez found on a phone. The dots of the depth line came back inside the search's underline: opening the search raises the keyboard, the keyboard resizes the page, and a resize redraws the dial; landing during the line's 220 ms change of length, it drew the dots back. The dial now leaves the line alone while the search owns it, and while the line is changing length. And with the keyboard up the bar could be scrolled off the screen, because the keyboard shrank only the visible part of the page, not its layout. The pages now ask the browser to shrink the layout with the keyboard (`interactive-widget=resizes-content`), so the bar stays on top; where a browser ignores that (iOS), the bar follows the visible part down while one types.
 
+**No scrollbar on a phone's sheets (17 Oct).** A definition's sheet showed a scrollbar on a phone though nothing was touched, drawn over the last letters of each line: the sheet's body, a fraction of a pixel taller than its box once the phone rounded its sizes, counted as scrollable. On a touch screen the sheets, the peek and the popovers now show no scrollbar (they are scrolled by dragging, as before), and a sheet's body never scrolls sideways.
+
 ## 7. Open questions for you
 
 1. **Whose papers first?** Your own (author-owned trees published next to the arXiv version) or any paper in the Epsilon library (reader-made trees, unreviewed by the author)? Both fit the format; they set different priorities for the skill's quality bar and for the provenance chips.

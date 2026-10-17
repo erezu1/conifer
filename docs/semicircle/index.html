@@ -301,7 +301,13 @@ dfn { font-style: italic; }
 .sheet.closing { animation: fall .18s var(--ease-in) forwards; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .35rem 0 .45rem; margin-bottom: .2rem; border-bottom: 1px solid var(--rule); flex: none; }
 .sheet-head h2 { font: 600 1.05rem/1.35 var(--sans); margin: 0; min-width: 0; }
-#sheet-body { overflow: auto; min-height: 0; padding-top: .3rem; }
+#sheet-body { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; min-height: 0; padding-top: .3rem; }
+/* On a touch screen a sheet or the peek is scrolled by dragging, so it shows no scrollbar: a phone drew one, unasked, over
+   the last letters of each line whenever a body came out a fraction of a pixel taller than its box (Erez, 17 Oct). */
+@media (pointer: coarse) {
+  #sheet-body, .peek-body, .pop { scrollbar-width: none; }
+  #sheet-body::-webkit-scrollbar, .peek-body::-webkit-scrollbar, .pop::-webkit-scrollbar { display: none; }
+}
 .x-btn { width: 1.65rem; height: 1.65rem; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--muted); display: grid; place-items: center; font: 400 1.05rem/1 var(--sans); cursor: pointer; flex: none; padding: 0; }
 .x-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 /* ONE ICON SYSTEM. Every icon is drawn in one line, 1.25px whatever its size (soft-edged, it reads as the crisp 1px
