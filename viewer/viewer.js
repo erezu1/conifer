@@ -906,6 +906,14 @@
     openPeek(`<span class="peek-label">From</span> ${link}`, render(n, PAPER, peekCtx()), inPeek);
     return true;
   }
+  // an author's affiliations (the names in the title block carry their marks when the paper has several affiliations)
+  function openAffil(k, anchor) {
+    const m = DOC.meta, marks = (m.authorAffiliations || [])[k] || [];
+    const A = (m.affiliations || []).filter(a => marks.includes(a.mark));
+    if (!A.length) return;
+    const html = `<ul class="pop-affils">${A.map(a => `<li><sup>${esc(a.mark)}</sup> ${esc(a.text)}</li>`).join('')}</ul>`;
+    showLayer(esc(m.authors[k]), html, anchor, 'sheet-affil');
+  }
   function openDef(id, anchor) {
     const d = defs.get(id); if (!d) return;
     const at = d.at && byId.get(d.at.node);
@@ -975,7 +983,7 @@
     if (pb) { if (pb.hasAttribute('data-peekclose')) closePeek(); else if (pb.hasAttribute('data-peekgo')) peekGo(); else peekBack(); return; }
     const foldHead = e.target.closest('[data-fold]');                           // the whole head of a fold is its control, open or closed
     if (foldHead && !e.target.closest('a, .anchor, .qwords, .qbadge, [data-def]')) { toggleFold(foldHead.dataset.fold); return; }
-    const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
+    const t = e.target.closest('[data-act], [data-setlevel], .gs, [data-peek], [data-go], .qbadge, .qwords, [data-def], [data-au], a[href^="#"], [data-open], [data-set], [data-reveal], [data-copy], .scrim, [data-close], #back');
     if (!t) { if (!e.target.closest('#pop')) closePop(); return; }
     if (t.matches('.scrim, [data-close]')) { if (t.closest('#pop')) closePop(); else closeSheet(); return; }   // (its own layer only: a peek under it stays)
     if (t.id === 'back') { goBack(); return; }
@@ -997,6 +1005,7 @@
     if (t.dataset.go) { if (longPressed) { longPressed = false; return; } reveal(t.dataset.go); return; }
     if (t.classList.contains('qbadge') || t.classList.contains('qwords')) { openQuestions(t.dataset.q, t.dataset.deep === '1'); return; }
     if (t.dataset.def) { e.preventDefault(); openDef(t.dataset.def, t); return; }
+    if (t.dataset.au !== undefined) { openAffil(+t.dataset.au, t); return; }
     if (t.dataset.reveal && t.closest('#peek-title') && !peekExpanding) { e.preventDefault(); peekGo(); return; }   // the peek grows into the page
     if (t.dataset.reveal) { e.preventDefault(); const q = t.dataset.quote, f = t.dataset.flash; reveal(t.dataset.reveal, { quote: q, flash: f }); return; }
     if (t.matches('a[href^="#"]')) {

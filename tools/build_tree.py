@@ -373,8 +373,9 @@ ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 def authors_html(meta):
     """The names, each with its affiliations' marks when the paper has several affiliations."""
     marks = meta.get("authorAffiliations") or []
-    return ", ".join(html.escape(n) + ("<sup>%s</sup>" % html.escape(",".join(marks[k])) if k < len(marks) and marks[k] else "")
-                     for k, n in enumerate(meta["authors"]))
+    # a name with marks is a button: a tap shows that author's affiliations, as a definition or a note is shown
+    return ", ".join(('<button type="button" class="au" data-au="%d">%s<sup>%s</sup></button>' % (k, html.escape(n), html.escape(",".join(marks[k]))))
+                     if k < len(marks) and marks[k] else html.escape(n) for k, n in enumerate(meta["authors"]))
 
 
 def affils_html(meta):
