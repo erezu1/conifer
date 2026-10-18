@@ -1,0 +1,17 @@
+{
+ "id": "2208.13607",
+ "version": "2",
+ "title": "Explicit holography for vector models at finite $N$, volume and temperature",
+ "authors": [
+  "Ofer Aharony",
+  "Shai M. Chester",
+  "Tal Sheaffer",
+  "Erez Y. Urbach"
+ ],
+ "abstract": "In previous work we constructed an explicit mapping between large $N$ vector models (free or critical) in $d$ dimensions and a non-local high-spin gravity theory on $AdS_{d+1}$, such that the gravitational theory reproduces the field theory correlation functions order by order in $1/N$. In this paper we discuss three aspects of this mapping. First, our original mapping was not valid non-perturbatively in $1/N$, since it did not include non-local correlations between the gravity fields which appear at finite $N$. We show that by using a bi-local $G-Σ$ type formalism similar to the one used in the SYK model, we can construct an exact mapping to the bulk that is valid also at finite $N$. The theory in the bulk contains additional auxiliary fields which implement the finite $N$ constraints. Second, we discuss the generalization of our mapping to the field theory on $S^d$, and in particular how the sphere free energy matches exactly between the two sides, and how the mapping can be consistently regularized. Finally, we discuss the field theory at finite temperature, and show that the low-temperature phase of the vector models can be mapped to a high-spin gravity theory on thermal AdS space.",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th"
+ ],
+ "published": "2022-08-29"
+}
