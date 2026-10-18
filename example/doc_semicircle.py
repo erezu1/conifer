@@ -53,10 +53,9 @@ DOC = {
     "version": 1,
     "meta": {
         "title": "Wigner's semicircle law by the moment method",
-        "kicker": "Conifer sample · an expository note",
-        "authors": ["Written as an example for Conifer"],
+        "kicker": "Example · random matrices · October 2026",
+        "authors": [],
         "date": "October 2026",
-        "note": "The text of this note was written as an example for Conifer; it is standard material, but it has not been refereed.",
         "key": {"equation": "eq-sc", "figure": "fig-semicircle"},
         "source": {"kind": "example", "generator": "doc_semicircle.py"},
         "defaultAudience": "physicist",

@@ -130,8 +130,6 @@ ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
 LOGO_BAR = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
-LOGO = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg")
-LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
 LOADER_HTML, LOADER_CSS = loader.build()
 body = f"""<title>Conifer: an example</title>
 {fonts}
@@ -157,12 +155,10 @@ body = f"""<title>Conifer: an example</title>
 </header>
 <main class="page">
  <header class="titleblock">
-  <p class="kicker">{LOGO}{html.escape(meta["kicker"])}</p>
+  <p class="kicker">{html.escape(meta["kicker"])}</p>
   <h1 class="title">{html.escape(meta["title"])}</h1>
-  <p class="authors">{html.escape(", ".join(meta["authors"]))} · {html.escape(meta["date"])}</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon">An example of a Conifer tree, made to show the reader: one document, read at any depth. <a href="https://github.com/erezu1/conifer">Conifer on GitHub</a> turns a LaTeX paper into a tree like this.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>

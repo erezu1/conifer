@@ -366,8 +366,6 @@ ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
 LOGO_BAR = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
-LOGO = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
-LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
 title_html = fill(S["meta"].get("titleHtml") or html.escape(meta["title"]))
 page_title = getattr(L, "PAGE_TITLE", meta["title"])
 LOADER_HTML, LOADER_CSS = loader.build()
@@ -394,12 +392,11 @@ body = f"""<title>{html.escape(page_title)}</title>
 </header>
 <main class="page">
  <header class="titleblock">
-  <p class="kicker">{LOGO}{html.escape(meta.get("kicker") or "")}</p>
+  <p class="kicker">{html.escape(meta.get("kicker") or "")}</p>
   <h1 class="title">{title_html}</h1>
-  <p class="authors">{html.escape(", ".join(meta["authors"]))}{(" · " + html.escape(meta["date"])) if meta.get("date") else ""}</p>
+  <p class="authors">{html.escape(", ".join(meta["authors"]))}</p>
  </header>
  <div id="paper"></div>
- <footer class="colophon">arXiv:{html.escape(meta.get("arxiv") or "")}, grown into a Conifer tree: the trunk is the gist, the branches the summary, the foliage the paper, the roots its appendices. The paper's text is the author's, converted with Epsilon; the summaries, definitions, background notes and questions were drafted by an AI reader and carry their status.</footer>
 </main>
 </div>
 <div id="scrim" class="scrim" hidden></div>

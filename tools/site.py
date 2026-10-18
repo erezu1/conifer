@@ -144,7 +144,7 @@ HEAD = ('<link rel="icon" href="favicon.ico" sizes="any">\n<link rel="icon" href
         '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n<link rel="manifest" href="manifest.webmanifest">\n'
         '<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">\n<meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)">\n'
         '<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="Conifer">\n<meta name="mobile-web-app-capable" content="yes">\n'
-        '<meta name="description" content="Project Conifer: papers grown into trees, read at any depth.">')
+        '<meta name="description" content="Conifer: papers you can read at any depth, from the gist to the full text.">')
 css = (HERE / "viewer" / "viewer.css").read_text()
 logo = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 logo = re.sub(r"<!--.*?-->", "", logo, flags=re.S).strip()
