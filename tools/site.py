@@ -148,12 +148,11 @@ HEAD = ('<link rel="icon" href="favicon.ico" sizes="any">\n<link rel="icon" href
 css = (HERE / "viewer" / "viewer.css").read_text()
 logo = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 logo = re.sub(r"<!--.*?-->", "", logo, flags=re.S).strip()
-OWNER = "Erez Y. Urbach"                     # (bold in the author lines, as on erezu1.github.io)
 PLUS = '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2.5 6h7"/><path class="v" d="M6 2.5v7"/></svg>'
 
 
 def entry(r):
-    auth = "" if r["year"] == "Example" else ", ".join(('<b class="nb">%s</b>' if a == OWNER else '<span class="nb">%s</span>') % html.escape(a) for a in r["authors"])
+    auth = "" if r["year"] == "Example" else ", ".join('<span class="nb">%s</span>' % html.escape(a) for a in r["authors"])
     arx = ('<a href="https://arxiv.org/abs/%s">arXiv:%s</a>' % (r["key"], r["key"])) if r["year"] != "Example" else ""
     meta = "".join('<span>%s</span>' % x for x in (arx, html.escape(r["cat"]), html.escape(r["when"])) if x)
     finds = ('<details class="finds"><summary><span class="circ">%s</span>What it finds</summary><ul>%s</ul></details>'
@@ -224,7 +223,6 @@ body {{ overflow-x: clip; }}
 .pub-title a {{ color: var(--fg); text-decoration: none; background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-size: 0 1px; background-position: 0 100%; transition: background-size .3s var(--ease-out); }}
 .pub-title a:hover {{ background-size: 100% 1px; }}
 .pub-authors {{ font: 400 .88rem var(--sans); color: var(--muted); margin: .25rem 0 0; }}
-.pub-authors b {{ color: var(--fg); font-weight: 600; }}
 .pub .nb {{ white-space: nowrap; }}
 .pub-context {{ font: 400 1rem/1.5 var(--serif); color: color-mix(in srgb, var(--fg) 82%, var(--muted)); margin: .5rem 0 0; max-width: 42rem; }}
 .finds {{ margin-top: .45rem; max-width: 42rem; }}
