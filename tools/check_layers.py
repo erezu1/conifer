@@ -181,7 +181,10 @@ paras = re.findall(r"<p[ >].*?</p>", rb, re.S) or [rb]
 R["root_brief_words"] = words(rb); R["root_brief_paragraphs"] = len(paras)
 R["root_brief_long_sentences"] = len(long_sentences(rb))
 R["root_brief_formulas"] = formulas(rb)
-if not 450 <= words(rb) <= 700: issue("root brief", "%d words (450-700)" % words(rb))
+paper_words = sum(len(t.split()) for _, t in order)
+lo = 450 if paper_words >= 8000 else 250                  # (a short paper, a letter or proceedings, has a shorter summary)
+R["paper_words"] = paper_words
+if not lo <= words(rb) <= 700: issue("root brief", "%d words (%d-700)" % (words(rb), lo))
 if not 4 <= len(paras) <= 7: issue("root brief", "%d paragraphs (4-7)" % len(paras))
 for k, p in enumerate(paras, 1):          # (one relation per paragraph)
     if formulas(p) > 3: issue("root brief ¶%d" % k, "%d formulas (at most 3)" % formulas(p))

@@ -24,7 +24,7 @@ import subprocess
 import sys
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent))
 import loader  # noqa: E402
-from slim import slim  # noqa: E402
+from slim import slim, merge_caches  # noqa: E402
 import tempfile
 import urllib.parse
 from pathlib import Path
@@ -268,8 +268,9 @@ if new_items:
     for k in out.get("undefined", []):
         print("undefined macro in the layers:", new_items[k]["tex"][:70], file=sys.stderr)
     new_svgs = out["out"]
+    new_cache = out.get("cache", "")
 else:
-    new_svgs = []
+    new_svgs, new_cache = [], ""
 print("layers' formulas drawn:", len(new_items))
 
 # the figures: no wider than WEB_W pixels (a page shows a figure at most ~700px wide, so this is sharp on a 2x screen;
@@ -403,7 +404,7 @@ body = f"""<title>{html.escape(page_title)}</title>
 <section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="x-btn peek-go" data-peekgo aria-label="Read it in the page" title="Read it in the page">{ICON_EXPAND}</button><button type="button" class="x-btn" data-peekclose aria-label="Close the peek"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button></div></div><div id="peek-body" class="peek-body"></div></section>
 <div id="pop" class="pop" hidden></div>
 <div id="toast" role="status" hidden></div>
-{M.get("cache", "")}
+{merge_caches(M.get("cache", ""), new_cache)}
 <script type="application/json" id="conifer-doc">{data}</script>
 <script>
 {js}

@@ -10,18 +10,79 @@ import html
 import json
 import re
 import shutil
+import tempfile
+import sys
+import subprocess
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 DOCS = HERE / "docs"
 DOCS.mkdir(exist_ok=True)
 
-cones = [
-    # (a tree's web/ page: its figures are files beside it, fetched when they come near the screen: tools/build_tree.py)
-    {"key": "2608.21511", "page": HERE / "papers" / "2608.21511" / "web" / "index.html", "data": HERE / "papers" / "2608.21511" / "tree.json"},
-    {"key": "2406.14605", "page": HERE / "papers" / "2406.14605" / "web" / "index.html", "data": HERE / "papers" / "2406.14605" / "tree.json"},
-    {"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json"},
-]
+# every tree that has been built (papers/<key>/web/index.html), newest first by arXiv number; the sample last
+cones = sorted(({"key": p.name, "page": p / "web" / "index.html", "data": p / "tree.json", "doc": p / "doc" / "paper.json"}
+                for p in (HERE / "papers").iterdir() if (p / "web" / "index.html").exists() and (p / "tree.json").exists()),
+               key=lambda c: c["key"], reverse=True)
+cones.append({"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json", "doc": None})
+
+# THE INDEX DRAWS ITS FORMULAS (18 Oct, Erez): a title's and a gist's TeX is drawn here, at build time, with the paper's
+# own macros by the renderer the trees use (Epsilon's render_math.js), slimmed, with one hidden set of glyphs for all
+EPSILON = Path("/Users/urbach/IAS Dropbox/Erez Urbach/research/epsilon")
+sys.path.insert(0, str(HERE / "tools"))
+from slim import slim, merge_caches  # noqa: E402
+caches = []
+
+
+def draw_tex(texts, doc_json):
+    """[TeX] -> [inline SVG markup], with the paper's macros; '' where a formula fails (its TeX is shown instead)."""
+    if not texts:
+        return []
+    D = json.loads(doc_json.read_text())["math"] if doc_json and doc_json.exists() else {}
+    with tempfile.TemporaryDirectory() as td:
+        job, res = Path(td) / "job.json", Path(td) / "res.json"
+        job.write_text(json.dumps({"items": [{"tex": t, "display": False} for t in texts], "macros": D.get("macros", {}), "packages": D.get("packages", ["base", "ams"])}))
+        r = subprocess.run(["node", str(EPSILON / "render_math.js"), str(job), str(res)], capture_output=True, text=True)
+        if r.returncode:
+            return ["" for _ in texts]
+        out = json.loads(res.read_text())
+    caches.append(out.get("cache", ""))
+    bad = {e["index"] for e in out.get("errors", [])}
+    return ["" if k in bad else slim(svg) for k, svg in enumerate(out["out"])]
+
+
+def with_math(text, doc_json):
+    """Plain text with $TeX$ in it -> HTML, the formulas drawn."""
+    parts = re.split(r"(\$[^$]+\$)", text)
+    texs = [p[1:-1] for p in parts if p.startswith("$") and p.endswith("$") and len(p) > 1]
+    drawn = iter(draw_tex(texs, doc_json))
+    out = []
+    for p in parts:
+        if p.startswith("$") and p.endswith("$") and len(p) > 1:
+            svg = next(drawn)
+            out.append(svg if svg else html.escape(p))
+        else:
+            out.append(html.escape(p))
+    return "".join(out)
+
+
+def context_of(gist_html):
+    """The gist's Context, as text with its $TeX$ (the index shows it under the title)."""
+    m = re.search(r"<li>\s*<b>Context</b>(.*?)</li>", gist_html, re.S)
+    t = m.group(1) if m else gist_html
+    t = re.sub(r"<[^>]+>", " ", t)
+    return re.sub(r"\s+", " ", html.unescape(t)).strip()
+
+
+def title_of(c, d):
+    """The paper's title with its $TeX$: from the converted document, where the title's formulas are kept as TeX."""
+    m = d["meta"]
+    if c["doc"] and c["doc"].exists() and m.get("titleHtml"):
+        items = json.loads(c["doc"].read_text())["math"]["items"]
+        t = re.sub(r'<l2m-math n="(\d+)"></l2m-math>', lambda x: "$" + items[int(x.group(1))]["tex"].strip() + "$", m["titleHtml"])
+        return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", t))).strip()
+    return m["title"]
+
+
 rows = []
 for c in cones:
     if not c["data"].exists():                                  # a tree not built yet
@@ -33,18 +94,10 @@ for c in cones:
         shutil.rmtree(DOCS / c["key"] / "img", ignore_errors=True)
         shutil.copytree(c["page"].parent / "img", DOCS / c["key"] / "img")
     m = d["meta"]
-    gist = re.sub(r"<[^>]+>", " ", (d["root"].get("gist") or {}).get("html", ""))
-    def tex_text(m):                                                 # (the index draws no formulas: a simple one is kept
-        t = m.group(1)                                               #  as plain text, AdS_3\times S^3 as AdS3×S3)
-        for k, v in ((r"\times", "×"), (r"\propto", "∝"), (r"\sim", "∼"), (r"\to", "→"), (r"\beta", "β"), (r"\Omega", "Ω"),
-                     (r"\pi", "π"), (r"\nu", "ν"), (r"\mathrm", ""), (r"\hat", ""), (r"\,", " ")):
-            t = t.replace(k, v)
-        t = re.sub(r"\\[A-Za-z]+", "", t)
-        return re.sub(r"[{}^_ ]", "", t)
-    gist = re.sub(r"\$([^$]*)\$", tex_text, gist)
-    gist = re.sub(r"\s+", " ", gist).strip()
-    first = re.split(r"(?<=[.!?])\s+(?=Result)", gist)[0].replace("Context ", "", 1)
-    rows.append((c["key"], m["title"], ", ".join(m.get("authors", [])), m.get("kicker") or "", first))
+    gist = context_of((d["root"].get("gist") or {}).get("html", ""))
+    if len(gist) > 420:
+        gist = gist[:420].rsplit(" ", 1)[0] + "…"
+    rows.append((c["key"], with_math(title_of(c, d), c["doc"]), ", ".join(m.get("authors", [])), m.get("kicker") or "", with_math(gist, c["doc"])))
 
 # the app's files at the site's root: icons, the manifest, the service worker
 (DOCS / "icons").mkdir(exist_ok=True)
@@ -63,7 +116,7 @@ css = (HERE / "viewer" / "viewer.css").read_text()
 logo = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 logo = re.sub(r"<!--.*?-->", "", logo, flags=re.S).strip()
 items = "\n".join(
-    f'<li class="cone"><a href="{k}/"><span class="cone-title">{html.escape(t)}</span><span class="cone-by">{html.escape(a)}{(" · " + html.escape(kk)) if kk else ""}</span><span class="cone-gist">{html.escape(g[:360])}{"…" if len(g) > 360 else ""}</span></a></li>'
+    f'<li class="cone"><a href="{k}/"><span class="cone-title">{t}</span><span class="cone-by">{html.escape(a)}{(" · " + html.escape(kk)) if kk else ""}</span><span class="cone-gist">{g}</span></a></li>'
     for k, t, a, kk, g in rows)
 page = f"""<!doctype html>
 <html lang="en">
@@ -80,6 +133,7 @@ page = f"""<!doctype html>
 .cone a:hover {{ background: var(--surface); border-color: color-mix(in srgb, var(--accent) 40%, transparent); text-decoration: none; }}
 .cone-title {{ display: block; font: 600 1.25rem/1.25 var(--serif); text-wrap: balance; }}
 .cone-by {{ display: block; font: .8rem var(--sans); color: var(--muted); margin: .3rem 0 .6rem; }}
+.cones li, .cones li * {{ text-align: left; hyphens: manual; -webkit-hyphens: manual; }}
 .cone-gist {{ display: block; font-size: .95em; color: color-mix(in srgb, var(--fg) 85%, var(--muted)); }}
 .intro {{ font-size: 1.02em; }}
 </style>
@@ -94,6 +148,7 @@ page = f"""<!doctype html>
  <ul class="cones">
 {items}
  </ul>
+{merge_caches(*caches)}
  <footer class="colophon">Summaries, definitions and questions are drafted by an AI reader and carry their status; the paper's text is the author's. Made with Epsilon.</footer>
 </main>
 <script>if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(function () {{}});</script>

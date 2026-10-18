@@ -31,3 +31,15 @@ def slim(svg):
         prev, svg = svg, _BARE.sub(r"\1", svg)
     # a group that only places one glyph: the glyph is placed by its own x and y (the same translation)
     return _POS.sub(lambda m: m.group(3).replace("<use ", '<use x="%s"%s ' % (m.group(1), ' y="%s"' % m.group(2) if m.group(2) else ""), 1), svg)
+
+
+def merge_caches(*caches):
+    """One hidden glyph set from several MathJax global caches (each formula points to its glyphs by id): the paper's,
+    and the one made for formulas drawn later (the layers', the index's). A glyph only the later formulas use was
+    missing from the page before (17 Oct: the gist's \\propto drew as nothing)."""
+    seen, paths = set(), []
+    for c in caches:
+        for m in re.finditer(r'<path id="([^"]+)"[^>]*>(?:</path>)?', c or ""):
+            if m.group(1) not in seen:
+                seen.add(m.group(1)); paths.append(m.group(0) if m.group(0).endswith("</path>") else m.group(0) + "</path>")
+    return '<svg style="display: none;" id="MJX-SVG-global-cache"><defs>%s</defs></svg>' % "".join(paths) if paths else ""
