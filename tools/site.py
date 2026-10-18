@@ -260,7 +260,6 @@ body {{ overflow-x: clip; }}
  </header>
 {items}
 {merge_caches(*caches)}
- <footer class="colophon">Conifer turns a LaTeX paper into a tree like this one: <a href="https://github.com/erezu1/conifer">the code on GitHub</a>. The LaTeX is read by <a href="https://github.com/erezu1/epsilon">Epsilon</a>. Erez Y. Urbach's papers as trees: <a href="{PAPERS}">{PAPERS.split("//")[1]}</a>.</footer>
 </main>
 <script>
 (function () {{
