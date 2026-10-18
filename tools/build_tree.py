@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """conifer build: a paper's skeleton + its drafted layers -> tree.json and a self-contained page.
 
-    python3 tools/build_tree.py papers/2608.21511
+    python3 tools/build_tree.py DIR       (a tree folder made by tools/convert.py, with its layers drafted)
 
 Expects in the paper folder:
   doc/            the Epsilon document (paper.json, math.json, images/)
@@ -29,7 +29,7 @@ import tempfile
 import urllib.parse
 from pathlib import Path
 
-EPSILON = Path("/Users/urbach/IAS Dropbox/Erez Urbach/research/epsilon")
+from paths import EPSILON  # noqa: E402
 HERE = Path(__file__).resolve().parent.parent
 paper = Path(sys.argv[1]).resolve()
 doc = paper / "doc"
@@ -289,7 +289,7 @@ def px(f):
     return (int(w.group(1)), int(h.group(1))) if w and h else (None, None)
 
 
-for f in sorted((doc / "images").iterdir()):
+for f in sorted((doc / "images").iterdir() if (doc / "images").is_dir() else []):   # (a paper without figures may have no folder)
     mime = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "svg": "image/svg+xml", "gif": "image/gif", "webp": "image/webp"}.get(f.suffix[1:].lower(), "application/octet-stream")
     src = f
     if f.suffix.lower() == ".png" or (f.suffix.lower() in (".jpg", ".jpeg") and px(f)[0] and px(f)[0] > WEB_W):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """conifer skeleton: an Epsilon document (paper.json) -> the tree with empty layers, and an outline to draft from.
 
-    python3 tools/skeleton.py papers/2608.21511/doc  [-o papers/2608.21511]
+    python3 tools/skeleton.py DIR/doc  [-o DIR]       (tools/convert.py runs this)
 
 Writes <out>/skeleton.json (the tree: sections, paragraphs grouped with their displays, figures, boxes, footnotes,
 references; stable ids; a hash of each node's text) and <out>/outline.md (every node's id and text, math as TeX),

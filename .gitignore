@@ -1,11 +1,12 @@
-# downloaded sources and build leftovers
-papers/*/source/
+# build leftovers (in a tree's folder: its downloaded source, web/ and .img/)
+source/
+web/
+.img/
 *.artifact.html
 __pycache__/
 .DS_Store
 .claude/
-mockup/.claude/
-mockup/cone-*.html
-papers/*/.img/
-papers/*/web/
+example/.claude/
+example/cone-*.html
 .venv/
+epsilon.path

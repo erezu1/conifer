@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """conifer blind read: the abstract, every version of the gist and the paragraphs the gist cites, as plain text, for a fresh
 reader who sees nothing else.
-    python3 tools/blind_gist.py papers/2406.14605 > blind.txt
+    python3 tools/blind_gist.py DIR > blind.txt
 The reader is asked (skill/conifer-draft.md, section 3) whether the Result bullet states each result the abstract claims,
 and whether anything under Why it matters is really another result.
 """

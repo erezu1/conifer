@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """conifer check: measure a paper's drafted layers against the drafting rules (skill/conifer-draft.md).
-    python3 tools/check_layers.py papers/2406.14605            # a report
-    python3 tools/check_layers.py papers/2406.14605 --json     # the numbers, for comparing two drafts
+    python3 tools/check_layers.py DIR            # a report
+    python3 tools/check_layers.py DIR --json     # the numbers, for comparing two drafts
 It reads layers.py (and the files it imports), skeleton.json and doc/paper.json; it changes nothing.
 """
 import html, importlib.util, json, re, sys

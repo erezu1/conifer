@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Build the example tree (the Wigner semicircle, from random matrix theory).
+
+    python3 build.py
+
+Writes
+  semicircle.tree.json       the sample document as data (TeX intact): the proposed format
+  semicircle.html        the page, self-contained (formulas drawn once as SVG with Epsilon's MathJax)
+  semicircle.artifact.html   the same without the document skeleton, to publish as a Claude artifact
+
+The formulas are drawn with Epsilon's render_math.js (node + mathjax-full), so nothing is fetched by the page
+except the fonts.
+"""
+import html
+import json
+import re
+import subprocess
+import sys
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent.parent / 'tools'))
+import loader  # noqa: E402
+from slim import slim  # noqa: E402
+import tempfile
+import urllib.parse
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'tools'))
+from paths import EPSILON  # noqa: E402
+sys.path.insert(0, str(HERE))
+from doc_semicircle import DOC  # noqa: E402
+
+(HERE / "semicircle.tree.json").write_text(json.dumps(DOC, indent=1, ensure_ascii=False) + "\n")
+
+# ---------------------------------------------------------------- collect the formulas
+items = []
+SKIP = {"id", "quote", "node", "covers", "answeredBy", "at", "key", "kind", "role", "status", "source", "number", "format", "generator", "term", "aliases"}
+
+
+def mark(tex, display):
+    items.append({"tex": tex, "display": display})
+    return "\x00%d\x00" % (len(items) - 1)
+
+
+def collect(s):
+    def disp(m):
+        tex = m.group(1)
+        lab = re.search(r"\\label\{([^}]*)\}", tex)
+        tex = re.sub(r"\\label\{[^}]*\}", "", tex)
+        idattr = ' id="%s"' % lab.group(1) if lab else ""
+        # a display inside a paragraph closes it, as Epsilon's converter does; empty paragraphs are removed below
+        return '</p><div class="display"%s><div class="eqbody">%s</div></div><p class="cont">' % (idattr, mark(tex.strip(), True))
+    s = re.sub(r"\\\[(.+?)\\\]", disp, s, flags=re.S)
+    s = re.sub(r"\$(.+?)\$", lambda m: mark(m.group(1), False), s, flags=re.S)
+    s = re.sub(r'<p(?: class="cont")?>\s*</p>', "", s)
+    return s
+
+
+def walk(o, key=None):
+    if isinstance(o, dict):
+        return {k: walk(v, k) for k, v in o.items()}
+    if isinstance(o, list):
+        return [walk(v, key) for v in o]
+    if isinstance(o, str) and key not in SKIP and ("$" in o or "\\[" in o):
+        return collect(o)
+    return o
+
+
+doc = walk(DOC)
+
+# ---------------------------------------------------------------- draw them with MathJax (Epsilon's renderer)
+with tempfile.TemporaryDirectory() as td:
+    job = Path(td) / "job.json"
+    res = Path(td) / "res.json"
+    job.write_text(json.dumps({"items": items, "macros": {}, "packages": ["base", "ams", "boldsymbol", "newcommand", "mathtools"]}))
+    r = subprocess.run(["node", str(EPSILON / "render_math.js"), str(job), str(res)], capture_output=True, text=True)
+    if r.returncode:
+        sys.exit("render_math.js failed:\n" + r.stderr)
+    out = json.loads(res.read_text())
+for e in out.get("errors", []):
+    print("math error:", e["message"], "in", e["tex"][:60], file=sys.stderr)
+for k in out.get("undefined", []):
+    print("undefined macro in:", items[k]["tex"][:60], file=sys.stderr)
+svgs = out["out"]
+
+
+HL = '<span class="mjx-hl" aria-hidden="true"></span>'
+
+
+def with_band(svg):   # the selection band under a formula (tools/build_tree.py)
+    m = re.search(r'<svg[^>]*?\swidth="([\d.]+ex)"', svg)
+    a = svg.find(">")
+    if not m or a < 0 or not svg.startswith("<mjx-container"):
+        return svg
+    return svg[:a] + ' style="--w:%s">' % m.group(1) + HL + svg[a + 1:]
+
+
+def fill(o):
+    if isinstance(o, dict):
+        return {k: fill(v) for k, v in o.items()}
+    if isinstance(o, list):
+        return [fill(v) for v in o]
+    if isinstance(o, str) and "\x00" in o:
+        return re.sub("\x00(\\d+)\x00", lambda m: with_band(slim(svgs[int(m.group(1))]).replace("<mjx-container", '<mjx-container data-tex="%s"' % html.escape(items[int(m.group(1))]["tex"].strip(), quote=True), 1)), o)
+    return o
+
+
+doc = fill(doc)
+print("formulas drawn:", len(items))
+
+# ---------------------------------------------------------------- the page
+css = (HERE.parent / "viewer" / "viewer.css").read_text()
+js = (HERE.parent / "viewer" / "viewer.js").read_text()
+js += "\n" + (HERE.parent / "viewer" / "search.js").read_text()
+js += "\n" + (HERE.parent / "viewer" / "copy.js").read_text()
+meta = doc["meta"]
+data = json.dumps(doc, ensure_ascii=False).replace("</", "<\\/").replace("<!--", "<\\u0021--")
+fonts = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
+         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+         # (not render-blocking: media="print" until the viewer switches it on, so the loader paints at once)
+         '<link rel="stylesheet" data-font media="print" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">')
+ICON_TOC = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M4 6h16M4 12h16M4 18h10"/></svg>')
+ICON_FIND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>')
+ICON_EXPAND = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-7 7"/><path d="M10 20H4v-6"/><path d="M4 20l7-7"/></svg>')
+ICON_CLOSE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg>')
+ICON_BACK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>')
+ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>')
+ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
+ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
+LOGO_BAR = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
+LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
+LOGO = (HERE.parent / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace("<svg xmlns=\"http://www.w3.org/2000/svg\"", "<svg")
+LOGO = re.sub(r"<!--.*?-->", "", LOGO, flags=re.S).strip()
+LOADER_HTML, LOADER_CSS = loader.build()
+body = f"""<title>Conifer: an example</title>
+{fonts}
+<style>
+{css}
+{out["css"]}
+{LOADER_CSS}
+</style>
+{LOADER_HTML}<div class="app">
+<header class="bar" id="bar">
+ <div class="bar-row" id="bar-row">
+  <button type="button" class="bar-btn" data-open="contents" aria-label="Contents">{LOGO_BAR}</button>
+  <button type="button" class="bar-pill" id="back" hidden title="Back to where you were"></button>
+  <button type="button" class="bar-title" id="bar-title" data-open="contents" title="Contents"></button>
+  <button type="button" class="bar-btn bar-search" data-open="search" aria-label="Search in the paper"><span class="i-find">{ICON_FIND}</span><span class="i-close">{ICON_CLOSE}</span></button>
+  <button type="button" class="bar-btn" data-open="settings" aria-label="Settings">{ICON_SET}</button>
+ </div>
+ <div class="lane" id="lane">
+  <div class="dial" role="radiogroup" aria-label="How much of the paper to show" id="dial"></div>
+  <div id="find-row" hidden><input id="find-input" type="search" autocomplete="off" spellcheck="false" placeholder="Words, or TeX: phi, x^2, \\frac{{1}}{{2}}" aria-label="Search in the paper"><span id="find-count"></span><button type="button" class="bar-btn" data-find="prev" aria-label="Previous match">{ICON_UP}</button><button type="button" class="bar-btn" data-find="next" aria-label="Next match">{ICON_DOWN}</button></div>
+  <svg class="dial-line" aria-hidden="true"><line class="track"/><line class="lit"/><g class="nodes"></g></svg>
+ </div>
+</header>
+<main class="page">
+ <header class="titleblock">
+  <p class="kicker">{LOGO}{html.escape(meta["kicker"])}</p>
+  <h1 class="title">{html.escape(meta["title"])}</h1>
+  <p class="authors">{html.escape(", ".join(meta["authors"]))} · {html.escape(meta["date"])}</p>
+ </header>
+ <div id="paper"></div>
+ <footer class="colophon">An example of a Conifer tree, made to show the reader: one document, read at any depth. <a href="https://github.com/erezu1/conifer">Conifer on GitHub</a> turns a LaTeX paper into a tree like this.</footer>
+</main>
+</div>
+<div id="scrim" class="scrim" hidden></div>
+<aside id="sheet" class="sheet" hidden aria-live="polite"><div class="sheet-head"><h2 id="sheet-title"></h2><button type="button" class="x-btn" data-close aria-label="Close"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button></div><div id="sheet-body"></div></aside>
+<section id="peek" class="peek" hidden aria-label="Peek"><div class="peek-head" title="Drag to resize"><span class="peek-grip" aria-hidden="true"></span><div class="peek-row"><button type="button" class="bar-btn peek-back" data-peekback aria-label="Back in the peek" hidden>{ICON_BACK}</button><div id="peek-title" class="peek-title"></div><button type="button" class="x-btn peek-go" data-peekgo aria-label="Read it in the page" title="Read it in the page">{ICON_EXPAND}</button><button type="button" class="x-btn" data-peekclose aria-label="Close the peek"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button></div></div><div id="peek-body" class="peek-body"></div></section>
+<div id="pop" class="pop" hidden></div>
+<div id="toast" role="status" hidden></div>
+{out["cache"]}
+<script type="application/json" id="conifer-doc">{data}</script>
+<script>
+{js}
+</script>
+"""
+(HERE / "semicircle.artifact.html").write_text(body)
+page = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+{body}
+</head>
+<body></body>
+</html>
+"""
+# the full page: the fragment's title/style/link belong in <head>; everything else in <body>
+head_end = body.index("</style>") + len("</style>")
+page = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content\">\n"
+        + '<link rel="icon" href="data:image/svg+xml,' + urllib.parse.quote((HERE.parent / "logo" / "conifer-icon.svg").read_text().replace("currentColor", "#1d5b98")) + '">\n'
+        + body[:head_end] + "\n</head>\n<body>\n" + body[head_end:] + "\n</body>\n</html>\n")
+(HERE / "semicircle.html").write_text(page)
+print("wrote semicircle.html (%d KB) and semicircle.artifact.html" % (len(page.encode()) // 1024))

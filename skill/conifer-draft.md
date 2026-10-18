@@ -5,12 +5,11 @@ These are the instructions an AI drafter follows to turn a converted paper into 
 ## 0. The pipeline
 
 ```
-python3 tools/fetch_arxiv.py <arxiv id>                       # papers/<id>/source, doc/ (Epsilon's converter)
-python3 tools/skeleton.py papers/<id>/doc -o papers/<id>      # skeleton.json and outline.md (every node, with its id and text)
-#   ...the drafter reads outline.md and writes papers/<id>/layers*.py (this document)...
-python3 tools/build_tree.py papers/<id>                       # checks ids and quotes, writes tree.json and tree.html
-python3 tools/check_layers.py papers/<id>                     # measures the draft against the rules below
-python3 tools/blind_gist.py papers/<id>                       # the abstract and the gist alone, for a blind reader (section 3)
+python3 tools/convert.py <paper.tex | folder | archive | arXiv id> -o DIR   # DIR/doc (Epsilon's converter), skeleton.json, outline.md
+#   ...the drafter reads DIR/outline.md and writes DIR/layers*.py (this document)...
+python3 tools/build_tree.py DIR                   # checks ids and quotes, writes tree.json and tree.html
+python3 tools/check_layers.py DIR                 # measures the draft against the rules below
+python3 tools/blind_gist.py DIR                   # the abstract and the gist alone, for a blind reader (section 3)
 ```
 
 Read the whole of `outline.md` before writing anything. First list the paper's contributions (section 2). Then write bottom-up: paragraph gists, section briefs, then the root summary and gist, then the side tables. Then run the build and the checker and fix every problem and every issue the checker reports, unless the issue is one the rules below allow (say so in a comment).
@@ -56,7 +55,7 @@ The card a reader sees first, read in thirty seconds. Its three bullets have thr
 ```
 - **At most 90 words** for the default audience (110 when the paper has more than two contributions), never longer than the abstract. At most **one formula** in the default and student gists. No equation numbers, section or appendix references.
 - **Variants differ in vocabulary and in what they state, not in which results they report.** Every version, the student's too, states every contribution the abstract claims, and its Why it matters builds only on results its own Result states. The specialist version may run to about 130 words (150 with more than two contributions) with up to four formulas: it states the results a specialist would check (the critical values, the scalings, what is computed exactly), and names prior work only in Context, for the result the paper builds on, and where a result agrees with earlier work or contradicts it. State results, not citations.
-- **A blind read.** When the gist is written, give a fresh reader (another agent) only what `python3 tools/blind_gist.py papers/<id>` prints: the abstract, every version of the gist, and the paragraphs each of the gist's sentences cites. Ask: does the abstract present one argument or several findings, and does the gist (its order, its "this", "so", "thus", its Context and Why it matters) claim links between results that the abstract does not make; does Result state, point by point, each result the abstract claims; is every sentence under Why it matters the paper's own framing of its headline result, rather than another result or a side remark; is every sentence supported by the paragraphs it cites, at the abstract's confidence? Fix what it finds and read again.
+- **A blind read.** When the gist is written, give a fresh reader (another agent) only what `python3 tools/blind_gist.py DIR` prints: the abstract, every version of the gist, and the paragraphs each of the gist's sentences cites. Ask: does the abstract present one argument or several findings, and does the gist (its order, its "this", "so", "thus", its Context and Why it matters) claim links between results that the abstract does not make; does Result state, point by point, each result the abstract claims; is every sentence under Why it matters the paper's own framing of its headline result, rather than another result or a side remark; is every sentence supported by the paragraphs it cites, at the abstract's confidence? Fix what it finds and read again.
 
 ## 4. The summary (`ROOT_BRIEF`)
 
@@ -112,7 +111,7 @@ A folded box placed in the paper, after a paragraph, holding what that paragraph
 
 ## 9. The files
 
-`papers/<id>/layers.py` holds the metadata and the root, and imports the rest:
+`DIR/layers.py` holds the metadata and the root, and imports the rest:
 
 ```python
 from layers_gists import GIST          # {node id: html}  one line per paragraph, box and section
@@ -144,6 +143,6 @@ CONTRIBUTIONS = [{"id": "c-…", "claim": "…", "quote": "<words from the abstr
 
 ## 10. Before handing over
 
-1. `python3 tools/build_tree.py papers/<id>` reports no problems (unknown ids, quotes not found).
-2. `python3 tools/check_layers.py papers/<id>` reports no issues except ones you have justified in a comment.
+1. `python3 tools/build_tree.py DIR` reports no problems (unknown ids, quotes not found).
+2. `python3 tools/check_layers.py DIR` reports no issues except ones you have justified in a comment.
 3. Read the gist and the summary once as each audience, start to finish, and cut anything that reader would skip.
