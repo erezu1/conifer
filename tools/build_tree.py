@@ -41,6 +41,12 @@ if not S["meta"].get("arxiv") and (paper / "meta.json").exists():          # the
 if (paper / "meta.json").exists() and json.loads((paper / "meta.json").read_text()).get("authors"):   # the names as arXiv lists
     S["meta"]["authors"] = json.loads((paper / "meta.json").read_text())["authors"]                      # them (the source's own
                                                                                                          # author block can carry e-mails)
+# the affiliations, as Epsilon gives them (paper.json "affiliations": [{mark, text}], "authorAffiliations": each author's
+# marks, parallel to "authors"); the marks are kept only when they still match the names (arXiv's list may differ)
+if D.get("affiliations"):
+    S["meta"]["affiliations"] = [{"mark": a.get("mark"), "text": a["text"]} for a in D["affiliations"] if a.get("text")]
+    marks = D.get("authorAffiliations") or []
+    S["meta"]["authorAffiliations"] = marks if len(marks) == len(S["meta"]["authors"]) and len(S["meta"]["affiliations"]) > 1 else []
 sys.path.insert(0, str(paper))                 # the layers may be split over several files in the paper's folder
 spec = importlib.util.spec_from_file_location("layers", paper / "layers.py")
 L = importlib.util.module_from_spec(spec)
@@ -364,6 +370,23 @@ ICON_UP = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>')
 ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
+def authors_html(meta):
+    """The names, each with its affiliations' marks when the paper has several affiliations."""
+    marks = meta.get("authorAffiliations") or []
+    return ", ".join(html.escape(n) + ("<sup>%s</sup>" % html.escape(",".join(marks[k])) if k < len(marks) and marks[k] else "")
+                     for k, n in enumerate(meta["authors"]))
+
+
+def affils_html(meta):
+    """The affiliations under the names (marked when the names carry marks)."""
+    A = meta.get("affiliations") or []
+    if not A:
+        return ""
+    marked = any(meta.get("authorAffiliations") or [])
+    return '<ul class="affils">%s</ul>' % "".join("<li>%s%s</li>" % (("<sup>%s</sup> " % html.escape(a["mark"])) if marked and a.get("mark") else "", html.escape(a["text"]))
+                                                for a in A)
+
+
 LOGO_BAR = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 LOGO_BAR = re.sub(r"<!--.*?-->", "", LOGO_BAR, flags=re.S).strip()
 title_html = fill(S["meta"].get("titleHtml") or html.escape(meta["title"]))
@@ -394,7 +417,7 @@ body = f"""<title>{html.escape(page_title)}</title>
  <header class="titleblock">
   <p class="kicker">{html.escape(meta.get("kicker") or "")}</p>
   <h1 class="title">{title_html}</h1>
-  <p class="authors">{html.escape(", ".join(meta["authors"]))}</p>
+  <p class="authors">{authors_html(meta)}</p>{affils_html(meta)}
  </header>
  <div id="paper"></div>
 </main>
