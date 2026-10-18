@@ -260,7 +260,7 @@ body {{ overflow-x: clip; }}
  </header>
 {items}
 {merge_caches(*caches)}
- <footer class="colophon"><a href="https://github.com/erezu1/conifer">github.com/erezu1/conifer</a></footer>
+ <footer class="colophon">The code is on GitHub at <a href="https://github.com/erezu1/conifer">erezu1/conifer</a>; it reads the LaTeX with <a href="https://github.com/erezu1/epsilon">Epsilon</a>.</footer>
 </main>
 <script>
 (function () {{
