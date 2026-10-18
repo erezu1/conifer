@@ -1,0 +1,15 @@
+{
+ "id": "2510.17951",
+ "version": "2",
+ "title": "A spin on Hagedorn temperatures and string stars",
+ "authors": [
+  "Josef Seitz",
+  "Erez Y. Urbach"
+ ],
+ "abstract": "We discuss the correspondence between highly excited strings and black holes in the presence of angular momentum. At fixed imaginary angular velocity $ν$, we show that free strings exhibit a Hagedorn instability due to a thermal-winding mode turning tachyonic. This allows us to determine the exact Hagedorn temperature $β_H(ν)$ for bosonic, type II, and heterotic strings. Using the effective field theory for the thermal-winding mode around the $ν$-dependent background, we find a novel `rotating string star' saddle (perturbatively in the angular velocity) and study its properties. This configuration describes a self-gravitating bound state of highly excited rotating strings. As in the non-rotating case, the saddle is qualitatively shown to interpolate between the rotating strings phase and a rotating black hole. We also comment on the implications of these results for anti-de Sitter space.",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th"
+ ],
+ "published": "2025-10-20"
+}
