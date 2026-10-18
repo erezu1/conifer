@@ -1919,8 +1919,10 @@ mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
   // ------------------------------------------------------------------ boot
   load(); applyTheme();
   if (skimHidden() && state.level === SKIM) state.level = BRIEF;
-  draw(); mark('drawn');
   const h = decodeURIComponent(location.hash.slice(1));
+  // a link to a depth (the front page links to #gist) opens there at once, not after drawing the last-used one
+  if (LEVEL_HASH.indexOf(h) >= 0) { state.level = LEVEL_HASH.indexOf(h); save(); }
+  draw(); mark('drawn');
   if (h) goHash(h, false);
   commit(); mark('ready');
   // the page is ready: the growing tree that stood while it loaded fades away (tools/loader.py)

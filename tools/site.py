@@ -137,7 +137,7 @@ def entry(r):
     meta = "".join('<span>%s</span>' % x for x in (arx, html.escape(r["cat"]), html.escape(r["when"])) if x)
     finds = ('<details class="finds"><summary><span class="circ">%s</span>What it finds</summary><ul>%s</ul></details>'
              % (PLUS, "".join("<li>%s</li>" % p for p in r["points"]))) if r["points"] else ""
-    return ('<li class="pub"><div class="pub-meta">%s</div><div class="pub-body"><h3 class="pub-title"><a href="%s/">%s</a></h3>'
+    return ('<li class="pub"><div class="pub-meta">%s</div><div class="pub-body"><h3 class="pub-title"><a href="%s/#gist">%s</a></h3>'
             '<p class="pub-authors">%s</p><p class="pub-context">%s</p>%s</div></li>' % (meta, r["key"], r["title"], auth, r["context"], finds))
 
 
@@ -220,7 +220,7 @@ body {{ background: var(--bg); color: var(--fg); }}
 <main class="page">
  <header class="titleblock">
   <div class="index-top"><p class="kicker">{logo}Project Conifer</p><button type="button" class="theme-btn" id="theme-btn" aria-label="Switch between light and dark">{SUN}{MOON}</button></div>
-  <h1 class="title">Papers you can read at three depths</h1>
+  <h1 class="title">From the gist down</h1>
   <p class="intro">Each paper opens on a short card and goes deeper when you want it to. Switch between the depths with the tabs at the top of a paper.</p>
   <ul class="depths">
    <li><b>Gist</b>the question, what the paper finds and why it matters: a minute.</li>
