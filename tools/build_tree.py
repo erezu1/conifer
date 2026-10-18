@@ -371,21 +371,12 @@ ICON_DOWN = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 ICON_SET = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
             '<path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>')
 def authors_html(meta):
-    """The names, each with its affiliations' marks when the paper has several affiliations."""
-    marks = meta.get("authorAffiliations") or []
-    # a name with marks is a button: a tap shows that author's affiliations, as a definition or a note is shown
-    return ", ".join(('<button type="button" class="au" data-au="%d">%s<sup>%s</sup></button>' % (k, html.escape(n), html.escape(",".join(marks[k]))))
-                     if k < len(marks) and marks[k] else html.escape(n) for k, n in enumerate(meta["authors"]))
-
-
-def affils_html(meta):
-    """The affiliations under the names (marked when the names carry marks)."""
-    A = meta.get("affiliations") or []
-    if not A:
-        return ""
-    marked = any(meta.get("authorAffiliations") or [])
-    return '<ul class="affils">%s</ul>' % "".join("<li>%s%s</li>" % (("<sup>%s</sup> " % html.escape(a["mark"])) if marked and a.get("mark") else "", html.escape(a["text"]))
-                                                for a in A)
+    """The names."""
+    # when the paper gives affiliations every name is a button: a tap shows that author's affiliations, as a definition
+    # or a note is shown (Erez, 18 Oct: then neither the list under the names nor the marks are needed)
+    if not meta.get("affiliations"):
+        return html.escape(", ".join(meta["authors"]))
+    return ", ".join('<button type="button" class="au" data-au="%d">%s</button>' % (k, html.escape(n)) for k, n in enumerate(meta["authors"]))
 
 
 LOGO_BAR = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="bar-logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
@@ -418,7 +409,7 @@ body = f"""<title>{html.escape(page_title)}</title>
  <header class="titleblock">
   <p class="kicker">{html.escape(meta.get("kicker") or "")}</p>
   <h1 class="title">{title_html}</h1>
-  <p class="authors">{authors_html(meta)}</p>{affils_html(meta)}
+  <p class="authors">{authors_html(meta)}</p>
  </header>
  <div id="paper"></div>
 </main>

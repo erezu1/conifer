@@ -906,12 +906,12 @@
     openPeek(`<span class="peek-label">From</span> ${link}`, render(n, PAPER, peekCtx()), inPeek);
     return true;
   }
-  // an author's affiliations (the names in the title block carry their marks when the paper has several affiliations)
+  // an author's affiliations: every name in the title block is a button when the paper gives affiliations
   function openAffil(k, anchor) {
     const m = DOC.meta, marks = (m.authorAffiliations || [])[k] || [];
-    const A = (m.affiliations || []).filter(a => marks.includes(a.mark));
+    const A = marks.length ? (m.affiliations || []).filter(a => marks.includes(a.mark)) : (m.affiliations || []);   // (one for all, or no marks: all of them)
     if (!A.length) return;
-    const html = `<ul class="pop-affils">${A.map(a => `<li><sup>${esc(a.mark)}</sup> ${esc(a.text)}</li>`).join('')}</ul>`;
+    const html = `<ul class="pop-affils">${A.map(a => `<li>${esc(a.text)}</li>`).join('')}</ul>`;
     showLayer(esc(m.authors[k]), html, anchor, 'sheet-affil');
   }
   function openDef(id, anchor) {
