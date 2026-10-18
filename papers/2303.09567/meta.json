@@ -1,0 +1,14 @@
+{
+ "id": "2303.09567",
+ "version": "4",
+ "title": "The black hole/string transition in AdS$_3$ and confining backgrounds",
+ "authors": [
+  "Erez Y. Urbach"
+ ],
+ "abstract": "String stars, or Horowitz-Polchinski solutions, are Euclidean string theory saddles with a normalizable condensate of thermal winding strings. String stars were suggested as a possible description of stringy (Euclidean) black holes close to the Hagedorn temperature. In this work, we continue the study initiated in arXiv:2202.06966 by investigating the thermodynamic properties of string stars in asymptotically (thermal) anti-de Sitter backgrounds. First, we discuss the case of AdS$_3$ with mixed RR and NS-NS fluxes (including the pure NS-NS system) and comment on a possible BTZ/string transition unique to AdS$_3$. Second, we present new ``winding-string gas'' saddles for confining holographic backgrounds such as the Witten model, and determine the subleading correction to their Hagedorn temperature. We speculate a black brane/string transition in these models and argue for a possible relation to the deconfined phase of 3+1 dimensional pure Yang-Mills.",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th"
+ ],
+ "published": "2023-03-16"
+}
