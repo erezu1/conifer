@@ -972,8 +972,8 @@ to:
 
 (2.58)
 
-#### [standard-solutions] section: Standard solutions
-##### [standard-solutions-p1] paragraph
+#### [standard-solutions-2] section: Standard solutions
+##### [standard-solutions-2-p1] paragraph
 
 Plugging in (2.55) one obtains (we changed notation $a_0\to a$), for $-\pi<N<\pi$17
 
@@ -985,8 +985,8 @@ Comparing with (2.32), this matches the action that follows from the exact propa
 $a_0=a_1=a$. So, $a_+$ is the configuration contributing to this propagator. A classical saddle of this action
 is $N=2\pi$.
 
-#### [tunneling-solutions] section: Tunneling solutions
-##### [tunneling-solutions-p1] paragraph
+#### [tunneling-solutions-2] section: Tunneling solutions
+##### [tunneling-solutions-2-p1] paragraph
 
 What about the $a_-$ solution? The on-shell action becomes
 
@@ -1002,7 +1002,7 @@ observe that (in analogy with its dS counterpart (2.40)) the solution almost rep
 Firstly, the solution $a_-$ must become negative along $0\leq \tau\leq 1$. Secondly, the actions differ by a
 constant addition $\pi q/2$. We now solve both issues simultaneously.
 
-##### [tunneling-solutions-p2] paragraph
+##### [tunneling-solutions-2-p2] paragraph
 
 Consider the solution $a_-$ along the contour $\tau=1/2+\i T$. This is a crunching Lorentzian spacetime with a
 Milne-type singularity $a_-=0$ at $T=T_\text{sing}$. It seems logical that to pass from $a_->0$ to $a_-<0$ (in
@@ -1039,7 +1039,7 @@ that, going around the singularity once as instructed by the $\tau$ contour in e
 an additional phase: $a_-\to e^{\i \pi} a_-$. This proves that along the contour (2.62), $a_-$ is indeed a
 solution with boundary conditions $a_0=-a_1=a$.
 
-##### [tunneling-solutions-p3] paragraph
+##### [tunneling-solutions-2-p3] paragraph
 
 Crucially, the on-shell gravitational action $I_-$ (2.58) receives a nontrivial extra contribution due to
 winding around the singularity. Using equation (2.56), somewhat miraculously one finds:
@@ -1054,7 +1054,7 @@ satisfies boundary conditions $a_0=-a_1=a$ and is responsible for the exact prop
 $a$ plane. As explained in section 2.2, a steepest descent analysis now reveals that the dominant contribution
 to the gravitational path integral is the solution $a_-$ (with $N=\pi$).
 
-##### [tunneling-solutions-p4] paragraph
+##### [tunneling-solutions-2-p4] paragraph
 
 We stress that this Lorentzian detour, and the associated correction (2.66) to the action, is essential to
 obtain a $q$-independent on-shell action (2.37). We discuss the puzzling $q$-independence of the entropy in
@@ -1062,7 +1062,7 @@ more detail in section 2.6. The $a\to a$ sector with action $I_{a\to a}(N)$ shou
 manner: like the empty dS solution (2.47), the solutions with $N=2\pi n$ crosses $a=0$ a total $2n$ times.
 This gives the $q$-independent necklace action (2.36).
 
-##### [tunneling-solutions-p5] paragraph
+##### [tunneling-solutions-2-p5] paragraph
 
 We remark that the action is unique provided $I_{a_1\to a_2}(N\in \i \mathbb{R})\in \i\mathbb{R}$ for
 configurations $a_1,a_2$ associated with Lorentzian solutions. In particular, one could not simply add terms

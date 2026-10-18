@@ -513,13 +513,13 @@
         "hash": "6f852ba224e9"
        },
        {
-        "id": "standard-solutions",
+        "id": "standard-solutions-2",
         "kind": "section",
         "title": "Standard solutions",
         "titleHtml": "Standard solutions",
         "children": [
          {
-          "id": "standard-solutions-p1",
+          "id": "standard-solutions-2-p1",
           "kind": "paragraph",
           "body": "<p>Plugging in <a href=\"#2.51aplus\">(2.55)</a> one obtains (we changed notation <l2m-math n=\"501\"></l2m-math>), for <l2m-math n=\"502\"></l2m-math><sup class=\"fnref\"><a href=\"#fn17\" id=\"fnref17\">17</a></sup></p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"504\"></l2m-math></div><span class=\"eqno\">(2.60)</span></div>\n<p class=\"cont\">Comparing with <a href=\"#2.32Iaa\">(2.32)</a>, this matches the action that follows from the exact propagator with boundary conditions <l2m-math n=\"505\"></l2m-math>. So, <l2m-math n=\"506\"></l2m-math> is the configuration contributing to this propagator. A classical saddle of this action is <l2m-math n=\"507\"></l2m-math>.</p>",
           "hash": "b280f7afec95"
@@ -527,37 +527,37 @@
         ]
        },
        {
-        "id": "tunneling-solutions",
+        "id": "tunneling-solutions-2",
         "kind": "section",
         "title": "Tunneling solutions",
         "titleHtml": "Tunneling solutions",
         "children": [
          {
-          "id": "tunneling-solutions-p1",
+          "id": "tunneling-solutions-2-p1",
           "kind": "paragraph",
           "body": "<p>What about the <l2m-math n=\"508\"></l2m-math> solution? The on-shell action becomes</p>\n<div class=\"display multi\" id=\"2.60\"><div class=\"eqbody\"><l2m-math n=\"509\"></l2m-math></div></div>\n<p class=\"cont\">This action differs significantly from <l2m-math n=\"510\"></l2m-math>. So, despite satisfying boundary conditions <l2m-math n=\"511\"></l2m-math>, the solution <l2m-math n=\"512\"></l2m-math> does <em>not</em> contribute to the propagator <l2m-math n=\"513\"></l2m-math>. Instead, we observe that (in analogy with its dS counterpart <a href=\"#2.36amin\">(2.40)</a>) the solution <em>almost</em> reproduces the action <l2m-math n=\"514\"></l2m-math>, corresponding to boundary conditions <l2m-math n=\"515\"></l2m-math>. There are two issues with such an identification. Firstly, the solution <l2m-math n=\"516\"></l2m-math> must become negative along <l2m-math n=\"517\"></l2m-math>. Secondly, the actions differ by a constant addition <l2m-math n=\"518\"></l2m-math>. We now solve both issues simultaneously.</p>",
           "hash": "01345658b603"
          },
          {
-          "id": "tunneling-solutions-p2",
+          "id": "tunneling-solutions-2-p2",
           "kind": "paragraph",
           "body": "<p>Consider the solution <l2m-math n=\"519\"></l2m-math> along the contour <l2m-math n=\"520\"></l2m-math>. This is a crunching Lorentzian spacetime with a Milne-type singularity <l2m-math n=\"521\"></l2m-math> at <l2m-math n=\"522\"></l2m-math>. It seems logical that to pass from <l2m-math n=\"523\"></l2m-math> to <l2m-math n=\"524\"></l2m-math> (in order to respect boundary conditions <l2m-math n=\"525\"></l2m-math>), one should somehow pass by this singularity. The right procedure is to consider the solution <l2m-math n=\"526\"></l2m-math> in equation <a href=\"#2.52amin\">(2.56)</a> along a <l2m-math n=\"527\"></l2m-math> contour that winds once around the big-crunch singularity:</p>\n<div class=\"display\" id=\"2.59contour\"><div class=\"eqbody\"><l2m-math n=\"528\"></l2m-math></div><span class=\"eqno\">(2.62)</span></div>\n<p class=\"cont\">An instructive example of this configuration is the classical saddle of the action <l2m-math n=\"529\"></l2m-math> (at <l2m-math n=\"530\"></l2m-math>) with boundary conditions <l2m-math n=\"531\"></l2m-math>. Solving for <l2m-math n=\"532\"></l2m-math> in equation <a href=\"#2.52amin\">(2.56)</a> one recovers the classical solution <a href=\"#2.5Euclideansol\">(2.6)</a>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"533\"></l2m-math></div><span class=\"eqno\">(2.63)</span></div>\n<p class=\"cont\">Along the contour <l2m-math n=\"534\"></l2m-math> one now finds the following big-bang big-crunch Lorentzian spacetime:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"535\"></l2m-math></div><span class=\"eqno\">(2.64)</span></div>\n<p class=\"cont\">The location of the singularities is</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"536\"></l2m-math></div><span class=\"eqno\">(2.65)</span></div>\n<p class=\"cont\">Crucially, expanding around <l2m-math n=\"537\"></l2m-math> gives <l2m-math n=\"538\"></l2m-math>. Hence, we see that, going around the singularity once as instructed by the <l2m-math n=\"539\"></l2m-math> contour in equation <a href=\"#2.59contour\">(2.62)</a>, <l2m-math n=\"540\"></l2m-math> acquires an additional phase: <l2m-math n=\"541\"></l2m-math>. This proves that along the contour <a href=\"#2.59contour\">(2.62)</a>, <l2m-math n=\"542\"></l2m-math> is indeed a solution with boundary conditions <l2m-math n=\"543\"></l2m-math>.</p>",
           "hash": "d7d50ed6bba0"
          },
          {
-          "id": "tunneling-solutions-p3",
+          "id": "tunneling-solutions-2-p3",
           "kind": "paragraph",
           "body": "<p>Crucially, the on-shell gravitational action <l2m-math n=\"544\"></l2m-math> <a href=\"#2.54I\">(2.58)</a> receives a nontrivial extra contribution due to winding around the singularity. Using equation <a href=\"#2.52amin\">(2.56)</a>, somewhat miraculously one finds:</p>\n<div class=\"display\" id=\"corrrr\"><div class=\"eqbody\"><l2m-math n=\"545\"></l2m-math></div><span class=\"eqno\">(2.66)</span></div>\n<p class=\"cont\">This is the main result of this section: the solution <l2m-math n=\"546\"></l2m-math> <a href=\"#2.52amin\">(2.56)</a> along a bra-ket wormhole contour <a href=\"#2.59contour\">(2.62)</a> satisfies boundary conditions <l2m-math n=\"547\"></l2m-math> and is responsible for the exact propagator <l2m-math n=\"548\"></l2m-math>. An important point was that there was a contribution from winding around the singularity in the complex <l2m-math n=\"549\"></l2m-math> plane. As explained in section <a href=\"#sect2.2exact\">2.2</a>, a steepest descent analysis now reveals that the dominant contribution to the gravitational path integral is the solution <l2m-math n=\"550\"></l2m-math> (with <l2m-math n=\"551\"></l2m-math>).</p>",
           "hash": "fad5462f6af9"
          },
          {
-          "id": "tunneling-solutions-p4",
+          "id": "tunneling-solutions-2-p4",
           "kind": "paragraph",
           "body": "<p>We stress that this Lorentzian detour, and the associated correction <a href=\"#corrrr\">(2.66)</a> to the action, is essential to obtain a <l2m-math n=\"552\"></l2m-math>-independent on-shell action <a href=\"#action237\">(2.37)</a>. We discuss the puzzling <l2m-math n=\"553\"></l2m-math>-independence of the entropy in more detail in section <a href=\"#sect-3.3\">2.6</a>. The <l2m-math n=\"554\"></l2m-math> sector with action <l2m-math n=\"555\"></l2m-math> should be interpreted in a similar manner: like the empty dS solution <a href=\"#2.43pot\">(2.47)</a>, the solutions with <l2m-math n=\"556\"></l2m-math> crosses <l2m-math n=\"557\"></l2m-math> a total <l2m-math n=\"558\"></l2m-math> times. This gives the <l2m-math n=\"559\"></l2m-math>-independent necklace action <a href=\"#actiona\">(2.36)</a>.</p>",
           "hash": "86b96041c558"
          },
          {
-          "id": "tunneling-solutions-p5",
+          "id": "tunneling-solutions-2-p5",
           "kind": "paragraph",
           "body": "<p>We remark that the action is unique provided <l2m-math n=\"560\"></l2m-math> for configurations <l2m-math n=\"561\"></l2m-math> associated with Lorentzian solutions. In particular, one could not simply add terms like <l2m-math n=\"562\"></l2m-math> to the action for all <l2m-math n=\"563\"></l2m-math>. This makes for instance equation <a href=\"#2.33Ia-a\">(2.34)</a> robust, and thus also our key (but confusing) result <a href=\"#key\">(2.68)</a> below.</p>",
           "hash": "eb3b91a9cbbe"
@@ -620,7 +620,7 @@
          {
           "id": "walls-p1",
           "kind": "paragraph",
-          "body": "<p>The more difficult part is proving that the higher necklaces (<l2m-math n=\"610\"></l2m-math>) will not contribute. In other words, ascent lines from <l2m-math n=\"611\"></l2m-math> may not cross <l2m-math n=\"612\"></l2m-math>. For the analytically solvable axion model one can understand this analytically. Consider the actions <a href=\"#2.32Iaa\">(2.32)</a>/<a href=\"#2.33Ia-a\">(2.34)</a>. We focus on <l2m-math n=\"613\"></l2m-math>. Define the <strong>height function</strong></p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"614\"></l2m-math></div><span class=\"eqno\">(2.73)</span></div>\n<p class=\"cont\">Ascent lines <l2m-math n=\"615\"></l2m-math> follow lines of constant <l2m-math n=\"616\"></l2m-math>, start at <l2m-math n=\"617\"></l2m-math>, and have monotonically increasing height functions (they are ascending). Therefore (recalling that saddles have odd <l2m-math n=\"618\"></l2m-math>):</p>\n<div class=\"display\" id=\"2.74confine\"><div class=\"eqbody\"><l2m-math n=\"619\"></l2m-math></div><span class=\"eqno\">(2.74)</span></div>\n<p class=\"cont\">The function <l2m-math n=\"620\"></l2m-math> given in equation <a href=\"#2.33Ia-a\">(2.34)</a> has a remarkable property. The height function <l2m-math n=\"621\"></l2m-math> is constant on lines above and below the singularities <l2m-math n=\"622\"></l2m-math>:</p>\n<div class=\"display\" id=\"walls\"><div class=\"eqbody\"><l2m-math n=\"623\"></l2m-math></div><span class=\"eqno\">(2.75)</span></div>\n<p class=\"cont\">Combined with equation <a href=\"#2.74confine\">(2.74)</a>, we see that the ascent line of the saddle at <l2m-math n=\"624\"></l2m-math> is confined to the region <l2m-math n=\"625\"></l2m-math>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"626\"></l2m-math></div><span class=\"eqno\">(2.76)</span></div>\n<p class=\"cont\">Therefore the ascent line does not intersect the defining contour <l2m-math n=\"627\"></l2m-math>. This demonstrates analytically that the higher necklaces <l2m-math n=\"628\"></l2m-math> indeed do not contribute.</p>",
+          "body": "<p>The more difficult part is proving that the higher necklaces (<l2m-math n=\"610\"></l2m-math>) will not contribute. In other words, ascent lines from <l2m-math n=\"611\"></l2m-math> may not cross <l2m-math n=\"612\"></l2m-math>. For the analytically solvable axion model one can understand this analytically. Consider the actions <a href=\"#2.32Iaa\">(2.32)</a>/<a href=\"#2.33Ia-a\">(2.34)</a>. We focus on <l2m-math n=\"613\"></l2m-math>. Define the <strong>height function</strong></p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"614\"></l2m-math></div><span class=\"eqno\">(2.73)</span></div>\n<p class=\"cont\">Ascent lines <l2m-math n=\"615\"></l2m-math> follow lines of constant <l2m-math n=\"616\"></l2m-math>, start at <l2m-math n=\"617\"></l2m-math>, and have monotonically increasing height functions (they are ascending). Therefore (recalling that saddles have odd <l2m-math n=\"618\"></l2m-math>):</p>\n<div class=\"display\" id=\"2.74confine\"><div class=\"eqbody\"><l2m-math n=\"619\"></l2m-math></div><span class=\"eqno\">(2.74)</span></div>\n<p class=\"cont\">The function <l2m-math n=\"620\"></l2m-math> given in equation <a href=\"#2.33Ia-a\">(2.34)</a> has a remarkable property. The height function <l2m-math n=\"621\"></l2m-math> is constant on lines above and below the singularities <l2m-math n=\"622\"></l2m-math>:</p>\n<div class=\"display\" id=\"walls-2\"><div class=\"eqbody\"><l2m-math n=\"623\"></l2m-math></div><span class=\"eqno\">(2.75)</span></div>\n<p class=\"cont\">Combined with equation <a href=\"#2.74confine\">(2.74)</a>, we see that the ascent line of the saddle at <l2m-math n=\"624\"></l2m-math> is confined to the region <l2m-math n=\"625\"></l2m-math>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"626\"></l2m-math></div><span class=\"eqno\">(2.76)</span></div>\n<p class=\"cont\">Therefore the ascent line does not intersect the defining contour <l2m-math n=\"627\"></l2m-math>. This demonstrates analytically that the higher necklaces <l2m-math n=\"628\"></l2m-math> indeed do not contribute.</p>",
           "hash": "bdb3e847f020"
          }
         ]

@@ -135,7 +135,7 @@ QUESTIONS = [
     {"id": "q-flux", "at": {"node": "sect-3.3"}, "source": "ai", "status": "draft",
      "q": "Why is the entropy independent of the axion flux, and should it be?",
      "a": r"The Euclidean part of the saddle gives $\pi(1-q)/2G$ and the Lorentzian detour around the crunch adds $\pi q/2G$. The paper explains the sum by deforming the time contour to late Lorentzian times, where any such universe is empty de Sitter, as the cosmic no-hair theorem says. The authors call the result puzzling; it is a clear target for Lorentzian algebraic calculations to reproduce or disprove.",
-     "answeredBy": ["sect-3.3-p2", "sect-3.3-p3", "tunneling-solutions-p4"]},
+     "answeredBy": ["sect-3.3-p2", "sect-3.3-p3", "tunneling-solutions-2-p4"]},
     {"id": "q-other-contour", "at": {"node": "sect5-concl"}, "source": "ai", "status": "draft",
      "q": r"What does the other contour, $N=-\varepsilon+i\mathbb R$, predict?",
      "a": r"It passes left of the pole and picks up only $k\le0$, so the trivial static “saddle” dominates and the entropy has no term of order $1/G$. That would mean the horizon area does not measure entropy, an idea the paper calls radical but in line with recent doubts. It also cures the conformal mode problem but makes all matter fluctuations unstable.",

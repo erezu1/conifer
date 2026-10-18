@@ -3,18 +3,18 @@
 # the empty paragraph sec-transient_stability_loss-p4 (the source has a commented-out experimental section there).
 GIST = {
     # ---- Introduction
-    "introduction": r"Rewriting viscoelasticity as elasticity about evolving reference lengths turns the stability of creeping solids into simple rules.",
-    "introduction-p1": r"Elastomers creep and relax stress reversibly, yet keep their topology and a finite fraction of stress indefinitely.",
-    "introduction-p2": r"In delayed stability loss a slow creep precedes a fast snap: Venus fly-traps, jumping poppers, some earthquakes.",
-    "introduction-p3": r"Memory-kernel laws simulate well but explain little; relaxation seems bound to stabilize, which makes viscoelastic instabilities puzzling.",
-    "introduction-p4": r"Plan of the one-dimensional part: the standard linear solid as an evolving spring, a truss, general 1D claims.",
-    "introduction-p5": r"Plan of the continuum part: a covariant metric description, then claims for isotropic incompressible bodies.",
+    "section-I": r"Rewriting viscoelasticity as elasticity about evolving reference lengths turns the stability of creeping solids into simple rules.",
+    "section-I-p1": r"Elastomers creep and relax stress reversibly, yet keep their topology and a finite fraction of stress indefinitely.",
+    "section-I-p2": r"In delayed stability loss a slow creep precedes a fast snap: Venus fly-traps, jumping poppers, some earthquakes.",
+    "section-I-p3": r"Memory-kernel laws simulate well but explain little; relaxation seems bound to stabilize, which makes viscoelastic instabilities puzzling.",
+    "section-I-p4": r"Plan of the one-dimensional part: the standard linear solid as an evolving spring, a truss, general 1D claims.",
+    "section-I-p5": r"Plan of the continuum part: a covariant metric description, then claims for isotropic incompressible bodies.",
 
     # ---- 1D
     "sec-1d_viscoelasticity": r"In one dimension, evolving rest lengths explain when a truss of viscoelastic springs acquires and then loses stability.",
     "fig-sls_diagram": r"The standard linear solid: a spring in parallel with a spring and dashpot in series.",
-    "standard-linear-solid": r"A standard linear solid is a spring of fixed stiffness whose reference length relaxes towards its current and rest lengths.",
-    "standard-linear-solid-p1": r"The SLS force is $-k(L-\bar L)$; $\bar L$ relaxes towards $L$ and $\bar L^0$, weighted by $\beta$, the asymptotically relaxed force fraction.",
+    "section-II-A": r"A standard linear solid is a spring of fixed stiffness whose reference length relaxes towards its current and rest lengths.",
+    "section-II-A-p1": r"The SLS force is $-k(L-\bar L)$; $\bar L$ relaxes towards $L$ and $\bar L^0$, weighted by $\beta$, the asymptotically relaxed force fraction.",
     "fig-sls_von_mises_truss_diagram": r"The truss: a mass on a line, two diagonal SLS elements making it bistable, a vertical one breaking symmetry.",
     "sec-sls_von_Mises_truss": r"Holding a viscoelastic truss inverted gives three phases: never bistable, always bistable, or bistable for a while.",
     "sec-sls_von_Mises_truss-p1": r"The truss's energy is the squared distance between the reference point and the curve of admissible lengths.",
@@ -39,17 +39,17 @@ GIST = {
     "sec-delayed_stability_and_loss-p1": r"Continua, like the truss, can acquire stable states through relaxation that cannot always last.",
     "sec-delayed_stability_and_loss-p2": r"A body held in an unstable shape may be stable when released: acquired stability.",
     "sec-delayed_stability_and_loss-p3": r"Acquired stability ends in delayed stability loss, a creep then a snap; both are expected near multistability.",
-    "isotropicity": r"Isotropy and homogeneity must refer to a metric; taking the rest metric gives a two-function memory kernel.",
-    "isotropicity-p1": r"Isotropy is invariance under the rotations of some metric on the body, which must be specified.",
-    "isotropicity-p2": r"The stiffness is taken isotropic about the rest metric, set by the material's composition, not the instantaneous one.",
-    "isotropicity-p3": r"Homogeneity is a matter of measure: constant stiffness means equal energy per initial volume.",
-    "isotropicity-p4": r"Isotropic homogeneous kernels reduce to a scalar part $\beta\phi$ and a part $\psi$ mixing the metric's components.",
+    "section-III-D": r"Isotropy and homogeneity must refer to a metric; taking the rest metric gives a two-function memory kernel.",
+    "section-III-D-p1": r"Isotropy is invariance under the rotations of some metric on the body, which must be specified.",
+    "section-III-D-p2": r"The stiffness is taken isotropic about the rest metric, set by the material's composition, not the instantaneous one.",
+    "section-III-D-p3": r"Homogeneity is a matter of measure: constant stiffness means equal energy per initial volume.",
+    "section-III-D-p4": r"Isotropic homogeneous kernels reduce to a scalar part $\beta\phi$ and a part $\psi$ mixing the metric's components.",
 
     # ---- Incompressible materials
     "sec-scalar_viscoelasticity": r"For incompressible solids, stable shapes reached from rest never evolve, and only acquired stability can be lost.",
-    "constitutive-relations": r"Incompressibility makes the kernel scalar, so the reference metric relaxes towards a fixed mix of current and rest metrics.",
-    "constitutive-relations-p1": r"Incompressibility removes $\psi$; at stationarity $\bar g^{\rm stat}_{ij}=\beta g_{ij}+(1-\beta)\bar g^0_{ij}$, with $\beta$ the relaxed stress fraction.",
-    "constitutive-relations-p2": r"Long-time stability depends only on $\beta$; the exponential SLS kernel suffices to discuss it.",
+    "section-IV-A": r"Incompressibility makes the kernel scalar, so the reference metric relaxes towards a fixed mix of current and rest metrics.",
+    "section-IV-A-p1": r"Incompressibility removes $\psi$; at stationarity $\bar g^{\rm stat}_{ij}=\beta g_{ij}+(1-\beta)\bar g^0_{ij}$, with $\beta$ the relaxed stress fraction.",
+    "section-IV-A-p2": r"Long-time stability depends only on $\beta$; the exponential SLS kernel suffices to discuss it.",
     "fig-metric_space": r"Realized metrics are the admissible ones closest to the reference metric, which moves along a line from rest.",
     "sec-stationary_states": r"Stationary configurations are rest-system extremals, and rest-stable configurations reached abruptly from rest stay exactly still.",
     "sec-stationary_states-p1": r"Stationary forces are $(1-\beta)$ times the rest system's, so every stationary configuration is an extremal of the rest system.",
@@ -61,14 +61,14 @@ GIST = {
     "sec-transient_stability_loss-p1": r"An inverted, suitably cut jumping popper creeps for seconds then snaps back, like the intermediate-stiffness truss.",
     "sec-transient_stability_loss-p2": r"Stability can be lost only if it was acquired, so a popper that snaps late had been relaxed while inverted.",
     "sec-transient_stability_loss-p3": r"Acquired stability of a configuration that is not a rest extremal must end: such a popper always snaps back.",
-    "fig-hopper_popper": r"Poppers, the hold-and-release protocol, and simulated flip times versus thickness for immediate release and long holding.",
+    "fig-hopper_popper": r"Poppers and the hold-release protocol; simulated flip times mark stable, acquired-stability and unstable ranges of cone thickness.",
 
     # ---- Summary and discussion
-    "summary": r"Relaxation does stabilize states reached from rest; instabilities need acquired stability and a curved set of admissible shapes.",
-    "summary-p1": r"The naive intuition holds: a metastable state reached abruptly from rest never loses stability or moves.",
-    "summary-p2": r"Only states unstable about the rest metric that acquired stability can snap, and that acquired stability cannot last.",
-    "summary-p3": r"Delayed instabilities need a curved set of admissible states; in continua relaxation can also leave residual stress.",
-    "summary-p4": r"Letting the rest metric evolve could give a covariant theory of growth and plasticity, not yet tested.",
+    "section-V": r"Relaxation does stabilize states reached from rest; instabilities need acquired stability and a curved set of admissible shapes.",
+    "section-V-p1": r"The naive intuition holds: a metastable state reached abruptly from rest never loses stability or moves.",
+    "section-V-p2": r"Only states unstable about the rest metric that acquired stability can snap, and that acquired stability cannot last.",
+    "section-V-p3": r"Delayed instabilities need a curved set of admissible states; in continua relaxation can also leave residual stress.",
+    "section-V-p4": r"Letting the rest metric evolve could give a covariant theory of growth and plasticity, not yet tested.",
 
     # ---- Appendix
     "app-1d_sls_systems": r"For any SLS assembly on a line sharing $\beta$ and $\tau$, rest-stable states stay still and acquired stability ends.",

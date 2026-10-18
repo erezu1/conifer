@@ -2,7 +2,7 @@
 # Drafted from the text; status ai-draft for all. Roadmap, recap, lead-in and acknowledgement paragraphs have no gist:
 # section-1.3-p1, sect2.2exact-p3 (a half-sentence lead-in), dominant-solution-p3 (recap), sect3.1-5fproper-p3,
 # app-numerics-p2 (the end of a sentence split by a figure), acknowledgments.
-# The ids standard-solutions* and tunneling-solutions* are those of section 2.4 (the build keeps the later copy).
+# Also without a gist: tunneling-solutions-p3 (a recap closing section 2.3).
 GIST = {
     # ---- 1 Introduction and summary
     "sect-1.intro": r"Real Euclidean saddles make the de Sitter path integral diverge; a mostly Lorentzian lapse contour restores a finite entropy.",
@@ -67,16 +67,21 @@ GIST = {
     "sec-pure_grav_3d-p1": r"Off-shell solutions of the $a$ equation alone reproduce both exact effective actions in closed form.",
     "sec-pure_grav_3d-p2": r"Off-shell configurations are particle orbits at nonzero energy, with the lapse their elapsed time.",
     "sec-pure_grav_3d-p3": r"Names $a_+$ standard solutions and $a_-$ tunneling solutions.",
+    "standard-solutions": r"In empty de Sitter the $a\to a$ sector holds the two-sphere saddle at $N=2\pi$, but never the single sphere.",
+    "standard-solutions-p1": r"Standard configurations cap one sphere, then three; energy diverges at the $N=\pi$ pole, and $N=2\pi$ is two spheres.",
+    "tunneling-solutions": r"In empty de Sitter the single sphere, $I=-A/4G$, appears only in the $a\to-a$ sector, at $N=\pi$.",
+    "tunneling-solutions-p1": r"Crossing zero size, the $a\to-a$ configuration needs infinite energy at zero lapse; its $N=\pi$ saddle is the sphere.",
+    "tunneling-solutions-p2": r"Not every particle trajectory contributes to the exact propagator, a lesson proposed as input in 4d and 5d.",
     "sect2.4necklasesemi": r"With flux, the sign-flipping configuration winds around a big crunch, and this Lorentzian detour makes the action flux-independent.",
     "sect2.4necklasesemi-p1": r"Generalises the two empty de Sitter configurations to $0<q<1$; the tunneling one now never changes sign.",
-    "standard-solutions": r"The standard solution reproduces the exact $a\to a$ action.",
-    "standard-solutions-p1": r"Plugging the standard solution into the action gives exactly $I_{a\to a}(N)$, so it carries that propagator.",
-    "tunneling-solutions": r"The tunneling solution carries the $a\to-a$ propagator only after winding around the big-crunch singularity.",
-    "tunneling-solutions-p1": r"The naive tunneling solution keeps one sign and misses the $a\to-a$ action by a constant.",
-    "tunneling-solutions-p2": r"Letting time wind once around the big-crunch singularity flips the sign of $a$, as $a\to-a$ requires.",
-    "tunneling-solutions-p3": r"The winding adds exactly the missing constant, so this solution carries the $a\to-a$ propagator and dominates.",
-    "tunneling-solutions-p4": r"The Lorentzian detour is what makes the action flux-independent; even necklaces cross zero size likewise.",
-    "tunneling-solutions-p5": r"Requiring imaginary actions for Lorentzian solutions fixes the action uniquely, so no constant can be added.",
+    "standard-solutions-2": r"The standard solution reproduces the exact $a\to a$ action.",
+    "standard-solutions-2-p1": r"Plugging the standard solution into the action gives exactly $I_{a\to a}(N)$, so it carries that propagator.",
+    "tunneling-solutions-2": r"The tunneling solution carries the $a\to-a$ propagator only after winding around the big-crunch singularity.",
+    "tunneling-solutions-2-p1": r"The naive tunneling solution keeps one sign and misses the $a\to-a$ action by a constant.",
+    "tunneling-solutions-2-p2": r"Letting time wind once around the big-crunch singularity flips the sign of $a$, as $a\to-a$ requires.",
+    "tunneling-solutions-2-p3": r"The winding adds exactly the missing constant, so this solution carries the $a\to-a$ propagator and dominates.",
+    "tunneling-solutions-2-p4": r"The Lorentzian detour is what makes the action flux-independent; even necklaces cross zero size likewise.",
+    "tunneling-solutions-2-p5": r"Requiring imaginary actions for Lorentzian solutions fixes the action uniquely, so no constant can be added.",
     "dominant-solution": r"The dominant geometry is Euclidean with a Lorentzian bra-ket piece, and gives $S=\pi/2G$.",
     "dominant-solution-p1": r"If the no-boundary integral is an entropy, this geometry gives $S=\pi/2G$, a target for Lorentzian calculations.",
     "dominant-solution-p2": r"Seen as a particle, the Lorentzian piece is the tunneling: the reverse of the usual Euclidean tunneling.",
