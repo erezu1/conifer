@@ -3,7 +3,7 @@
 # subsection we review", acknowledgements, the appendix's opening line) have no gist.
 GIST = {
     # ---- 1 Introduction
-    "sec-intro": r"Grand-canonical orbifold correlators give an exact string genus expansion; the orbifold also explains strong coupling and a decoupled $\hat T^4$.",
+    "sec-intro": r"Three separate results: grand-canonical orbifold correlators have an exact genus expansion, the $1/N$ expansion fails at strong coupling, $\hat T^4$ decouples.",
     "sec-intro-p1": r"The D1-D5 duality has a weakly curved string limit and a free orbifold limit; NS-NS flux makes the worldsheet tractable.",
     "sec-intro-p2": r"Much is known about this theory; the paper highlights three confusing features of its string perturbation theory.",
     "sec-intro-p3": r"Announces the review of supergravity, CFT and worldsheet, and of the dualities relating different $(Q_1,Q_5)$ with equal $N$.",
@@ -39,7 +39,7 @@ GIST = {
     "fig-N30_moduli": r"The $N=30$ moduli-space slice: lines where each $(Q_1,Q_5)$ background has vanishing R-R scalars, NS-NS end to R-R end.",
     "sec-diffrent_back-p4": r"For $Q_5>1$ the long-string continuum is not evident in the deformed-orbifold description.",
     "sec-diffrent_back-p5": r"The orbifold with $\theta=0$ is another singular locus, believed to sit at $\chi=\pm1/2$ in figure 1.",
-    "section-2.5": r"The review leaves three puzzles: a string ensemble, a free orbifold at strong coupling, and a decoupled $\hat T^4$.",
+    "section-2.5": r"The review raises three independent questions: a string ensemble, a free orbifold at strong coupling, and a decoupled $\hat T^4$.",
     "section-2.5-p1": r"States the three questions: ensemble versus fixed $Q_1$; a free orbifold for $v_4>N$; and the decoupled $\hat T^4$.",
 
     # ---- 3 Grand-canonical ensemble

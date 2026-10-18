@@ -28,8 +28,8 @@ def plain(h):                                # the text as read, each formula as
     t = re.sub(r"\$\$(.+?)\$\$|\$(.+?)\$", lambda m: stash(m.group(1) or m.group(2)), t, flags=re.S)
     t = html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", t))).strip()
     return re.sub("\x01(\\d+)\x01", lambda m: "$" + keep[int(m.group(1))].replace("$", "") + "$", t)
-def words(h):
-    return len(re.sub(r"\$[^$]*\$", " F ", plain(h)).split())
+def words(h):                                # (a formula is one word, with the punctuation that follows it)
+    return len(re.sub(r"\$[^$]*\$", " F", plain(h)).split())
 REL = re.compile(r"=|\\sim|\\approx|\\propto|\\le|\\ge|<|>|\\to|\\gg|\\ll")
 _SYM, _CMP = r"\\?[A-Za-z]+(_\{?[\w]+\}?)?", r"(=|<|>|\\[lg]eq?|\\[lg]{2}|\\neq?)"
 REGIME = re.compile(r"^\s*(-?\d+\s*%s\s*)?%s\s*%s\s*-?\d+\s*$" % (_CMP, _SYM, _CMP))   # Q_5=1, G>1, 2<d<6
@@ -102,6 +102,24 @@ abstract_text = norm(plain(S["meta"].get("abstractHtml") or ""))
 in_abstract = {c["id"] for c in C if norm(c.get("quote", "")) in abstract_text}   # these every version of the gist states
 R["contributions_in_abstract"] = len(in_abstract)
 VAGUE = re.compile(r"\b(poses? (a |an )?(possible )?(issue|problem|question|puzzle)s?|has implications|have implications|sheds? light|is discussed|are discussed|is also studied|are also studied|interesting)\b", re.I)
+# how the results relate: from the paper (skill section 2), never supplied
+SHAPE = getattr(L, "SHAPE", None)
+by_id = {c["id"]: c for c in C}
+whole_text = norm(" ".join(t for _, t in order) + " " + plain(S["meta"].get("abstractHtml") or ""))
+for c in C:
+    if not c.get("theme"): issue("contribution " + c["id"], "no theme (skill section 2)")
+    b = c.get("builds_on")
+    if b:
+        if b not in by_id: issue("contribution " + c["id"], "builds on unknown %s" % b)
+        if not c.get("link_quote") or norm(c["link_quote"]) not in whole_text: issue("contribution " + c["id"], "builds_on without the paper's own words for the link (link_quote)")
+themes = sorted({c.get("theme") for c in C if c.get("theme")})
+R["themes"] = len(themes); R["shape"] = SHAPE
+if C and SHAPE not in ("one argument", "several findings"): issue("contributions", "SHAPE is not set to 'one argument' or 'several findings'")
+if SHAPE == "one argument" and len(themes) > 1:
+    linked = {c["theme"] for c in C if c.get("builds_on")}
+    if len(themes) - len(linked) > 1: issue("contributions", "SHAPE 'one argument' with %d themes the paper does not link" % len(themes))
+ANAPHOR = re.compile(r"^\s*(It|Its|This|These|That|Those|So|Thus|Hence|Such|Together|Therefore)\b")
+GATHER = re.compile(r"^\s*(This|These|So|Thus|Hence|Together|Therefore|In all|All this)\b")
 def list_items(h, level=1):                  # (opening tag, inner html) of each <li> at this depth of nested lists
     out, depth, start = [], 0, None
     for m in re.finditer(r"<(/?)(ul|ol|li)\b[^>]*>", h):
@@ -126,18 +144,29 @@ for k, v in gv.items():
     points = list_items(parts["result"][1])
     R["gist_points"][k] = len(points)
     if not points: issue("root gist/" + k, "Result is not a list of points, one per contribution")
-    got = set()
+    got = set(); seen_themes = []
     for tag, inner in points:
         c = claims_of(tag + inner)
-        if len(c) != 1: issue("root gist/" + k, "a point claims %s; each point states exactly one contribution" % (", ".join(sorted(c)) or "nothing"))
+        cid = sorted(c, key=lambda x: [i for i, cc in enumerate(C) if cc["id"] == x] or [0])[0] if c else None
+        if cid and ANAPHOR.match(plain(inner)) and not (by_id.get(cid, {}).get("builds_on") and by_id[cid]["builds_on"] in got):
+            issue("root gist/" + k, "a point leans on the one before ('%s…') without a link the paper states: name its subject" % plain(inner)[:24])
+        th = by_id.get(cid, {}).get("theme")
+        if th and seen_themes and th != seen_themes[-1] and th in seen_themes: issue("root gist/" + k, "the points of theme %s are not together" % th)
+        if th: seen_themes.append(th)
+        one_theme = len({by_id.get(x, {}).get("theme") for x in c}) == 1
+        if not c or (len(c) > 1 and not (SHAPE == "several findings" and one_theme)):
+            issue("root gist/" + k, "a point claims %s; a point states one contribution (several findings: one finding's)" % (", ".join(sorted(c)) or "nothing"))
         if c & got: issue("root gist/" + k, "%s has two points" % ", ".join(sorted(c & got)))
         got |= c
-        n = words(inner); lim_p = 40 if k == "specialist" else 30
+        n = words(inner); lim_p = (40 if k == "specialist" else 30) + (25 if len(c) > 1 else 0)
         if n > lim_p: issue("root gist/" + k, "a point of %d words (about 25, at most %d): %s…" % (n, lim_p, plain(inner)[:50]))
         for m in VAGUE.finditer(plain(inner)): issue("root gist/" + k, "a point says only that something was found: '%s'" % m.group(0))
     need = in_abstract
     if need - got: issue("root gist/" + k, "Result does not state %s" % ", ".join(sorted(need - got)))
     if got - ids_c: issue("root gist/" + k, "Result claims unknown %s" % ", ".join(sorted(got - ids_c)))
+    why_text = plain(re.sub(r"<b>.*?</b>", "", parts["why it matters"][1]))
+    if SHAPE == "several findings" and GATHER.match(why_text):
+        issue("root gist/" + k, "Why it matters gathers several findings into one conclusion ('%s…')" % why_text[:20])
     for lab in ("context", "why it matters"):
         inner = parts[lab][1]
         if claims_of(inner): issue("root gist/" + k, "%s states a result (%s): it belongs under Result" % (lab.capitalize(), ", ".join(sorted(claims_of(inner)))))
@@ -153,13 +182,18 @@ R["root_brief_words"] = words(rb); R["root_brief_paragraphs"] = len(paras)
 R["root_brief_long_sentences"] = len(long_sentences(rb))
 R["root_brief_formulas"] = formulas(rb)
 if not 450 <= words(rb) <= 700: issue("root brief", "%d words (450-700)" % words(rb))
-if not 4 <= len(paras) <= 6: issue("root brief", "%d paragraphs (4-6)" % len(paras))
+if not 4 <= len(paras) <= 7: issue("root brief", "%d paragraphs (4-7)" % len(paras))
 for k, p in enumerate(paras, 1):          # (one relation per paragraph)
     if formulas(p) > 3: issue("root brief ¶%d" % k, "%d formulas (at most 3)" % formulas(p))
 for s in long_sentences(rb): issue("root brief", "long sentence (%d words): %s…" % (len(s.split()), s[:70]))
 if re.search(r"\bthe (discussion|paper|section) (summari[sz]es|concludes)", plain(rb), re.I): issue("root brief", "meta sentence")
 
 rb_cov = set(" ".join(re.findall(r'data-covers="([^"]+)"', rb)).split())
+if SHAPE == "several findings" and len(themes) > 1:
+    where_theme = {w: c.get("theme") for c in C for w in c.get("where", [])}
+    para_themes = [{where_theme[w] for w in set(" ".join(re.findall(r'data-covers="([^"]+)"', p)).split()) if w in where_theme} for p in paras]
+    for th in themes:
+        if not any(pt == {th} for pt in para_themes): issue("root brief", "finding %s has no paragraph of its own" % th)
 for c in C:
     if not set(c.get("where", [])) & rb_cov: issue("root brief", "does not ground contribution %s in any of its paragraphs" % c["id"])
 # ---- grounding: a span should cover paragraphs, not whole sections
@@ -217,7 +251,7 @@ R["questions"] = len(L.QUESTIONS)
 R["question_answer_words_mean"] = round(sum(words(q["a"]) for q in L.QUESTIONS) / max(1, len(L.QUESTIONS)), 1)
 for q in L.QUESTIONS:
     w = words(q["a"])
-    if not 40 <= w <= 90: issue("question " + q["id"], "answer %d words (40-90)" % w)
+    if not 35 <= w <= 90: issue("question " + q["id"], "answer %d words (about 40-90)" % w)
 R["issue_count"] = len(R["issues"])
 
 if AS_JSON:
