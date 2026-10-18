@@ -260,6 +260,7 @@ body {{ overflow-x: clip; }}
  </header>
 {items}
 {merge_caches(*caches)}
+ <footer class="colophon"><a href="https://github.com/erezu1/conifer">github.com/erezu1/conifer</a></footer>
 </main>
 <script>
 (function () {{
