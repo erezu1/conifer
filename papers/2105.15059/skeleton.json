@@ -1,0 +1,628 @@
+{
+ "format": "conifer-doc",
+ "version": 1,
+ "meta": {
+  "title": "The entanglement entropy of typical pure states and replica wormholes",
+  "authors": [
+   "Erez Y. Urbach"
+  ],
+  "arxiv": null,
+  "abstractHtml": "<p>In a 1+1 dimensional QFT on a circle, we consider the von Neumann entanglement entropy of an interval for typical pure states. As a function of the interval size, we expect a Page curve in the entropy. We employ a specific ensemble average of pure states, and show how to write the ensemble-averaged Rényi entropy as a path integral on a singular replicated geometry. Assuming that the QFT is a conformal field theory with a gravitational dual, we then use the holographic dictionary to obtain the Page curve. For short intervals the thermal saddle is dominant. For large intervals (larger than half of the circle size), the dominant saddle connects the replicas in a non-trivial way using the singular boundary geometry. The result extends the ‘island conjecture’ to a non-evaporating setting.</p>",
+  "kicker": null,
+  "titleHtml": "The entanglement entropy of typical pure states and replica wormholes",
+  "key": {},
+  "defaultAudience": "physicist",
+  "source": {
+   "kind": "epsilon",
+   "doc": "papers/2105.15059/doc"
+  }
+ },
+ "levels": [
+  {
+   "key": "gist",
+   "label": "Gist",
+   "hint": "the trunk: the three things to know"
+  },
+  {
+   "key": "brief",
+   "label": "Summary",
+   "hint": "the branches: one page, every sentence opens"
+  },
+  {
+   "key": "paper",
+   "label": "Paper",
+   "hint": "the foliage: the full text, with the roots folded"
+  }
+ ],
+ "audiences": [],
+ "root": {
+  "id": "root",
+  "kind": "paper",
+  "children": [
+   {
+    "id": "section-1",
+    "kind": "section",
+    "number": "1",
+    "title": "Introduction",
+    "titleHtml": "Introduction",
+    "children": [
+     {
+      "id": "section-1-p1",
+      "kind": "paragraph",
+      "body": "<p>One of the main recent developments in the study of quantum gravity are replica wormholes: non-trivial gravitational solutions connecting the replicas in the quantum gravitational replica-trick <span class=\"cite\">[<a href=\"#cite-Penington-2019kki\">1</a>, <a href=\"#cite-Almheiri-2019qdq\">2</a>]</span>. These solutions give rise to a refinement of the gravitational von Neumann entropy formula called the island conjecture <span class=\"cite\">[<a href=\"#cite-Almheiri-2019psf\">3</a>, <a href=\"#cite-Penington-2019npb\">4</a>, <a href=\"#cite-Almheiri-2020cfm\">5</a>]</span>. In the context of evaporating black holes, these solutions are dominant at large times, leading to the Page-curve of the black hole radiation.</p>",
+      "hash": "df85ac525b65"
+     },
+     {
+      "id": "section-1-p2",
+      "kind": "paragraph",
+      "body": "<p>In this letter, we study a purely gravitational system on <l2m-math n=\"0\"></l2m-math> with no evaporation or dynamics. In the dual field theory on spatial <l2m-math n=\"1\"></l2m-math> we ask for the von Neumann entropy <l2m-math n=\"2\"></l2m-math>, <l2m-math n=\"3\"></l2m-math> a region of <l2m-math n=\"4\"></l2m-math>, of a typical high-energy pure state. Holographically this quantity describes the spatial encoding of a typical <l2m-math n=\"5\"></l2m-math>-dimensional AdS black hole microstate in the dual boundary theory. For a typical state, we expect <l2m-math n=\"6\"></l2m-math> to follow a Page curve in <l2m-math n=\"7\"></l2m-math> (see figure <a href=\"#fig-page_curv\">1</a>). In fact, this is exactly the toy model used by Page for black hole evaporation <span class=\"cite\">[<a href=\"#cite-Page-1993df\">6</a>, <a href=\"#cite-Page-1993wv\">7</a>]</span>. By employing an ensemble average over microstates we show how to get this curve using the standard holographic dictionary of Euclidean gravity. We find a phenomenon similar to replica wormholes, but without conjecturing their existence in the quantum gravity path integral. Instead, the non-trivial replica topologies are imposed by the field theory calculation, from the purity of ensemble states. The result is a generalization of the standard thermal RT formula <span class=\"cite\">[<a href=\"#cite-Azeyanagi-2007bj\">8</a>]</span> for the typical pure state, where now the RT surface has a weaker homology constraint <span class=\"cite\">[<a href=\"#cite-Haehl-2014zoa\">9</a>]</span>.</p>",
+      "hash": "e7f6a3b227c5"
+     },
+     {
+      "id": "section-1-p3",
+      "kind": "paragraph",
+      "body": "<p>A closely related quantity is the thermal density matrix. Compared to an energetic pure state, the von Neumann entropy of the thermal density matrix is a more controlled quantity. One reason is that thermal entropies can be written in field theory as a Euclidean path integral over some geometry. The holographic dictionary can then be used to map these quantities to classical observables in the dual gravitational theory <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>]</span>. In this way, the thermodynamic entropy <l2m-math n=\"8\"></l2m-math> was found by Gibbons and Hawking <span class=\"cite\">[<a href=\"#cite-Gibbons-1976ue\">11</a>]</span> to be proportional to the dual black hole horizon area. Similarly, the thermal von Neumann entropy <l2m-math n=\"9\"></l2m-math> is given by the RT formula in the background of a stationary AdS black hole <span class=\"cite\">[<a href=\"#cite-Ryu-2006bv\">12</a>, <a href=\"#cite-Nishioka-2009un\">13</a>, <a href=\"#cite-Ryu-2006ef\">14</a>]</span>. However the von Neumann entropy of a generic high-energy microstate can’t be written in such a simple path integral but typically requires <l2m-math n=\"10\"></l2m-math> operator insertions. While being practically impossible to calculate exactly on the field theory side, it is unclear to what extent semiclassical analysis applies to a specific black hole microstate.<sup class=\"fnref\"><a href=\"#fn1\" id=\"fnref1\">1</a></sup></p>",
+      "hash": "aa5b13443689"
+     },
+     {
+      "id": "section-1-p4",
+      "kind": "paragraph",
+      "body": "<p>Instead of looking at a specific microstate, we propose an ensemble of pure states, weighted by a Boltzmann-like factor parametrized by <l2m-math n=\"11\"></l2m-math>. Taking the ensemble average over the different microstate entropies “<l2m-math n=\"12\"></l2m-math>&quot; allows us to write it as a path integral similar to the thermal case, albeit over a singular geometry. The resulting averaged entropy claims to capture the von Neumann entropy of a typical microstate with a given energy <l2m-math n=\"13\"></l2m-math>. The singularity of the integral is a result of the pure state being the same one on all the different replicas in the Rényi entropy calculation. The singular behavior allows for several equivalent geometrical interpretations of the field theory replica path integral. One geometry resembles the thermal calculation, while a second geometry connects all replicas together (see figure <a href=\"#fig-topologies\">4</a>). The field theory path integrals over each of the geometries are equal mathematically.</p>",
+      "hash": "50d011b172c1"
+     },
+     {
+      "id": "section-1-p5",
+      "kind": "paragraph",
+      "body": "<p>Writing the averaged entropy as a path integral, we can employ the holographic dictionary to find its value. We propose that a holographic calculation can be made by taking all the field-theory geometries as possible asymptotic boundaries for the gravitational path integral. Each boundary geometry gives (in the large <l2m-math n=\"14\"></l2m-math> saddle-point approximation) a different saddle (see figure <a href=\"#fig-pure_RT\">5</a>). Whenever dominant, the saddle with the standard thermal boundary geometry gives the thermal RT result <l2m-math n=\"15\"></l2m-math>. Here <l2m-math n=\"16\"></l2m-math> is the RT surface in the background of an AdS black hole <span class=\"cite\">[<a href=\"#cite-Azeyanagi-2007bj\">8</a>]</span>. Notably, the RT surface <l2m-math n=\"17\"></l2m-math> is homologous to the (asymptotic) entanglement region <l2m-math n=\"18\"></l2m-math>. The second boundary geometry has a corresponding gravitational saddle which smoothly connects the replicas non-trivially (also) in the bulk. The resulted contribution of this saddle to the von Neumann entropy (when dominant) can be written as <l2m-math n=\"19\"></l2m-math>. <l2m-math n=\"20\"></l2m-math> is another extremal surface of the same background geometry as <l2m-math n=\"21\"></l2m-math>, but one homologous to the complement <l2m-math n=\"22\"></l2m-math>. The bulk entangling surface can be understood in this case as an ‘island’ covering the horizon.</p>",
+      "hash": "32da7e822891"
+     },
+     {
+      "id": "section-1-p6",
+      "kind": "paragraph",
+      "body": "<p>The final result is a refinement of the RT formula for the case of typical pure states, where we allow the RT surface <l2m-math n=\"23\"></l2m-math> to be homologous to either <l2m-math n=\"24\"></l2m-math> or its complement <l2m-math n=\"25\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn2\" id=\"fnref2\">2</a></sup> At small <l2m-math n=\"26\"></l2m-math> the thermal saddle dominates, giving an agreement of the typical pure state entropy with the thermal entropy. This result is supported by expectations from eigenstate-thermalization-hypothesis (ETH) calculations <span class=\"cite\">[<a href=\"#cite-Goldstein-2005aib\">18</a>, <a href=\"#cite-Dymarsky-2016ntg\">19</a>, <a href=\"#cite-Fujita-2017pju\">20</a>]</span> and large central charge expansions <span class=\"cite\">[<a href=\"#cite-He-2017vyf\">21</a>]</span>. As a function of the entanglement region <l2m-math n=\"27\"></l2m-math>, a Page-curve occurs as the non-trivial saddle becomes dominant over the thermal saddle for large enough regions (figure <a href=\"#fig-phase_transition\">6</a>). The non-trivial saddle thus ensures the ‘purity’ of the result <l2m-math n=\"28\"></l2m-math>. Therefore, both in the field theory and in gravity, the non-trivial geometry of the replica calculation is directly related to the purity of the state.</p>",
+      "hash": "6aa85333c642"
+     },
+     {
+      "id": "section-1-p7",
+      "kind": "paragraph",
+      "body": "<p>We start in section <a href=\"#sec-ensemble\">2</a> by describing the ensemble of pure-states we will use to calculate the averaged entropy. The calculation of the averaged pure state entropy is best understood as a generalization of the thermal entropy calculation. We, therefore, begin in section <a href=\"#sec-thermal\">3</a> by briefly reviewing the von Neumann entropy calculation for the thermal density matrix. We explain how in field theories the von Neumann entropy can be written as a replica path integral, and (following <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>]</span>) how computing the path integral using the holographic dictionary gives the RT formula. Finally, in section <a href=\"#sec-typical\">4</a> we show how a similar calculation can be made studying the von Neumann entropy averaged over the ensemble of pure states defined in section <a href=\"#sec-ensemble\">2</a>. In particular, we show how for any field theory the averaged Rényi entropy can be written as a path integral <a href=\"#eq-av_renyi_path\">(4.5)</a>. Using the holographic dictionary we find our proposed refinement of the RT formula for typical pure states <a href=\"#eq-typical_RT_proposal\">(4.9)</a>.</p>",
+      "hash": "ab46756670f2"
+     },
+     {
+      "id": "fig-page_curv",
+      "kind": "figure",
+      "title": "Figure 1",
+      "body": "<figure class=\"float figure\" id=\"fig-page_curv\"><p><img src=\"images/31324fee308567ab.png\" alt=\"\" style=\"width:50%\"></p><figcaption><span class=\"capname\">Figure 1.</span> In <l2m-math n=\"29\"></l2m-math> dimensions, we consider a theory on a circle with periodicity <l2m-math n=\"30\"></l2m-math>. The graph is a schematic picture for the von Neumann entropy on the interval <l2m-math n=\"31\"></l2m-math>. The thermal result (in red) is calculated by first averaging the pure density matrix and then taking the von Neumann entropy. The pure ‘Page-like’ result can be obtained by averaging over the pure von Neumann entropies (in blue). <span id=\"fig-page_curv\" class=\"anchor\"></span> </figcaption></figure>",
+      "hash": "bf0924734c33"
+     }
+    ]
+   },
+   {
+    "id": "sec-ensemble",
+    "kind": "section",
+    "number": "2",
+    "title": "The ensemble of states",
+    "titleHtml": "The ensemble of states",
+    "children": [
+     {
+      "id": "sec-ensemble-p1",
+      "kind": "paragraph",
+      "body": "<p>We will focus here on Euclidean two-dimensional field theories on <l2m-math n=\"32\"></l2m-math> but everything can be generalized to theories in a general dimension <l2m-math n=\"33\"></l2m-math> on <l2m-math n=\"34\"></l2m-math>. We denote the fields in the theory collectively by <l2m-math n=\"35\"></l2m-math>. In the main text, we assume <l2m-math n=\"36\"></l2m-math> is a scalar. We believe the calculations described can be extended, with suitable adjustments, to fermions and gauge fields. Specifically, they are expected to be generalizable to known holographic CFTs such as <l2m-math n=\"37\"></l2m-math> SYM on <l2m-math n=\"38\"></l2m-math>.</p>",
+      "hash": "6dd2d3760c26"
+     },
+     {
+      "id": "sec-ensemble-p2",
+      "kind": "paragraph",
+      "body": "<p>We start by defining our ensemble of pure states <l2m-math n=\"39\"></l2m-math>, <l2m-math n=\"40\"></l2m-math> is the ensemble index. First, we choose a set of commuting operators that we denote collectively <l2m-math n=\"41\"></l2m-math> and its eigenbasis <l2m-math n=\"42\"></l2m-math> with <l2m-math n=\"43\"></l2m-math>, which we assume to uniquely identify the state. Our ensemble of pure states is the Euclidean evolution of this basis</p>\n<div class=\"display\" id=\"eq-ensemble_state\"><div class=\"eqbody\"><l2m-math n=\"44\"></l2m-math></div><span class=\"eqno\">(2.1)</span></div>\n<p class=\"cont\">for all <l2m-math n=\"45\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn3\" id=\"fnref3\">3</a></sup> Over the following sections, our favorite choice for the operators <l2m-math n=\"46\"></l2m-math> would be all the field operators <l2m-math n=\"47\"></l2m-math>, which correspond to the field state basis <l2m-math n=\"48\"></l2m-math> for every field configuration <l2m-math n=\"49\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn4\" id=\"fnref4\">4</a></sup> For this choice of basis the ensemble states (sandwiched with a field-state <l2m-math n=\"54\"></l2m-math>) can be written as a Euclidean path integral</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"55\"></l2m-math></div><span class=\"eqno\">(2.2)</span></div>\n<p class=\"cont\">For any other basis a similar path integral can be written, only the identification (the green circle) at <l2m-math n=\"56\"></l2m-math> would be <l2m-math n=\"57\"></l2m-math>. The role of the Euclidean evolution is to select on average states with energy <l2m-math n=\"58\"></l2m-math>. One way to see it is to decompose the ensemble states into energy eigenstates <l2m-math n=\"59\"></l2m-math>. The energy of the state <l2m-math n=\"60\"></l2m-math> is thus</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"61\"></l2m-math></div><span class=\"eqno\">(2.3)</span></div>\n<p class=\"cont\">For generic operators <l2m-math n=\"62\"></l2m-math> we expect the <l2m-math n=\"63\"></l2m-math>’s to be random, and each state <l2m-math n=\"64\"></l2m-math> should resemble a typical state in the canonical ensemble. Note that the energy basis will completely localize the <l2m-math n=\"65\"></l2m-math>s and won’t give the necessary Boltzmann suppression. One can try to fix it by using a microcanonical ensemble around a small energy window, but this option has other issues we will discuss later (see footnote <a href=\"#foot-typicality\">9</a>).</p>",
+      "hash": "e8b5e099a9c0"
+     },
+     {
+      "id": "sec-ensemble-p3",
+      "kind": "paragraph",
+      "body": "<p>For a given element of the ensemble, we can define the unnormalized density matrix <l2m-math n=\"66\"></l2m-math>. We separate the spatial circle into two regions: <l2m-math n=\"67\"></l2m-math> and its complement <l2m-math n=\"68\"></l2m-math>. The reduced density matrix is <l2m-math n=\"69\"></l2m-math>, which can be drawn as</p>\n<div class=\"display\" id=\"eq-density_matrix\"><div class=\"eqbody\"><l2m-math n=\"70\"></l2m-math></div><span class=\"eqno\">(2.4)</span></div>\n<p class=\"cont\">The green circles represent the <l2m-math n=\"71\"></l2m-math> identification at <l2m-math n=\"72\"></l2m-math>. The RHS represents the same calculation only in a shape of a torus <l2m-math n=\"73\"></l2m-math>. The horizontal circle is the spatial <l2m-math n=\"74\"></l2m-math> direction with periodicity <l2m-math n=\"75\"></l2m-math>. The vertical circle is the euclidean time direction <l2m-math n=\"76\"></l2m-math> with length <l2m-math n=\"77\"></l2m-math>. The cut is on the spatial interval <l2m-math n=\"78\"></l2m-math> and euclidean time <l2m-math n=\"79\"></l2m-math>. The green spatial circle covers all of <l2m-math n=\"80\"></l2m-math>.</p>",
+      "hash": "9bdbe491b555"
+     },
+     {
+      "id": "sec-ensemble-p4",
+      "kind": "paragraph",
+      "body": "<p>We want to calculate ensemble-averaged quantities, which we will denote with a bar <l2m-math n=\"81\"></l2m-math>. Given a quantity <l2m-math n=\"82\"></l2m-math> calculated on each ensemble state <l2m-math n=\"83\"></l2m-math>, the averaged quantity can be written formally as <l2m-math n=\"84\"></l2m-math>. For discrete bases, this sum has a well-defined meaning. For continuous bases, like the field basis <l2m-math n=\"85\"></l2m-math>, we need to specify a measure on the formal sum, and the value of <l2m-math n=\"86\"></l2m-math> will depend on that choice. A similar question arises when one needs to define the trace at a given basis, where formally <l2m-math n=\"87\"></l2m-math>. Up to an overall constant, we will use the same measure used for the trace. In the case of the field basis <l2m-math n=\"88\"></l2m-math>, this amounts to a path integral <l2m-math n=\"89\"></l2m-math>.</p>",
+      "hash": "2bab21b618d1"
+     }
+    ]
+   },
+   {
+    "id": "sec-thermal",
+    "kind": "section",
+    "number": "3",
+    "title": "The thermal mixed state",
+    "titleHtml": "The thermal mixed state",
+    "children": [
+     {
+      "id": "section-3.1",
+      "kind": "section",
+      "number": "3.1",
+      "title": "QFT side",
+      "titleHtml": "QFT side",
+      "children": [
+       {
+        "id": "section-3.1-p1",
+        "kind": "paragraph",
+        "body": "<p>As a first step, we would like to find the entanglement-entropy of the averaged density matrix <l2m-math n=\"90\"></l2m-math>. We define the ensemble-averaged density matrix <l2m-math n=\"91\"></l2m-math> by the (normalized) statistical mixture of all the individual <l2m-math n=\"92\"></l2m-math> in the ensemble. The result is simply the thermal density matrix</p>\n<div class=\"display\" id=\"eq-av_rho_thermal\"><div class=\"eqbody\"><l2m-math n=\"93\"></l2m-math></div><span class=\"eqno\">(3.1)</span></div>\n<p class=\"cont\">The normalization is <l2m-math n=\"94\"></l2m-math>. Note that the result is independent of the basis we chose (or the operators <l2m-math n=\"95\"></l2m-math>).<sup class=\"fnref\"><a href=\"#fn5\" id=\"fnref5\">5</a></sup> In terms of path integrals, we simply replaced the boundary conditions by a geometrical identification as in the right-hand side of <a href=\"#eq-density_matrix\">(2.4)</a>, but without the green circle. Finally, we define the reduced averaged density matrix as <l2m-math n=\"99\"></l2m-math>. In the rest of the section, we briefly explain how to find the entanglement-entropy for <l2m-math n=\"100\"></l2m-math> in field theory and using holography. Although these results are well known in the literature they will help us motivate the calculation of the next section, for the pure typical state.</p>",
+        "hash": "16380a093635"
+       },
+       {
+        "id": "section-3.1-p2",
+        "kind": "paragraph",
+        "body": "<p>For every density matrix <l2m-math n=\"101\"></l2m-math>, its von Neumann or entanglement entropy <l2m-math n=\"102\"></l2m-math> can be written using the Rényi entropy <l2m-math n=\"103\"></l2m-math>:</p>\n<div class=\"display multi\" id=\"eq-EE_def\"><span id=\"eq-renyi_def\" class=\"anchor\"></span><div class=\"eqbody\"><l2m-math n=\"104\"></l2m-math></div></div>\n<p class=\"cont\">Using <a href=\"#eq-av_rho_thermal\">(3.1)</a>, we can write <l2m-math n=\"105\"></l2m-math>. Here <l2m-math n=\"106\"></l2m-math> is the partition-function on <l2m-math n=\"107\"></l2m-math>, and <l2m-math n=\"108\"></l2m-math> is the partition-function over the <l2m-math n=\"109\"></l2m-math>-sheeted torus we call <l2m-math n=\"110\"></l2m-math>. To define it, start with <l2m-math n=\"111\"></l2m-math> copies of the torus <l2m-math n=\"112\"></l2m-math> and denote the intervals of the i’th replica <l2m-math n=\"113\"></l2m-math>, <l2m-math n=\"114\"></l2m-math>. <l2m-math n=\"115\"></l2m-math> is defined by cutting these intervals and gluing them back by <l2m-math n=\"116\"></l2m-math> for <l2m-math n=\"117\"></l2m-math>, and <l2m-math n=\"118\"></l2m-math>. We can draw the result by</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"119\"></l2m-math></div><span class=\"eqno\">(3.4)</span></div>\n<p class=\"cont\">Explicitly in terms of path integrals we can write</p>\n<div class=\"display\" id=\"eq-thermal_renyi\"><div class=\"eqbody\"><l2m-math n=\"120\"></l2m-math></div><span class=\"eqno\">(3.5)</span></div>",
+        "hash": "609f703fe364"
+       },
+       {
+        "id": "section-3.1-p3",
+        "kind": "paragraph",
+        "body": "<p>The behavior of the thermal von Neumann entropy <l2m-math n=\"121\"></l2m-math> is known at several regimes. For low temperatures <l2m-math n=\"122\"></l2m-math> the ensemble localize to the ground-state, and the result on <l2m-math n=\"123\"></l2m-math> is universal (up to a cutoff-dependent additive constant) <span class=\"cite\">[<a href=\"#cite-Holzhey-1994we\">23</a>, <a href=\"#cite-Calabrese-2004eu\">24</a>, <a href=\"#cite-Ryu-2006ef\">14</a>]</span></p>\n<div class=\"display\" id=\"eq-vac_ee\"><div class=\"eqbody\"><l2m-math n=\"124\"></l2m-math></div><span class=\"eqno\">(3.6)</span></div>\n<p class=\"cont\"><l2m-math n=\"125\"></l2m-math> being the UV cutoff. We are interested instead in the high-temperature limit <l2m-math n=\"126\"></l2m-math>. At least for <l2m-math n=\"127\"></l2m-math> one can use the universal finite temperature limit on the line <span class=\"cite\">[<a href=\"#cite-Calabrese-2004eu\">24</a>, <a href=\"#cite-Ryu-2006ef\">14</a>]</span></p>\n<div class=\"display\" id=\"eq-thermal_ee\"><div class=\"eqbody\"><l2m-math n=\"128\"></l2m-math></div><span class=\"eqno\">(3.7)</span></div>\n<p class=\"cont\">On general grounds, we expect the thermal entropy <l2m-math n=\"129\"></l2m-math> to increase with <l2m-math n=\"130\"></l2m-math> (at least for small enough <l2m-math n=\"131\"></l2m-math>), and to reach the thermodynamic entropy of the theory <l2m-math n=\"132\"></l2m-math> at <l2m-math n=\"133\"></l2m-math>. Note that unlike the individual <l2m-math n=\"134\"></l2m-math>, <l2m-math n=\"135\"></l2m-math> is not pure, and so we don’t expect <l2m-math n=\"136\"></l2m-math> (see figure <a href=\"#fig-page_curv\">1</a>).</p>",
+        "hash": "02d46738ad30"
+       },
+       {
+        "id": "section-3.1-p4",
+        "kind": "paragraph",
+        "body": "<p>We would like to stress a trivial point. At the denominator of <a href=\"#eq-thermal_renyi\">(3.5)</a> for example, we took the path integral over <l2m-math n=\"137\"></l2m-math>. The reason is that the normalization of the thermal density matrix is the trace <l2m-math n=\"138\"></l2m-math>. Using the path integral formalism, the trace can be written as a path integral on <l2m-math n=\"139\"></l2m-math> with periodic identification</p>\n<div class=\"display\" id=\"eq-trace_canonical\"><div class=\"eqbody\"><l2m-math n=\"140\"></l2m-math></div><span class=\"eqno\">(3.8)</span></div>\n<p class=\"cont\">Note that this is not directly the same as the path integral on the torus. In <a href=\"#eq-trace_canonical\">(3.8)</a> only the field is identified at the two ends, whereas for the torus we assume only smooth configurations of the field. More concretely, in <a href=\"#eq-trace_canonical\">(3.8)</a> a derivative discontinuity at <l2m-math n=\"141\"></l2m-math> cost no action, unlike on the torus. The reason the two computations do agree is that smooth configurations on the torus can approximate functions with discontinuous derivative arbitrarily close to <l2m-math n=\"142\"></l2m-math>. We checked these claims explicitly for the free scalar and <l2m-math n=\"143\"></l2m-math> in appendix <a href=\"#app-ident\">B</a>. These comments also apply to the numerator of <a href=\"#eq-thermal_renyi\">(3.5)</a>, where the path integral is over the <l2m-math n=\"144\"></l2m-math>-sheeted torus <l2m-math n=\"145\"></l2m-math>. Although we discuss the field basis, similar statements should hold for other bases as well.</p>",
+        "hash": "989ef539b319"
+       }
+      ]
+     },
+     {
+      "id": "sec-termal_GR",
+      "kind": "section",
+      "number": "3.2",
+      "title": "Gravity side",
+      "titleHtml": "Gravity side",
+      "children": [
+       {
+        "id": "sec-termal_GR-p1",
+        "kind": "paragraph",
+        "body": "<p>Holographically the calculation of the thermal entropy <l2m-math n=\"146\"></l2m-math> at high temperatures corresponds to the study of RT surfaces in the background of an Euclidean AdS black hole <span class=\"cite\">[<a href=\"#cite-Hawking-1982dh\">25</a>, <a href=\"#cite-Witten-1998zw\">26</a>, <a href=\"#cite-Azeyanagi-2007bj\">8</a>]</span>. Below we follow <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>, <a href=\"#cite-Ryu-2006bv\">12</a>]</span> and emphasize the main ingredients leading to the RT formula.</p>",
+        "hash": "744db801339f"
+       },
+       {
+        "id": "sec-termal_GR-p2",
+        "kind": "paragraph",
+        "body": "<p>The main observation of <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>]</span> is that both terms in the Rényi entropy <a href=\"#eq-thermal_renyi\">(3.5)</a> can be translated by the AdS/CFT dictionary to concrete gravitational calculations</p>\n<div class=\"display\" id=\"eq-renyi_grav\"><div class=\"eqbody\"><l2m-math n=\"147\"></l2m-math></div><span class=\"eqno\">(3.9)</span></div>\n<p class=\"cont\">Here <l2m-math n=\"148\"></l2m-math> is the gravitational on-shell action of the solution with a boundary of a torus <l2m-math n=\"149\"></l2m-math>, and <l2m-math n=\"150\"></l2m-math> with a boundary of <l2m-math n=\"151\"></l2m-math>. We stress again that the asymptotic topology of a torus (and not a cylinder) was due to the smoothness assumption we were allowed to take. We are interested in the <l2m-math n=\"152\"></l2m-math> limit, where <l2m-math n=\"153\"></l2m-math> corresponds to the Euclidean global BTZ solution with temperature <l2m-math n=\"154\"></l2m-math>. This solution topologically closes the asymptotic time circle <l2m-math n=\"155\"></l2m-math> in the bulk. To find <l2m-math n=\"156\"></l2m-math> we will look for bulk solutions that keep the <l2m-math n=\"157\"></l2m-math> replica symmetry. While each sheet of <l2m-math n=\"158\"></l2m-math> is continued to the bulk, the replicated line <l2m-math n=\"159\"></l2m-math> is continued inside to a replicated surface <l2m-math n=\"160\"></l2m-math>, together forming a smooth geometry. The authors of <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>]</span> showed how to analytically continue this solution in <l2m-math n=\"161\"></l2m-math> and that as <l2m-math n=\"162\"></l2m-math> the difference in <a href=\"#eq-renyi_grav\">(3.9)</a> localize to the boundary of the replicated surface <l2m-math n=\"163\"></l2m-math>. Taking the limit carefully gives the RT formula <l2m-math n=\"164\"></l2m-math>, where we denoted the boundary of the bulk surface by <l2m-math n=\"165\"></l2m-math>. The equation of motion for the metric constrain <l2m-math n=\"166\"></l2m-math> to be an extremal line (a geodesic). As <l2m-math n=\"167\"></l2m-math> is the boundary of the replicated surface <l2m-math n=\"168\"></l2m-math>, it is also constrained to be homologous to the boundary replicated line <l2m-math n=\"169\"></l2m-math>. This is known as the ‘homology constraint’ of RT surfaces <span class=\"cite\">[<a href=\"#cite-Haehl-2014zoa\">9</a>, <a href=\"#cite-Rangamani-2016dms\">27</a>]</span>.</p>",
+        "hash": "7b924f37ce58"
+       },
+       {
+        "id": "sec-termal_GR-p3",
+        "kind": "paragraph",
+        "body": "<p>In our case, we need to find Euclidean BTZ space-like geodesic <l2m-math n=\"170\"></l2m-math> that ends asymptotically at <l2m-math n=\"171\"></l2m-math> and are homologous to <l2m-math n=\"172\"></l2m-math>. For every <l2m-math n=\"173\"></l2m-math> and high enough temperatures <l2m-math n=\"174\"></l2m-math> there is only one solution.<sup class=\"fnref\"><a href=\"#fn6\" id=\"fnref6\">6</a></sup> The geodesics are drawn schematically in figure <a href=\"#fig-thermal_RT\">2</a>. Calculating the length gives <span class=\"cite\">[<a href=\"#cite-Rangamani-2016dms\">27</a>]</span></p>\n<div class=\"display\" id=\"eq-thermal_ee_holo\"><div class=\"eqbody\"><l2m-math n=\"176\"></l2m-math></div><span class=\"eqno\">(3.10)</span></div>\n<p class=\"cont\"><l2m-math n=\"177\"></l2m-math> being a bulk UV regulator. At the limit <l2m-math n=\"178\"></l2m-math> we get back <a href=\"#eq-thermal_ee\">(3.7)</a> as drawn schematically in figure <a href=\"#fig-page_curv\">1</a>. The linear behavior is explained geometrically by the geodesic roughly ‘hug’ the black hole horizon for an arc of an angle <l2m-math n=\"179\"></l2m-math>. At <l2m-math n=\"180\"></l2m-math> the RT surface is the black hole horizon itself, which leads to the Bekenstein-Hawking formula for the thermodynamic entropy <l2m-math n=\"181\"></l2m-math>. In terms of the gravitational replica trick, the <l2m-math n=\"182\"></l2m-math> calculation is exactly that of Gibbons and Hawking <span class=\"cite\">[<a href=\"#cite-Gibbons-1976ue\">11</a>]</span>.</p>",
+        "hash": "bf15ea987a19"
+       },
+       {
+        "id": "fig-thermal_RT",
+        "kind": "figure",
+        "title": "Figure 2",
+        "body": "<figure class=\"float figure\" id=\"fig-thermal_RT\"><p><img src=\"images/f3b934a6359f8f67.png\" alt=\"\" style=\"width:60%\"></p><figcaption><span class=\"capname\">Figure 2.</span> The spatial slice of BTZ black hole. The outer circle is the <l2m-math n=\"183\"></l2m-math> boundary spatial slice. The inner circle is <l2m-math n=\"184\"></l2m-math> that we identify. The middle dashed circle is the (Euclidean) black hole horizon. The thick blue lines are two different boundary replicated lines <l2m-math n=\"185\"></l2m-math>. The surface <l2m-math n=\"186\"></l2m-math> is the extension of the replicated line inside the bulk. The blue line <l2m-math n=\"187\"></l2m-math> is its boundary, and the would-be extremal RT surface. <span id=\"fig-thermal_RT\" class=\"anchor\"></span></figcaption></figure>",
+        "hash": "64c79aacb37b"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sec-typical",
+    "kind": "section",
+    "number": "4",
+    "title": "Typical pure state",
+    "titleHtml": "Typical pure state",
+    "children": [
+     {
+      "id": "section-4.1",
+      "kind": "section",
+      "number": "4.1",
+      "title": "QFT side",
+      "titleHtml": "QFT side",
+      "children": [
+       {
+        "id": "section-4.1-p1",
+        "kind": "paragraph",
+        "body": "<p>In the previous section we studied the von Neumann entropy of the averaged density matrix. Here we would like instead to find the ensemble average of the von Neumann entropy</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"188\"></l2m-math></div><span class=\"eqno\">(4.1)</span></div>\n<p class=\"cont\">For brevity, we will denote this quantity (and its Rényi analogs) by <l2m-math n=\"189\"></l2m-math>. On cases where the ensemble represents typical states (see above), <l2m-math n=\"190\"></l2m-math> describes the von Neumann entropy of a typical pure state with energy <l2m-math n=\"191\"></l2m-math>. We will calculate the averaged entropy as the limit of the averaged Rényi entropy <l2m-math n=\"192\"></l2m-math>.</p>",
+        "hash": "09edd86eec48"
+       },
+       {
+        "id": "section-4.1-p2",
+        "kind": "paragraph",
+        "body": "<p>For an ensemble state <l2m-math n=\"193\"></l2m-math>, the Rényi entropy can be written as</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"194\"></l2m-math></div><span class=\"eqno\">(4.2)</span></div>\n<p class=\"cont\">where <l2m-math n=\"195\"></l2m-math> and <l2m-math n=\"196\"></l2m-math>. Taking the average gives</p>\n<div class=\"display multi\" id=\"eq-av_renyi_exact\"><span id=\"eq-av_renyi\" class=\"anchor\"></span><div class=\"eqbody\"><l2m-math n=\"197\"></l2m-math></div></div>\n<p class=\"cont\">In the second line we took a simplifying assumption, that the quantities self-average well enough so we can take the average inside the log. This assumption is for brevity only. In appendix <a href=\"#app-another_replica\">A</a> we show how to use a second replica trick to calculate <a href=\"#eq-av_renyi_exact\">(4.3)</a> exactly. For holographic theories the approximation is shown to be exact at leading (classical) order in <l2m-math n=\"198\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn7\" id=\"fnref7\">7</a></sup></p>",
+        "hash": "b54c87b0ce44"
+       },
+       {
+        "id": "section-4.1-p3",
+        "kind": "paragraph",
+        "body": "<p>Following our expression for the thermal case <a href=\"#eq-thermal_renyi\">(3.5)</a>, we can now write <a href=\"#eq-av_renyi\">(4.4)</a> in terms of a path integral</p>\n<div class=\"display\" id=\"eq-av_renyi_path\"><div class=\"eqbody\"><l2m-math n=\"199\"></l2m-math></div><span class=\"eqno\">(4.5)</span></div>\n<p class=\"cont\">By <l2m-math n=\"200\"></l2m-math> we mean a projector to states with the same <l2m-math n=\"201\"></l2m-math> eigenvalues on all the <l2m-math n=\"202\"></l2m-math> copies. Apart from the identification at <l2m-math n=\"203\"></l2m-math>, we got the same path integrals as in the thermal case <a href=\"#eq-thermal_renyi\">(3.5)</a>. Through the identification, the expression now depends on the ensemble basis we chose (unlike the thermal case). Specifically in the local field basis <l2m-math n=\"204\"></l2m-math> the delta-function take a simpler form, of identifying the field’s value between all the replicas on <l2m-math n=\"205\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn8\" id=\"fnref8\">8</a></sup> As the ensemble average is over pure states we expect <l2m-math n=\"208\"></l2m-math>. In fact this property is immediate from the topology of the manifold on <a href=\"#eq-av_renyi_path\">(4.5)</a> (unlike the thermal topology of <a href=\"#eq-thermal_renyi\">(3.5)</a>).</p>",
+        "hash": "7efb06f82156"
+       },
+       {
+        "id": "fig-pure_replica",
+        "kind": "figure",
+        "title": "Figure 3",
+        "body": "<figure class=\"float figure\" id=\"fig-pure_replica\"><p><l2m-math n=\"209\"></l2m-math></p><p><img src=\"images/bb03b8af4f74ab7b.png\" alt=\"\" style=\"width:100%\">,</p><figcaption><span class=\"capname\">Figure 3.</span> The replica trick for pure ensemble state <l2m-math n=\"210\"></l2m-math>. The green dashed circle represent the same boundary condition for all the replicas on the inner circle. The topology of the resulted manifold ensures <l2m-math n=\"211\"></l2m-math>. <span id=\"fig-pure_replica\" class=\"anchor\"></span></figcaption></figure>",
+        "hash": "850acbe3f3ec"
+       },
+       {
+        "id": "section-4.1-p4",
+        "kind": "paragraph",
+        "body": "<p>The reader may worry that the identification between the replicas in <a href=\"#eq-av_renyi_path\">(4.5)</a> makes the expression singular or even ill-defined. As the singularities are coming from a local theory it is enough to consider the denominator integral in <a href=\"#eq-av_renyi_path\">(4.5)</a>, which includes no replicated cut. In appendix <a href=\"#app-ident\">B</a> we study its behavior for the free scalar. The singularities from the identifications seem to be basis-dependent. These UV singularities can be regulated for example by a cutoff or the zeta-function regularization. In terms of a UV cutoff, the path integral can be regulated by the normal local counter-terms on the full manifold (as in the thermal case), together with new local counter-terms on the <l2m-math n=\"212\"></l2m-math> identified circles. Both because of the basis-dependence and due to the geometries we will consider, it is not clear what is the bulk interpretation of these divergences/counter-terms (see below).</p>",
+        "hash": "c33315f6485e"
+       },
+       {
+        "id": "section-4.1-p5",
+        "kind": "paragraph",
+        "body": "<p>What is the expected behavior for <l2m-math n=\"213\"></l2m-math>? For <l2m-math n=\"214\"></l2m-math> the ensemble reduce to the ground-state, and <l2m-math n=\"215\"></l2m-math> takes the universal ground-state result <a href=\"#eq-vac_ee\">(3.6)</a>. When the entanglement region is very small <l2m-math n=\"216\"></l2m-math> we can use the twist operator OPE and recover the ground-state result <a href=\"#eq-vac_ee\">(3.6)</a></p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"217\"></l2m-math></div><span class=\"eqno\">(4.6)</span></div>\n<p class=\"cont\">We are interested in the high temperatures limit <l2m-math n=\"218\"></l2m-math>. In the strict limit <l2m-math n=\"219\"></l2m-math> (the lattice regulator) the ensemble states are exactly the field states <l2m-math n=\"220\"></l2m-math>. Upon lattice regularization, these states are products of lattice-points position states giving <l2m-math n=\"221\"></l2m-math>. At intermediate temperatures <l2m-math n=\"222\"></l2m-math> we expect a thermal behavior <a href=\"#eq-thermal_ee\">(3.7)</a>. The intuition is that we trace over a big reservoir of a high-temperature pure state.<sup class=\"fnref\"><a href=\"#fn9\" id=\"fnref9\">9</a></sup> From the symmetry around <l2m-math n=\"223\"></l2m-math>, we expect a Page-like behavior for high-enough temperatures <l2m-math n=\"224\"></l2m-math> (see figure <a href=\"#fig-page_curv\">1</a>). In the next section, we find <l2m-math n=\"225\"></l2m-math> for holographic large-<l2m-math n=\"226\"></l2m-math> theories using semiclassical gravity. Based on either subsystem ETH <span class=\"cite\">[<a href=\"#cite-Dymarsky-2016ntg\">19</a>]</span> at <l2m-math n=\"227\"></l2m-math> or large central charge expansion <span class=\"cite\">[<a href=\"#cite-He-2017vyf\">21</a>]</span> we expect the pure state semiclassical result to exactly match the thermal holographic result <a href=\"#eq-thermal_ee_holo\">(3.10)</a> for <l2m-math n=\"228\"></l2m-math>. Below we will argue this is actually the case using the holographic dictionary.</p>",
+        "hash": "5673d9f91f19"
+       },
+       {
+        "id": "fig-topologies",
+        "kind": "figure",
+        "title": "Figure 4",
+        "body": "<figure class=\"float figure\" id=\"fig-topologies\"><p><img src=\"images/bb4b1e001ec446af.png\" alt=\"\" style=\"width:100%\">,</p><figcaption><span class=\"capname\">Figure 4.</span> Top left: <l2m-math n=\"229\"></l2m-math> cylinders with a replicated line. All the cylinder’s boundaries are identified (dashed blue line). Bottom left: Each cylinder is understood as a torus. <l2m-math n=\"230\"></l2m-math> is identified between the <l2m-math n=\"231\"></l2m-math> tori. Top right: stacking the <l2m-math n=\"232\"></l2m-math> cylinders into a bigger torus with temporal periodicity <l2m-math n=\"233\"></l2m-math>. the circles at times <l2m-math n=\"234\"></l2m-math> are identified. Bottom right: the same topology can be drawn as <l2m-math n=\"235\"></l2m-math> tori with another replicated circle at <l2m-math n=\"236\"></l2m-math>. <span id=\"fig-topologies\" class=\"anchor\"></span></figcaption></figure>",
+        "hash": "eadad4f224b1"
+       },
+       {
+        "id": "section-4.1-p6",
+        "kind": "paragraph",
+        "body": "<p>Before turning to the gravity side, we need to describe the topology of the manifolds in <a href=\"#eq-av_renyi_path\">(4.5)</a>. We claim that several different smooth geometries exist, all giving the same path integral <a href=\"#eq-av_renyi_path\">(4.5)</a>. As our main example we take the field states basis. The basic topology one gets from the canonical formulation is that of (<l2m-math n=\"237\"></l2m-math> times) <l2m-math n=\"238\"></l2m-math> intervals <l2m-math n=\"239\"></l2m-math> with field identifications between all their <l2m-math n=\"240\"></l2m-math> boundaries (top left in figure <a href=\"#fig-topologies\">4</a>). Specifically the field derivative might jump when crossing <l2m-math n=\"241\"></l2m-math>. For the thermal case <l2m-math n=\"242\"></l2m-math>, we argued above that we can assume the smoothness of the fields turning the interval topology to a circle, with equivalent results. Correspondingly, we can make different smoothness assumptions on the <l2m-math n=\"243\"></l2m-math> intervals changing the topology, with the same results. One option is to assume the smoothness of the fields when crossing at the same time interval, which results in the topology of <l2m-math n=\"244\"></l2m-math> tori (bottom left in figure <a href=\"#fig-topologies\">4</a>). Between the <l2m-math n=\"245\"></l2m-math> tori we still need to identify the fields at <l2m-math n=\"246\"></l2m-math>, which still allows a derivative jump when crossing to another torus. A second option we will consider is to stack the intervals into one long circle of length <l2m-math n=\"247\"></l2m-math>. We then take the field to be smooth along it, which results in a topology of a single long torus (top right in figure <a href=\"#fig-topologies\">4</a>). Along the torus we still identify the spatial-slices of <l2m-math n=\"248\"></l2m-math>, but not their derivative. We can also think of this topology as <l2m-math n=\"249\"></l2m-math>-sheeted torus (with time circle of length <l2m-math n=\"250\"></l2m-math>) with a replicated circle at <l2m-math n=\"251\"></l2m-math> (bottom right in figure <a href=\"#fig-topologies\">4</a>). We conclude that the two smoothness assumptions give rise to two different topologies. Specifically note that the first has <l2m-math n=\"252\"></l2m-math> connected components (for <l2m-math n=\"253\"></l2m-math>), while the second is connected (see figure <a href=\"#fig-topologies\">4</a>). The path integral on one will be equal to the second, and both to the original cylinder geometry of <a href=\"#eq-av_renyi_path\">(4.5)</a>.</p>",
+        "hash": "a6ce57ee559d"
+       },
+       {
+        "id": "section-4.1-p7",
+        "kind": "paragraph",
+        "body": "<p>One can make the same smoothness assumptions also for the numerator in <a href=\"#eq-av_renyi_path\">(4.5)</a>, which will add a replicated line along <l2m-math n=\"254\"></l2m-math> (and <l2m-math n=\"255\"></l2m-math>) to the same geometries. In fact, starting from one of the two geometries at some <l2m-math n=\"256\"></l2m-math>, and continuously deforming the cut to <l2m-math n=\"257\"></l2m-math> will result in the second geometry of <l2m-math n=\"258\"></l2m-math>. The two compact topologies described are the only ones that respect the <l2m-math n=\"259\"></l2m-math> replica symmetry. There are more complicated topologies (correspond to other smoothness assumptions) that break the symmetry, which we won’t describe here. Following the thermal <l2m-math n=\"260\"></l2m-math> case, we argue all the different topologies are equivalent in the path integral, and equivalent to the original description where no smoothness assumptions were assumed.<sup class=\"fnref\"><a href=\"#fn10\" id=\"fnref10\">10</a></sup> We stress that we don’t mean one needs to sum over all these topologies to get the right result in <a href=\"#eq-av_renyi_path\">(4.5)</a>. We are claiming that the path integrals are equal, and the path integral on either one of the geometries (together with the remaining identifications) is already the right result. We show it explicitly at <l2m-math n=\"261\"></l2m-math> (two replicas) for the free theory in appendix <a href=\"#app-ident\">B</a>.</p>",
+        "hash": "6f7f8f4c326b"
+       }
+      ]
+     },
+     {
+      "id": "section-4.2",
+      "kind": "section",
+      "number": "4.2",
+      "title": "Gravity side",
+      "titleHtml": "Gravity side",
+      "children": [
+       {
+        "id": "section-4.2-p1",
+        "kind": "paragraph",
+        "body": "<p>We now turn to calculate the averaged entropy <l2m-math n=\"262\"></l2m-math> using holography. Following the thermal calculation reviewed in section <a href=\"#sec-termal_GR\">3.2</a>, we will do it by analytically continuing the gravitational calculation of the averaged Rényi entropies <a href=\"#eq-av_renyi_path\">(4.5)</a>. The first step is to write the path integrals in <a href=\"#eq-av_renyi_path\">(4.5)</a> as gravitational path integrals. At the CFT we found several equivalent compact topologies corresponding to different smoothness assumptions. To calculate the dual gravitational path integral we will assume that the main contribution to the path integral comes from smooth geometries that satisfy the boundary conditions. In this way, we get different saddles from each boundary topology. But unlike the QFT side, the saddles from each boundary topology won’t be equivalent to each other anymore and will give different results. We conclude that on the gravity side one needs to sum over saddles from all the allowed boundary topologies. As a sanity check, note that in this way the <l2m-math n=\"263\"></l2m-math> symmetry of <a href=\"#eq-av_renyi_path\">(4.5)</a> is preserved also in the bulk (see below).</p>",
+        "hash": "cd2ee9e47b31"
+       },
+       {
+        "id": "section-4.2-p2",
+        "kind": "paragraph",
+        "body": "<p>Let’s be more concrete. Every smoothness assumption on the QFT side leaves a path integral over a smooth compact geometry together with extra identifications (the dashed blue lines in figure <a href=\"#fig-topologies\">4</a>). We are looking for smooth gravitational saddles with that compact geometry as its asymptotic boundary. But we also need to map the remaining identifications of the fields to the gravity side. The identification gives further boundary conditions on the background SUGRA fields (or any other low energy bulk description) solution. To see it, notice that since all the CFT fields are identified between the replicas (at <l2m-math n=\"264\"></l2m-math>), so is the CFT stress tensor <l2m-math n=\"265\"></l2m-math>. As a result, the boundary mode of the bulk metric <l2m-math n=\"266\"></l2m-math> is identified between the <l2m-math n=\"267\"></l2m-math> replicas. We expect similar boundary conditions for all the bulk’s low-energy SUGRA fields <span class=\"cite\">[<a href=\"#cite-Witten-2001ua\">33</a>]</span>. Note that this is the boundary condition dual to the field-basis ensemble <l2m-math n=\"268\"></l2m-math>. Other boundary conditions will depend on the bulk dual of the <l2m-math n=\"269\"></l2m-math> in <a href=\"#eq-av_renyi_path\">(4.5)</a>. We expect that for ‘local enough’ operators, we would have a similar picture.<sup class=\"fnref\"><a href=\"#fn11\" id=\"fnref11\">11</a></sup> The bulk geometries we will consider below all preserve the replica symmetry in the bulk (see appendix <a href=\"#app-another_replica\">A</a>). As a result, as long as we are allowed to use the semiclassical approximation for <a href=\"#eq-av_renyi_path\">(4.5)</a>, these saddles will satisfy the necessary boundary conditions between the replicas. Although replica-breaking solutions exist, far enough from <l2m-math n=\"270\"></l2m-math> the replica-symmetric solutions are the dominant ones (see appendix <a href=\"#app-another_replica\">A</a>). The smoothness assumption thus sets the geometry and will give the entropy at tree level. The extra (ensemble-dependent) bulk field identifications will only affect the subleading 1-loop order. We will comment on that at the end of the section. In any case, we conclude that to leading order in <l2m-math n=\"271\"></l2m-math>, our results are robust to the specifics of the ensemble.</p>",
+        "hash": "920c49d64955"
+       },
+       {
+        "id": "fig-pure_RT",
+        "kind": "figure",
+        "title": "Figure 5",
+        "body": "<figure class=\"float figure\" id=\"fig-pure_RT\"><p><img src=\"images/3474ad7c919603f0.png\" alt=\"\" style=\"width:60%\"></p><figcaption><span class=\"capname\">Figure 5.</span> Here the inner circle (thick blue) <l2m-math n=\"272\"></l2m-math> is identified between all the replicas. On left the same bulk replicated surface <l2m-math n=\"273\"></l2m-math> found for the thermal case figure <a href=\"#fig-thermal_RT\">2</a>. On the right a second replicated surface <l2m-math n=\"274\"></l2m-math> of a different topology. This solution is allowed only due to the inner circle identification. <span id=\"fig-pure_RT\" class=\"anchor\"></span></figcaption></figure>",
+        "hash": "b23e89ef7ff2"
+       },
+       {
+        "id": "section-4.2-p3",
+        "kind": "paragraph",
+        "body": "<p>Looking back at <a href=\"#eq-av_renyi_path\">(4.5)</a>, there are two candidates for dominant bulk saddles at <l2m-math n=\"275\"></l2m-math> corresponding to the two replica-symmetric boundary topologies. The first boundary topology is that of <l2m-math n=\"276\"></l2m-math> separated tori. This is the same boundary condition for the metric as in the thermal calculation <a href=\"#eq-renyi_grav\">(3.9)</a>. The solution includes an extension of the replicated line to a bulk replicated surface <l2m-math n=\"277\"></l2m-math>, see figure <a href=\"#fig-thermal_RT\">2</a>. Whenever this saddle dominates, the averaged entropy (after taking the <l2m-math n=\"278\"></l2m-math> limit) is just the thermal entropy <a href=\"#eq-thermal_ee_holo\">(3.10)</a>.</p>",
+        "hash": "74f3faf9d9fe"
+       },
+       {
+        "id": "section-4.2-p4",
+        "kind": "paragraph",
+        "body": "<p>The second boundary topology is that of one long torus, with <l2m-math n=\"279\"></l2m-math> replica cuts along it. Equivalently it can be described as <l2m-math n=\"280\"></l2m-math> separated tori, connected by both the replicated line <l2m-math n=\"281\"></l2m-math> and another replicated circle at <l2m-math n=\"282\"></l2m-math>. Now the gravitational solution <l2m-math n=\"283\"></l2m-math> will include a replicated surface <l2m-math n=\"284\"></l2m-math> which extend both replicated lines together. In other words its asymptotic boundary is both <l2m-math n=\"285\"></l2m-math> and the <l2m-math n=\"286\"></l2m-math> circle. Following the same logic of <span class=\"cite\">[<a href=\"#cite-Lewkowycz-2013nqa\">10</a>]</span>, at the limit <l2m-math n=\"287\"></l2m-math> the contribution of this saddle would be an RT line <l2m-math n=\"288\"></l2m-math> which is homologous to the sum of region <l2m-math n=\"289\"></l2m-math> and the identification circle (see figure <a href=\"#fig-pure_RT\">5</a>). Equivalently in terms of the bulk spatial slice, the line is homologous to the complement <l2m-math n=\"290\"></l2m-math>. Therefore whenever this saddle dominates, it contributes exactly thermal entropy of the complement <l2m-math n=\"291\"></l2m-math>. Taking only the dominant saddle at leading order<sup class=\"fnref\"><a href=\"#fn12\" id=\"fnref12\">12</a></sup> gives together<sup class=\"fnref\"><a href=\"#fn13\" id=\"fnref13\">13</a></sup></p>\n<div class=\"display\" id=\"eq-pure_entropy_holo\"><div class=\"eqbody\"><l2m-math n=\"293\"></l2m-math></div><span class=\"eqno\">(4.7)</span></div>\n<p class=\"cont\">As the thermal result is monotonic in <l2m-math n=\"294\"></l2m-math> it is dominant only for <l2m-math n=\"295\"></l2m-math>. For <l2m-math n=\"296\"></l2m-math> the second non-trivial topology dominates. In the high-temperature limit <l2m-math n=\"297\"></l2m-math> we have</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"298\"></l2m-math></div><span class=\"eqno\">(4.8)</span></div>\n<p class=\"cont\">as drawn schematically in figure <a href=\"#fig-page_curv\">1</a>. This is the holographic dual of the calculation made by Page <span class=\"cite\">[<a href=\"#cite-Page-1993df\">6</a>]</span>. We can further draw this phase transition in terms of <l2m-math n=\"299\"></l2m-math>. As can be seen in figure <a href=\"#fig-phase_transition\">6</a>, before the phase transition <l2m-math n=\"300\"></l2m-math> covers only the exterior of the black hole, but ‘swallows’ the black hole after the transition. Finally, we note that at the low-temperature phase the geometry is of thermal AdS. In this case there’s no phase transition and the disconnected replica solution <l2m-math n=\"301\"></l2m-math> is always dominant, leading to the vacuum result <a href=\"#eq-vac_ee\">(3.6)</a>. In other words at this order in <l2m-math n=\"302\"></l2m-math> the extra identification is obsolete.</p>",
+        "hash": "e59de5a8abc5"
+       },
+       {
+        "id": "section-4.2-p5",
+        "kind": "paragraph",
+        "body": "<p>We learn that the ‘purity’ of the boundary geometry <a href=\"#eq-av_renyi_path\">(4.5)</a> takes place in the bulk by the fact that any solution for <l2m-math n=\"303\"></l2m-math> can be transformed to a solution of <l2m-math n=\"304\"></l2m-math>. This way the gravitational path integral ensures the purity of the result <l2m-math n=\"305\"></l2m-math>. Consider now a general (compact) spatial manifold <l2m-math n=\"306\"></l2m-math> and a general entanglement region <l2m-math n=\"307\"></l2m-math>. Taking <l2m-math n=\"308\"></l2m-math> for the generalization of <a href=\"#eq-av_renyi_path\">(4.5)</a> calls for a refinement of the known RT formula for typical pure states of energy <l2m-math n=\"309\"></l2m-math>:</p>\n<div class=\"display\" id=\"eq-typical_RT_proposal\"><div class=\"eqbody\"><l2m-math n=\"310\"></l2m-math></div><span class=\"eqno\">(4.9)</span></div>\n<p class=\"cont\">Just like in the RT formula, <l2m-math n=\"311\"></l2m-math> is a minimal co-dimension <l2m-math n=\"312\"></l2m-math> manifold in the bulk solution (with boundary <l2m-math n=\"313\"></l2m-math>) which asymptote to <l2m-math n=\"314\"></l2m-math>. For the typical state, we further allow <l2m-math n=\"315\"></l2m-math> to be homologous to either <l2m-math n=\"316\"></l2m-math> or its spatial complement <l2m-math n=\"317\"></l2m-math>. In other words, for typical pure states the ‘homology constraint’ should be relaxed.</p>",
+        "hash": "56c4f909e343"
+       },
+       {
+        "id": "fig-phase_transition",
+        "kind": "figure",
+        "title": "Figure 6",
+        "body": "<figure class=\"float figure\" id=\"fig-phase_transition\"><p><img src=\"images/f28c05996276f81d.png\" alt=\"\" style=\"width:60%\"></p><figcaption><span class=\"capname\">Figure 6.</span> The phase transition of the RT surface as a function of <l2m-math n=\"318\"></l2m-math>. The outer circle is the boundary spatial slice <l2m-math n=\"319\"></l2m-math>. The black solid circle is the BTZ black hole (it’s boundary is the horizon). The upper row include the first ‘thermal’ RT surface (thin blue line) changes as a function of <l2m-math n=\"320\"></l2m-math>. The middle column describe the phase transition at <l2m-math n=\"321\"></l2m-math> to the new solution on the bottom row. Together the two solutions give a Page-like behavior for the holographic <l2m-math n=\"322\"></l2m-math> (see figure <a href=\"#fig-page_curv\">1</a>). <span id=\"fig-phase_transition\" class=\"anchor\"></span></figcaption></figure>",
+        "hash": "781caa1357d0"
+       },
+       {
+        "id": "section-4.2-p6",
+        "kind": "paragraph",
+        "body": "<p>Following <span class=\"cite\">[<a href=\"#cite-Faulkner-2013ana\">35</a>]</span>, we can study the next order in <l2m-math n=\"323\"></l2m-math>. To that end we consider the 1-loop contribution from bulk fields around the dominant gravitational saddle. Ignoring the effect of the identification on the fields, the path integral prepare a thermofield double state on the bulk global spatial slice, or a bulk thermal density matrix on the slice that ends at the horizon. But as we discussed above the CFT identification on <a href=\"#eq-av_renyi_path\">(4.5)</a> is dual to the identification of the field’s asymptotic value at <l2m-math n=\"324\"></l2m-math> between the <l2m-math n=\"325\"></l2m-math> bulk replicas. Each asymptotic value prepares a state at <l2m-math n=\"326\"></l2m-math>. The bulk state at the slice <l2m-math n=\"327\"></l2m-math> is then the bulk EFT evolution of this state by <l2m-math n=\"328\"></l2m-math>. We learn that each CFT ensemble corresponds to some bulk effective ensemble of ‘almost-thermal’ density matrices. Following <span class=\"cite\">[<a href=\"#cite-Faulkner-2013ana\">35</a>]</span>, we propose that the next order is<sup class=\"fnref\"><a href=\"#fn14\" id=\"fnref14\">14</a></sup></p>\n<div class=\"display\" id=\"eq-1loop_proposal\"><div class=\"eqbody\"><l2m-math n=\"329\"></l2m-math></div><span class=\"eqno\">(4.10)</span></div>\n<p class=\"cont\">The ensemble average on the RHS is in the bulk EFT using the bulk dual EFT ensemble. Note that from the prescription for <l2m-math n=\"330\"></l2m-math>, <l2m-math n=\"331\"></l2m-math> which ensures also the purity of the second term in <a href=\"#eq-1loop_proposal\">(4.10)</a>.</p>",
+        "hash": "ceb573bf4982"
+       },
+       {
+        "id": "section-4.2-p7",
+        "kind": "paragraph",
+        "body": "<p>We note that in the full string theory we will need to further identify all the heavier vertex operators insertions between the identification circles. The exact identification will depend on the exact string duals of the operators <l2m-math n=\"332\"></l2m-math>. As we identify the full string state between the asymptotic temporal circles, the string theory path integral also allows for new types of non-dynamical strings. Close strings can stretch between (asymptotic) identified circles of the same geometry. Strings can also end in one identified circle and then continue on a circle of another disconnected geometry.<sup class=\"fnref\"><a href=\"#fn15\" id=\"fnref15\">15</a></sup> These are not orbifolds or D-branes, but a complete identification of spacetime (asymptotic) points. This identification might be related to the localized singularities we find in the QFT calculation of <a href=\"#eq-av_renyi_path\">(4.5)</a> and described in appendix <a href=\"#app-ident\">B</a>. Further research is needed to determine the consistency of string theories with such identifications, and we won’t explore them further here.<sup class=\"fnref\"><a href=\"#fn16\" id=\"fnref16\">16</a></sup></p>",
+        "hash": "bd3aff1d88d5"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sec-discussion",
+    "kind": "section",
+    "number": "5",
+    "title": "Discussion",
+    "titleHtml": "Discussion",
+    "children": [
+     {
+      "id": "sec-discussion-p1",
+      "kind": "paragraph",
+      "body": "<p>Following the idea of ‘entanglement wedge reconstruction’ <span class=\"cite\">[<a href=\"#cite-Dong-2016eik\">36</a>]</span>, we can interpret the phase transition of <l2m-math n=\"333\"></l2m-math> in terms of bulk reconstruction from the CFT. As a function of <l2m-math n=\"334\"></l2m-math> the entanglement wedge, the domain of dependence of <l2m-math n=\"335\"></l2m-math>, include the black-hole interior starting from <l2m-math n=\"336\"></l2m-math> (figure <a href=\"#fig-phase_transition\">6</a>). We learn that it requires operators from half the boundary area to locally describe the black hole interior (to the extent such a description is possible). Note that this is possible only for a pure state and not for the thermal density matrix. There are different ideas for explicit boundary-to-interior mappings  <span class=\"cite\">[<a href=\"#cite-Papadodimas-2013jku\">37</a>, <a href=\"#cite-Penington-2019kki\">1</a>]</span>. It would be interesting to see if such mappings are possible in the state ensemble context (or they are too state-dependent to survive the average).</p>",
+      "hash": "f66498f6b338"
+     },
+     {
+      "id": "sec-discussion-p2",
+      "kind": "paragraph",
+      "body": "<p>The analysis above was agnostic to the correct quantum-gravitational description of the black hole interior. It would be interesting however to find a way to connect this work to older discussions about typical black-hole microstates in holography <span class=\"cite\">[<a href=\"#cite-Marolf-2013dba\">38</a>, <a href=\"#cite-deBoer-2019kyr\">39</a>, <a href=\"#cite-Bousso-2013wia\">40</a>]</span>, as well as the new discussions in the context of evaporation <span class=\"cite\">[<a href=\"#cite-Almheiri-2019psf\">3</a>, <a href=\"#cite-Penington-2019kki\">1</a>, <a href=\"#cite-Almheiri-2019qdq\">2</a>]</span>.</p>",
+      "hash": "6541c4cb3b0e"
+     },
+     {
+      "id": "sec-discussion-p3",
+      "kind": "paragraph",
+      "body": "<p>The HRT prescription extends the RT formula for general density matrices including arbitrary time dependence <span class=\"cite\">[<a href=\"#cite-Hubeny-2007xt\">41</a>, <a href=\"#cite-Dong-2016hjy\">42</a>]</span>. Recently the idea of replica wormholes was similarly generalized to real-time gravitational path integrals <span class=\"cite\">[<a href=\"#cite-Goto-2020wnk\">43</a>, <a href=\"#cite-Colin-Ellerin-2020mva\">44</a>, <a href=\"#cite-Colin-Ellerin-2021jev\">45</a>]</span>. Using these methods, it would be interesting to find a Lorentzian version of our analysis, perhaps to study the averaged effect of infalling matter into a typical black hole microstate.</p>",
+      "hash": "64306fcc56d7"
+     },
+     {
+      "id": "sec-discussion-p4",
+      "kind": "paragraph",
+      "body": "<p>Finally, we can take our assumption about the leading gravitational saddles to <l2m-math n=\"337\"></l2m-math> as a property of holographic CFTs. In the CFT language at large <l2m-math n=\"338\"></l2m-math> it gives the equality between the <l2m-math n=\"339\"></l2m-math> path integral and a sum of CFT path integrals over different partitions of the replicas (without any further identifications). This equality was recently found directly in the CFT (in a slightly different context) by assuming ergodicity properties <span class=\"cite\">[<a href=\"#cite-Pollack-2020gfa\">46</a>, <a href=\"#cite-Liu-2020jsv\">47</a>, <a href=\"#cite-Sasieta-2021pzj\">48</a>, <a href=\"#cite-Freivogel-2021ivu\">49</a>]</span>. It would be illuminating to study further the state-averaged gravitational path integral as a probe of the dual CFT statistical properties <span class=\"cite\">[<a href=\"#cite-Belin-2020hea\">50</a>]</span>.</p>",
+      "hash": "1c107f446e96"
+     }
+    ]
+   },
+   {
+    "id": "acknowledgements",
+    "kind": "section",
+    "title": "Acknowledgements",
+    "titleHtml": "Acknowledgements",
+    "children": [
+     {
+      "id": "acknowledgements-p1",
+      "kind": "paragraph",
+      "body": "<p>I would like to thank Micha Berkooz, Anatoly Dymarsky, Rohit Kalloor, Adar Sharon, Ohad Mamroud, Tal Sheaffer, and Masataka Watanabe for useful discussions, and especially Ofer Aharony for many helpful discussions and guidance. I also thank Ofer Aharony, Micha Berkooz, Anatoly Dymarsky, Ohad Mamroud, Mukund Rangamani, and Adar Sharon for their comments on a draft of the manuscript. The work was supported in part by an Israel Science Foundation center for excellence grant (grant number 2289/18), by grant no.2018068 from the United States-Israel Binational Science Foundation (BSF), and by the Minerva foundation with funding from the Federal German Ministry for Education and Research.</p>",
+      "hash": "61ffb90d43b7"
+     }
+    ]
+   },
+   {
+    "id": "app-another_replica",
+    "kind": "appendix",
+    "number": "A",
+    "title": "Double replica trick",
+    "titleHtml": "Double replica trick",
+    "children": [
+     {
+      "id": "app-another_replica-p1",
+      "kind": "paragraph",
+      "body": "<p>The averaged Rényi entropy is given by <a href=\"#eq-av_renyi_exact\">(4.3)</a> <l2m-math n=\"340\"></l2m-math>. In order to calculate the first term, we can use a second replica trick</p>\n<div class=\"display\" id=\"eq-sec_rep\"><div class=\"eqbody\"><l2m-math n=\"341\"></l2m-math></div><span class=\"eqno\">(A.1)</span></div>\n<p class=\"cont\"><l2m-math n=\"342\"></l2m-math> is a path integral over <l2m-math n=\"343\"></l2m-math> copies of the <l2m-math n=\"344\"></l2m-math>-sheeted torus <l2m-math n=\"345\"></l2m-math>, with all the <l2m-math n=\"346\"></l2m-math> <l2m-math n=\"347\"></l2m-math> circles identified.</p>",
+      "hash": "d1e467aa21c3"
+     },
+     {
+      "id": "app-another_replica-p2",
+      "kind": "paragraph",
+      "body": "<p>What is the dominant bulk saddle of <l2m-math n=\"348\"></l2m-math>? Above we assumed for <l2m-math n=\"349\"></l2m-math> the dominating solution is invariant under the replica symmetry <l2m-math n=\"350\"></l2m-math>. We argue more generally that for any <l2m-math n=\"351\"></l2m-math>, the dominant bulk saddle is <l2m-math n=\"352\"></l2m-math> times a replica-symmetric solution that fills <l2m-math n=\"353\"></l2m-math>. These are the solutions invariant under the full <l2m-math n=\"354\"></l2m-math> symmetry of <l2m-math n=\"355\"></l2m-math>. Notice that these solutions still respect the identification boundary conditions between the <l2m-math n=\"356\"></l2m-math> copies as it is symmetric under permutations <l2m-math n=\"357\"></l2m-math>.</p>",
+      "hash": "06816f8b43bf"
+     },
+     {
+      "id": "app-another_replica-p3",
+      "kind": "paragraph",
+      "body": "<p>Start at <l2m-math n=\"358\"></l2m-math>, where <l2m-math n=\"359\"></l2m-math> has an <l2m-math n=\"360\"></l2m-math> permutation symmetry. On general grounds the free energy on <l2m-math n=\"361\"></l2m-math> for <l2m-math n=\"362\"></l2m-math> is <l2m-math n=\"363\"></l2m-math> for some constant <l2m-math n=\"364\"></l2m-math> <span class=\"cite\">[<a href=\"#cite-Aharony-2019vgs\">51</a>]</span>. The solutions at <l2m-math n=\"365\"></l2m-math> correspond to different partitions of the <l2m-math n=\"366\"></l2m-math> intervals into tori. The fully disconnected solution include <l2m-math n=\"367\"></l2m-math> seperated tori with temporal length <l2m-math n=\"368\"></l2m-math> each, and the free energy <l2m-math n=\"369\"></l2m-math>. The fully connected solution is a torus with temporal length <l2m-math n=\"370\"></l2m-math>, and free-energy <l2m-math n=\"371\"></l2m-math>. Any other partition <l2m-math n=\"372\"></l2m-math> with <l2m-math n=\"373\"></l2m-math> has free energy <l2m-math n=\"374\"></l2m-math>. Therefore at <l2m-math n=\"375\"></l2m-math> the dominant solution is the fully disconnected one. At small enough <l2m-math n=\"376\"></l2m-math> we expect the dominant saddle to be a deformation of the fully disconnected saddle, which extends the replica cuts to the bulk (and thus connecting each of the <l2m-math n=\"377\"></l2m-math> copies). Without loss of generality we can take the minimal deformation on each of the separated <l2m-math n=\"378\"></l2m-math> copies. Inside each copy it is also reasonable to assume the solution respect the replica symmetry (as topologically it is already satisfied). For the case <l2m-math n=\"379\"></l2m-math> this is exactly the ‘thermal saddle’ we considered above. Using the symmetry <l2m-math n=\"380\"></l2m-math> we also know the dominant solution at <l2m-math n=\"381\"></l2m-math> is <l2m-math n=\"382\"></l2m-math> copies of the ‘fully connected saddle’ (in terms of the thermal circle identification). A priori other saddles might dominate in the intermediate region between <l2m-math n=\"383\"></l2m-math> and <l2m-math n=\"384\"></l2m-math>. In practice, as they break the <l2m-math n=\"385\"></l2m-math> symmetry we expect them to contribute only around <l2m-math n=\"386\"></l2m-math>.</p>",
+      "hash": "f7ea3909ae6b"
+     },
+     {
+      "id": "app-another_replica-p4",
+      "kind": "paragraph",
+      "body": "<p>Taking only the dominant solution gives <l2m-math n=\"387\"></l2m-math>. Pluging inside <a href=\"#eq-sec_rep\">(A.1)</a> brings <l2m-math n=\"388\"></l2m-math>, as we approximated in <a href=\"#eq-av_renyi\">(4.4)</a>. The same analysis shows that the variance in <l2m-math n=\"389\"></l2m-math> is non-perturbative in <l2m-math n=\"390\"></l2m-math>. We note that if the bulk theory field content breaks the replica-symmetry, the breaking is perturbative in <l2m-math n=\"391\"></l2m-math>.</p>",
+      "hash": "48668513e1c0"
+     }
+    ],
+    "fold": true
+   },
+   {
+    "id": "app-ident",
+    "kind": "appendix",
+    "number": "B",
+    "title": "Details about the identification",
+    "titleHtml": "Details about the identification",
+    "children": [
+     {
+      "id": "app-ident-p1",
+      "kind": "paragraph",
+      "body": "<p>The goal of this section is to study the path integral on <l2m-math n=\"392\"></l2m-math> identified cylinders, called <l2m-math n=\"393\"></l2m-math> on <a href=\"#eq-av_renyi_path\">(4.5)</a>. We will do the calculation for the free boson and study its divergences. We will also explicitly show it is equal to the path integral over the other two geometries described in figure <a href=\"#fig-topologies\">4</a>. We first practice on the harmonic oscillator, where we show the equivalence first for <l2m-math n=\"394\"></l2m-math> (the thermal case) and then for general <l2m-math n=\"395\"></l2m-math>. We then follow to the free 2d boson.</p>",
+      "hash": "2d7d261924cb"
+     },
+     {
+      "id": "app-ident-p2",
+      "kind": "paragraph",
+      "body": "<p><strong class=\"runin\">Regularization</strong> For all the calculations below we us the zeta-function regularization. Specifically we will be needed to regularize expressions like <l2m-math n=\"396\"></l2m-math>. To that end we define</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"397\"></l2m-math></div><span class=\"eqno\">(B.1)</span></div>\n<p class=\"cont\">Using the zeta-function regularization</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"398\"></l2m-math></div><span class=\"eqno\">(B.2)</span></div>\n<p class=\"cont\">or</p>\n<div class=\"display\" id=\"eq-zeta_eq\"><div class=\"eqbody\"><l2m-math n=\"399\"></l2m-math></div><span class=\"eqno\">(B.3)</span></div>",
+      "hash": "3c72e68e2342"
+     },
+     {
+      "id": "section-B.1",
+      "kind": "appendix",
+      "number": "B.1",
+      "title": "Harmonic Oscillator",
+      "titleHtml": "Harmonic Oscillator",
+      "children": [
+       {
+        "id": "section-B.1-p1",
+        "kind": "paragraph",
+        "body": "<p>We start by studying the Euclidean harmonic oscillator on <l2m-math n=\"400\"></l2m-math></p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"401\"></l2m-math></div><span class=\"eqno\">(B.4)</span></div>\n<p class=\"cont\">Our main goal is to study the one-dimensional version of <a href=\"#eq-av_renyi\">(4.4)</a> <l2m-math n=\"402\"></l2m-math> in the position basis, or simply the path integral over <l2m-math n=\"403\"></l2m-math> identified intervals. By the end of this section, we will show explicitly for <l2m-math n=\"404\"></l2m-math>, that the euclidean path integral on the two identified intervals is equal to a path integral over two other geometries. The first is two identified circles, and the second is one doubly-long circle identified in the middle (see figure <a href=\"#fig-free_calc\">7</a>). We start by studying the thermal <l2m-math n=\"405\"></l2m-math>, where we show explicitly that the path integral on a single identified interval is equal to the path integral over a circle. We will use all these results for the free scalar in the next section.</p>",
+        "hash": "83e6ed8ac88c"
+       },
+       {
+        "id": "section-B.1.1",
+        "kind": "section",
+        "title": "Thermal partition function",
+        "titleHtml": "Thermal partition function",
+        "children": [
+         {
+          "id": "section-B.1.1-p1",
+          "kind": "paragraph",
+          "body": "<p>We start with the computation of the thermal partition function using the path integral formalism. Following the Hilbert-space definition, we need to find:</p>\n<div class=\"display\" id=\"eq-HO_Z\"><div class=\"eqbody\"><l2m-math n=\"406\"></l2m-math></div><span class=\"eqno\">(B.5)</span></div>\n<p class=\"cont\">The Euclidean propagation <l2m-math n=\"407\"></l2m-math> can be written in the path integral formalism as</p>\n<div class=\"display\" id=\"eq-KE_def\"><div class=\"eqbody\"><l2m-math n=\"408\"></l2m-math></div><span class=\"eqno\">(B.6)</span></div>\n<p class=\"cont\">We see that <l2m-math n=\"409\"></l2m-math> is strictly equal to the path integral over the identified interval <l2m-math n=\"410\"></l2m-math>.</p>",
+          "hash": "96797db0d416"
+         },
+         {
+          "id": "section-B.1.1-p2",
+          "kind": "paragraph",
+          "body": "<p>We start by finding the Euclidean propagator <l2m-math n=\"411\"></l2m-math>. The classical solution (<l2m-math n=\"412\"></l2m-math>) satisfying the boundary conditions is <l2m-math n=\"413\"></l2m-math>. Changing variables in <a href=\"#eq-KE_def\">(B.6)</a> by the shift <l2m-math n=\"414\"></l2m-math> gives</p>\n<div class=\"display\" id=\"eq-K_E_y\"><div class=\"eqbody\"><l2m-math n=\"415\"></l2m-math></div><span class=\"eqno\">(B.7)</span></div>\n<p class=\"cont\">We diagonalize <l2m-math n=\"416\"></l2m-math> by decomposing <l2m-math n=\"417\"></l2m-math> into the orthonormal basis</p>\n<div class=\"display\" id=\"eq-y_basis\"><div class=\"eqbody\"><l2m-math n=\"418\"></l2m-math></div><span class=\"eqno\">(B.8)</span></div>\n<p class=\"cont\">Note that although <l2m-math n=\"419\"></l2m-math>, its derivatives might jump between the two ends. Specifically for odd <l2m-math n=\"420\"></l2m-math> <l2m-math n=\"421\"></l2m-math>. Performing the integrals gives</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"422\"></l2m-math></div><span class=\"eqno\">(B.9)</span></div>\n<p class=\"cont\">Using the zeta-function regularization <a href=\"#eq-zeta_eq\">(B.3)</a> <l2m-math n=\"423\"></l2m-math> and</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"424\"></l2m-math></div><span class=\"eqno\">(B.10)</span></div>\n<p class=\"cont\">We will ignore the <l2m-math n=\"425\"></l2m-math> and take:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"426\"></l2m-math></div><span class=\"eqno\">(B.11)</span></div>\n<p class=\"cont\">Going back to <a href=\"#eq-K_E_y\">(B.7)</a>, we find the on-shell action <l2m-math n=\"427\"></l2m-math>, which gives the final propagator</p>\n<div class=\"display\" id=\"eq-KE_x\"><div class=\"eqbody\"><l2m-math n=\"428\"></l2m-math></div><span class=\"eqno\">(B.12)</span></div>",
+          "hash": "93919d74e504"
+         },
+         {
+          "id": "section-B.1.1-p3",
+          "kind": "paragraph",
+          "body": "<p>To find the partition-function <a href=\"#eq-HO_Z\">(B.5)</a> we integrate over <l2m-math n=\"429\"></l2m-math>, to get</p>\n<div class=\"display multi\" id=\"eq-Z_QM\"><div class=\"eqbody\"><l2m-math n=\"430\"></l2m-math></div></div>\n<p class=\"cont\">This result is the canonically normalized one, as we can see in the energy basis:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"431\"></l2m-math></div><span class=\"eqno\">(B.14)</span></div>",
+          "hash": "5b069ee6217a"
+         },
+         {
+          "id": "section-B.1.1-p4",
+          "kind": "paragraph",
+          "body": "<p>On the other hand, we can write the partition function <a href=\"#eq-HO_Z\">(B.5)</a> formally as the path integral</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"432\"></l2m-math></div><span class=\"eqno\">(B.15)</span></div>\n<p class=\"cont\">Instead of the previous calculation, we would like to understand this expression as the path integral over the smooth manifold of circle <l2m-math n=\"433\"></l2m-math>. In practice, we decompose <l2m-math n=\"434\"></l2m-math> in the Fourier basis (the fluctuations of the constant mode <l2m-math n=\"435\"></l2m-math> the <l2m-math n=\"436\"></l2m-math> mode):</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"437\"></l2m-math></div><span class=\"eqno\">(B.16)</span></div>\n<p class=\"cont\">Note that unlike the previous decomposition <a href=\"#eq-y_basis\">(B.8)</a>, this basis is smooth at <l2m-math n=\"438\"></l2m-math>, and so naively might give different results. In this case the action is</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"439\"></l2m-math></div><span class=\"eqno\">(B.17)</span></div>\n<p class=\"cont\">Computing the Gaussian integral gives the partition function</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"440\"></l2m-math></div><span class=\"eqno\">(B.18)</span></div>\n<p class=\"cont\">The second term can be calculated using zeta function regularization <a href=\"#eq-zeta_eq\">(B.3)</a> to give <l2m-math n=\"441\"></l2m-math>, and</p>\n<div class=\"display multi\" id=\"eq-Z_QM_smooth\"><div class=\"eqbody\"><l2m-math n=\"442\"></l2m-math></div></div>\n<p class=\"cont\">As expected, this is the same result found using the discontinuous basis <a href=\"#eq-Z_QM\">(B.13)</a>.</p>",
+          "hash": "3df007a83dee"
+         }
+        ]
+       },
+       {
+        "id": "section-B.1.2",
+        "kind": "section",
+        "title": "Replica average",
+        "titleHtml": "Replica average",
+        "children": [
+         {
+          "id": "section-B.1.2-p1",
+          "kind": "paragraph",
+          "body": "<p>We turn to the more general case of <l2m-math n=\"443\"></l2m-math> (from <a href=\"#eq-av_renyi\">(4.4)</a>). In one dimension and in the position space basis, this is the path integral on <l2m-math n=\"444\"></l2m-math> intervals with all their <l2m-math n=\"445\"></l2m-math> ends identified to the same value <l2m-math n=\"446\"></l2m-math>:</p>\n<div class=\"display\" id=\"eq-Z_N_QM_def\"><div class=\"eqbody\"><l2m-math n=\"447\"></l2m-math></div><span class=\"eqno\">(B.20)</span></div>\n<p class=\"cont\">Using the expression for the propagation <a href=\"#eq-KE_x\">(B.12)</a> we find</p>\n<div class=\"display\" id=\"eq-Z_N_QM\"><div class=\"eqbody\"><l2m-math n=\"448\"></l2m-math></div><span class=\"eqno\">(B.21)</span></div>",
+          "hash": "e27f5d691c6d"
+         },
+         {
+          "id": "section-B.1.2-p2",
+          "kind": "paragraph",
+          "body": "<p>In the rest of this section, we focus on the <l2m-math n=\"449\"></l2m-math> case. Following the thermal calculation, the path integral <a href=\"#eq-Z_N_QM_def\">(B.20)</a> can be equivalently calculated over two other topologies, which corresponds to two different smoothness assumptions at the crossing (see figure <a href=\"#fig-free_calc\">(7)</a>). We show below that the path integrals on both topologies coincide with <a href=\"#eq-Z_N_QM\">(B.21)</a>.</p>",
+          "hash": "25745662f72f"
+         },
+         {
+          "id": "fig-free_calc",
+          "kind": "figure",
+          "title": "Figure 7",
+          "body": "<figure class=\"float figure\" id=\"fig-free_calc\"><p><img src=\"images/062fd1fc651563ba.png\" alt=\"\" style=\"width:70%\"></p><figcaption><span class=\"capname\">Figure 7.</span> <span id=\"fig-free_calc\" class=\"anchor\"></span> The three equivalent path integrals. Top left: two intervals of size <l2m-math n=\"450\"></l2m-math> with all their ends identified (in blue). Bottom left: two circles of length <l2m-math n=\"451\"></l2m-math>, with the point <l2m-math n=\"452\"></l2m-math> identified between them. Right: one circle of length <l2m-math n=\"453\"></l2m-math>, with the points <l2m-math n=\"454\"></l2m-math> further identified. </figcaption></figure>",
+          "hash": "90a49934e591"
+         },
+         {
+          "id": "section-B.1.2-p3",
+          "kind": "paragraph",
+          "body": "<p><strong class=\"runin\">Two circles</strong> The first topology takes place by gluing each of the two intervals into two circles. We denote the particle on each of the circles by <l2m-math n=\"455\"></l2m-math> and <l2m-math n=\"456\"></l2m-math>. On each circle we assume the particles are smooth, and share between them the value on <l2m-math n=\"457\"></l2m-math>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"458\"></l2m-math></div><span class=\"eqno\">(B.22)</span></div>",
+          "hash": "6d437f5307e3"
+         },
+         {
+          "id": "section-B.1.2-p4",
+          "kind": "paragraph",
+          "body": "<p>Decomposing the particles into real temporal modes</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"459\"></l2m-math></div><span class=\"eqno\">(B.23)</span></div>\n<p class=\"cont\">we have</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"460\"></l2m-math></div><span class=\"eqno\">(B.24)</span></div>\n<p class=\"cont\">with the action</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"461\"></l2m-math></div><span class=\"eqno\">(B.25)</span></div>\n<p class=\"cont\">In terms of the modes, the delta function constraint is</p>\n<div class=\"display\" id=\"eq-constraint\"><div class=\"eqbody\"><l2m-math n=\"462\"></l2m-math></div><span class=\"eqno\">(B.26)</span></div>\n<p class=\"cont\">Note that the <l2m-math n=\"463\"></l2m-math>s decouple and contribute (using <a href=\"#eq-Z_QM_smooth\">(B.19)</a>)</p>\n<div class=\"display multi\" id=\"eq-Z_sin\"><div class=\"eqbody\"><l2m-math n=\"464\"></l2m-math></div></div>",
+          "hash": "8f1479f59ae5"
+         },
+         {
+          "id": "section-B.1.2-p5",
+          "kind": "paragraph",
+          "body": "<p>As for the <l2m-math n=\"465\"></l2m-math>s, we can change basis to <l2m-math n=\"466\"></l2m-math>. Integrating over <l2m-math n=\"467\"></l2m-math> using the delta-function <a href=\"#eq-constraint\">(B.26)</a> gives an action</p>\n<div class=\"display multi\" id=\"eq-action_change_basis\"><div class=\"eqbody\"><l2m-math n=\"468\"></l2m-math></div></div>\n<p class=\"cont\">The <l2m-math n=\"469\"></l2m-math>s decouple as well, and contribute</p>\n<div class=\"display\" id=\"eq-Z_plus\"><div class=\"eqbody\"><l2m-math n=\"470\"></l2m-math></div><span class=\"eqno\">(B.29)</span></div>\n<p class=\"cont\">In order to carry the Gaussian integral over the <l2m-math n=\"471\"></l2m-math>s, we need the determinant of the quadratic form <a href=\"#eq-action_change_basis\">(B.28)</a>. Consider first the matrix <l2m-math n=\"472\"></l2m-math>. Its determinant satisfy</p>\n<div class=\"display\" id=\"eq-matrix_identity\"><div class=\"eqbody\"><l2m-math n=\"473\"></l2m-math></div><span class=\"eqno\">(B.30)</span></div>\n<p class=\"cont\">Comparing to the remaining <l2m-math n=\"474\"></l2m-math> action <a href=\"#eq-action_change_basis\">(B.28)</a> we find <l2m-math n=\"475\"></l2m-math> and <l2m-math n=\"476\"></l2m-math>. The resulted integral over <l2m-math n=\"477\"></l2m-math> is</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"478\"></l2m-math></div><span class=\"eqno\">(B.31)</span></div>\n<p class=\"cont\">In the second line we used the identity <l2m-math n=\"479\"></l2m-math>. Together with <a href=\"#eq-Z_sin\">(B.27)</a> and <a href=\"#eq-Z_plus\">(B.29)</a> we find (we also need to multiply by <l2m-math n=\"480\"></l2m-math> from the delta function for <l2m-math n=\"481\"></l2m-math> <a href=\"#eq-constraint\">(B.26)</a>):</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"482\"></l2m-math></div><span class=\"eqno\">(B.32)</span></div>\n<p class=\"cont\">This is exactly <a href=\"#eq-Z_N_QM\">(B.21)</a> for <l2m-math n=\"483\"></l2m-math>.</p>",
+          "hash": "0e2274948202"
+         },
+         {
+          "id": "section-B.1.2-p6",
+          "kind": "paragraph",
+          "body": "<p><strong class=\"runin\">One big circle</strong> The second topology we can consider for <l2m-math n=\"484\"></l2m-math> is built by connecting the two intervals together into one circle of size <l2m-math n=\"485\"></l2m-math>, <l2m-math n=\"486\"></l2m-math>, with a delta-function identification <l2m-math n=\"487\"></l2m-math>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"488\"></l2m-math></div><span class=\"eqno\">(B.33)</span></div>\n<p class=\"cont\">Decomposing <l2m-math n=\"489\"></l2m-math> in the modes of the <l2m-math n=\"490\"></l2m-math> circle</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"491\"></l2m-math></div><span class=\"eqno\">(B.34)</span></div>\n<p class=\"cont\">gives the integral</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"492\"></l2m-math></div><span class=\"eqno\">(B.35)</span></div>\n<p class=\"cont\">with the action</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"493\"></l2m-math></div><span class=\"eqno\">(B.36)</span></div>\n<p class=\"cont\">The delta function gives the constraint</p>\n<div class=\"display\" id=\"eq-constraint_2\"><div class=\"eqbody\"><l2m-math n=\"494\"></l2m-math></div><span class=\"eqno\">(B.37)</span></div>\n<p class=\"cont\">Both the <l2m-math n=\"495\"></l2m-math>s and the even <l2m-math n=\"496\"></l2m-math> modes decouple from the constraint and contribute</p>\n<div class=\"display\" id=\"eq-Zb_and_Zeven\"><div class=\"eqbody\"><l2m-math n=\"497\"></l2m-math></div><span class=\"eqno\">(B.38)</span></div>\n<p class=\"cont\">To deal with the odd <l2m-math n=\"498\"></l2m-math>s we denote <l2m-math n=\"499\"></l2m-math>. Integrating over <l2m-math n=\"500\"></l2m-math> using the delta-function <a href=\"#eq-constraint_2\">(B.37)</a> gives <l2m-math n=\"501\"></l2m-math>. We get following quadratic action for the remaining <l2m-math n=\"502\"></l2m-math> <l2m-math n=\"503\"></l2m-math>:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"504\"></l2m-math></div><span class=\"eqno\">(B.39)</span></div>\n<p class=\"cont\">The quadratic form here is exactly of the type <a href=\"#eq-matrix_identity\">(B.30)</a>, this time with <l2m-math n=\"505\"></l2m-math> and <l2m-math n=\"506\"></l2m-math>. Therefore</p>\n<div class=\"display\" id=\"eq-Z_odd\"><div class=\"eqbody\"><l2m-math n=\"507\"></l2m-math></div><span class=\"eqno\">(B.40)</span></div>\n<p class=\"cont\">Together <a href=\"#eq-Zb_and_Zeven\">(B.38)</a>, <a href=\"#eq-Z_odd\">(B.40)</a> and the factor of <l2m-math n=\"508\"></l2m-math> from <a href=\"#eq-constraint_2\">(B.37)</a> gives</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"509\"></l2m-math></div><span class=\"eqno\">(B.41)</span></div>\n<p class=\"cont\">Again, this is exactly equal to the canonical result <a href=\"#eq-Z_N_QM\">(B.21)</a>.</p>",
+          "hash": "53d3894aae3c"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "section-B.2",
+      "kind": "appendix",
+      "number": "B.2",
+      "title": "Free theory on a circle",
+      "titleHtml": "Free theory on a circle",
+      "children": [
+       {
+        "id": "section-B.2-p1",
+        "kind": "paragraph",
+        "body": "<p>In this section, we consider the two-dimensional field theory of a single free scalar <l2m-math n=\"510\"></l2m-math> of mass <l2m-math n=\"511\"></l2m-math>, on a circle of size <l2m-math n=\"512\"></l2m-math>, <l2m-math n=\"513\"></l2m-math>. The Euclidean action is</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"514\"></l2m-math></div><span class=\"eqno\">(B.42)</span></div>\n<p class=\"cont\">We start by studying the conventional thermal partition function. We show explicitly that it can be calculated either as the path integral on the identified cylinder, or as the path integral on the torus. We then turn to the field theory calculation of <l2m-math n=\"515\"></l2m-math> and discuss its divergences.</p>",
+        "hash": "96b4f7f4431f"
+       },
+       {
+        "id": "section-B.2.1",
+        "kind": "section",
+        "title": "Thermal partition-function",
+        "titleHtml": "Thermal partition-function",
+        "children": [
+         {
+          "id": "section-B.2.1-p1",
+          "kind": "paragraph",
+          "body": "<p>Using the path integral formalism, the thermal partition function can be written as a path integral over the cylinder <l2m-math n=\"516\"></l2m-math>, with the two ends identified</p>\n<div class=\"display\" id=\"eq-Z_free_def\"><div class=\"eqbody\"><l2m-math n=\"517\"></l2m-math></div><span class=\"eqno\">(B.43)</span></div>\n<p class=\"cont\">As a first step, we decompose <l2m-math n=\"518\"></l2m-math> into spatial modes</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"519\"></l2m-math></div><span class=\"eqno\">(B.44)</span></div>\n<p class=\"cont\">We can write the path integral as</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"520\"></l2m-math></div><span class=\"eqno\">(B.45)</span></div>\n<p class=\"cont\">with the action</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"521\"></l2m-math></div><span class=\"eqno\">(B.46)</span></div>\n<p class=\"cont\">Each mode <l2m-math n=\"522\"></l2m-math> is a complex harmonic oscillator with <l2m-math n=\"523\"></l2m-math> (besides <l2m-math n=\"524\"></l2m-math> which is real with <l2m-math n=\"525\"></l2m-math>). The path integral on each mode is over an identified interval. In the previous section, we found that this path integral is also equal to the one over the circle. Composing back the spatial modes, we learn <a href=\"#eq-Z_free_def\">(B.43)</a> is equal to the free-theory path integral over the torus <l2m-math n=\"526\"></l2m-math>! We can find its value using <a href=\"#eq-Z_QM\">(B.13)</a></p>\n<div class=\"display\" id=\"eq-1d_Z_final\"><div class=\"eqbody\"><l2m-math n=\"527\"></l2m-math></div><span class=\"eqno\">(B.47)</span></div>\n<p class=\"cont\">With <l2m-math n=\"528\"></l2m-math> being the regularization of the zero-point energy <l2m-math n=\"529\"></l2m-math>. For <l2m-math n=\"530\"></l2m-math> (and ignoring the zero mode), we can use the standard <l2m-math n=\"531\"></l2m-math> to get the known result</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"532\"></l2m-math></div><span class=\"eqno\">(B.48)</span></div>\n<p class=\"cont\">For the sake of the next section, we can also find <l2m-math n=\"533\"></l2m-math> differently. Already in <a href=\"#eq-Z_free_def\">(B.43)</a> we can first evaluate <l2m-math n=\"534\"></l2m-math>. By decomposing <l2m-math n=\"535\"></l2m-math> into modes and regularizing the zero-point energy in the same way we get, using <a href=\"#eq-KE_x\">(B.12)</a>,</p>\n<div class=\"display\" id=\"eq-phi_prop_ren\"><div class=\"eqbody\"><l2m-math n=\"536\"></l2m-math></div><span class=\"eqno\">(B.49)</span></div>\n<p class=\"cont\">This expression was renormalized only using cylinder local counter-terms. In particular, integrating over <l2m-math n=\"537\"></l2m-math> will give back the final thermal partition-function <a href=\"#eq-1d_Z_final\">(B.47)</a>. It agrees with our expectation that the latter can be regularized using only local counter-terms on the torus.</p>",
+          "hash": "c92d08e4d376"
+         }
+        ]
+       },
+       {
+        "id": "section-B.2.2",
+        "kind": "section",
+        "title": "Replica average",
+        "titleHtml": "Replica average",
+        "children": [
+         {
+          "id": "section-B.2.2-p1",
+          "kind": "paragraph",
+          "body": "<p>We generalized the discussion to the free-theory calculation of <l2m-math n=\"538\"></l2m-math> in the field basis (<a href=\"#eq-av_renyi\">(4.4)</a>)</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"539\"></l2m-math></div><span class=\"eqno\">(B.50)</span></div>\n<p class=\"cont\">Using <a href=\"#eq-phi_prop_ren\">(B.49)</a> and integrating the <l2m-math n=\"540\"></l2m-math> modes gives</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"541\"></l2m-math></div><span class=\"eqno\">(B.51)</span></div>\n<p class=\"cont\">Remember that <a href=\"#eq-phi_prop_ren\">(B.49)</a> was already regulated using local counter-terms on the cylinder, which gave finite thermal partition function on <a href=\"#eq-1d_Z_final\">(B.47)</a>. Still, for every <l2m-math n=\"542\"></l2m-math> we have a divergence due to <l2m-math n=\"543\"></l2m-math>.</p>",
+          "hash": "0fea2b9dc935"
+         },
+         {
+          "id": "section-B.2.2-p2",
+          "kind": "paragraph",
+          "body": "<p>More generally, for free theories on <l2m-math n=\"544\"></l2m-math> the product would be on the sphere’s Laplacian eigenvalues <l2m-math n=\"545\"></l2m-math>. Using a momentum cutoff <l2m-math n=\"546\"></l2m-math> and a dimensionless path integral measure <span class=\"cite\">[<a href=\"#cite-Anninos-2012ft\">52</a>]</span> gives a free-energy contribution of <l2m-math n=\"547\"></l2m-math> which behave at large <l2m-math n=\"548\"></l2m-math> as <l2m-math n=\"549\"></l2m-math>. Thus this divergence can be canceled by a local (note the <l2m-math n=\"550\"></l2m-math> independence) counter-term on the <l2m-math n=\"551\"></l2m-math> spheres we identified. We expect that also in weak coupling, two kinds of counter terms are necessary: the local counter-terms on the <l2m-math n=\"552\"></l2m-math> cylinders used also for the thermal <l2m-math n=\"553\"></l2m-math> calculation, and counter-terms localized to the <l2m-math n=\"554\"></l2m-math> identified circles to account for the divergences of the identification.</p>",
+          "hash": "6675a4cef3e2"
+         },
+         {
+          "id": "section-B.2.2-p3",
+          "kind": "paragraph",
+          "body": "<p>We go back to the two-dimensional case and renormalized the divergence using zeta-function-regularization <a href=\"#eq-zeta_eq\">(B.3)</a>, <l2m-math n=\"555\"></l2m-math> we have</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"556\"></l2m-math></div><span class=\"eqno\">(B.52)</span></div>\n<p class=\"cont\">At <l2m-math n=\"557\"></l2m-math> (and removing the zero mode) we can simplify the expression using <l2m-math n=\"558\"></l2m-math></p>\n<div class=\"display\" id=\"eq-Z_N_circle\"><div class=\"eqbody\"><l2m-math n=\"559\"></l2m-math></div><span class=\"eqno\">(B.53)</span></div>",
+          "hash": "65ba8606d508"
+         },
+         {
+          "id": "section-B.2.2-p4",
+          "kind": "paragraph",
+          "body": "<p>As a comparison note that in the energy basis</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"560\"></l2m-math></div><span class=\"eqno\">(B.54)</span></div>\n<p class=\"cont\">Importantly <l2m-math n=\"561\"></l2m-math> has only ground state divergence <l2m-math n=\"562\"></l2m-math> and did not seem to require the localized counter-terms we introduced above. We learn that the divergences of the identification are basis-dependent.</p>",
+          "hash": "4f1a642932ff"
+         },
+         {
+          "id": "footnotes",
+          "kind": "footnotes",
+          "title": "Footnotes",
+          "body": "<section class=\"footnotes\" aria-labelledby=\"notes-h\"><h2 id=\"notes-h\">Notes</h2><ol class=\"fnlist\"><li id=\"fn1\"><a class=\"fnback\" href=\"#fnref1\" aria-label=\"Back to the text\">1</a><div class=\"fn-text\">For the RT result of non-generic black holes created by a collapse see <span class=\"cite\">[<a href=\"#cite-Takayanagi-2010wp\">15</a>]</span>. For the RT result for (pure) CFT B-states see <span class=\"cite\">[<a href=\"#cite-Takayanagi-2011zk\">16</a>, <a href=\"#cite-Hartman-2013qma\">17</a>]</span>.</div></li><li id=\"fn2\"><a class=\"fnback\" href=\"#fnref2\" aria-label=\"Back to the text\">2</a><div class=\"fn-text\">For non-typical pure states with a known geometric dual, it should possible to retain the homology constraint. One example of that is the non-typical collapsed black hole state, where the homology constraint can be kept due to the past geometry <span class=\"cite\">[<a href=\"#cite-Takayanagi-2010wp\">15</a>]</span>. Another is a CFT ‘B-state’ in which non-trivial surfaces are homologically allowed due to an end of the world brane <span class=\"cite\">[<a href=\"#cite-Hartman-2013qma\">17</a>]</span>.</div></li><li id=\"fn3\"><a class=\"fnback\" href=\"#fnref3\" aria-label=\"Back to the text\">3</a><div class=\"fn-text\">The ensemble is very similar to that of <span class=\"cite\">[<a href=\"#cite-Sugiura-2012\">22</a>, <a href=\"#cite-Fujita-2017pju\">20</a>]</span>.</div></li><li id=\"fn4\"><a class=\"fnback\" href=\"#fnref4\" aria-label=\"Back to the text\">4</a><div class=\"fn-text\">Given a gauge field <l2m-math n=\"50\"></l2m-math>, similar basis can be formed. The basis include <l2m-math n=\"51\"></l2m-math> for every spatial gauge field <l2m-math n=\"52\"></l2m-math>, up to gauge transformations <l2m-math n=\"53\"></l2m-math>.</div></li><li id=\"fn5\"><a class=\"fnback\" href=\"#fnref5\" aria-label=\"Back to the text\">5</a><div class=\"fn-text\">One can imagine a different type of averaged density matrix, where the mixture is between the normalized <l2m-math n=\"96\"></l2m-math>: <l2m-math n=\"97\"></l2m-math> (<l2m-math n=\"98\"></l2m-math> is the formal normalization). We didn’t study this expression, but we believe the holographic calculation to be equal to the thermal case.</div></li><li id=\"fn6\"><a class=\"fnback\" href=\"#fnref6\" aria-label=\"Back to the text\">6</a><div class=\"fn-text\">For large enough <l2m-math n=\"175\"></l2m-math> (or low enough temperatures) there’s a dominant disconnected solution with the same homology class <span class=\"cite\">[<a href=\"#cite-Azeyanagi-2007bj\">8</a>]</span> (for the relation to the Araki-Lieb inequality see also <span class=\"cite\">[<a href=\"#cite-Headrick-2007km\">28</a>, <a href=\"#cite-Hubeny-2013gta\">29</a>]</span>). <span id=\"foot-disc_sol\" class=\"anchor\"></span></div></li><li id=\"fn7\"><a class=\"fnback\" href=\"#fnref7\" aria-label=\"Back to the text\">7</a><div class=\"fn-text\">I thank Ohad Mamroud for emphasizing this point.</div></li><li id=\"fn8\"><a class=\"fnback\" href=\"#fnref8\" aria-label=\"Back to the text\">8</a><div class=\"fn-text\">For gauge theories (and orbifolds) a similar path integral can be written. Locally the identification has the same form as the scalar. Globally one also need to integrate over the <l2m-math n=\"206\"></l2m-math> different <l2m-math n=\"207\"></l2m-math> holonomies from each interval.</div></li><li id=\"fn9\"><a class=\"fnback\" href=\"#fnref9\" aria-label=\"Back to the text\">9</a><div class=\"fn-text\">This property was termed ‘canonical typicality’ <span class=\"cite\">[<a href=\"#cite-Goldstein-2005aib\">18</a>]</span>. Importantly, the microcanonical ensemble would differ from the canonical one for the Rényi entropies but will agree on the von Neumann entropy <span class=\"cite\">[<a href=\"#cite-Lashkari-2016vgj\">30</a>, <a href=\"#cite-He-2017vyf\">21</a>]</span> (and also found holographically <span class=\"cite\">[<a href=\"#cite-Dong-2016fnf\">31</a>, <a href=\"#cite-Dong-2018lsk\">32</a>]</span>). It is therefore essential that our ensemble does not consist of energy eigenstates. <span id=\"foot-typicality\" class=\"anchor\"></span></div></li><li id=\"fn10\"><a class=\"fnback\" href=\"#fnref10\" aria-label=\"Back to the text\">10</a><div class=\"fn-text\">In principle, classical (field theory) saddles are allowed to be non-smooth at the identification, or smooth only in several of the topologies.</div></li><li id=\"fn11\"><a class=\"fnback\" href=\"#fnref11\" aria-label=\"Back to the text\">11</a><div class=\"fn-text\">Specifically, we don’t expect it to work for the microcanonical ensemble (see also footnote <a href=\"#foot-typicality\">9</a>). As the gluing in this case will include non-local boundary identifications, it is no longer clear smooth geometries dominate the partition function.</div></li><li id=\"fn12\"><a class=\"fnback\" href=\"#fnref12\" aria-label=\"Back to the text\">12</a><div class=\"fn-text\">As we mention in footnote <a href=\"#foot-disc_sol\">6</a> both topologies allow another solution with a disconnected RT line covering the horizon. For the second (non-trivial) boundary topology this is explicitly a replica island covering the horizon. As these solutions are always sub-dominant we omit them in <a href=\"#eq-pure_entropy_holo\">(4.7)</a>.</div></li><li id=\"fn13\"><a class=\"fnback\" href=\"#fnref13\" aria-label=\"Back to the text\">13</a><div class=\"fn-text\">For states similar to our <a href=\"#eq-ensemble_state\">(2.1)</a>, <span class=\"cite\">[<a href=\"#cite-Asplund-2014coa\">34</a>]</span> found the same result using a large central charge expansion in <l2m-math n=\"292\"></l2m-math>.</div></li><li id=\"fn14\"><a class=\"fnback\" href=\"#fnref14\" aria-label=\"Back to the text\">14</a><div class=\"fn-text\">To write the second term we actually need the original exact expression <a href=\"#eq-av_renyi_exact\">(4.3)</a>.</div></li><li id=\"fn15\"><a class=\"fnback\" href=\"#fnref15\" aria-label=\"Back to the text\">15</a><div class=\"fn-text\">These strings are dual to the gauge-invariant holonomies measured along a line between two identified points.</div></li><li id=\"fn16\"><a class=\"fnback\" href=\"#fnref16\" aria-label=\"Back to the text\">16</a><div class=\"fn-text\">I thank Ofer Aharony for stressing these issues.</div></li></ol></section>",
+          "hash": "f56cbd0a6f17"
+         },
+         {
+          "id": "refs",
+          "kind": "references",
+          "title": "References",
+          "body": "<section class=\"references\" aria-labelledby=\"refs-h\"><h2 id=\"refs-h\">References</h2><ol class=\"refs\"><li id=\"cite-Penington-2019kki\"><span class=\"refnum\">[1]</span><span class=\"reftext\">G. Penington, S. H. Shenker, D. Stanford and Z. Yang, <em>Replica wormholes and the black hole interior</em>, <a href=\"http://arXiv.org/abs/1911.11977\"><code>1911.11977</code></a>.</span></li><li id=\"cite-Almheiri-2019qdq\"><span class=\"refnum\">[2]</span><span class=\"reftext\">A. Almheiri, T. Hartman, J. Maldacena, E. Shaghoulian and A. Tajdini, <em>Replica Wormholes and the Entropy of Hawking Radiation</em>, <em>JHEP</em> <strong>05</strong> (2020) 013 [<a href=\"http://arXiv.org/abs/1911.12333\"><code>1911.12333</code></a>].</span></li><li id=\"cite-Almheiri-2019psf\"><span class=\"refnum\">[3]</span><span class=\"reftext\">A. Almheiri, N. Engelhardt, D. Marolf and H. Maxfield, <em>The entropy of bulk quantum fields and the entanglement wedge of an evaporating black hole</em>, <em>JHEP</em> <strong>12</strong> (2019) 063 [<a href=\"http://arXiv.org/abs/1905.08762\"><code>1905.08762</code></a>].</span></li><li id=\"cite-Penington-2019npb\"><span class=\"refnum\">[4]</span><span class=\"reftext\">G. Penington, <em>Entanglement Wedge Reconstruction and the Information Paradox</em>, <em>JHEP</em> <strong>09</strong> (2020) 002 [<a href=\"http://arXiv.org/abs/1905.08255\"><code>1905.08255</code></a>].</span></li><li id=\"cite-Almheiri-2020cfm\"><span class=\"refnum\">[5]</span><span class=\"reftext\">A. Almheiri, T. Hartman, J. Maldacena, E. Shaghoulian and A. Tajdini, <em>The entropy of Hawking radiation</em>, <a href=\"http://arXiv.org/abs/2006.06872\"><code>2006.06872</code></a>.</span></li><li id=\"cite-Page-1993df\"><span class=\"refnum\">[6]</span><span class=\"reftext\">D. N. Page, <em>Average entropy of a subsystem</em>, <em>Phys. Rev. Lett.</em> <strong>71</strong> (1993) 1291–1294 [<a href=\"http://arXiv.org/abs/gr-qc/9305007\"><code>gr-qc/9305007</code></a>].</span></li><li id=\"cite-Page-1993wv\"><span class=\"refnum\">[7]</span><span class=\"reftext\">D. N. Page, <em>Information in black hole radiation</em>, <em>Phys. Rev. Lett.</em> <strong>71</strong> (1993) 3743–3746 [<a href=\"http://arXiv.org/abs/hep-th/9306083\"><code>hep-th/9306083</code></a>].</span></li><li id=\"cite-Azeyanagi-2007bj\"><span class=\"refnum\">[8]</span><span class=\"reftext\">T. Azeyanagi, T. Nishioka and T. Takayanagi, <em>Near Extremal Black Hole Entropy as Entanglement Entropy via AdS(2)/CFT(1)</em>, <em>Phys. Rev. D</em> <strong>77</strong> (2008) 064005 [<a href=\"http://arXiv.org/abs/0710.2956\"><code>0710.2956</code></a>].</span></li><li id=\"cite-Haehl-2014zoa\"><span class=\"refnum\">[9]</span><span class=\"reftext\">F. M. Haehl, T. Hartman, D. Marolf, H. Maxfield and M. Rangamani, <em>Topological aspects of generalized gravitational entropy</em>, <em>JHEP</em> <strong>05</strong> (2015) 023 [<a href=\"http://arXiv.org/abs/1412.7561\"><code>1412.7561</code></a>].</span></li><li id=\"cite-Lewkowycz-2013nqa\"><span class=\"refnum\">[10]</span><span class=\"reftext\">A. Lewkowycz and J. Maldacena, <em>Generalized gravitational entropy</em>, <em>JHEP</em> <strong>08</strong> (2013) 090 [<a href=\"http://arXiv.org/abs/1304.4926\"><code>1304.4926</code></a>].</span></li><li id=\"cite-Gibbons-1976ue\"><span class=\"refnum\">[11]</span><span class=\"reftext\">G. W. Gibbons and S. W. Hawking, <em>Action Integrals and Partition Functions in Quantum Gravity</em>, <em>Phys. Rev. D</em> <strong>15</strong> (1977) 2752–2756.</span></li><li id=\"cite-Ryu-2006bv\"><span class=\"refnum\">[12]</span><span class=\"reftext\">S. Ryu and T. Takayanagi, <em>Holographic derivation of entanglement entropy from AdS/CFT</em>, <em>Phys. Rev. Lett.</em> <strong>96</strong> (2006) 181602 [<a href=\"http://arXiv.org/abs/hep-th/0603001\"><code>hep-th/0603001</code></a>].</span></li><li id=\"cite-Nishioka-2009un\"><span class=\"refnum\">[13]</span><span class=\"reftext\">T. Nishioka, S. Ryu and T. Takayanagi, <em>Holographic Entanglement Entropy: An Overview</em>, <em>J. Phys. A</em> <strong>42</strong> (2009) 504008 [<a href=\"http://arXiv.org/abs/0905.0932\"><code>0905.0932</code></a>].</span></li><li id=\"cite-Ryu-2006ef\"><span class=\"refnum\">[14]</span><span class=\"reftext\">S. Ryu and T. Takayanagi, <em>Aspects of Holographic Entanglement Entropy</em>, <em>JHEP</em> <strong>08</strong> (2006) 045 [<a href=\"http://arXiv.org/abs/hep-th/0605073\"><code>hep-th/0605073</code></a>].</span></li><li id=\"cite-Takayanagi-2010wp\"><span class=\"refnum\">[15]</span><span class=\"reftext\">T. Takayanagi and T. Ugajin, <em>Measuring Black Hole Formations by Entanglement Entropy via Coarse-Graining</em>, <em>JHEP</em> <strong>11</strong> (2010) 054 [<a href=\"http://arXiv.org/abs/1008.3439\"><code>1008.3439</code></a>].</span></li><li id=\"cite-Takayanagi-2011zk\"><span class=\"refnum\">[16]</span><span class=\"reftext\">T. Takayanagi, <em>Holographic Dual of BCFT</em>, <em>Phys. Rev. Lett.</em> <strong>107</strong> (2011) 101602 [<a href=\"http://arXiv.org/abs/1105.5165\"><code>1105.5165</code></a>].</span></li><li id=\"cite-Hartman-2013qma\"><span class=\"refnum\">[17]</span><span class=\"reftext\">T. Hartman and J. Maldacena, <em>Time Evolution of Entanglement Entropy from Black Hole Interiors</em>, <em>JHEP</em> <strong>05</strong> (2013) 014 [<a href=\"http://arXiv.org/abs/1303.1080\"><code>1303.1080</code></a>].</span></li><li id=\"cite-Goldstein-2005aib\"><span class=\"refnum\">[18]</span><span class=\"reftext\">S. Goldstein, J. L. Lebowitz, R. Tumulka and N. Zanghi, <em>Canonical Typicality</em>, <em>Phys. Rev. Lett.</em> <strong>96</strong> (2006), no. 5 050403 [<a href=\"http://arXiv.org/abs/cond-mat/0511091\"><code>cond-mat/0511091</code></a>].</span></li><li id=\"cite-Dymarsky-2016ntg\"><span class=\"refnum\">[19]</span><span class=\"reftext\">A. Dymarsky, N. Lashkari and H. Liu, <em>Subsystem ETH</em>, <em>Phys. Rev. E</em> <strong>97</strong> (2018) 012140 [<a href=\"http://arXiv.org/abs/1611.08764\"><code>1611.08764</code></a>].</span></li><li id=\"cite-Fujita-2017pju\"><span class=\"refnum\">[20]</span><span class=\"reftext\">Y. O. Nakagawa, M. Watanabe, S. Sugiura and H. Fujita, <em>Universality in volume-law entanglement of scrambled pure quantum states</em>, <em>Nature Commun.</em> <strong>9</strong> (2018), no. 1 1635 [<a href=\"http://arXiv.org/abs/1703.02993\"><code>1703.02993</code></a>].</span></li><li id=\"cite-He-2017vyf\"><span class=\"refnum\">[21]</span><span class=\"reftext\">S. He, F.-L. Lin and J.-j. Zhang, <em>Subsystem eigenstate thermalization hypothesis for entanglement entropy in CFT</em>, <em>JHEP</em> <strong>08</strong> (2017) 126 [<a href=\"http://arXiv.org/abs/1703.08724\"><code>1703.08724</code></a>].</span></li><li id=\"cite-Sugiura-2012\"><span class=\"refnum\">[22]</span><span class=\"reftext\">S. Sugiura and A. Shimizu, <em>Thermal pure quantum states at finite temperature</em>, <em>Phys. Rev. Lett.</em> <strong>108</strong> (Jun, 2012) 240401.</span></li><li id=\"cite-Holzhey-1994we\"><span class=\"refnum\">[23]</span><span class=\"reftext\">C. Holzhey, F. Larsen and F. Wilczek, <em>Geometric and renormalized entropy in conformal field theory</em>, <em>Nucl. Phys. B</em> <strong>424</strong> (1994) 443–467 [<a href=\"http://arXiv.org/abs/hep-th/9403108\"><code>hep-th/9403108</code></a>].</span></li><li id=\"cite-Calabrese-2004eu\"><span class=\"refnum\">[24]</span><span class=\"reftext\">P. Calabrese and J. L. Cardy, <em>Entanglement entropy and quantum field theory</em>, <em>J. Stat. Mech.</em> <strong>0406</strong> (2004) P06002 [<a href=\"http://arXiv.org/abs/hep-th/0405152\"><code>hep-th/0405152</code></a>].</span></li><li id=\"cite-Hawking-1982dh\"><span class=\"refnum\">[25]</span><span class=\"reftext\">S. W. Hawking and D. N. Page, <em>Thermodynamics of Black Holes in anti-De Sitter Space</em>, <em>Commun. Math. Phys.</em> <strong>87</strong> (1983) 577.</span></li><li id=\"cite-Witten-1998zw\"><span class=\"refnum\">[26]</span><span class=\"reftext\">E. Witten, <em>Anti-de Sitter space, thermal phase transition, and confinement in gauge theories</em>, <em>Adv. Theor. Math. Phys.</em> <strong>2</strong> (1998) 505–532 [<a href=\"http://arXiv.org/abs/hep-th/9803131\"><code>hep-th/9803131</code></a>].</span></li><li id=\"cite-Rangamani-2016dms\"><span class=\"refnum\">[27]</span><span class=\"reftext\">M. Rangamani and T. Takayanagi, <em>Holographic Entanglement Entropy</em>, vol. 931. Springer, 2017.</span></li><li id=\"cite-Headrick-2007km\"><span class=\"refnum\">[28]</span><span class=\"reftext\">M. Headrick and T. Takayanagi, <em>A Holographic proof of the strong subadditivity of entanglement entropy</em>, <em>Phys. Rev. D</em> <strong>76</strong> (2007) 106013 [<a href=\"http://arXiv.org/abs/0704.3719\"><code>0704.3719</code></a>].</span></li><li id=\"cite-Hubeny-2013gta\"><span class=\"refnum\">[29]</span><span class=\"reftext\">V. E. Hubeny, H. Maxfield, M. Rangamani and E. Tonni, <em>Holographic entanglement plateaux</em>, <em>JHEP</em> <strong>08</strong> (2013) 092 [<a href=\"http://arXiv.org/abs/1306.4004\"><code>1306.4004</code></a>].</span></li><li id=\"cite-Lashkari-2016vgj\"><span class=\"refnum\">[30]</span><span class=\"reftext\">N. Lashkari, A. Dymarsky and H. Liu, <em>Eigenstate Thermalization Hypothesis in Conformal Field Theory</em>, <em>J. Stat. Mech.</em> <strong>1803</strong> (2018), no. 3 033101 [<a href=\"http://arXiv.org/abs/1610.00302\"><code>1610.00302</code></a>].</span></li><li id=\"cite-Dong-2016fnf\"><span class=\"refnum\">[31]</span><span class=\"reftext\">X. Dong, <em>The Gravity Dual of Renyi Entropy</em>, <em>Nature Commun.</em> <strong>7</strong> (2016) 12472 [<a href=\"http://arXiv.org/abs/1601.06788\"><code>1601.06788</code></a>].</span></li><li id=\"cite-Dong-2018lsk\"><span class=\"refnum\">[32]</span><span class=\"reftext\">X. Dong, <em>Holographic Rényi Entropy at High Energy Density</em>, <em>Phys. Rev. Lett.</em> <strong>122</strong> (2019), no. 4 041602 [<a href=\"http://arXiv.org/abs/1811.04081\"><code>1811.04081</code></a>].</span></li><li id=\"cite-Witten-2001ua\"><span class=\"refnum\">[33]</span><span class=\"reftext\">E. Witten, <em>Multitrace operators, boundary conditions, and AdS / CFT correspondence</em>, <a href=\"http://arXiv.org/abs/hep-th/0112258\"><code>hep-th/0112258</code></a>.</span></li><li id=\"cite-Asplund-2014coa\"><span class=\"refnum\">[34]</span><span class=\"reftext\">C. T. Asplund, A. Bernamonti, F. Galli and T. Hartman, <em>Holographic Entanglement Entropy from 2d CFT: Heavy States and Local Quenches</em>, <em>JHEP</em> <strong>02</strong> (2015) 171 [<a href=\"http://arXiv.org/abs/1410.1392\"><code>1410.1392</code></a>].</span></li><li id=\"cite-Faulkner-2013ana\"><span class=\"refnum\">[35]</span><span class=\"reftext\">T. Faulkner, A. Lewkowycz and J. Maldacena, <em>Quantum corrections to holographic entanglement entropy</em>, <em>JHEP</em> <strong>11</strong> (2013) 074 [<a href=\"http://arXiv.org/abs/1307.2892\"><code>1307.2892</code></a>].</span></li><li id=\"cite-Dong-2016eik\"><span class=\"refnum\">[36]</span><span class=\"reftext\">X. Dong, D. Harlow and A. C. Wall, <em>Reconstruction of Bulk Operators within the Entanglement Wedge in Gauge-Gravity Duality</em>, <em>Phys. Rev. Lett.</em> <strong>117</strong> (2016), no. 2 021601 [<a href=\"http://arXiv.org/abs/1601.05416\"><code>1601.05416</code></a>].</span></li><li id=\"cite-Papadodimas-2013jku\"><span class=\"refnum\">[37]</span><span class=\"reftext\">K. Papadodimas and S. Raju, <em>State-Dependent Bulk-Boundary Maps and Black Hole Complementarity</em>, <em>Phys. Rev. D</em> <strong>89</strong> (2014), no. 8 086010 [<a href=\"http://arXiv.org/abs/1310.6335\"><code>1310.6335</code></a>].</span></li><li id=\"cite-Marolf-2013dba\"><span class=\"refnum\">[38]</span><span class=\"reftext\">D. Marolf and J. Polchinski, <em>Gauge/Gravity Duality and the Black Hole Interior</em>, <em>Phys. Rev. Lett.</em> <strong>111</strong> (2013) 171301 [<a href=\"http://arXiv.org/abs/1307.4706\"><code>1307.4706</code></a>].</span></li><li id=\"cite-deBoer-2019kyr\"><span class=\"refnum\">[39]</span><span class=\"reftext\">J. De Boer, R. Van Breukelen, S. F. Lokhande, K. Papadodimas and E. Verlinde, <em>Probing typical black hole microstates</em>, <em>JHEP</em> <strong>01</strong> (2020) 062 [<a href=\"http://arXiv.org/abs/1901.08527\"><code>1901.08527</code></a>].</span></li><li id=\"cite-Bousso-2013wia\"><span class=\"refnum\">[40]</span><span class=\"reftext\">R. Bousso, <em>Firewalls from double purity</em>, <em>Phys. Rev. D</em> <strong>88</strong> (2013), no. 8 084035 [<a href=\"http://arXiv.org/abs/1308.2665\"><code>1308.2665</code></a>].</span></li><li id=\"cite-Hubeny-2007xt\"><span class=\"refnum\">[41]</span><span class=\"reftext\">V. E. Hubeny, M. Rangamani and T. Takayanagi, <em>A Covariant holographic entanglement entropy proposal</em>, <em>JHEP</em> <strong>07</strong> (2007) 062 [<a href=\"http://arXiv.org/abs/0705.0016\"><code>0705.0016</code></a>].</span></li><li id=\"cite-Dong-2016hjy\"><span class=\"refnum\">[42]</span><span class=\"reftext\">X. Dong, A. Lewkowycz and M. Rangamani, <em>Deriving covariant holographic entanglement</em>, <em>JHEP</em> <strong>11</strong> (2016) 028 [<a href=\"http://arXiv.org/abs/1607.07506\"><code>1607.07506</code></a>].</span></li><li id=\"cite-Goto-2020wnk\"><span class=\"refnum\">[43]</span><span class=\"reftext\">K. Goto, T. Hartman and A. Tajdini, <em>Replica wormholes for an evaporating 2D black hole</em>, <em>JHEP</em> <strong>04</strong> (2021) 289 [<a href=\"http://arXiv.org/abs/2011.09043\"><code>2011.09043</code></a>].</span></li><li id=\"cite-Colin-Ellerin-2020mva\"><span class=\"refnum\">[44]</span><span class=\"reftext\">S. Colin-Ellerin, X. Dong, D. Marolf, M. Rangamani and Z. Wang, <em>Real-time gravitational replicas: Formalism and a variational principle</em>, <em>JHEP</em> <strong>05</strong> (2021) 117 [<a href=\"http://arXiv.org/abs/2012.00828\"><code>2012.00828</code></a>].</span></li><li id=\"cite-Colin-Ellerin-2021jev\"><span class=\"refnum\">[45]</span><span class=\"reftext\">S. Colin-Ellerin, X. Dong, D. Marolf, M. Rangamani and Z. Wang, <em>Real-time gravitational replicas: Low dimensional examples</em>, <a href=\"http://arXiv.org/abs/2105.07002\"><code>2105.07002</code></a>.</span></li><li id=\"cite-Pollack-2020gfa\"><span class=\"refnum\">[46]</span><span class=\"reftext\">J. Pollack, M. Rozali, J. Sully and D. Wakeham, <em>Eigenstate Thermalization and Disorder Averaging in Gravity</em>, <em>Phys. Rev. Lett.</em> <strong>125</strong> (2020), no. 2 021601 [<a href=\"http://arXiv.org/abs/2002.02971\"><code>2002.02971</code></a>].</span></li><li id=\"cite-Liu-2020jsv\"><span class=\"refnum\">[47]</span><span class=\"reftext\">H. Liu and S. Vardhan, <em>Entanglement entropies of equilibrated pure states in quantum many-body systems and gravity</em>, <em>P. R. X. Quantum.</em> <strong>2</strong> (2021) 010344 [<a href=\"http://arXiv.org/abs/2008.01089\"><code>2008.01089</code></a>].</span></li><li id=\"cite-Sasieta-2021pzj\"><span class=\"refnum\">[48]</span><span class=\"reftext\">M. Sasieta, <em>Ergodic Equilibration of Rényi Entropies and Replica Wormholes</em>, <a href=\"http://arXiv.org/abs/2103.09880\"><code>2103.09880</code></a>.</span></li><li id=\"cite-Freivogel-2021ivu\"><span class=\"refnum\">[49]</span><span class=\"reftext\">B. Freivogel, D. Nikolakopoulou and A. F. Rotundo, <em>Wormholes from Averaging over States</em>, <a href=\"http://arXiv.org/abs/2105.12771\"><code>2105.12771</code></a>.</span></li><li id=\"cite-Belin-2020hea\"><span class=\"refnum\">[50]</span><span class=\"reftext\">A. Belin and J. de Boer, <em>Random Statistics of OPE Coefficients and Euclidean Wormholes</em>, <a href=\"http://arXiv.org/abs/2006.05499\"><code>2006.05499</code></a>.</span></li><li id=\"cite-Aharony-2019vgs\"><span class=\"refnum\">[51]</span><span class=\"reftext\">O. Aharony, E. Y. Urbach and M. Weiss, <em>Generalized Hawking-Page transitions</em>, <em>JHEP</em> <strong>08</strong> (2019) 018 [<a href=\"http://arXiv.org/abs/1904.07502\"><code>1904.07502</code></a>].</span></li><li id=\"cite-Anninos-2012ft\"><span class=\"refnum\">[52]</span><span class=\"reftext\">D. Anninos, F. Denef and D. Harlow, <em>Wave function of Vasiliev’s universe: A few slices thereof</em>, <em>Phys. Rev. D</em> <strong>88</strong> (2013), no. 8 084049 [<a href=\"http://arXiv.org/abs/1207.5517\"><code>1207.5517</code></a>].</span></li></ol></section>",
+          "hash": "7aa3dcd59006"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "fold": true
+   }
+  ]
+ },
+ "defs": [],
+ "questions": []
+}

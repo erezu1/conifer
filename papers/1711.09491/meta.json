@@ -1,0 +1,15 @@
+{
+ "id": "1711.09491",
+ "version": "1",
+ "title": "Delayed instabilities in viscoelastic solids through a metric description",
+ "authors": [
+  "Erez Y. Urbach",
+  "Efi Efrati"
+ ],
+ "abstract": "While determining the stability of an unconstrained elastic structure is a straightforward task, this is not the case for viscoelastic structures. Seemingly elastically stable conformations of viscoelastic structures may gradually creep until stability is lost, and conversely, creeping does not necessarily imply that a structure will eventually become unstable. Understanding instabilities in viscoelastic structures requires a more intuitive description of viscoelasticity to allow analytical results and quantitative predictions. In this work we put forward a metric description of viscoelasticity in which the continua is characterized by temporally evolving reference lengths with respect to which elastic strains are measured. Formulating the three dimensional theory using metric tensors we are able to predict which structures will exhibit delayed instability due to viscoelastic flow. We also quantitatively describe the viscoelastic relaxation in free standing structures including cases where the relaxation leads to no apparent motion. We demonstrate these results and the power of the metric approach by elucidating the subtle mechanism of delayed instability in elastomer shells showing quantitative agreement with experimental measurements.",
+ "primary": "cond-mat.soft",
+ "categories": [
+  "cond-mat.soft"
+ ],
+ "published": "2017-11-26"
+}

@@ -1,0 +1,447 @@
+{
+ "format": "conifer-doc",
+ "version": 1,
+ "meta": {
+  "title": "Generalized Hawking-Page transitions",
+  "authors": [
+   "Ofer Aharony",
+   "Erez Y. Urbach",
+   "Maya Weiss"
+  ],
+  "arxiv": null,
+  "abstractHtml": "<p>We construct holographic backgrounds that are dual by the AdS/CFT correspondence to Euclidean conformal field theories on products of spheres <l2m-math n=\"580\"></l2m-math>, for conformal field theories whose dual may be approximated by classical Einstein gravity (typically these are large <l2m-math n=\"581\"></l2m-math> strongly coupled theories). For <l2m-math n=\"582\"></l2m-math> these backgrounds correspond to thermal field theories on <l2m-math n=\"583\"></l2m-math>, and Hawking and Page found that there are several possible bulk solutions, with two different topologies, that compete with each other, leading to a phase transition as the relative size of the spheres is modified. By numerically solving the Einstein equations we find similar results also for <l2m-math n=\"584\"></l2m-math>, with bulk solutions in which either one or the other sphere shrinks to zero smoothly at a minimal value of the radial coordinate, and with a first order phase transition (for <l2m-math n=\"585\"></l2m-math>) between solutions of two different topologies as the relative radius changes. For a critical ratio of the radii there is a (sub-dominant) singular solution where both spheres shrink, and we analytically analyze the behavior near this radius. For <l2m-math n=\"586\"></l2m-math> the number of solutions grows to infinity as the critical ratio is approached.</p>",
+  "kicker": null,
+  "titleHtml": "Generalized Hawking-Page transitions",
+  "key": {},
+  "defaultAudience": "physicist",
+  "source": {
+   "kind": "epsilon",
+   "doc": "papers/1904.07502/doc"
+  }
+ },
+ "levels": [
+  {
+   "key": "gist",
+   "label": "Gist",
+   "hint": "the trunk: the three things to know"
+  },
+  {
+   "key": "brief",
+   "label": "Summary",
+   "hint": "the branches: one page, every sentence opens"
+  },
+  {
+   "key": "paper",
+   "label": "Paper",
+   "hint": "the foliage: the full text, with the roots folded"
+  }
+ ],
+ "audiences": [],
+ "root": {
+  "id": "root",
+  "kind": "paper",
+  "children": [
+   {
+    "id": "sec-introduction",
+    "kind": "section",
+    "number": "1",
+    "title": "Introduction and summary",
+    "titleHtml": "Introduction and summary",
+    "children": [
+     {
+      "id": "sec-introduction-p1",
+      "kind": "paragraph",
+      "body": "<p>Gauge/gravity duality allows us to translate results in gravity to results in field theory, and vice versa. In particular, there is a large set of examples of <l2m-math n=\"0\"></l2m-math>-dimensional conformal field theories (CFTs) whose dual is well-approximated by classical Einstein gravity on <l2m-math n=\"1\"></l2m-math> (times some compact manifold). These include the <l2m-math n=\"2\"></l2m-math> <l2m-math n=\"3\"></l2m-math> large <l2m-math n=\"4\"></l2m-math> <l2m-math n=\"5\"></l2m-math> supersymmetric Yang-Mills theory at strong ‘t Hooft coupling, and the large <l2m-math n=\"6\"></l2m-math> maximally supersymmetric <l2m-math n=\"7\"></l2m-math> and <l2m-math n=\"8\"></l2m-math> CFTs. For these theories classical computations in gravity can teach us about the behavior of the field theory (in the large <l2m-math n=\"9\"></l2m-math> limit). Moreover, since the gravitational sector is shared between many different field theories (which differ, for instance, in the choice of compact manifold), gravity computations give us universal results that are valid for many different field theories.</p>",
+      "hash": "b9977762da4a"
+     },
+     {
+      "id": "sec-introduction-p2",
+      "kind": "paragraph",
+      "body": "<p>CFTs on some manifold <l2m-math n=\"10\"></l2m-math> are dual by the AdS/CFT correspondence to gravitational theories on asymptotically anti-de Sitter (AdS) spaces, whose boundary is conformally equivalent to <l2m-math n=\"11\"></l2m-math>. The most studied examples are <l2m-math n=\"12\"></l2m-math> or <l2m-math n=\"13\"></l2m-math>, where the metric is exactly anti-de Sitter. Not many results are known about other spaces (see, for instance, <span class=\"cite\">[<a href=\"#cite-Witten-1999xp\">1</a>, <a href=\"#cite-Anderson2004\">2</a>, <a href=\"#cite-deBoer-2004yu\">3</a>]</span> for some general comments). One particularly interesting example is the Euclidean space <l2m-math n=\"14\"></l2m-math>, first studied by Hawking and Page <span class=\"cite\">[<a href=\"#cite-Hawking1983\">4</a>]</span>. This is interesting because it corresponds to the CFT on <l2m-math n=\"15\"></l2m-math> at finite temperature. Hawking and Page showed that there are two classes of smooth solutions with these boundary conditions. One set of solutions is given by anti-de Sitter space in global coordinates with Euclidean time identified; in this solution the <l2m-math n=\"16\"></l2m-math> factor shrinks to zero in the interior of space, such that the topology is <l2m-math n=\"17\"></l2m-math>. The other set is described by Euclidean black holes, in which the <l2m-math n=\"18\"></l2m-math> shrinks to zero in the interior at the Euclidean horizon; this set has the topology <l2m-math n=\"19\"></l2m-math>. The AdS/CFT correspondence identifies the partition function of the Euclidean field theory, in the gravity approximation, with the exponent of minus the Euclidean gravitational action (summed over all solutions with given boundary conditions). Hawking and Page showed that different classical solutions dominate the partition function at different temperatures (different ratios of the <l2m-math n=\"20\"></l2m-math> radius to the <l2m-math n=\"21\"></l2m-math> radius), with a phase transition between them at some critical temperature. When the dual field theory is a gauge theory, this phase transition may be identified (using various order parameters) with a confinement/deconfinement transition <span class=\"cite\">[<a href=\"#cite-Witten1998\">5</a>, <a href=\"#cite-Witten1998_2\">6</a>]</span>. On the field theory side, a sharp phase transition at finite volume is possible only when the number of degrees of freedom is infinite; for a finite number we expect a crossover. The translation of this to the gravity side is that quantum effects (corresponding to <l2m-math n=\"22\"></l2m-math> corrections in the field theory) will turn the phase transition into a crossover.</p>",
+      "hash": "05e629a1ea17"
+     },
+     {
+      "id": "sec-introduction-p3",
+      "kind": "paragraph",
+      "body": "<p>In this paper we generalize the discussion of Hawking and Page to CFTs on <l2m-math n=\"23\"></l2m-math>. This no longer has a thermal interpretation, but the CFT partition function on such Euclidean manifolds is still an interesting observable. Similar observables are computed analytically using localization in supersymmetric CFTs <span class=\"cite\">[<a href=\"#cite-Pestun-2016zxk\">7</a>]</span>. The result may also be related by analytic continuation to the physics of the canonical vacuum state in the CFT on the <l2m-math n=\"24\"></l2m-math>-dimensional de Sitter space times <l2m-math n=\"25\"></l2m-math> <span class=\"cite\">[<a href=\"#cite-Blackman-2011in\">8</a>]</span>. For this case we also find that there are two possible topologies, <l2m-math n=\"26\"></l2m-math> and <l2m-math n=\"27\"></l2m-math>, and that there is a phase transition between them as the ratio of radii, <l2m-math n=\"28\"></l2m-math> is varied. We were not able to find analytical solutions for general <l2m-math n=\"29\"></l2m-math>, but we find numerical solutions for various values of <l2m-math n=\"30\"></l2m-math>; the large isometry group of the space implies that the equations of motion are ordinary differential equations in a single variable. One important difference from the <l2m-math n=\"31\"></l2m-math> case is that here only one solution exists for <l2m-math n=\"32\"></l2m-math> and for <l2m-math n=\"33\"></l2m-math>; there is no analog of the thermal AdS solution that exists for all ratios. In addition, there is in this case a solution with a conical singularity where both spheres shrink together, for some critical ratio <l2m-math n=\"34\"></l2m-math>. This solution can be found analytically, and we can also analyze analytically the small fluctuations around it. For <l2m-math n=\"35\"></l2m-math> we find oscillatory behavior of these fluctuations, such that the number of solutions with a given ratio <l2m-math n=\"36\"></l2m-math> grows as <l2m-math n=\"37\"></l2m-math>; however, the new solutions and the singular solution never dominate, and there is a first order phase transition between the solution which exists at <l2m-math n=\"38\"></l2m-math> and the solution (of the other topology) which exists at <l2m-math n=\"39\"></l2m-math>, at some critical <l2m-math n=\"40\"></l2m-math> close to <l2m-math n=\"41\"></l2m-math>. The case of <l2m-math n=\"42\"></l2m-math> is unphysical, since there are no consistent quantum gravitational theories that have such <l2m-math n=\"43\"></l2m-math> solution with small curvature (indeed, even without requiring a gravity dual, there are so far no known interacting conformal field theories with <l2m-math n=\"44\"></l2m-math>). However, the classical analysis can be performed also in this case, and leads to a second order phase transition at <l2m-math n=\"45\"></l2m-math>, with only one solution existing for every value of <l2m-math n=\"46\"></l2m-math>.</p>",
+      "hash": "fc8eaf249e81"
+     },
+     {
+      "id": "sec-introduction-p4",
+      "kind": "paragraph",
+      "body": "<p>The phase structure of the Hawking-Page case, and of the <l2m-math n=\"47\"></l2m-math> case with <l2m-math n=\"48\"></l2m-math>, are schematically summarized in figure <a href=\"#fig-schematic\">1</a>. The case of a CFT on <l2m-math n=\"49\"></l2m-math> was already studied by the same methods in <span class=\"cite\">[<a href=\"#cite-Blackman-2011in\">8</a>]</span>, with the motivation of continuing the <l2m-math n=\"50\"></l2m-math> sphere to de Sitter space, and understanding thermal phase transitions in de Sitter space for confining theories arising from CFTs on <l2m-math n=\"51\"></l2m-math>. The results we find for the phase structure exactly agree with theirs. As in the case of the Hawking-Page transition, quantum effects should turn the phase transition into a crossover, bu we do not discuss them here.</p>",
+      "hash": "ba9979f94fb7"
+     },
+     {
+      "id": "sec-introduction-p5",
+      "kind": "paragraph",
+      "body": "<p>We begin in section <a href=\"#sec-setup\">2</a> by describing the setup and the observables we can compute. In section <a href=\"#sec-sing_sol_pert\">3</a> we discuss in detail the singular solution and the perturbations around it. In section <a href=\"#sec-hybrid_method_calc_energy\">4</a> we present some details of our numerical implementation of the holographic renormalization which is needed for computing the Euclidean action. Our numerical results are presented in section <a href=\"#sec-num_results\">5</a> for the specific case of <l2m-math n=\"52\"></l2m-math>, and then in section <a href=\"#sec-num\">6</a> we briefly present the results for some other representative examples.</p>",
+      "hash": "3d566452201e"
+     },
+     {
+      "id": "sec-introduction-p6",
+      "kind": "paragraph",
+      "body": "<p>The topology of space is different on the two sides of the phase transition, but in the pure gravity theory there is no simple order parameter that distinguishes them. If our bulk gravity theory contains <l2m-math n=\"53\"></l2m-math>-dimensional extended objects which can end on the boundary, then these correspond to <l2m-math n=\"54\"></l2m-math>-dimensional extended operators in the CFT; for example, this happens for <l2m-math n=\"55\"></l2m-math> when we have a string theory in the bulk, and strings ending on the boundary may be identified with Wilson loops. In such a case, the expectation value of the <l2m-math n=\"56\"></l2m-math>-dimensional operator integrated on <l2m-math n=\"57\"></l2m-math> gives an order parameter for the phase transition, since one can find <l2m-math n=\"58\"></l2m-math>-dimensional extended configurations in the bulk that end on the <l2m-math n=\"59\"></l2m-math>, leading to a non-zero expectation value, if and only if the topology is of the form <l2m-math n=\"60\"></l2m-math>. A similar discussion applies with <l2m-math n=\"61\"></l2m-math>. In many examples of the AdS/CFT correspondence such order parameters exist, but their field theory interpretation depends on the specific case, and we will not discuss it here.</p>",
+      "hash": "b23afc48d473"
+     },
+     {
+      "id": "fig-schematic",
+      "kind": "figure",
+      "title": "Figure 1",
+      "body": "<figure class=\"float figure\" id=\"fig-schematic\"><p><img src=\"images/f961f2004895d8eb.png\" alt=\"\" style=\"width:49%\"> <img src=\"images/e3d53a44e8283a68.png\" alt=\"\" style=\"width:49%\"></p><figcaption><span class=\"capname\">Figure 1.</span> Schematic plots of the Euclidean action <l2m-math n=\"62\"></l2m-math> as a function of the ratio <l2m-math n=\"63\"></l2m-math> between the two radii. On the left, for the Hawking-Page case <l2m-math n=\"64\"></l2m-math>, with <l2m-math n=\"65\"></l2m-math>. On the right, for high-dimensional spheres <l2m-math n=\"66\"></l2m-math> (<l2m-math n=\"67\"></l2m-math>, <l2m-math n=\"68\"></l2m-math>), with <l2m-math n=\"69\"></l2m-math>. Our analytic results do not fix the sign of <l2m-math n=\"70\"></l2m-math> in the asymptotic regions, we took the signs from the numerical results. As we note below (section <a href=\"#sec-num_results\">5</a> and section <a href=\"#sec-num\">6</a>) these signs are correct for <l2m-math n=\"71\"></l2m-math>. For <l2m-math n=\"72\"></l2m-math> the sign of <l2m-math n=\"73\"></l2m-math> in the two asymptotic regions is equal and is dimension-dependent.</figcaption></figure>",
+      "hash": "bc90c4513128"
+     },
+     {
+      "id": "sec-introduction-p7",
+      "kind": "paragraph",
+      "body": "<p>Our results give a universal behavior for all theories that are well-approximated by classical Einstein gravity in some limit. We consider solutions where only the gravitational field is turned on, and no other fields. Assuming that all other fields are set to zero at the boundary, it is natural to expect that they will vanish in the minimal-action solutions, but this may not be true in some examples, in which case our solutions would be sub-leading saddle points in these examples.</p>",
+      "hash": "2412db89dc81"
+     },
+     {
+      "id": "sec-introduction-p8",
+      "kind": "paragraph",
+      "body": "<p>In many cases it is interesting to turn on additional bulk fields in addition to the metric. In particular, for supersymmetric theories, it is often interesting to compactify them on <l2m-math n=\"74\"></l2m-math> in a way that preserves supersymmetry, and this requires turning on additional fields. In this paper we discuss only solutions with no extra fields; in particular in supersymmetric theories, these solutions preserve no supersymmetry (since it is broken by the compactification of the field theory on <l2m-math n=\"75\"></l2m-math>, in the absence of extra background fields). It would be interesting to look for solutions in which extra fields are turned on. There are also many other generalizations of our work, to different space-times, with products of more spheres, or with smaller isometry groups.</p>",
+      "hash": "f89dc18531cd"
+     },
+     {
+      "id": "sec-introduction-p9",
+      "kind": "paragraph",
+      "body": "<p>It would also be interesting to investigate other field theories, that do not have a dual described by classical Einstein gravity. These can include weakly coupled field theories, whose <l2m-math n=\"76\"></l2m-math> partition function can be computed in perturbation theory, and it would be interesting to compare their qualitative behavior to the one that we find here for strongly coupled field theories (for the <l2m-math n=\"77\"></l2m-math> case, a similar transition exists at large <l2m-math n=\"78\"></l2m-math> also in weakly coupled gauge theories <span class=\"cite\">[<a href=\"#cite-Sundborg\">9</a>, <a href=\"#cite-Hagedorn\">10</a>]</span>).</p>",
+      "hash": "8eccdca7019f"
+     }
+    ]
+   },
+   {
+    "id": "sec-setup",
+    "kind": "section",
+    "number": "2",
+    "title": "Setup and conventions",
+    "titleHtml": "Setup and conventions",
+    "children": [
+     {
+      "id": "sec-setup-p1",
+      "kind": "paragraph",
+      "body": "<p>Our goal is to find Euclidean gravitational duals of CFTs on the space <l2m-math n=\"79\"></l2m-math>, for <l2m-math n=\"80\"></l2m-math>-dimensional CFTs (<l2m-math n=\"81\"></l2m-math>) whose holographic dual is well-approximated by classical Einstein gravity on <l2m-math n=\"82\"></l2m-math> (perhaps multiplied by some compact space, which we assume nothing depends on so that it will play no role in our discussion). Namely, we look for <l2m-math n=\"83\"></l2m-math>-dimensional manifolds that satisfy the (Euclidean) Einstein equations with a negative cosmological constant <l2m-math n=\"84\"></l2m-math>, and have a conformal boundary <l2m-math n=\"85\"></l2m-math>. We assume for simplicity that no additional fields are turned on except the metric; this gives us universal solutions that are present in all CFTs of this type, though they may not necessarily be the dominant solutions for specific CFTs. We will also assume the manifolds preserve the symmetries of the space that the CFT lives on<sup class=\"fnref\"><a href=\"#fn1\" id=\"fnref1\">1</a></sup>, and can thus can be foliated into <l2m-math n=\"86\"></l2m-math> orbits. We can therefore write the metric as</p>\n<div class=\"display\" id=\"eq-regular_coord\"><div class=\"eqbody\"><l2m-math n=\"87\"></l2m-math></div><span class=\"eqno\">(2.1)</span></div>\n<p class=\"cont\">Here <l2m-math n=\"88\"></l2m-math> is the <l2m-math n=\"89\"></l2m-math>-invariant metric of the unit sphere <l2m-math n=\"90\"></l2m-math>, and <l2m-math n=\"91\"></l2m-math> may be thought of as the radii of each sphere for a given <l2m-math n=\"92\"></l2m-math>. Here we chose a convenient reparameterization of the radial coordinate <l2m-math n=\"93\"></l2m-math>, with the boundary at <l2m-math n=\"94\"></l2m-math>, and space ending smoothly at <l2m-math n=\"95\"></l2m-math> in the interior. The cosmological constant <l2m-math n=\"96\"></l2m-math> dictates the asymptotic behavior <l2m-math n=\"97\"></l2m-math> as <l2m-math n=\"98\"></l2m-math>, where <l2m-math n=\"99\"></l2m-math> is related to the AdS radius; we will work in units with <l2m-math n=\"100\"></l2m-math> from here on. The range of <l2m-math n=\"101\"></l2m-math> is infinite; for our numerics it will be useful to work with a different coordinate <l2m-math n=\"102\"></l2m-math> that will have a finite range in our solutions. In terms of this coordinate we write:</p>\n<div class=\"display\" id=\"eq-compact_metric\"><div class=\"eqbody\"><l2m-math n=\"103\"></l2m-math></div><span class=\"eqno\">(2.2)</span></div>\n<p class=\"cont\">This is also the convention used in the Fefferman-Graham expansion in order to renormalize the gravitational action <span class=\"cite\">[<a href=\"#cite-DeHaro2000\">11</a>]</span>. This time <l2m-math n=\"104\"></l2m-math> is the boundary, and we expect the functions <l2m-math n=\"105\"></l2m-math> to stay finite along the entire compact region. We are going to use both conventions in this paper. At the beginning we use mostly the <l2m-math n=\"106\"></l2m-math> convention. Starting from the end of section <a href=\"#sec-sing_sol_pert\">3</a> we switch to the <l2m-math n=\"107\"></l2m-math> convention to calculate asymptotic observables.</p>",
+      "hash": "b6075809ebc6"
+     },
+     {
+      "id": "sec-setup-p2",
+      "kind": "paragraph",
+      "body": "<p>As in the Hawking-Page transition, we expect the solutions where space ends smoothly at <l2m-math n=\"108\"></l2m-math> to associate with two types of topologies – <l2m-math n=\"109\"></l2m-math> and <l2m-math n=\"110\"></l2m-math>. Because the entire discussion is symmetric in <l2m-math n=\"111\"></l2m-math>, it is enough to conisder the case of <l2m-math n=\"112\"></l2m-math>. In this case the <l2m-math n=\"113\"></l2m-math> sphere shrinks to zero size at <l2m-math n=\"114\"></l2m-math> (<l2m-math n=\"115\"></l2m-math>), <l2m-math n=\"116\"></l2m-math>.</p>",
+      "hash": "133823f5707c"
+     },
+     {
+      "id": "sec-setup-p3",
+      "kind": "paragraph",
+      "body": "<p>Aside from the topology, the solution should also stay regular at the closing point <l2m-math n=\"117\"></l2m-math>. This determines <l2m-math n=\"118\"></l2m-math> and <l2m-math n=\"119\"></l2m-math> for some “closing radius&quot; <l2m-math n=\"120\"></l2m-math>. These conditions can be written as boundary conditions for the fields <l2m-math n=\"121\"></l2m-math> at <l2m-math n=\"122\"></l2m-math>:</p>\n<div class=\"display multi\" id=\"eq-initial_cond\"><div class=\"eqbody\"><l2m-math n=\"123\"></l2m-math></div></div>\n<p class=\"cont\">One way to derive these conditions is to look at the expression for the Kretschmann scalar <l2m-math n=\"124\"></l2m-math>. For the metric <a href=\"#eq-regular_coord\">(2.1)</a> it is</p>\n<div class=\"display multi\"><div class=\"eqbody\"><l2m-math n=\"125\"></l2m-math></div></div>\n<p class=\"cont\">This expression is a sum of squares. Requiring each square to stay finite (for <l2m-math n=\"126\"></l2m-math>) separately at <l2m-math n=\"127\"></l2m-math> gives the boundary conditions <a href=\"#eq-initial_cond\">(2.3)</a>. Note that for small closing radius <l2m-math n=\"128\"></l2m-math> the Kretschmann scalar behaves as <l2m-math n=\"129\"></l2m-math>, so as <l2m-math n=\"130\"></l2m-math> the curvature blows up, as expected since for <l2m-math n=\"131\"></l2m-math> we have a conical singularity at <l2m-math n=\"132\"></l2m-math> where both spheres shrink together. In summary, the most general boundary condition is parametrized by a choice of topology (which sphere closes at <l2m-math n=\"133\"></l2m-math>) and of the closing radius <l2m-math n=\"134\"></l2m-math> (of the other sphere at <l2m-math n=\"135\"></l2m-math>).</p>",
+      "hash": "d91c10cc7026"
+     },
+     {
+      "id": "sec-setup-p4",
+      "kind": "paragraph",
+      "body": "<p>The Einstein equations for a <l2m-math n=\"136\"></l2m-math>-dimensional space in vacuum with a cosmological constant <l2m-math n=\"137\"></l2m-math> are</p>\n<div class=\"display\" id=\"eq-einstein_eqs\"><div class=\"eqbody\"><l2m-math n=\"138\"></l2m-math></div><span class=\"eqno\">(2.5)</span></div>\n<p class=\"cont\">where in our case <l2m-math n=\"139\"></l2m-math>. In our choice of units we have <l2m-math n=\"140\"></l2m-math>. Substitution of the metric <l2m-math n=\"141\"></l2m-math> gives the following second order differential equations for <l2m-math n=\"142\"></l2m-math>:</p>\n<div class=\"display multi\" id=\"eq-eqs_of_motion\"><div class=\"eqbody\"><l2m-math n=\"143\"></l2m-math></div></div>\n<p class=\"cont\">and also a constraint coming from the equation for <l2m-math n=\"144\"></l2m-math> (which we fixed by a choice of diffeomorphism):</p>\n<div class=\"display\" id=\"eq-restriction\"><div class=\"eqbody\"><l2m-math n=\"145\"></l2m-math></div><span class=\"eqno\">(2.7)</span></div>\n<p class=\"cont\">This equation can be derived from the first two <a href=\"#eq-eqs_of_motion\">(2.6)</a> assuming it is satisfied at one point. Moreover, the constraints of regularity at the closing point <a href=\"#eq-initial_cond\">(2.3)</a> together with the equations of motion <a href=\"#eq-eqs_of_motion\">(2.6)</a> lead to the constraint being satisfied at the closing point. Thus it is enough to solve <a href=\"#eq-eqs_of_motion\">(2.6)</a> with these initial conditions, and the constraint will be satisfied.</p>",
+      "hash": "96238bb52cba"
+     },
+     {
+      "id": "sec-setup-p5",
+      "kind": "paragraph",
+      "body": "<p>For a given topology and <l2m-math n=\"146\"></l2m-math> there is a unique metric given by solving <a href=\"#eq-eqs_of_motion\">(2.6)</a> with the initial conditions <a href=\"#eq-initial_cond\">(2.3)</a>, giving the pair of functions <l2m-math n=\"147\"></l2m-math>. This metric is a saddle point of the AdS partition function, and so can be used to extract CFT information. Generally, it is convenient to write metrics on asymptoticaly AdS spaces as</p>\n<div class=\"display\" id=\"eq-norm_metric\"><div class=\"eqbody\"><l2m-math n=\"148\"></l2m-math></div><span class=\"eqno\">(2.8)</span></div>\n<p class=\"cont\">in our case this is exactly the metric written in terms of <l2m-math n=\"149\"></l2m-math> <a href=\"#eq-compact_metric\">(2.2)</a>. We then have the Fefferman-Graham expansion of <l2m-math n=\"150\"></l2m-math> around the boundary <l2m-math n=\"151\"></l2m-math>  <span class=\"cite\">[<a href=\"#cite-DeHaro2000\">11</a>]</span>, which in even dimensions takes the form</p>\n<div class=\"display\" id=\"eq-metric_exp\"><div class=\"eqbody\"><l2m-math n=\"152\"></l2m-math></div><span class=\"eqno\">(2.9)</span></div>\n<p class=\"cont\">and in odd dimensions</p>\n<div class=\"display\" id=\"eq-metric_exp2\"><div class=\"eqbody\"><l2m-math n=\"153\"></l2m-math></div><span class=\"eqno\">(2.10)</span></div>",
+      "hash": "f3b8144b7566"
+     },
+     {
+      "id": "sec-setup-p6",
+      "kind": "paragraph",
+      "body": "<p>In the AdS/CFT correspondence, such solutions describe CFTs on a space conformally equivalent to <l2m-math n=\"154\"></l2m-math>. In our case the CFT metric is defined up to conformal transformations by the ratio between the two spheres’ radii. In terms of the bulk metric it is</p>\n<div class=\"display\" id=\"eq-beta_def\"><div class=\"eqbody\"><l2m-math n=\"155\"></l2m-math></div><span class=\"eqno\">(2.11)</span></div>\n<p class=\"cont\">Note that in the case of <l2m-math n=\"156\"></l2m-math> (Hawking-Page), <l2m-math n=\"157\"></l2m-math> has the interpretation of the inverse temperature of the thermal CFT on the unit sphere <l2m-math n=\"158\"></l2m-math>. Given a solution with some <l2m-math n=\"159\"></l2m-math> we can compute <l2m-math n=\"160\"></l2m-math>, which tells us which theory our saddle-point metric <l2m-math n=\"161\"></l2m-math> corresponds to.</p>",
+      "hash": "5c99565fac0b"
+     },
+     {
+      "id": "sec-setup-p7",
+      "kind": "paragraph",
+      "body": "<p>In order to find the phase diagram of the theory we need to find all the saddle-point metrics with the same asymptotic geometry <l2m-math n=\"162\"></l2m-math>. We can label the solution by the triad <l2m-math n=\"163\"></l2m-math>. This label is not unique since several solutions (corresponding to different <l2m-math n=\"164\"></l2m-math>’s) might have the same asymptotic <l2m-math n=\"165\"></l2m-math>. Moreover, in this notation a solution with a triad <l2m-math n=\"166\"></l2m-math> also has the same asymptotic geometry, and all those solutions are saddle points of the same path integral. Therefore properties of the theory should be compared between all solutions with triads of both kinds (if they exist).</p>",
+      "hash": "8a30b771367c"
+     },
+     {
+      "id": "sec-setup-p8",
+      "kind": "paragraph",
+      "body": "<p>The <l2m-math n=\"167\"></l2m-math>’th order term of the expansion <a href=\"#eq-metric_exp\">(2.9)</a>, <l2m-math n=\"168\"></l2m-math>, gives (up to a constant proportionality number) the expectation value of the CFT stress tensor <l2m-math n=\"169\"></l2m-math> (for even dimensions there is a further anomalous contribution to the trace of <l2m-math n=\"170\"></l2m-math>). In our case this means the stress tensor expectation values are given by <l2m-math n=\"171\"></l2m-math>.</p>",
+      "hash": "e631015ccbcb"
+     },
+     {
+      "id": "sec-setup-p9",
+      "kind": "paragraph",
+      "body": "<p>In the AdS/CFT correspondence, the partition function of the CFT may be approximated as <l2m-math n=\"172\"></l2m-math>, where <l2m-math n=\"173\"></l2m-math> is the Euclidean action of the saddle point metric<sup class=\"fnref\"><a href=\"#fn2\" id=\"fnref2\">2</a></sup>. In order to calculate it, one needs to regularize the naive Hilbert-Einstein action by introducing a boundary at some cutoff <l2m-math n=\"177\"></l2m-math> and subtracting covariant boundary counter-terms,</p>\n<div class=\"display\" id=\"eq-holo_reg_sketch\"><div class=\"eqbody\"><l2m-math n=\"178\"></l2m-math></div><span class=\"eqno\">(2.12)</span></div>\n<p class=\"cont\">where <l2m-math n=\"179\"></l2m-math> is the metric induced on the boundary <span class=\"cite\">[<a href=\"#cite-DeHaro2000\">11</a>]</span>. In general we need to sum the contributions to <l2m-math n=\"180\"></l2m-math> from different saddle points; in the large <l2m-math n=\"181\"></l2m-math> limit the actions are very large so we can ignore any subleading saddle points. Given an asymptotic geometry, the free energy (defined as minus the log of the partition function) is the minimum between the actions of all the different configurations with either <l2m-math n=\"182\"></l2m-math> or <l2m-math n=\"183\"></l2m-math>. We denote this function by <l2m-math n=\"184\"></l2m-math>, and it encodes the different phases of the CFT. In the case of <l2m-math n=\"185\"></l2m-math>, after dividing by <l2m-math n=\"186\"></l2m-math>, this quantity is just the thermal free energy as a function of the inverse temperature.</p>",
+      "hash": "d1e2836b27eb"
+     }
+    ]
+   },
+   {
+    "id": "sec-sing_sol_pert",
+    "kind": "section",
+    "number": "3",
+    "title": "The singular solution and its perturbations",
+    "titleHtml": "The singular solution and its perturbations",
+    "children": [
+     {
+      "id": "sec-sing_sol_pert-p1",
+      "kind": "paragraph",
+      "body": "<p>Some qualitative properties of the phase diagram are apparent without calculation. In the limit <l2m-math n=\"187\"></l2m-math>, where <l2m-math n=\"188\"></l2m-math> at the boundary, we expect the smaller sphere to shrink much before the larger one, such that the only solution would have the topology <l2m-math n=\"189\"></l2m-math> with a large <l2m-math n=\"190\"></l2m-math>.<sup class=\"fnref\"><a href=\"#fn3\" id=\"fnref3\">3</a></sup> We also expect the CFT on such a space to behave like some <l2m-math n=\"195\"></l2m-math>-dimensional theory on <l2m-math n=\"196\"></l2m-math>, which is obtained by KK reduction on the other sphere. Thus, to first order the action should scale like the normalized volume of <l2m-math n=\"197\"></l2m-math>, which is <l2m-math n=\"198\"></l2m-math>. Symmetrically, for <l2m-math n=\"199\"></l2m-math> the solution will be topologically <l2m-math n=\"200\"></l2m-math> with a large <l2m-math n=\"201\"></l2m-math>, and the action will scale like <l2m-math n=\"202\"></l2m-math>. So for both <l2m-math n=\"203\"></l2m-math> the action diverges, each limit as a result of a different bulk topology. Consequently, at least one phase transition is expected between the two topologies. Naively one may expect that decreasing <l2m-math n=\"204\"></l2m-math> decreases the asymptotic radius of the corresponding sphere, until some critical radius where <l2m-math n=\"205\"></l2m-math>, where this branch of solutions connects to the branch with the other topology. In this case there would be just a single solution for every radius in the CFT, and a smooth transition between the two branches at <l2m-math n=\"206\"></l2m-math>. We will see that this is true when <l2m-math n=\"207\"></l2m-math>, but not in the physically interesting range of dimensions <l2m-math n=\"208\"></l2m-math>, where the asymptotic radius will not be monotonic in <l2m-math n=\"209\"></l2m-math>. In this range more than one solution of the same topology can exist for the same asymptotic radii. Recall that this happens already for <l2m-math n=\"210\"></l2m-math>, where both “large” and “small” AdS black holes can exist with the same temperature.</p>",
+      "hash": "29287af4af10"
+     },
+     {
+      "id": "sec-sing_sol_pert-p2",
+      "kind": "paragraph",
+      "body": "<p>Lacking a complete analytical solution, we turn to study the behavior for <l2m-math n=\"211\"></l2m-math>. By the analysis above (section <a href=\"#sec-setup\">2</a>) <l2m-math n=\"212\"></l2m-math> corresponds to a solution with a singular curvature at the closing point <l2m-math n=\"213\"></l2m-math> <sup class=\"fnref\"><a href=\"#fn4\" id=\"fnref4\">4</a></sup>. To find the solution we take the ansatz <l2m-math n=\"219\"></l2m-math>. Substitution in <a href=\"#eq-eqs_of_motion\">(2.6)</a>,<a href=\"#eq-restriction\">(2.7)</a> gives (for <l2m-math n=\"220\"></l2m-math>) the solution</p>\n<div class=\"display multi\" id=\"eq-singular_metric\"><div class=\"eqbody\"><l2m-math n=\"221\"></l2m-math></div></div>\n<p class=\"cont\">or in terms of <l2m-math n=\"222\"></l2m-math></p>\n<div class=\"display multi\" id=\"eq-singular_metric_compact\"><div class=\"eqbody\"><l2m-math n=\"223\"></l2m-math></div></div>\n<p class=\"cont\">This solution has the ratio of radii</p>\n<div class=\"display\" id=\"eq-singular_temp\"><div class=\"eqbody\"><l2m-math n=\"224\"></l2m-math></div><span class=\"eqno\">(3.3)</span></div>\n<p class=\"cont\">Since <l2m-math n=\"225\"></l2m-math>, we have <l2m-math n=\"226\"></l2m-math>. In the singular solution <l2m-math n=\"227\"></l2m-math> and <l2m-math n=\"228\"></l2m-math> are fourth order polynomials in <l2m-math n=\"229\"></l2m-math>, so for <l2m-math n=\"230\"></l2m-math> the <l2m-math n=\"231\"></l2m-math>’th derivative of the metric at the bondary vanishes,</p>\n<div class=\"display\" id=\"eq-no_gd_singular\"><div class=\"eqbody\"><l2m-math n=\"232\"></l2m-math></div><span class=\"eqno\">(3.4)</span></div>\n<p class=\"cont\"><a href=\"#eq-singular_metric_compact\">(3.2)</a> is an explicit solution for <l2m-math n=\"233\"></l2m-math>, but there may also be others so it may not be the dominant one.</p>",
+      "hash": "9f7ebf5e610a"
+     },
+     {
+      "id": "sec-sing_sol_pert-p3",
+      "kind": "paragraph",
+      "body": "<p>Solutions with non-zero <l2m-math n=\"234\"></l2m-math> will look very different, and be non-singular, near the origin. But we expect that for small <l2m-math n=\"235\"></l2m-math>, and far from the origin <l2m-math n=\"236\"></l2m-math>, they will be small perturbations of the singular metric. Thus, following <span class=\"cite\">[<a href=\"#cite-Kol2002\">12</a>, <a href=\"#cite-Kalisch2017\">13</a>]</span>, we look for small perturbations of <a href=\"#eq-singular_metric\">(3.1)</a>, keeping only the terms linear in the perturbation in the equations of motion. Given a metric perturbation <l2m-math n=\"237\"></l2m-math>, we can look at its trace with respect to the unperturbed singular metric <l2m-math n=\"238\"></l2m-math>. The only trace-full perturbation turns out to be a coordinate change (a shift of the closing point). The other perturbation is traceless:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"239\"></l2m-math></div><span class=\"eqno\">(3.5)</span></div>\n<p class=\"cont\">Linearizing the Einstein equations <a href=\"#eq-eqs_of_motion\">(2.6)</a> in <l2m-math n=\"240\"></l2m-math> around the singular solution gives</p>\n<div class=\"display\" id=\"eq-traceless_de\"><div class=\"eqbody\"><l2m-math n=\"241\"></l2m-math></div><span class=\"eqno\">(3.6)</span></div>\n<p class=\"cont\">The two solutions of <a href=\"#eq-traceless_de\">(3.6)</a> are</p>\n<div class=\"display\" id=\"eq-pert_sols_general\"><div class=\"eqbody\"><l2m-math n=\"242\"></l2m-math></div><span class=\"eqno\">(3.7)</span></div>\n<p class=\"cont\">where <l2m-math n=\"243\"></l2m-math>. The general traceless perturbation is a linear combination of the two. We are mostly interested in the case of <l2m-math n=\"244\"></l2m-math>, where <l2m-math n=\"245\"></l2m-math> are complex and the two solutions are complex conjugates. In this case we can parameterize the perturbation using a complex number <l2m-math n=\"246\"></l2m-math> by</p>\n<div class=\"display\" id=\"eq-pert\"><div class=\"eqbody\"><l2m-math n=\"247\"></l2m-math></div><span class=\"eqno\">(3.8)</span></div>\n<p class=\"cont\">where we take</p>\n<div class=\"display\" id=\"eq-pert_sols\"><div class=\"eqbody\"><l2m-math n=\"248\"></l2m-math></div><span class=\"eqno\">(3.9)</span></div>\n<p class=\"cont\">and <l2m-math n=\"249\"></l2m-math>.</p>",
+      "hash": "6897beb3581c"
+     },
+     {
+      "id": "sec-sing_sol_pert-p4",
+      "kind": "paragraph",
+      "body": "<p>For each such solution we can find the change in the asymptotic ratio of radii <a href=\"#eq-beta_def\">(2.11)</a>; using <a href=\"#eq-pert\">(3.8)</a> we find at first order in <l2m-math n=\"250\"></l2m-math>:</p>\n<div class=\"display\" id=\"eq-pert_temp\"><div class=\"eqbody\"><l2m-math n=\"251\"></l2m-math></div><span class=\"eqno\">(3.10)</span></div>\n<p class=\"cont\">where <l2m-math n=\"252\"></l2m-math>.</p>",
+      "hash": "9749f5b5be4f"
+     },
+     {
+      "id": "sec-sing_sol_pert-p5",
+      "kind": "paragraph",
+      "body": "<p>We can also find the perturbed <l2m-math n=\"253\"></l2m-math>, by deriving the metric <l2m-math n=\"254\"></l2m-math> <l2m-math n=\"255\"></l2m-math> times with respect to the coordinate <l2m-math n=\"256\"></l2m-math>. To first order in <l2m-math n=\"257\"></l2m-math></p>\n<div class=\"display multi\"><div class=\"eqbody\"><l2m-math n=\"258\"></l2m-math></div></div>\n<p class=\"cont\">Note that to first order the volume at <l2m-math n=\"259\"></l2m-math> is not modified because we perturbed by a traceless perturbation. The <l2m-math n=\"260\"></l2m-math>’th derivative is then</p>\n<div class=\"display multi\" id=\"eq-pert_gd\"><div class=\"eqbody\"><l2m-math n=\"261\"></l2m-math></div></div>\n<p class=\"cont\">where <l2m-math n=\"262\"></l2m-math> is the <l2m-math n=\"263\"></l2m-math>-th derivative of <l2m-math n=\"264\"></l2m-math> at <l2m-math n=\"265\"></l2m-math>.</p>",
+      "hash": "604804c25e93"
+     },
+     {
+      "id": "sec-sing_sol_pert-p6",
+      "kind": "paragraph",
+      "body": "<p>To calculate the perturbation of the action, we use the fact that the action is (an integral of) a scalar functional of <l2m-math n=\"266\"></l2m-math> and of its derivatives at <l2m-math n=\"267\"></l2m-math>. The singular solution <l2m-math n=\"268\"></l2m-math> is a constant metric multiplied by a scalar function of <l2m-math n=\"269\"></l2m-math>. Therefore the variation of the action at the singular solution is proportional to <l2m-math n=\"270\"></l2m-math>. It follows that the variation with respect to the traceless perturbation is zero at leading order in <l2m-math n=\"271\"></l2m-math>, because</p>\n<div class=\"display\" id=\"eq-pert_F\"><div class=\"eqbody\"><l2m-math n=\"272\"></l2m-math></div><span class=\"eqno\">(3.14)</span></div>",
+      "hash": "bf63100349ed"
+     },
+     {
+      "id": "sec-sing_sol_pert-p7",
+      "kind": "paragraph",
+      "body": "<p>Our numerical solutions depend on the initial condition <l2m-math n=\"273\"></l2m-math>, so in order to relate them to our discussion we need to say something about the relation between <l2m-math n=\"274\"></l2m-math> and <l2m-math n=\"275\"></l2m-math>. In our conventions the AdS radius is of order <l2m-math n=\"276\"></l2m-math>. When <l2m-math n=\"277\"></l2m-math> we expect the solution around <l2m-math n=\"278\"></l2m-math> to be the same as a flat space solution, namely a solution where we ignore the cosmological constant term and expand in <l2m-math n=\"279\"></l2m-math> around the conical singularity (at <l2m-math n=\"280\"></l2m-math>) in flat space. For such a solution <l2m-math n=\"281\"></l2m-math> is the only length scale. Define <l2m-math n=\"282\"></l2m-math> to be the value of <l2m-math n=\"283\"></l2m-math> such that the dimensionless perturbation to the singular solution, <l2m-math n=\"284\"></l2m-math> <a href=\"#eq-pert\">(3.8)</a>, behaves similar to the <l2m-math n=\"285\"></l2m-math> solution for <l2m-math n=\"286\"></l2m-math>. Dimensional analysis implies that <l2m-math n=\"287\"></l2m-math> has to be a function of the dimensionless ratio <l2m-math n=\"288\"></l2m-math> alone. By <a href=\"#eq-pert_sols\">(3.9)</a>, for <l2m-math n=\"289\"></l2m-math> we get <l2m-math n=\"290\"></l2m-math>, and thus <l2m-math n=\"291\"></l2m-math>. This conclusion satisfies the consistency check <l2m-math n=\"292\"></l2m-math>, so that one gets back the singular solution in the limit <l2m-math n=\"293\"></l2m-math>. For <l2m-math n=\"294\"></l2m-math> the exponent is complex <l2m-math n=\"295\"></l2m-math>, and <l2m-math n=\"296\"></l2m-math>, and thus also <l2m-math n=\"297\"></l2m-math> <a href=\"#eq-pert_temp\">(3.10)</a>, has decayed oscillations to zero,</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"298\"></l2m-math></div><span class=\"eqno\">(3.15)</span></div>\n<p class=\"cont\">for some constants <l2m-math n=\"299\"></l2m-math> and <l2m-math n=\"300\"></l2m-math>. We do not know how to compute these dimensionless constants, but we can extract them from our numerical solutions, discussed below.</p>",
+      "hash": "d3b4889e3cf5"
+     },
+     {
+      "id": "sec-sing_sol_pert-p8",
+      "kind": "paragraph",
+      "body": "<p>From the analysis above we can draw a schematic picture of the phase map (figure <a href=\"#fig-schematic\">1</a>). Around <l2m-math n=\"301\"></l2m-math> the action diverges like <l2m-math n=\"302\"></l2m-math> respectively (we take <l2m-math n=\"303\"></l2m-math>), each divergence comes from a different bulk topology. The two branches coincide at <l2m-math n=\"304\"></l2m-math> and at the same action. From <a href=\"#eq-pert_temp\">(3.10)</a> we expect decayed oscillations of <l2m-math n=\"305\"></l2m-math> toward <l2m-math n=\"306\"></l2m-math> as <l2m-math n=\"307\"></l2m-math>. Because <l2m-math n=\"308\"></l2m-math> <a href=\"#eq-pert_F\">(3.14)</a>, the two topologies approach <l2m-math n=\"309\"></l2m-math> in <l2m-math n=\"310\"></l2m-math> with zero slope. The minimal action curve is expected to have at least one first order phase transition, close to <l2m-math n=\"311\"></l2m-math> on the <l2m-math n=\"312\"></l2m-math> axis (see figure <a href=\"#fig-schematic\">1</a>). Note that the second order variation of the action with respect to the deviation from the singular solution dictates whether there will be an infinite amount of phase transitions, which would happen if the action decreases as the solution becomes singular. In figure <a href=\"#fig-schematic\">1</a> we assumed that the action increases, so that we get a single first order phase transition; this scenario will be confirmed by our numerical analysis. Finally, by <a href=\"#eq-pert_gd\">(3.13)</a> <l2m-math n=\"313\"></l2m-math> oscillates in a similar fashion to the ratio of radii but with (presumably) different phase and amplitude. Therefore the function <l2m-math n=\"314\"></l2m-math> is expected to have spiral behavior around the point <l2m-math n=\"315\"></l2m-math>.</p>",
+      "hash": "9ce062d0d24b"
+     },
+     {
+      "id": "sec-sing_sol_pert-p9",
+      "kind": "paragraph",
+      "body": "<p>In the unphysical case of <l2m-math n=\"316\"></l2m-math> <l2m-math n=\"317\"></l2m-math> behaves monotonically (at least around <l2m-math n=\"318\"></l2m-math>, and for <l2m-math n=\"319\"></l2m-math>), so we expect to have a second order phase transition that smoothly interpolates between the two topologies.</p>",
+      "hash": "b3264ab71d77"
+     }
+    ]
+   },
+   {
+    "id": "sec-hybrid_method_calc_energy",
+    "kind": "section",
+    "number": "4",
+    "title": "Holographic numerical calculations",
+    "titleHtml": "Holographic numerical calculations",
+    "children": [
+     {
+      "id": "sec-hybrid_method_calc_energy-p1",
+      "kind": "paragraph",
+      "body": "<p>In order to find solutions for general <l2m-math n=\"320\"></l2m-math> (general <l2m-math n=\"321\"></l2m-math>) we take initial conditions with many different values of <l2m-math n=\"322\"></l2m-math>, and numerically solve the differential equations <a href=\"#eq-eqs_of_motion\">(2.6)</a>.</p>",
+      "hash": "60383c65a5cd"
+     },
+     {
+      "id": "sec-hybrid_method_calc_energy-p2",
+      "kind": "paragraph",
+      "body": "<p>Given a numerical solution <l2m-math n=\"323\"></l2m-math> for the equations of motion <a href=\"#eq-eqs_of_motion\">(2.6)</a> we would like to calculate its Euclidean action. As mentioned above <a href=\"#eq-holo_reg_sketch\">(2.12)</a>, the Hilbert-Einstein action should be regularized and renormalized by local boundary counter terms in order to be finite. The expression for the action is</p>\n<div class=\"display\" id=\"eq-exact_action\"><div class=\"eqbody\"><l2m-math n=\"324\"></l2m-math></div><span class=\"eqno\">(4.1)</span></div>\n<p class=\"cont\">where (for <l2m-math n=\"325\"></l2m-math>) <span class=\"cite\">[<a href=\"#cite-DeHaro2000\">11</a>]</span></p>\n<div class=\"display multi\" id=\"eq-L_reg_def\"><span id=\"eq-I_ct_def\" class=\"anchor\"></span><div class=\"eqbody\"><l2m-math n=\"326\"></l2m-math></div></div>\n<p class=\"cont\">In <a href=\"#eq-L_reg_def\">(4.2)</a> the metric is at the point <l2m-math n=\"327\"></l2m-math>, whereas in <a href=\"#eq-I_ct_def\">(4.3)</a> <l2m-math n=\"328\"></l2m-math> (and the curvatures in the integrand) is the induced metric from <l2m-math n=\"329\"></l2m-math> on the sub-manifold <l2m-math n=\"330\"></l2m-math> at <l2m-math n=\"331\"></l2m-math>. Each term in <a href=\"#eq-I_ct_def\">(4.3)</a> appears only for high enough dimension. The first appears for any <l2m-math n=\"332\"></l2m-math>, the second for <l2m-math n=\"333\"></l2m-math> and the third for <l2m-math n=\"334\"></l2m-math>. The counter-terms remove the diverging part of the regularized action, so that the limit of <a href=\"#eq-exact_action\">(4.1)</a> gives a finite answer.</p>",
+      "hash": "94b47f963644"
+     },
+     {
+      "id": "sec-hybrid_method_calc_energy-p3",
+      "kind": "paragraph",
+      "body": "<p>Unfortunately, a naive numerical calculation of <a href=\"#eq-exact_action\">(4.1)</a> leads to a significant numerical error arising from the subtraction of two large and close numbers. One possible solution is to write the sum using one integrand. Defining <l2m-math n=\"335\"></l2m-math>, we obtain</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"336\"></l2m-math></div><span class=\"eqno\">(4.4)</span></div>\n<p class=\"cont\">The new integrand opens up a different problem: <l2m-math n=\"337\"></l2m-math> might diverge (depending on <l2m-math n=\"338\"></l2m-math>) around the closing point <l2m-math n=\"339\"></l2m-math>. For this reason we use the fact that both integrands are finite in the bulk, and write instead</p>\n<div class=\"display\" id=\"eq-try_delta\"><div class=\"eqbody\"><l2m-math n=\"340\"></l2m-math></div><span class=\"eqno\">(4.5)</span></div>\n<p class=\"cont\">where <l2m-math n=\"341\"></l2m-math> was chosen such that the first and last terms are comparably small. Although this solution reduces the error around the boundary, it is not enough to eliminate it to a sufficient degree. Close to the boundary the two integrands (of the first integral in <a href=\"#eq-try_delta\">(4.5)</a>) diverge differently, and so the complete integral still carries a large numerical error in the limit <l2m-math n=\"342\"></l2m-math>. Nonetheless, we can trust the value of the numerical integral <a href=\"#eq-try_delta\">(4.5)</a> for <l2m-math n=\"343\"></l2m-math> which is not too small.</p>",
+      "hash": "3963c20f97bf"
+     },
+     {
+      "id": "sec-hybrid_method_calc_energy-p4",
+      "kind": "paragraph",
+      "body": "<p>To find the value of <l2m-math n=\"344\"></l2m-math> with better accuracy we can incorporate the Fefferman-Graham expansion of <l2m-math n=\"345\"></l2m-math> around <l2m-math n=\"346\"></l2m-math> <a href=\"#eq-metric_exp\">(2.9)</a>,<a href=\"#eq-metric_exp2\">(2.10)</a>. We can expand the integrand of the renormalized action <l2m-math n=\"347\"></l2m-math> up to some positive power <l2m-math n=\"348\"></l2m-math> of <l2m-math n=\"349\"></l2m-math> as a local functional of <l2m-math n=\"350\"></l2m-math> (the entire expansion of the function <l2m-math n=\"351\"></l2m-math> in <a href=\"#eq-norm_metric\">(2.8)</a> may be written using local functionals of <l2m-math n=\"352\"></l2m-math>). Taking the integral between <l2m-math n=\"353\"></l2m-math> and <l2m-math n=\"354\"></l2m-math> will give the correct <l2m-math n=\"355\"></l2m-math> up to the positive power <l2m-math n=\"356\"></l2m-math>. We can denote it <l2m-math n=\"357\"></l2m-math>. This expression is still a local function of <l2m-math n=\"358\"></l2m-math>. Their value can be found numerically by fitting the numerical solution in some range between <l2m-math n=\"359\"></l2m-math> and some small <l2m-math n=\"360\"></l2m-math> to the analytical expansion of the metric, up to the positive order <l2m-math n=\"361\"></l2m-math>. The combined calculation of the action can be written as</p>\n<div class=\"display\" id=\"eq-energy_calc\"><div class=\"eqbody\"><l2m-math n=\"362\"></l2m-math></div><span class=\"eqno\">(4.6)</span></div>\n<p class=\"cont\">We note that there is a trade-off in choosing <l2m-math n=\"363\"></l2m-math>. Making it too small will bring back the numerical error caused by the integrands’ divergence in <l2m-math n=\"364\"></l2m-math> <a href=\"#eq-try_delta\">(4.5)</a>. Making it too large will result in a larger error in <l2m-math n=\"365\"></l2m-math>, as it was calculated with error <l2m-math n=\"366\"></l2m-math>.</p>",
+      "hash": "d0c4dd9536c5"
+     },
+     {
+      "id": "sec-hybrid_method_calc_energy-p5",
+      "kind": "paragraph",
+      "body": "<p>In the convention we chose for the coordinates <a href=\"#eq-norm_metric\">(2.8)</a> the solution’s closing point is at <l2m-math n=\"367\"></l2m-math>. Choosing a different closing point is equivalent to taking a different boundary metric <l2m-math n=\"368\"></l2m-math>, related by a conformal transformation. For even dimensions, due to the conformal anomaly, this choice affects the action, so we need to fix it when comparing different solutions. We will choose our CFT coordinates such that the total CFT volume <l2m-math n=\"369\"></l2m-math> is constant, independent of <l2m-math n=\"370\"></l2m-math>. Our numerical solutions generally give a different volume, and to fix this we use the transformation <l2m-math n=\"371\"></l2m-math>. The scale anomaly <l2m-math n=\"372\"></l2m-math>, which is non zero only for even dimensions, is known analytically as a local functional of the boundary metric <l2m-math n=\"373\"></l2m-math> <span class=\"cite\">[<a href=\"#cite-Henningson1998\">14</a>]</span>. We thus need to add an extra factor</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"374\"></l2m-math></div><span class=\"eqno\">(4.7)</span></div>\n<p class=\"cont\"><br>and this gives our final result which we plot below. Note that the additional terms ensures that we still have <l2m-math n=\"375\"></l2m-math> <a href=\"#eq-pert_F\">(3.14)</a> at leading order in the deviation away from the singular solution.</p>",
+      "hash": "a3dd6096712e"
+     },
+     {
+      "id": "sec-hybrid_method_calc_energy-p6",
+      "kind": "paragraph",
+      "body": "<p>Several arbitrary parameters were introduced above to carry out the calculation of the action. Here is a list with the explanation of each of them, together with the measured effect of altering their value.</p>\n<ul><li><p><l2m-math n=\"376\"></l2m-math> - used to specify the range of integration for the counter-terms <a href=\"#eq-try_delta\">(4.5)</a>. Varying <l2m-math n=\"377\"></l2m-math> has almost no effect on the final result.</p></li><li><p><l2m-math n=\"378\"></l2m-math> - the range <l2m-math n=\"379\"></l2m-math> from which the fit to the analytical expansion, determining <l2m-math n=\"380\"></l2m-math> and <l2m-math n=\"381\"></l2m-math>, was taken. Varying <l2m-math n=\"382\"></l2m-math> has almost no effect on the final result.</p></li><li><p><l2m-math n=\"383\"></l2m-math> - circumscribes between the analytical and the numerical integration. <l2m-math n=\"384\"></l2m-math> needed some fine-tuning, to minimize the numerical errors.</p></li></ul>\n<p class=\"cont\">The figures we draw below contain estimates of the numerical errors, though in most cases these are too small to be visible. These can be reduced by increasing the accuracy of the numerical analysis.</p>",
+      "hash": "a59839bb4b79"
+     }
+    ]
+   },
+   {
+    "id": "sec-num_results",
+    "kind": "section",
+    "number": "5",
+    "title": "Summary of numerical results for $S^3 \\times S^2$",
+    "titleHtml": "Summary of numerical results for <l2m-math n=\"385\"></l2m-math>",
+    "children": [
+     {
+      "id": "sec-num_results-p1",
+      "kind": "paragraph",
+      "body": "<p>As we described in section <a href=\"#sec-setup\">2</a>, for a given CFT metric <l2m-math n=\"386\"></l2m-math> we need to consider all the bulk solutions with that boundary metric. We now label the CFT geometry by the ratio <l2m-math n=\"387\"></l2m-math> of the <l2m-math n=\"388\"></l2m-math> radius to the <l2m-math n=\"389\"></l2m-math> radius, where <l2m-math n=\"390\"></l2m-math>. Note that in the notations of section <a href=\"#sec-setup\">2</a> we need to consider solutions both with a closed <l2m-math n=\"391\"></l2m-math> sphere and ratio <l2m-math n=\"392\"></l2m-math>, and with a closed <l2m-math n=\"393\"></l2m-math> sphere and ratio <l2m-math n=\"394\"></l2m-math>. In the case of <l2m-math n=\"395\"></l2m-math> we can consider the same solution under both <l2m-math n=\"396\"></l2m-math> and <l2m-math n=\"397\"></l2m-math>. In this section we will describe the features found in the numerical analysis for various <l2m-math n=\"398\"></l2m-math> through the example of <l2m-math n=\"399\"></l2m-math>. Some plots for other dimensions are given in the next section.</p>",
+      "hash": "28d7676705bc"
+     },
+     {
+      "id": "section-5.1",
+      "kind": "section",
+      "number": "5.1",
+      "title": "The ratio of radii as a function of the closing radius",
+      "titleHtml": "The ratio of radii as a function of the closing radius",
+      "children": [
+       {
+        "id": "section-5.1-p1",
+        "kind": "paragraph",
+        "body": "<p>The analytical examination above (section <a href=\"#sec-sing_sol_pert\">3</a>) suggests that for large <l2m-math n=\"400\"></l2m-math> the open sphere in the IR would stay bigger along the bulk, and the final ratio of radii <l2m-math n=\"401\"></l2m-math> would be very large or very small (depending on the convention for the ratio). For small <l2m-math n=\"402\"></l2m-math> a complex critical exponent was predicted near <l2m-math n=\"403\"></l2m-math> <a href=\"#eq-singular_temp\">(3.3)</a>. In figure <a href=\"#fig-S3S2_bh_1\">2</a> we can see exactly those characteristics. Similar behavior can be found also for other <l2m-math n=\"404\"></l2m-math> (see section <a href=\"#sec-num\">6</a>). The analytical description captures all the qualitative features appearing in the figures.</p>",
+        "hash": "89a490c78e5b"
+       },
+       {
+        "id": "section-5.1-p2",
+        "kind": "paragraph",
+        "body": "<p>The behavior of <l2m-math n=\"405\"></l2m-math> around the singular solution was found above to take the form <l2m-math n=\"406\"></l2m-math> where <l2m-math n=\"407\"></l2m-math> and <l2m-math n=\"408\"></l2m-math>. In order to check this result we fitted the log of the calculated <l2m-math n=\"409\"></l2m-math> to the aforementioned equation, to find <l2m-math n=\"410\"></l2m-math>. The fit was taken with the function <code>FindFit</code> of <code>Mathematica</code> with 100 data points, for <l2m-math n=\"411\"></l2m-math> between <l2m-math n=\"412\"></l2m-math> and <l2m-math n=\"413\"></l2m-math> (which is also the lower bound for accurate results of <l2m-math n=\"414\"></l2m-math> using the Mathematica integrator). The results are presented in table <a href=\"#tb-temp_exponent\">1</a>. The numerical exponent agrees with the analytical one to high precision. It is evident that the error in the fit grows with the total dimension <l2m-math n=\"415\"></l2m-math>. This is because the frequency becomes smaller as <l2m-math n=\"416\"></l2m-math> gets closer to <l2m-math n=\"417\"></l2m-math>, making it more difficult to estimate it over the same data range. As expected, no oscillations were found for <l2m-math n=\"418\"></l2m-math> (not shown in the table).</p>",
+        "hash": "f1306ceb4126"
+       },
+       {
+        "id": "tb-temp_exponent",
+        "kind": "table",
+        "title": "Table 1",
+        "body": "<figure class=\"float table\" id=\"tb-temp_exponent\"><div class=\"center\"><div class=\"table-wrap\"><table><tbody><tr><td style=\"text-align:center\"></td><td colspan=\"2\" style=\"text-align:center\">Expected</td><td colspan=\"2\" style=\"text-align:center\">Fitted</td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"419\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"420\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"421\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"422\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"423\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"424\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"425\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"426\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"427\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"428\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"429\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"430\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"431\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"432\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"433\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"434\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"435\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"436\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"437\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"438\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"439\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"440\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"441\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"442\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"443\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"444\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"445\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"446\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"447\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"448\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"449\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"450\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"451\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"452\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"453\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"454\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"455\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"456\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"457\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"458\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"459\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"460\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"461\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"462\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"463\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"464\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"465\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"466\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"467\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"468\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"469\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"470\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"471\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"472\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"473\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"474\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"475\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"476\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"477\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"478\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"479\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"480\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"481\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"482\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"483\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"484\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"485\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"486\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"487\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"488\"></l2m-math></td></tr><tr><td style=\"text-align:center\"><l2m-math n=\"489\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"490\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"491\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"492\"></l2m-math></td><td style=\"text-align:center\"><l2m-math n=\"493\"></l2m-math></td></tr></tbody></table></div></div><figcaption><span class=\"capname\">Table 1.</span> Fitted values for the complex exponent of <l2m-math n=\"494\"></l2m-math> vs the analytical value.</figcaption></figure>",
+        "hash": "e8911b077b66"
+       },
+       {
+        "id": "section-5.1-p3",
+        "kind": "paragraph",
+        "body": "<p><figure class=\"float figure\" id=\"fig-S3S2_bh_1\"><p><img src=\"images/b15cace8a1647dcf.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/d87bd0001ad24076.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 2.</span> The ratio of radii <l2m-math n=\"495\"></l2m-math> as a function of the closing radius <l2m-math n=\"496\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"497\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"498\"></l2m-math>.</figcaption></figure></p>",
+        "hash": "660b5839b80d"
+       }
+      ]
+     },
+     {
+      "id": "section-5.2",
+      "kind": "section",
+      "number": "5.2",
+      "title": "The action as a function of the ratio of radii",
+      "titleHtml": "The action as a function of the ratio of radii",
+      "children": [
+       {
+        "id": "section-5.2-p1",
+        "kind": "paragraph",
+        "body": "<p>In figure <a href=\"#fig-schematic\">1</a> we drew a schematic picture of <l2m-math n=\"499\"></l2m-math>, the action as a function of the ratio. We expect <l2m-math n=\"500\"></l2m-math> to diverge. We also expect the two topologies to approach <l2m-math n=\"501\"></l2m-math> with zero-slope decayed oscillations. In all cases, we found numerically that the action decreases at second order in the expansion around the singular solution. We haven’t found an analytical explanation for this fact. Thus the simplest scenario (like the one drawn in figure <a href=\"#fig-schematic\">1</a>) would be a single first order phase transition between the two topologies, close to <l2m-math n=\"502\"></l2m-math>. Figure <a href=\"#fig-S3S2_Fb_1\">3</a> agrees with this description and exhibits one first order phase transition. The critical ratio of the phase transition for this case agree with the results previously found in <span class=\"cite\">[<a href=\"#cite-Blackman-2011in\">8</a>]</span>.</p>",
+        "hash": "328ce13c432f"
+       },
+       {
+        "id": "section-5.2-p2",
+        "kind": "paragraph",
+        "body": "<p>There are two cases that display a somewhat different behavior than that in figures <a href=\"#fig-schematic\">1</a> and <a href=\"#fig-S3S2_Fb_1\">3</a>. The first is the case of equal spheres <l2m-math n=\"503\"></l2m-math>. The behavior there is very similar besides the sign of the divergence at <l2m-math n=\"504\"></l2m-math> (we show examples of this in the next section). The second is the Hawking-Page <l2m-math n=\"505\"></l2m-math>, shown on the left-hand side of figure <a href=\"#fig-schematic\">1</a>, where there are no oscillations (as there is no singular solution). <figure class=\"float figure\" id=\"fig-S3S2_Fb_1\"><p><img src=\"images/29c9bac03387d07c.png\" alt=\"\" style=\"width:80%\"> clip(round(((2-1)/(3-1))^(1/2),3))</p><figcaption><span class=\"capname\">Figure 3.</span> The action <l2m-math n=\"506\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"507\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"508\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"509\"></l2m-math>, and the black line follows the dominant solution for each ratio <l2m-math n=\"510\"></l2m-math>. We see that there is a first order phase transition at <l2m-math n=\"511\"></l2m-math>.</figcaption></figure></p>",
+        "hash": "60912ce7b693"
+       }
+      ]
+     },
+     {
+      "id": "section-5.3",
+      "kind": "section",
+      "number": "5.3",
+      "title": "The stress energy tensor expectation value as a function of $\\beta$",
+      "titleHtml": "The stress energy tensor expectation value as a function of <l2m-math n=\"512\"></l2m-math>",
+      "children": [
+       {
+        "id": "section-5.3-p1",
+        "kind": "paragraph",
+        "body": "<p>As we mentioned above (see section <a href=\"#sec-sing_sol_pert\">3</a>) <l2m-math n=\"513\"></l2m-math> is proportional to the traceless part of the CFT stress tensor expectation value. For <l2m-math n=\"514\"></l2m-math> we have <l2m-math n=\"515\"></l2m-math>. Because <l2m-math n=\"516\"></l2m-math> is traceless the two components are dependent, and it is enough to plot <l2m-math n=\"517\"></l2m-math>. Based on the analysis above, we expect <l2m-math n=\"518\"></l2m-math> around <l2m-math n=\"519\"></l2m-math> to have spiral decayed oscillations toward the singular value <l2m-math n=\"520\"></l2m-math>. In figure <a href=\"#fig-S3S2_gd1b_1\">4</a> we can see exactly this behavior. Similar behavior can be found also for other <l2m-math n=\"521\"></l2m-math> (see section <a href=\"#sec-num\">6</a>). All the graphs display a transition between monotonic behavior at extreme ratios (<l2m-math n=\"522\"></l2m-math>), and the spiral decay around <l2m-math n=\"523\"></l2m-math>. <figure class=\"float figure\" id=\"fig-S3S2_gd1b_1\"><p><img src=\"images/35b4888bdc7c2c99.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/500285d4a61de911.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 4.</span> <l2m-math n=\"524\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"525\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"526\"></l2m-math>. This is proportional to the expectation value of the energy-momentum tensor. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"527\"></l2m-math>.</figcaption></figure></p>",
+        "hash": "a5e0544baa96"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sec-num",
+    "kind": "section",
+    "number": "6",
+    "title": "Numerical results for other products of spheres",
+    "titleHtml": "Numerical results for other products of spheres",
+    "children": [
+     {
+      "id": "section-6.1",
+      "kind": "section",
+      "number": "6.1",
+      "title": "Two equal spheres $d_1=d_2$",
+      "titleHtml": "Two equal spheres <l2m-math n=\"528\"></l2m-math>",
+      "children": [
+       {
+        "id": "section-6.1-p1",
+        "kind": "paragraph",
+        "body": "<p>Figures <a href=\"#fig-S2S2_bh_1\">5</a>, <a href=\"#fig-S2S2_Fb_1\">6</a>, <a href=\"#fig-S2S2_gd1b_1\">7</a>, <a href=\"#fig-S3S3_bh_1\">8</a>, <a href=\"#fig-S3S3_Fb_1\">9</a> and <a href=\"#fig-S3S3_gd1b_1\">10</a> describe the behavior of CFTs on the spaces <l2m-math n=\"529\"></l2m-math> and <l2m-math n=\"530\"></l2m-math>. These cases have a similar qualitative description as in section <a href=\"#sec-num_results\">5</a>. The only difference is the sign of the coefficient of <l2m-math n=\"531\"></l2m-math> in the action for <l2m-math n=\"532\"></l2m-math>. As the two limits are identical, the sign is symmetric, but it depends on <l2m-math n=\"533\"></l2m-math>. For <l2m-math n=\"534\"></l2m-math> it is negative (see figure <a href=\"#fig-S2S2_Fb_1\">6</a>), and for <l2m-math n=\"535\"></l2m-math> it is positive (see figure <a href=\"#fig-S3S3_Fb_1\">9</a>).</p>",
+        "hash": "03e6dae59a14"
+       },
+       {
+        "id": "section-6.1-p2",
+        "kind": "paragraph",
+        "body": "<p><figure class=\"float figure\" id=\"fig-S2S2_bh_1\"><p><img src=\"images/4cf358d2e70a3a3d.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/d99240e57d3411f8.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 5.</span> The ratio of radii <l2m-math n=\"536\"></l2m-math> as a function of the closing radius <l2m-math n=\"537\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"538\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"539\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S2S2_Fb_1\"><p><img src=\"images/6419960cc900f55e.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/74fd5897bddefd6b.png\" alt=\"\" style=\"width:48%\"> clip(round(((2-1)/(2-1))^(1/2),3))</p><figcaption><span class=\"capname\">Figure 6.</span> The action <l2m-math n=\"540\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"541\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"542\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"543\"></l2m-math>, and the black line follows the dominant solution for each ratio <l2m-math n=\"544\"></l2m-math>. We see that there is a first order phase transition at <l2m-math n=\"545\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S2S2_gd1b_1\"><p><img src=\"images/c9bbc4aa1e3b58d0.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/0c54439496ca987c.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 7.</span> <l2m-math n=\"546\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"547\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"548\"></l2m-math>. This is proportional to the expectation value of the energy-momentum tensor. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"549\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S3S3_bh_1\"><p><img src=\"images/5fb9d7aa6f366220.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/42132ecd9d667c14.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 8.</span> The ratio of radii <l2m-math n=\"550\"></l2m-math> as a function of the closing radius <l2m-math n=\"551\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"552\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"553\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S3S3_Fb_1\"><p><img src=\"images/346c8316e4d9e235.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/09e0c3a485e2808d.png\" alt=\"\" style=\"width:48%\"> clip(round(((3-1)/(3-1))^(1/2),3))</p><figcaption><span class=\"capname\">Figure 9.</span> The action <l2m-math n=\"554\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"555\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"556\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"557\"></l2m-math>, and the black line follows the dominant solution for each ratio <l2m-math n=\"558\"></l2m-math>. We see that there is a first order phase transition at <l2m-math n=\"559\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S3S3_gd1b_1\"><p><img src=\"images/d8adbdf3d410195f.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/50d00a19b403009b.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 10.</span> <l2m-math n=\"560\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"561\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"562\"></l2m-math>. This is proportional to the expectation value of the energy-momentum tensor. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"563\"></l2m-math>.</figcaption></figure></p>",
+        "hash": "e37513df879b"
+       }
+      ]
+     },
+     {
+      "id": "section-6.2",
+      "kind": "section",
+      "number": "6.2",
+      "title": "The gravity dual of $S^4\\times S^2$",
+      "titleHtml": "The gravity dual of <l2m-math n=\"564\"></l2m-math>",
+      "children": [
+       {
+        "id": "section-6.2-p1",
+        "kind": "paragraph",
+        "body": "<p>Figures <a href=\"#fig-S4S2_bh_1\">11</a>, <a href=\"#fig-S4S2_Fb_1\">12</a> and <a href=\"#fig-S4S2_gd1b_1\">13</a> give the ratio of radii, the action and the stress tensor of the <l2m-math n=\"565\"></l2m-math> theory, respectively. The qualitative discussion in section <a href=\"#sec-num_results\">5</a> is relevant to this case as well. Our results for the phase structure in this case agree with the results previously found in <span class=\"cite\">[<a href=\"#cite-Blackman-2011in\">8</a>]</span>. <figure class=\"float figure\" id=\"fig-S4S2_bh_1\"><p><img src=\"images/8aa836bb1af207ea.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/d1c49d74f3a49e39.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 11.</span> The ratio of radii <l2m-math n=\"566\"></l2m-math> as a function of the closing radius <l2m-math n=\"567\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"568\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"569\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S4S2_Fb_1\"><p><img src=\"images/5ee80cff0666e7e0.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/d4412d7e03a874fa.png\" alt=\"\" style=\"width:48%\"> clip(round(((2-1)/(4-1))^(1/2),3))</p><figcaption><span class=\"capname\">Figure 12.</span> The action <l2m-math n=\"570\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"571\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"572\"></l2m-math>. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"573\"></l2m-math>, and the black line follows the dominant solution for each ratio <l2m-math n=\"574\"></l2m-math>. We see that there is a first order phase transition at <l2m-math n=\"575\"></l2m-math>.</figcaption></figure> <figure class=\"float figure\" id=\"fig-S4S2_gd1b_1\"><p><img src=\"images/200eaf471f0840d7.png\" alt=\"\" style=\"width:48%\"> <img src=\"images/c6fd285bdebe8087.png\" alt=\"\" style=\"width:48%\"></p><figcaption><span class=\"capname\">Figure 13.</span> <l2m-math n=\"576\"></l2m-math> as a function of the ratio of radii <l2m-math n=\"577\"></l2m-math> for both topologies with conformal boundary <l2m-math n=\"578\"></l2m-math>. This is proportional to the expectation value of the energy-momentum tensor. The red diamond is the analytical calculation for the singular ratio <l2m-math n=\"579\"></l2m-math>.</figcaption></figure></p>",
+        "hash": "7dec792d8981"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "acknowledgements",
+    "kind": "section",
+    "title": "Acknowledgements",
+    "titleHtml": "Acknowledgements",
+    "children": [
+     {
+      "id": "acknowledgements-p1",
+      "kind": "paragraph",
+      "body": "<p>We would like to thank M. Berkooz for many useful discussions, and M. Van Raamsdonk for pointing us to the results of <span class=\"cite\">[<a href=\"#cite-Blackman-2011in\">8</a>]</span>. This work was supported in part by an Israel Science Foundation center for excellence grant (grant number 1989/14) and by the Minerva foundation with funding from the Federal German Ministry for Education and Research. OA is the Samuel Sebba Professorial Chair of Pure and Applied Physics.</p>",
+      "hash": "963c2d66113b"
+     },
+     {
+      "id": "footnotes",
+      "kind": "footnotes",
+      "title": "Footnotes",
+      "body": "<section class=\"footnotes\" aria-labelledby=\"notes-h\"><h2 id=\"notes-h\">Notes</h2><ol class=\"fnlist\"><li id=\"fn1\"><a class=\"fnback\" href=\"#fnref1\" aria-label=\"Back to the text\">1</a><div class=\"fn-text\">We expect the solutions that break the symmetry to have higher action and not dominate the dynamics, though we have not proven this.</div></li><li id=\"fn2\"><a class=\"fnback\" href=\"#fnref2\" aria-label=\"Back to the text\">2</a><div class=\"fn-text\">Here we took the coefficient <l2m-math n=\"174\"></l2m-math> outside the action; in our <l2m-math n=\"175\"></l2m-math> units this is a very large dimensionless number. In our computations it only appears multiplying <l2m-math n=\"176\"></l2m-math> everywhere, and we will leave it implicit.</div></li><li id=\"fn3\"><a class=\"fnback\" href=\"#fnref3\" aria-label=\"Back to the text\">3</a><div class=\"fn-text\">This statement not true when <l2m-math n=\"191\"></l2m-math>. In that case there is a solution with closed <l2m-math n=\"192\"></l2m-math> sphere even as <l2m-math n=\"193\"></l2m-math>, which is thermal AdS (see figure <a href=\"#fig-schematic\">1</a>), because this happens to be an exact solution for all <l2m-math n=\"194\"></l2m-math>.</div></li><li id=\"fn4\"><a class=\"fnback\" href=\"#fnref4\" aria-label=\"Back to the text\">4</a><div class=\"fn-text\">In this paper we assume that the higher curvature corrections to Einstein’s equations are small, and we neglect them. This will not be true when both <l2m-math n=\"214\"></l2m-math> and <l2m-math n=\"215\"></l2m-math> are very small, so our solutions cannot be trusted there. The features of the solutions that we describe will be independent of the form of these corrections for <l2m-math n=\"216\"></l2m-math>. For <l2m-math n=\"217\"></l2m-math>, where the singular solution is dominant for some value of <l2m-math n=\"218\"></l2m-math>, the corrections will be important in order to determine the precise nature of the phase transition; however, this case is unphysical.</div></li></ol></section>",
+      "hash": "513dc571cc1a"
+     },
+     {
+      "id": "refs",
+      "kind": "references",
+      "title": "References",
+      "body": "<section class=\"references\" aria-labelledby=\"refs-h\"><h2 id=\"refs-h\">References</h2><ol class=\"refs\"><li id=\"cite-Witten-1999xp\"><span class=\"refnum\">[1]</span><span class=\"reftext\">E. Witten and S.-T. Yau, <em>Connectedness of the boundary in the AdS / CFT correspondence</em>, <em>Adv. Theor. Math. Phys.</em> <strong>3</strong> (1999) 1635–1655 [<a href=\"http://arXiv.org/abs/hep-th/9910245\"><code>hep-th/9910245</code></a>]. [,273(1999)].</span></li><li id=\"cite-Anderson2004\"><span class=\"refnum\">[2]</span><span class=\"reftext\">M. T. Anderson, <em>Geometric aspects of the AdS / CFT correspondence</em>, <em>IRMA Lect. Math. Theor. Phys.</em> <strong>8</strong> (2005) 1–31 [<a href=\"http://arXiv.org/abs/hep-th/0403087\"><code>hep-th/0403087</code></a>].</span></li><li id=\"cite-deBoer-2004yu\"><span class=\"refnum\">[3]</span><span class=\"reftext\">J. de Boer, L. Maoz and A. Naqvi, <em>Some aspects of the AdS / CFT correspondence</em>, <em>IRMA Lect. Math. Theor. Phys.</em> <strong>8</strong> (2005) 33–57 [<a href=\"http://arXiv.org/abs/hep-th/0407212\"><code>hep-th/0407212</code></a>].</span></li><li id=\"cite-Hawking1983\"><span class=\"refnum\">[4]</span><span class=\"reftext\">S. W. Hawking and D. N. Page, <em>Thermodynamics of Black Holes in anti-De Sitter Space</em>, <em>Commun. Math. Phys.</em> <strong>87</strong> (1983) 577.</span></li><li id=\"cite-Witten1998\"><span class=\"refnum\">[5]</span><span class=\"reftext\">E. Witten, <em>Anti-de Sitter space and holography</em>, <em>Adv. Theor. Math. Phys.</em> <strong>2</strong> (1998) 253–291 [<a href=\"http://arXiv.org/abs/hep-th/9802150\"><code>hep-th/9802150</code></a>].</span></li><li id=\"cite-Witten1998_2\"><span class=\"refnum\">[6]</span><span class=\"reftext\">E. Witten, <em>Anti-de Sitter space, thermal phase transition, and confinement in gauge theories</em>, <em>Adv. Theor. Math. Phys.</em> <strong>2</strong> (1998) 505–532 [<a href=\"http://arXiv.org/abs/hep-th/9803131\"><code>hep-th/9803131</code></a>]. [,89(1998)].</span></li><li id=\"cite-Pestun-2016zxk\"><span class=\"refnum\">[7]</span><span class=\"reftext\">V. Pestun <em>et. al.</em>, <em>Localization techniques in quantum field theories</em>, <em>J. Phys.</em> <strong>A50</strong> (2017), no. 44 440301 [<a href=\"http://arXiv.org/abs/1608.02952\"><code>1608.02952</code></a>].</span></li><li id=\"cite-Blackman-2011in\"><span class=\"refnum\">[8]</span><span class=\"reftext\">J. Blackman, M. B. McDermott and M. Van Raamsdonk, <em>Acceleration-Induced Deconfinement Transitions in de Sitter Spacetime</em>, <em>JHEP</em> <strong>08</strong> (2011) 064 [<a href=\"http://arXiv.org/abs/1105.0440\"><code>1105.0440</code></a>].</span></li><li id=\"cite-Sundborg\"><span class=\"refnum\">[9]</span><span class=\"reftext\">B. Sundborg, <em>The Hagedorn transition, deconfinement and N=4 SYM theory</em>, <em>Nucl. Phys.</em> <strong>B573</strong> (2000) 349–363 [<a href=\"http://arXiv.org/abs/hep-th/9908001\"><code>hep-th/9908001</code></a>].</span></li><li id=\"cite-Hagedorn\"><span class=\"refnum\">[10]</span><span class=\"reftext\">O. Aharony, J. Marsano, S. Minwalla, K. Papadodimas and M. Van Raamsdonk, <em>The Hagedorn - deconfinement phase transition in weakly coupled large N gauge theories</em>, <em>Adv. Theor. Math. Phys.</em> <strong>8</strong> (2004) 603–696 [<a href=\"http://arXiv.org/abs/hep-th/0310285\"><code>hep-th/0310285</code></a>]. [,161(2003)].</span></li><li id=\"cite-DeHaro2000\"><span class=\"refnum\">[11]</span><span class=\"reftext\">S. de Haro, S. N. Solodukhin and K. Skenderis, <em>Holographic reconstruction of space-time and renormalization in the AdS / CFT correspondence</em>, <em>Commun. Math. Phys.</em> <strong>217</strong> (2001) 595–622 [<a href=\"http://arXiv.org/abs/hep-th/0002230\"><code>hep-th/0002230</code></a>].</span></li><li id=\"cite-Kol2002\"><span class=\"refnum\">[12]</span><span class=\"reftext\">B. Kol, <em>Topology change in general relativity, and the black hole black string transition</em>, <em>JHEP</em> <strong>10</strong> (2005) 049 [<a href=\"http://arXiv.org/abs/hep-th/0206220\"><code>hep-th/0206220</code></a>].</span></li><li id=\"cite-Kalisch2017\"><span class=\"refnum\">[13]</span><span class=\"reftext\">M. Kalisch, S. Möckel and M. Ammon, <em>Critical behavior of the black hole/black string transition</em>, <em>JHEP</em> <strong>08</strong> (2017) 049 [<a href=\"http://arXiv.org/abs/gr-qc/1706.02323\"><code>gr-qc/1706.02323</code></a>].</span></li><li id=\"cite-Henningson1998\"><span class=\"refnum\">[14]</span><span class=\"reftext\">M. Henningson and K. Skenderis, <em>The Holographic Weyl anomaly</em>, <em>JHEP</em> <strong>07</strong> (1998) 023 [<a href=\"http://arXiv.org/abs/hep-th/9806087\"><code>hep-th/9806087</code></a>].</span></li></ol></section>",
+      "hash": "38b6708828ae"
+     }
+    ]
+   }
+  ]
+ },
+ "defs": [],
+ "questions": []
+}

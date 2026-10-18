@@ -1,0 +1,17 @@
+{
+ "id": "2109.05512",
+ "version": "1",
+ "title": "AdS from CFT for scalar QED",
+ "authors": [
+  "Ofer Aharony",
+  "Shai M. Chester",
+  "Erez Y. Urbach"
+ ],
+ "abstract": "We construct an explicit bulk dual in anti-de Sitter space, with couplings of order $1/N$, for the $SU(N)$-singlet sector of QED in $d$ space-time dimensions ($2 < d < 4$) coupled to $N$ scalar fields. We begin from the bulk dual for the theory of $N$ complex free scalar fields that we constructed in our previous work, and couple this to $U(1)$ gauge fields living on the boundary in order to get the bulk dual of scalar QED (in which the $U(1)$ gauge fields become the boundary value of the bulk vector fields). As in our previous work, the bulk dual is non-local but we can write down an explicit action for it. We focus on the CFTs arising at low energies (or, equivalently, when the $U(1)$ gauge coupling goes to infinity). For $d=3$ we discuss also the addition of a Chern-Simons term for $U(1)$, modifying the boundary conditions for the bulk gauge field. We also discuss the generalization to QCD, with $U(N_c)$ gauge fields coupled to $N$ scalar fields in the fundamental representation (in the large $N$ limit with fixed $N_c$).",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th",
+  "cond-mat.str-el"
+ ],
+ "published": "2021-09-12"
+}

@@ -1,0 +1,1226 @@
+{
+ "format": "l2m-doc",
+ "version": 1,
+ "converter": "0.6",
+ "source": "PRL_draft.tex",
+ "engine": "pdflatex",
+ "title": "Onset of Quantum Chaos in Random Field Theories",
+ "authors": [
+  "Micha Berkooz",
+  "Adar Sharon",
+  "Navot Silberstein",
+  "Erez Y. Urbach"
+ ],
+ "kicker": null,
+ "lang": "en",
+ "body": "<header class=\"titleblock\"><l2m-slot name=\"settings\"></l2m-slot><l2m-slot name=\"kicker\"></l2m-slot><h1>Onset of Quantum Chaos in Random Field Theories</h1><div class=\"titlemeta\"><p class=\"authors\">Micha Berkooz, Adar Sharon, Navot Silberstein, Erez Y. Urbach</p><p class=\"affil\">Department of Particle Physics and Astrophysics, <br> Weizmann Institute of Science, Rehovot 7610001, Israel</p><p class=\"email\">micha.berkooz@weizmann.ac.il</p><p class=\"email\">adar.sharon@weizmann.ac.il</p><p class=\"email\">navot.silberstein@weizmann.ac.il</p><p class=\"email\">erez.urbach@weizmann.ac.il</p><p class=\"date\">October 18, 2026</p></div><section class=\"abstract\" aria-labelledby=\"abstract-h\"><h2 id=\"abstract-h\">Abstract</h2><p>We study the quantum Lyapunov exponent <l2m-math n=\"233\"></l2m-math> in theories with spacetime-independent disorder. We first derive self-consistency equations for the two- and four-point functions for products of <l2m-math n=\"234\"></l2m-math> models coupled by disorder at large <l2m-math n=\"235\"></l2m-math>, generalizing the equations appearing in SYK-like models. We then study families of theories in which the disorder coupling is an exactly marginal deformation, allowing us to follow <l2m-math n=\"236\"></l2m-math> from weak to strong coupling. We find interesting behaviors, including a discontinuous transition into chaos, mimicking classical KAM theory.</p></section><details class=\"toc\"><summary>Contents</summary><ol><li><a href=\"#introduction\"><span class=\"tocnum\"></span>Introduction</a></li><li><a href=\"#disorder-around-a-nontrivial-cft\"><span class=\"tocnum\"></span>Disorder around a nontrivial CFT</a><ol><li><a href=\"#the-kernel-structure-of-the-four-point-function\"><span class=\"tocnum\"></span>The kernel structure of the four-point function</a></li><li><a href=\"#the-double-commutator-and-chaos\"><span class=\"tocnum\"></span>The double-commutator and chaos</a></li></ol></li><li><a href=\"#examples-of-the-onset-of-chaos\"><span class=\"tocnum\"></span>Examples of the Onset of chaos</a><ol><li><a href=\"#disordered-generalized-free-fields\"><span class=\"tocnum\"></span>Disordered generalized free fields</a></li><li><a href=\"#disordered-minimal-models\"><span class=\"tocnum\"></span>Disordered minimal models</a></li></ol></li><li><a href=\"#acknowledgments\"><span class=\"tocnum\"></span>Acknowledgments</a></li></ol></details></header>\n<h2 id=\"introduction\">Introduction</h2>\n<p>Systems with disorder are ubiquitous in nature, and display a wide range of interesting physical phenomena. Disorder can sometimes be modeled by introducing random couplings, and averaging over these random couplings can lead to simplifications which allow for exact computations, at least when the number of degrees of freedom is parametrically large. A notable example is the Sachdev–Ye–Kitaev (SYK) model, in which (nearly) conformal symmetry is restored at low energies Sachdev and Ye (<a href=\"#cite-PhysRevLett.70.3339\">1993</a>); Kitaev (<a href=\"#cite-KitaevTalk\">2015</a>); Maldacena and Stanford (<a href=\"#cite-Maldacena-2016hyu\">2016</a>); Kitaev and Suh (<a href=\"#cite-Kitaev-2017awl\">2018</a>), and such averages allow for the computation of the quantum chaos exponent <l2m-math n=\"0\"></l2m-math>. The latter is defined by the fastest growing exponential mode in the double-commutator <l2m-math n=\"1\"></l2m-math> for generic operators <l2m-math n=\"2\"></l2m-math>, over an appropriate time scale, with temperature <l2m-math n=\"3\"></l2m-math> Larkin and Ovchinnikov (<a href=\"#cite-Larkin1969QuasiclassicalMI\">1969</a>).</p>\n<p>The SYK model consists of <l2m-math n=\"4\"></l2m-math> free quantum mechanical fermions deformed by a relevant all-to-all spacetime-independent disordered interaction. Generalizations have appeared which consist of <l2m-math n=\"5\"></l2m-math> copies of other free theories with similar interactions Murugan <em>et al.</em> (<a href=\"#cite-Murugan-2017eto\">2017</a>); Fu <em>et al.</em> (<a href=\"#cite-Fu-2016vas\">2017</a>); Peng (<a href=\"#cite-Peng-2018zap\">2018</a>); Bulycheva (<a href=\"#cite-Bulycheva-2018qcp\">2018</a>); Chang <em>et al.</em> (<a href=\"#cite-Chang-2021fmd\">2021</a>); Popov (<a href=\"#cite-Popov-2019nja\">2020</a>); Gross and Rosenhaus (<a href=\"#cite-Gross-2017vhb\">2017</a>); Lian <em>et al.</em> (<a href=\"#cite-Lian-2019axs\">2019</a>). In this letter we study quantum chaos in a more general setting by studying <l2m-math n=\"6\"></l2m-math> copies of a general core model <l2m-math n=\"7\"></l2m-math> (which can be a quantum field theory or a spin system), deformed by a spacetime-independent all-to-all interaction. In particular, we eventually focus on <l2m-math n=\"8\"></l2m-math> being a conformal field theory (CFT) in 0+1 or in higher dimensions, and with an exactly marginal disorder interaction. In such a setup we have better control over the space of couplings over which we are averaging, eliminating the complications of the renormalization group (RG) and without having to resort to strong coupling.</p>\n<p>The theories we study are of the form</p>\n<div class=\"display\" id=\"eq-disordered_CFTs\"><div class=\"eqbody\"><l2m-math n=\"9\"></l2m-math></div><span class=\"eqno\">(1)</span></div>\n<p class=\"cont\">where <l2m-math n=\"10\"></l2m-math> denotes <l2m-math n=\"11\"></l2m-math> decoupled copies of the model <l2m-math n=\"12\"></l2m-math>, <l2m-math n=\"13\"></l2m-math> with <l2m-math n=\"14\"></l2m-math> are the <l2m-math n=\"15\"></l2m-math> copies of a local operator <l2m-math n=\"16\"></l2m-math> in <l2m-math n=\"17\"></l2m-math>, and <l2m-math n=\"18\"></l2m-math> are Gaussian random variables with variance</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"19\"></l2m-math></div><span class=\"eqno\">(2)</span></div>\n<p class=\"cont\">In the case where <l2m-math n=\"20\"></l2m-math> is a CFT, we will take <l2m-math n=\"21\"></l2m-math> to be a primary operator of this core CFT, and equation <a href=\"#eq-disordered_CFTs\">(1)</a> should be interpreted in conformal perturbation theory in <l2m-math n=\"22\"></l2m-math>. We call such theories disordered CFTs; the simplest example of this setup is the SYK model itself, as a disordered free fermion theory.</p>\n<p>We will first derive self-consistency equations for the two- and four-point functions of <l2m-math n=\"23\"></l2m-math> at leading order in <l2m-math n=\"24\"></l2m-math> for general disordered CFTs. These extend known results for disordered free theories like the SYK model Maldacena and Stanford (<a href=\"#cite-Maldacena-2016hyu\">2016</a>); Kitaev and Suh (<a href=\"#cite-Kitaev-2017awl\">2018</a>)), and for spin systems Bray and Moore (<a href=\"#cite-BrayMoore\">1980</a>). We will also discuss similar results for the double-commutator (defined in <a href=\"#eq-double_comm\">(7)</a> below). Although these self-consistency equations are complicated, they are tractable in perturbation theory in <l2m-math n=\"25\"></l2m-math> and allow us to establish the existence of a kernel structure from which we can extract the chaos exponent <l2m-math n=\"26\"></l2m-math>, which is the rate of growth of a double commutator. The latter is given by the fastest growing eigenvector (with eigenvalue 1) of a specific integral kernel <l2m-math n=\"27\"></l2m-math> (see equation <a href=\"#eq-double_commutator_kernel\">(9)</a>), as long as this rate of growth is indeed positive Kitaev (<a href=\"#cite-KitaevTalk2\">2015</a>); Kitaev (<a href=\"#cite-KitaevTalk\">2015</a>); Larkin and Ovchinnikov (<a href=\"#cite-Larkin1969QuasiclassicalMI\">1969</a>). We will denote by <l2m-math n=\"28\"></l2m-math> the putative chaos exponent read from the diagonalization <l2m-math n=\"29\"></l2m-math>.</p>\n<figure class=\"float figure\" id=\"fig-discontinuouschaos\"><p><img src=\"images/10e199e5ef56ad85.jpg\" alt=\"\" style=\"width:80%\"></p><figcaption><span class=\"capname\">Figure 1.</span> The behaviors we find for the chaos exponent as a function of an exactly marginal disorder deformation <l2m-math n=\"30\"></l2m-math>: (a) continuous and (b) discontinuous. <l2m-math n=\"31\"></l2m-math> corresponds to the dashed line and <l2m-math n=\"32\"></l2m-math> to the solid line.</figcaption></figure>\n<p>We will be interested in computing the chaos exponent <l2m-math n=\"33\"></l2m-math> as a function of <l2m-math n=\"34\"></l2m-math>, as it is varied from weak to strong coupling. The diagonalization of <l2m-math n=\"35\"></l2m-math> is a difficult process, which can usually be done only when conformal invariance is restored. Normally, the disorder is a relevant deformation. To compute the chaos one first flow to the IR CFT (which is equivalent to take <l2m-math n=\"36\"></l2m-math>) and find the chaos exponent there Murugan <em>et al.</em> (<a href=\"#cite-Murugan-2017eto\">2017</a>). In this work we focus on cases where the averaged interacting theory is conformally invariant for all <l2m-math n=\"37\"></l2m-math>. This can be done by demanding that the disorder interaction itself be exactly marginal, in which case the theory is conformally invariant for every realization of the couplings, and the space of <l2m-math n=\"38\"></l2m-math>’s forms a conformal manifold <sup class=\"fnref\"><a href=\"#fn1\" id=\"fnref1\">1</a></sup>. The disorder average is then simply a non-uniform average over this conformal manifold, with no RG-related complications (for recent discussions of averages over conformal manifolds see Maloney and Witten (<a href=\"#cite-Maloney-2020nni\">2020</a>); Afkhami-Jeddi <em>et al.</em> (<a href=\"#cite-Afkhami-Jeddi-2020ezh\">2021</a>), and for the marginal case see Berkooz <em>et al.</em> (<a href=\"#cite-Berkooz-2017efq\">2017</a>)).</p>\n<p>Surprisingly, we will find models where <l2m-math n=\"41\"></l2m-math> is negative at weak coupling. This signals a breakdown of the approximations involved in the computation, and so in this case the true chaos exponent simply vanishes, <l2m-math n=\"42\"></l2m-math>. In other words, we have</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"43\"></l2m-math></div><span class=\"eqno\">(3)</span></div>\n<p class=\"cont\">As a result, there are two possible behaviors for the onset of chaos: either the theory undergoes a continuous transition into chaos as in figure <a href=\"#fig-discontinuouschaos\">1a</a> or a discontinuous transition as in figure <a href=\"#fig-discontinuouschaos\">1b</a>, corresponding to whether <l2m-math n=\"44\"></l2m-math> is non-negative or negative at small enough <l2m-math n=\"45\"></l2m-math> respectively.<sup class=\"fnref\"><a href=\"#fn2\" id=\"fnref2\">2</a></sup></p>\n<p>The discontinuous transition into chaos is a surprising result, and it is tempting to compare it to similar results in classical chaos, the most famous one being the KAM theorem. In order to sharpen the comparison, we also discuss what a single core CFT should obey in order for the transition into chaos to be discontinuous. Similar works on the onset of quantum chaos include Stanford (<a href=\"#cite-Stanford-2015owe\">2016</a>); de Mello Koch <em>et al.</em> (<a href=\"#cite-deMelloKoch-2019ywq\">2019</a>); Chowdhury and Swingle (<a href=\"#cite-Chowdhury-2017jzb\">2017</a>); Steinberg and Swingle (<a href=\"#cite-Steinberg-2019uqb\">2019</a>); Maldacena and Stanford (<a href=\"#cite-Maldacena-2016hyu\">2016</a>); Peng (<a href=\"#cite-Peng-2018zap\">2018</a>), and Lian <em>et al.</em> (<a href=\"#cite-Lian-2019axs\">2019</a>); Hu and Lian (<a href=\"#cite-Hu-2021hsj\">2021</a>) are especially relevant.</p>\n<p>We will apply our formalism to two classes of examples where the disorder interaction is exactly marginal. The first class is disordered generalized free fields in <l2m-math n=\"47\"></l2m-math>d (following Gross and Rosenhaus (<a href=\"#cite-Gross-2017vhb\">2017</a>)) and in <l2m-math n=\"48\"></l2m-math>d. The second class is the disordered <l2m-math n=\"49\"></l2m-math> supersymmetric (SUSY) <l2m-math n=\"50\"></l2m-math> minimal models. In practice, we will only discuss the simplest case of the <l2m-math n=\"51\"></l2m-math> minimal model here. We will find a discontinuous transition in the former and a continuous transition in the latter.</p>\n<p>More details and discussions on the computations and results can be found in the companion paper Berkooz <em>et al.</em> (<a href=\"#cite-Berkooz-2021ehv\">2021</a>).</p>\n<h2 id=\"disorder-around-a-nontrivial-cft\">Disorder around a nontrivial CFT</h2>\n<h3 id=\"the-kernel-structure-of-the-four-point-function\">The kernel structure of the four-point function</h3>\n<p>We start by writing a self-consistency equation for the averaged two-point function of <a href=\"#eq-disordered_CFTs\">(1)</a>,</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"52\"></l2m-math></div><span class=\"eqno\">(4)</span></div>\n<p class=\"cont\">Using the <l2m-math n=\"53\"></l2m-math> formalism Maldacena and Stanford (<a href=\"#cite-Maldacena-2016hyu\">2016</a>); Kitaev (<a href=\"#cite-KitaevTalk\">2015</a>), it can be shown that <l2m-math n=\"54\"></l2m-math> obeys a generalized Schwinger-Dyson (SD) equation at leading order in <l2m-math n=\"55\"></l2m-math>, which appears diagrammatically in figure <a href=\"#fig-sdeqsfull\">2a</a>.</p>\n<figure class=\"float figure\" id=\"fig-sdeqsfull\"><p><img src=\"images/54da4dc5e5c2cb0a.jpg\" alt=\"\" style=\"width:100%\"></p><figcaption><span class=\"capname\">Figure 2.</span> (a) The SD equations. <l2m-math n=\"56\"></l2m-math> insertions appear as red lines, and black dots denote insertions of the deformation <a href=\"#eq-disordered_CFTs\">(1)</a>. (b) Examples of <l2m-math n=\"57\"></l2m-math>, The subtracted <l2m-math n=\"58\"></l2m-math>-point functions. Dashed lines connect to the external points, and numerical factors indicate symmetry factors. The blue numbers inside the brackets denote possible ways of permuting the legs. <span id=\"fig-sdeqsfull\" class=\"anchor\"></span> </figcaption></figure>\n<p>The equation includes subtracted <l2m-math n=\"59\"></l2m-math>-point functions denoted by “<l2m-math n=\"60\"></l2m-math>”, which are combinations of the standard core CFT <l2m-math n=\"61\"></l2m-math>-point functions with additional theory-independent subtractions which can be derived order-by order in <l2m-math n=\"62\"></l2m-math> Berkooz <em>et al.</em> (<a href=\"#cite-Berkooz-2021ehv\">2021</a>). The first few subtracted <l2m-math n=\"63\"></l2m-math>-point functions (assuming <l2m-math n=\"64\"></l2m-math> are real) are shown in figure <a href=\"#fig-sdeqsfull\">2b</a>. Generalizations to complex <l2m-math n=\"65\"></l2m-math> exist, and also to superfields (in which case the diagrams correspond to supergraphs).</p>\n<p>The contributions to the averaged connected four-point function</p>\n<div class=\"display\" id=\"eq-conn_four\"><div class=\"eqbody\"><l2m-math n=\"66\"></l2m-math></div><span class=\"eqno\">(5)</span></div>\n<p class=\"cont\">also have a simple form, and obey an iterative ladder structure similar to the case of disordered free fields:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"67\"></l2m-math></div><span class=\"eqno\">(6)</span></div>\n<p class=\"cont\">where the kernel <l2m-math n=\"68\"></l2m-math> and the initial diagram <l2m-math n=\"69\"></l2m-math> are defined in figure <a href=\"#fig-fullkernel\">3a</a>. The definition requires new subtracted <l2m-math n=\"70\"></l2m-math>-point functions called <l2m-math n=\"71\"></l2m-math>, which are again theory-independent Berkooz <em>et al.</em> (<a href=\"#cite-Berkooz-2021ehv\">2021</a>). The first few <l2m-math n=\"72\"></l2m-math> for real <l2m-math n=\"73\"></l2m-math> appear in figure <a href=\"#fig-fullkernel\">3b</a>.</p>\n<figure class=\"float figure\" id=\"fig-fullkernel\"><p><img src=\"images/ae8d630cbff1183c.jpg\" alt=\"\" style=\"width:90%\"></p><figcaption><span class=\"capname\">Figure 3.</span> (a) The kernel <l2m-math n=\"74\"></l2m-math> and initial diagram <l2m-math n=\"75\"></l2m-math> for general disordered CFTs. Red lines denote full propagators <l2m-math n=\"76\"></l2m-math>, and black dots denote insertions of the disorder interaction, with <l2m-math n=\"77\"></l2m-math> red propagators between each pair. (b) Examples of correlation functions <l2m-math n=\"78\"></l2m-math>. Dashed lines corresponds to external points, while solid lines are connected via <l2m-math n=\"79\"></l2m-math>’s defined in figure <a href=\"#fig-sdeqsfull\">2a</a>.</figcaption></figure>\n<p>Some comments are in order. First, although the kernel <l2m-math n=\"80\"></l2m-math> is very complicated, knowing that an iterative ladder structure exists for the four-point function is already an important result since it allows for a systematic computation of <l2m-math n=\"81\"></l2m-math>, as we now discuss. Second, although a full solution of the two- and four-point functions requires knowing all <l2m-math n=\"82\"></l2m-math>-point functions of the core CFT, a solution to order <l2m-math n=\"83\"></l2m-math> in perturbation theory in <l2m-math n=\"84\"></l2m-math> only requires knowing the <l2m-math n=\"85\"></l2m-math>-point functions for <l2m-math n=\"86\"></l2m-math>.</p>\n<h3 id=\"the-double-commutator-and-chaos\">The double-commutator and chaos</h3>\n<p>A similar analysis also applies to the computation of the double-commutator:</p>\n<div class=\"display\" id=\"eq-double_comm\"><div class=\"eqbody\"><l2m-math n=\"87\"></l2m-math></div><span class=\"eqno\">(7)</span></div>\n<p class=\"cont\">where we suppress the spatial positions. In chaotic theories, at large Lorentzian times <l2m-math n=\"88\"></l2m-math>, the double commutator is expected to grow exponentially:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"89\"></l2m-math></div><span class=\"eqno\">(8)</span></div>\n<p>Since the double commutator can be written in terms of analytically continued <l2m-math n=\"90\"></l2m-math>-point functions <a href=\"#eq-conn_four\">(5)</a>, <a href=\"#eq-double_comm\">(7)</a> satisfies a “retarded” version of the kernel structure of figure <a href=\"#fig-fullkernel\">3a</a>:</p>\n<div class=\"display\" id=\"eq-double_commutator_kernel\"><div class=\"eqbody\"><l2m-math n=\"91\"></l2m-math></div><span class=\"eqno\">(9)</span></div>\n<p class=\"cont\">with <l2m-math n=\"92\"></l2m-math> the retarded kernel Kitaev (<a href=\"#cite-KitaevTalk2\">2015</a>). The retarded kernel is composed of the same diagrams as in figure <a href=\"#fig-fullkernel\">3a</a>, where one plugs in specific analytic continuations in time of the <l2m-math n=\"93\"></l2m-math>-point functions.</p>\n<p>If <l2m-math n=\"94\"></l2m-math>, the ladder structure (however complicated) allows us to compute it in cases where the averaged correlator has conformal symmetry (see Murugan <em>et al.</em> (<a href=\"#cite-Murugan-2017eto\">2017</a>) for a review). This is done by finding the largest solution <l2m-math n=\"95\"></l2m-math> of the equation <l2m-math n=\"96\"></l2m-math>, where <l2m-math n=\"97\"></l2m-math> are the eigenvalues of the retarded kernel <l2m-math n=\"98\"></l2m-math>. If <l2m-math n=\"99\"></l2m-math> then we can identify <l2m-math n=\"100\"></l2m-math>, and otherwise we learn that <l2m-math n=\"101\"></l2m-math>.</p>\n<p>Importantly, if <l2m-math n=\"102\"></l2m-math> is exactly marginal, <l2m-math n=\"103\"></l2m-math> can be found perturbatively in <l2m-math n=\"104\"></l2m-math>. As a result, one can compute <l2m-math n=\"105\"></l2m-math> in orders of <l2m-math n=\"106\"></l2m-math> by using finitely many core CFT correlation functions at every order. The leading order of the equation is explicitly</p>\n<div class=\"display\" id=\"eq-k_in_pert_theory\"><div class=\"eqbody\"><l2m-math n=\"107\"></l2m-math></div><span class=\"eqno\">(10)</span></div>\n<p class=\"cont\">where <l2m-math n=\"108\"></l2m-math> denotes an expectation value at <l2m-math n=\"109\"></l2m-math> (i.e. of the core CFT). The integration range of the points <l2m-math n=\"110\"></l2m-math> is over the past light-cone of the points <l2m-math n=\"111\"></l2m-math> respectively, and <l2m-math n=\"112\"></l2m-math> is the analytically continued cylinder <l2m-math n=\"113\"></l2m-math>-point function:</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"114\"></l2m-math></div><span class=\"eqno\">(11)</span></div>\n<p>The expansion in <l2m-math n=\"115\"></l2m-math> can also be used to determine whether the transition into chaos would be continuous or discontinuous (see figure <a href=\"#fig-discontinuouschaos\">1</a>). This requires finding the sign of <l2m-math n=\"116\"></l2m-math> in the limit <l2m-math n=\"117\"></l2m-math>. Using the leading contribution to <l2m-math n=\"118\"></l2m-math> in orders of <l2m-math n=\"119\"></l2m-math> <a href=\"#eq-k_in_pert_theory\">(10)</a>, it is easy to see that the exponent <l2m-math n=\"120\"></l2m-math> is given by the maximal <l2m-math n=\"121\"></l2m-math> for which the integral <a href=\"#eq-k_in_pert_theory\">(10)</a> diverges. If the integral diverges at a positive (negative) value of <l2m-math n=\"122\"></l2m-math>, we have a continuous (discontinuous) transition into chaos.</p>\n<p>At <l2m-math n=\"123\"></l2m-math>, the kernel vanishes, and so it is not clear that <l2m-math n=\"124\"></l2m-math> is related to chaos. Instead, at <l2m-math n=\"125\"></l2m-math> we find <l2m-math n=\"126\"></l2m-math> decoupled core CFTs, and we expect</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"127\"></l2m-math></div><span class=\"eqno\">(12)</span></div>\n<p class=\"cont\">for some <l2m-math n=\"128\"></l2m-math>. Note that the CFTs are decoupled and so <l2m-math n=\"129\"></l2m-math> is a property of a single core CFT. However, we emphasize that it is not a chaos exponent in a single core CFT (as we take <l2m-math n=\"130\"></l2m-math> to be larger then any timescale of the core CFT); in fact, for unitary theories in <l2m-math n=\"131\"></l2m-math> it is always non-positive, <l2m-math n=\"132\"></l2m-math> Caron-Huot (<a href=\"#cite-Caron-Huot-2017vep\">2017</a>).</p>\n<p>Surprisingly, under reasonable physical assumptions it can be shown that <l2m-math n=\"133\"></l2m-math> and <l2m-math n=\"134\"></l2m-math> are equal Berkooz <em>et al.</em> (<a href=\"#cite-Berkooz-2021ehv\">2021</a>). This amounts to showing that the integral <a href=\"#eq-k_in_pert_theory\">(10)</a> diverges for <l2m-math n=\"135\"></l2m-math> due to the large (negative) <l2m-math n=\"136\"></l2m-math> regime of the integrand. Putting these pieces together, we claim that <l2m-math n=\"137\"></l2m-math> satisfies</p>\n<div class=\"display\" id=\"eq-continuity\"><div class=\"eqbody\"><l2m-math n=\"138\"></l2m-math></div><span class=\"eqno\">(13)</span></div>\n<p class=\"cont\">The LHS is calculated through the kernel equation <l2m-math n=\"139\"></l2m-math> in the limit <l2m-math n=\"140\"></l2m-math>, and the RHS is a property of the core CFT. We can interpret the result by noticing that <l2m-math n=\"141\"></l2m-math> describes the core CFT double-commutator behavior at large time scales. At arbitrarily weak coupling this behavior seems to control the <l2m-math n=\"142\"></l2m-math> behavior of the disordered theory double-commutator. The result is striking: in order to determine the type of transition into chaos, it is enough to find (the sign of) <l2m-math n=\"143\"></l2m-math> in a single core CFT. Below we give one example for each type of transition into chaos. In both cases we find that our conjecture <a href=\"#eq-continuity\">(13)</a> holds.</p>\n<h2 id=\"examples-of-the-onset-of-chaos\">Examples of the Onset of chaos</h2>\n<h3 id=\"disordered-generalized-free-fields\">Disordered generalized free fields</h3>\n<p>We now discuss our first class of examples with exactly marginal chaos, which are the disordered generalized free fields in <l2m-math n=\"144\"></l2m-math>d and in <l2m-math n=\"145\"></l2m-math>d. Generalized free fields (GFFs) are non-local theories with no energy-momentum tensor, but can be obtained by specific large-flavor limits of local theories, and are good toy-models for more complicated theories. Conformal invariance allows us to set the inverse temperature to be <l2m-math n=\"146\"></l2m-math> in the following.</p>\n<p>In <l2m-math n=\"147\"></l2m-math>d, the generalized free fermion model is called the “cSYK” model and was introduced in Gross and Rosenhaus (<a href=\"#cite-Gross-2017vhb\">2017</a>). Explicitly, the action is</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"148\"></l2m-math></div><span class=\"eqno\">(14)</span></div>\n<p class=\"cont\">with</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"149\"></l2m-math></div><span class=\"eqno\">(15)</span></div>\n<p class=\"cont\">Here, <l2m-math n=\"150\"></l2m-math> are Gaussian random variables with variance <l2m-math n=\"151\"></l2m-math>. Choosing <l2m-math n=\"152\"></l2m-math>, the deformation becomes classically marginal, and it is argued in Gross and Rosenhaus (<a href=\"#cite-Gross-2017vhb\">2017</a>) that it is exactly marginal at leading order in <l2m-math n=\"153\"></l2m-math>.</p>\n<p>The two- and four-point functions of <l2m-math n=\"154\"></l2m-math> for this model were found in Gross and Rosenhaus (<a href=\"#cite-Gross-2017vhb\">2017</a>). It is simple to extend the results also to the double-commutator. One finds that the corresponding retarded kernel <l2m-math n=\"155\"></l2m-math> has eigenvalues</p>\n<div class=\"display\" id=\"eq-GFFs_kR\"><div class=\"eqbody\"><l2m-math n=\"156\"></l2m-math></div><span class=\"eqno\">(16)</span></div>\n<p class=\"cont\">where <l2m-math n=\"157\"></l2m-math> solves the equation</p>\n<div class=\"display\" id=\"eq-bbar\"><div class=\"eqbody\"><l2m-math n=\"158\"></l2m-math></div><span class=\"eqno\">(17)</span></div>\n<p><l2m-math n=\"159\"></l2m-math> is found by taking the largest solution to <l2m-math n=\"160\"></l2m-math>. The result for <l2m-math n=\"161\"></l2m-math> appears in figure <a href=\"#fig-GFFchaos\">4</a>, and similar results apply for other <l2m-math n=\"162\"></l2m-math>.</p>\n<figure class=\"float figure\" id=\"fig-GFFchaos\"><p><img src=\"images/a320ac1253c07fee.png\" alt=\"\" style=\"width:100%\"></p><figcaption><span class=\"capname\">Figure 4.</span> The chaos exponent <l2m-math n=\"163\"></l2m-math> at <l2m-math n=\"164\"></l2m-math> for disordered GFFs in QM and for SUSY disordered GFFs in <l2m-math n=\"165\"></l2m-math>. Dashed lines represent <l2m-math n=\"166\"></l2m-math> and solid lines represent <l2m-math n=\"167\"></l2m-math>.</figcaption></figure>\n<p>At any <l2m-math n=\"168\"></l2m-math>, <l2m-math n=\"169\"></l2m-math> approaches the maximal value <l2m-math n=\"170\"></l2m-math> Maldacena <em>et al.</em> (<a href=\"#cite-Maldacena-2015waa\">2016</a>) at large <l2m-math n=\"171\"></l2m-math> as in the SYK model. More relevant to this study, <l2m-math n=\"172\"></l2m-math> approaches <l2m-math n=\"173\"></l2m-math> at <l2m-math n=\"174\"></l2m-math> (corresponding to the dashed red line), and so becomes negative at small <l2m-math n=\"175\"></l2m-math> for any <l2m-math n=\"176\"></l2m-math>. As discussed above, we cannot identify <l2m-math n=\"177\"></l2m-math> with <l2m-math n=\"178\"></l2m-math> when the former is negative, but we immediately learn that <l2m-math n=\"179\"></l2m-math> in this regime. We thus conclude that there is no chaos at small enough <l2m-math n=\"180\"></l2m-math>, corresponding to <l2m-math n=\"181\"></l2m-math> denoted by the solid red line. We thus find a discontinuous transition into chaos, as in figure <a href=\"#fig-discontinuouschaos\">1b</a>. We also comment that the long time exponent <l2m-math n=\"182\"></l2m-math> of a single core CFT is equal to <l2m-math n=\"183\"></l2m-math>, which matches <l2m-math n=\"184\"></l2m-math>, and so the conjecture <a href=\"#eq-continuity\">(13)</a> is obeyed.</p>\n<p>The same analysis can be done for disordered GFFs in 2d. In this case we choose to work with <l2m-math n=\"185\"></l2m-math> SUSY GFFs, since this results in an exact conformal manifold even at finite <l2m-math n=\"186\"></l2m-math>. The model consists of <l2m-math n=\"187\"></l2m-math> generalized free chiral superfields <l2m-math n=\"188\"></l2m-math> of dimension <l2m-math n=\"189\"></l2m-math>, coupled via the superpotential</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"190\"></l2m-math></div><span class=\"eqno\">(18)</span></div>\n<p class=\"cont\">The computation is very similar, and the results appear in figure <a href=\"#fig-GFFchaos\">4</a>. At large enough <l2m-math n=\"191\"></l2m-math>, the chaos exponent for any <l2m-math n=\"192\"></l2m-math> approaches the result in the <l2m-math n=\"193\"></l2m-math>d SUSY versions of the SYK model Murugan <em>et al.</em> (<a href=\"#cite-Murugan-2017eto\">2017</a>); Bulycheva (<a href=\"#cite-Bulycheva-2018qcp\">2018</a>). In addition, we again find that <l2m-math n=\"194\"></l2m-math> approaches <l2m-math n=\"195\"></l2m-math> as <l2m-math n=\"196\"></l2m-math>, and so for small enough <l2m-math n=\"197\"></l2m-math> <l2m-math n=\"198\"></l2m-math> is negative for any <l2m-math n=\"199\"></l2m-math>. As a result, we again find a discontinuous transition into chaos for any <l2m-math n=\"200\"></l2m-math>. We also find once again that the conjecture <a href=\"#eq-continuity\">(13)</a> is obeyed.</p>\n<h3 id=\"disordered-minimal-models\">Disordered minimal models</h3>\n<p>We now discuss the disordered 2d <l2m-math n=\"201\"></l2m-math> minimal models. A single core CFT in this case consists of an <l2m-math n=\"202\"></l2m-math> SUSY <l2m-math n=\"203\"></l2m-math> minimal model, which can be represented by a single chiral superfield <l2m-math n=\"204\"></l2m-math> and superpotential <l2m-math n=\"205\"></l2m-math>. The full disordered theory is then</p>\n<div class=\"display\" id=\"eq-IR_model\"><div class=\"eqbody\"><l2m-math n=\"206\"></l2m-math></div><span class=\"eqno\">(19)</span></div>\n<p class=\"cont\">We emphasize that we interpret this equation in conformal perturbation theory in <l2m-math n=\"207\"></l2m-math> around <l2m-math n=\"208\"></l2m-math> copies of the <l2m-math n=\"209\"></l2m-math> minimal model, where <l2m-math n=\"210\"></l2m-math> is the chiral operator of dimension <l2m-math n=\"211\"></l2m-math> which appears in <l2m-math n=\"212\"></l2m-math>. Since the CFT at <l2m-math n=\"213\"></l2m-math> has no continuous non-R global symmetries, every classically marginal operator is exactly marginal Green <em>et al.</em> (<a href=\"#cite-Green-2010da\">2010</a>); Kol (<a href=\"#cite-Kol-2002zt\">2002</a>); Kol (<a href=\"#cite-Kol-2010ub\">2010</a>), and so each deformation <l2m-math n=\"214\"></l2m-math> for <l2m-math n=\"215\"></l2m-math> is exactly marginal. Thus each realization of the model is conformal, and as a result averaged correlators of <l2m-math n=\"216\"></l2m-math> will also be conformal (even at finite <l2m-math n=\"217\"></l2m-math>).</p>\n<p>We can now attempt to compute <l2m-math n=\"218\"></l2m-math> in perturbation theory. This computation is generically difficult, and so we focus on the case <l2m-math n=\"219\"></l2m-math>, where a core CFT has central charge <l2m-math n=\"220\"></l2m-math> and so corresponds to the free compact boson at a specific radius. We can identify the operators <l2m-math n=\"221\"></l2m-math> in terms of vertex operators of the <l2m-math n=\"222\"></l2m-math> boson, and as a result we can read off all <l2m-math n=\"223\"></l2m-math>-point functions of the <l2m-math n=\"224\"></l2m-math>. Using this result to compute the leading contribution to the retarded kernel at small <l2m-math n=\"225\"></l2m-math> given in <a href=\"#eq-k_in_pert_theory\">(10)</a>, we find that at small <l2m-math n=\"226\"></l2m-math> the exponent <l2m-math n=\"227\"></l2m-math> approaches zero. As a result, we expect a continuous transition into chaos in this model, as in figure <a href=\"#fig-discontinuouschaos\">1a</a>. In particular, the value of <l2m-math n=\"228\"></l2m-math> in a single <l2m-math n=\"229\"></l2m-math> minimal model is also zero, so that the conjecture <a href=\"#eq-continuity\">(13)</a> is again obeyed.</p>\n<h2 id=\"acknowledgments\">Acknowledgments</h2>\n<p>We would like to thank O. Aharony, N. Brukner, C. Choi, Y. Jia, R.R. Kalloor, B. Lian, J. Maldacena, O. Mamroud, M. Mezei, M. Rangamani, V. Rosenhaus, D. Tong and M. Watanabe for useful conversations. This work was partly funded by an Israel Science Foundation center for excellence grant (grant number 2289/18), by grant no. 2018068 from the United States-Israel Binational Science Foundation (BSF), by the Minerva foundation with funding from the Federal German Ministry for Education and Research, by the German Research Foundation through a German-Israeli Project Cooperation (DIP) grant “Holography and the Swampland&quot;, and by a research grant from Martin Eisenstein. MB is the incumbent of the Charles and David Wolfson Professorial Chair of Theoretical Physics.</p>\n<section class=\"footnotes\" aria-labelledby=\"notes-h\"><h2 id=\"notes-h\">Notes</h2><ol class=\"fnlist\"><li id=\"fn1\"><a class=\"fnback\" href=\"#fnref1\" aria-label=\"Back to the text\">1</a><div class=\"fn-text\">It is important that <l2m-math n=\"39\"></l2m-math> itself does not obtain an anomalous dimension as a function of <l2m-math n=\"40\"></l2m-math>, which will be the case in the examples in this letter.</div></li><li id=\"fn2\"><a class=\"fnback\" href=\"#fnref2\" aria-label=\"Back to the text\">2</a><div class=\"fn-text\">We implicitly assumed that the chaos exponent increases monotonically with the strength of the disorder <l2m-math n=\"46\"></l2m-math>. As we start with N decoupled systems it is reasonable, but not necessarily true. For example, an integrable deformation keeps the exponent at zero, but these are hard to come by in this context.</div></li></ol></section><section class=\"references\" aria-labelledby=\"refs-h\"><h2 id=\"refs-h\">References</h2><ol class=\"refs\"><li id=\"cite-PhysRevLett.70.3339\"><span class=\"reftext\"> S.  Sachdev and J.  Ye, <a href=\"\\doibase 10.1103/PhysRevLett.70.3339\"> Phys. Rev. Lett. <strong> 70</strong>, 3339 ( 1993)</a></span></li><li id=\"cite-KitaevTalk\"><span class=\"reftext\"> A.  Kitaev, <a href=\"https://online.kitp.ucsb.edu/online/entangled15/kitaev/\">“ A simple model of quantum holography,” </a> ( 2015 a), talks at KITP</span></li><li id=\"cite-Maldacena-2016hyu\"><span class=\"reftext\"> J.  Maldacena and D.  Stanford, <a href=\"\\doibase 10.1103/PhysRevD.94.106002\"> Phys. Rev. D <strong> 94</strong>, 106002 ( 2016)</a>, <a href=\"http://arxiv.org/abs/1604.07818\">arXiv:1604.07818 [hep-th]</a></span></li><li id=\"cite-Kitaev-2017awl\"><span class=\"reftext\"> A.  Kitaev and S. J. Suh, <a href=\"\\doibase 10.1007/JHEP05(2018)183\"> JHEP <strong> 05</strong>, 183 ( 2018)</a>, <a href=\"http://arxiv.org/abs/1711.08467\">arXiv:1711.08467 [hep-th]</a></span></li><li id=\"cite-Larkin1969QuasiclassicalMI\"><span class=\"reftext\"> A. I. Larkin and Y. N. Ovchinnikov, Journal of Experimental and Theoretical Physics ( 1969)</span></li><li id=\"cite-Murugan-2017eto\"><span class=\"reftext\"> J.  Murugan, D.  Stanford, and E.  Witten, <a href=\"\\doibase 10.1007/JHEP08(2017)146\"> JHEP <strong> 08</strong>, 146 ( 2017)</a>, <a href=\"http://arxiv.org/abs/1706.05362\">arXiv:1706.05362 [hep-th]</a></span></li><li id=\"cite-Fu-2016vas\"><span class=\"reftext\"> W.  Fu, D.  Gaiotto, J.  Maldacena, and S.  Sachdev, <a href=\"\\doibase 10.1103/PhysRevD.95.026009\"> Phys. Rev. D <strong> 95</strong>, 026009 ( 2017)</a>, [Addendum: Phys.Rev.D 95, 069904 (2017)], <a href=\"http://arxiv.org/abs/1610.08917\">arXiv:1610.08917 [hep-th]</a></span></li><li id=\"cite-Peng-2018zap\"><span class=\"reftext\"> C.  Peng, <a href=\"\\doibase 10.1007/JHEP12(2018)065\"> JHEP <strong> 12</strong>, 065 ( 2018)</a>, <a href=\"http://arxiv.org/abs/1805.09325\">arXiv:1805.09325 [hep-th]</a></span></li><li id=\"cite-Bulycheva-2018qcp\"><span class=\"reftext\"> K.  Bulycheva, <a href=\"\\doibase 10.1007/JHEP04(2018)036\"> JHEP <strong> 04</strong>, 036 ( 2018)</a>, <a href=\"http://arxiv.org/abs/1801.09006\">arXiv:1801.09006 [hep-th]</a></span></li><li id=\"cite-Chang-2021fmd\"><span class=\"reftext\"> C.-M. Chang, S.  Colin-Ellerin, C.  Peng, and M.  Rangamani, ( 2021), <a href=\"http://arxiv.org/abs/2108.00027\">arXiv:2108.00027 [hep-th]</a></span></li><li id=\"cite-Popov-2019nja\"><span class=\"reftext\"> F. K. Popov, <a href=\"\\doibase 10.1103/PhysRevD.101.026020\"> Phys. Rev. D <strong> 101</strong>, 026020 ( 2020)</a>, <a href=\"http://arxiv.org/abs/1907.02440\">arXiv:1907.02440 [hep-th]</a></span></li><li id=\"cite-Gross-2017vhb\"><span class=\"reftext\"> D. J. Gross and V.  Rosenhaus, <a href=\"\\doibase 10.1007/JHEP07(2017)086\"> JHEP <strong> 07</strong>, 086 ( 2017)</a>, <a href=\"http://arxiv.org/abs/1706.07015\">arXiv:1706.07015 [hep-th]</a></span></li><li id=\"cite-Lian-2019axs\"><span class=\"reftext\"> B.  Lian, S. L. Sondhi, and Z.  Yang, <a href=\"\\doibase 10.1007/JHEP09(2019)067\"> JHEP <strong> 09</strong>, 067 ( 2019)</a>, <a href=\"http://arxiv.org/abs/1906.03308\">arXiv:1906.03308 [hep-th]</a></span></li><li id=\"cite-BrayMoore\"><span class=\"reftext\"> A. J. Bray and M. A. Moore, <a href=\"\\doibase 10.1088/0022-3719/13/24/005\"> J. Phys. C: Solid State Phys. <strong> 13</strong>, L655 ( 1980)</a></span></li><li id=\"cite-KitaevTalk2\"><span class=\"reftext\"> A.  Kitaev, <a href=\"https://online.kitp.ucsb.edu/online/joint98/kitaev/\">“ Hidden correlations in the hawking radiation and thermal noise,” </a> ( 2015 b), talks at KITP</span></li><li id=\"cite-Note1\"><span class=\"reftext\">It is important that <l2m-math n=\"230\"></l2m-math> itself does not obtain an anomalous dimension as a function of <l2m-math n=\"231\"></l2m-math>, which will be the case in the examples in this letter.</span></li><li id=\"cite-Maloney-2020nni\"><span class=\"reftext\"> A.  Maloney and E.  Witten, <a href=\"\\doibase 10.1007/JHEP10(2020)187\"> JHEP <strong> 10</strong>, 187 ( 2020)</a>, <a href=\"http://arxiv.org/abs/2006.04855\">arXiv:2006.04855 [hep-th]</a></span></li><li id=\"cite-Afkhami-Jeddi-2020ezh\"><span class=\"reftext\"> N.  Afkhami-Jeddi, H.  Cohn, T.  Hartman, and A.  Tajdini, <a href=\"\\doibase 10.1007/JHEP01(2021)130\"> JHEP <strong> 01</strong>, 130 ( 2021)</a>, <a href=\"http://arxiv.org/abs/2006.04839\">arXiv:2006.04839 [hep-th]</a></span></li><li id=\"cite-Berkooz-2017efq\"><span class=\"reftext\"> M.  Berkooz, P.  Narayan, M.  Rozali, and J.  Simón, <a href=\"\\doibase\n 10.1007/JHEP09(2017)057\"> JHEP <strong> 09</strong>, 057 ( 2017)</a>, <a href=\"http://arxiv.org/abs/1702.05105\">arXiv:1702.05105 [hep-th]</a></span></li><li id=\"cite-Note2\"><span class=\"reftext\">We implicitly assumed that the chaos exponent increases monotonically with the strength of the disorder <l2m-math n=\"232\"></l2m-math>. As we start with N decoupled systems it is reasonable, but not necessarily true. For example, an integrable deformation keeps the exponent at zero, but these are hard to come by in this context.</span></li><li id=\"cite-Stanford-2015owe\"><span class=\"reftext\"> D.  Stanford, <a href=\"\\doibase 10.1007/JHEP10(2016)009\"> JHEP <strong> 10</strong>, 009 ( 2016)</a>, <a href=\"http://arxiv.org/abs/1512.07687\">arXiv:1512.07687 [hep-th]</a></span></li><li id=\"cite-deMelloKoch-2019ywq\"><span class=\"reftext\"> R.  de Mello Koch, W.  LiMing, H. J. R. Van Zyl, and J. a. P. Rodrigues, <a href=\"\\doibase 10.1016/j.physletb.2019.04.044\"> Phys. Lett. B <strong> 793</strong>, 169 ( 2019)</a>, <a href=\"http://arxiv.org/abs/1902.06409\">arXiv:1902.06409 [hep-th]</a></span></li><li id=\"cite-Chowdhury-2017jzb\"><span class=\"reftext\"> D.  Chowdhury and B.  Swingle, <a href=\"\\doibase 10.1103/PhysRevD.96.065005\"> Phys. Rev. D <strong> 96</strong>, 065005 ( 2017)</a>, <a href=\"http://arxiv.org/abs/1703.02545\">arXiv:1703.02545 [cond-mat.str-el]</a></span></li><li id=\"cite-Steinberg-2019uqb\"><span class=\"reftext\"> J.  Steinberg and B.  Swingle, <a href=\"\\doibase 10.1103/PhysRevD.99.076007\"> Phys. Rev. D <strong> 99</strong>, 076007 ( 2019)</a>, <a href=\"http://arxiv.org/abs/1901.04984\">arXiv:1901.04984 [cond-mat.str-el]</a></span></li><li id=\"cite-Hu-2021hsj\"><span class=\"reftext\"> Y.  Hu and B.  Lian, ( 2021), <a href=\"http://arxiv.org/abs/2109.13263\">arXiv:2109.13263 [cond-mat.str-el]</a></span></li><li id=\"cite-Berkooz-2021ehv\"><span class=\"reftext\"> M.  Berkooz, A.  Sharon, N.  Silberstein, and E. Y. Urbach, ( 2021), <a href=\"http://arxiv.org/abs/2111.06108\">arXiv:2111.06108 [hep-th]</a></span></li><li id=\"cite-Caron-Huot-2017vep\"><span class=\"reftext\"> S.  Caron-Huot, <a href=\"\\doibase 10.1007/JHEP09(2017)078\"> JHEP <strong> 09</strong>, 078 ( 2017)</a>, <a href=\"http://arxiv.org/abs/1703.00278\">arXiv:1703.00278 [hep-th]</a></span></li><li id=\"cite-Maldacena-2015waa\"><span class=\"reftext\"> J.  Maldacena, S. H. Shenker, and D.  Stanford, <a href=\"\\doibase 10.1007/JHEP08(2016)106\"> JHEP <strong> 08</strong>, 106 ( 2016)</a>, <a href=\"http://arxiv.org/abs/1503.01409\">arXiv:1503.01409 [hep-th]</a></span></li><li id=\"cite-Green-2010da\"><span class=\"reftext\"> D.  Green, Z.  Komargodski, N.  Seiberg, Y.  Tachikawa, and B.  Wecht, <a href=\"\\doibase\n 10.1007/JHEP06(2010)106\"> JHEP <strong> 06</strong>, 106 ( 2010)</a>, <a href=\"http://arxiv.org/abs/1005.3546\">arXiv:1005.3546 [hep-th]</a></span></li><li id=\"cite-Kol-2002zt\"><span class=\"reftext\"> B.  Kol, <a href=\"\\doibase 10.1088/1126-6708/2002/09/046\"> JHEP <strong> 09</strong>, 046 ( 2002)</a>, <a href=\"http://arxiv.org/abs/hep-th/0205141\">arXiv:hep-th/0205141</a></span></li><li id=\"cite-Kol-2010ub\"><span class=\"reftext\"> B.  Kol, ( 2010), <a href=\"http://arxiv.org/abs/1005.4408\">arXiv:1005.4408 [hep-th]</a></span></li></ol></section>",
+ "headings": [
+  {
+   "level": 1,
+   "number": "",
+   "html": "Introduction",
+   "id": "introduction"
+  },
+  {
+   "level": 1,
+   "number": "",
+   "html": "Disorder around a nontrivial CFT",
+   "id": "disorder-around-a-nontrivial-cft"
+  },
+  {
+   "level": 2,
+   "number": "",
+   "html": "The kernel structure of the four-point function",
+   "id": "the-kernel-structure-of-the-four-point-function"
+  },
+  {
+   "level": 2,
+   "number": "",
+   "html": "The double-commutator and chaos",
+   "id": "the-double-commutator-and-chaos"
+  },
+  {
+   "level": 1,
+   "number": "",
+   "html": "Examples of the Onset of chaos",
+   "id": "examples-of-the-onset-of-chaos"
+  },
+  {
+   "level": 2,
+   "number": "",
+   "html": "Disordered generalized free fields",
+   "id": "disordered-generalized-free-fields"
+  },
+  {
+   "level": 2,
+   "number": "",
+   "html": "Disordered minimal models",
+   "id": "disordered-minimal-models"
+  },
+  {
+   "level": 1,
+   "number": "",
+   "html": "Acknowledgments",
+   "id": "acknowledgments"
+  }
+ ],
+ "labels": {
+  "FirstPage": {
+   "number": "",
+   "id": null
+  },
+  "eq:disordered_CFTs": {
+   "number": "1",
+   "id": "eq-disordered_CFTs"
+  },
+  "fig:discontinuouschaos": {
+   "number": "1",
+   "id": "fig-discontinuouschaos"
+  },
+  "fig:sdeqsfull": {
+   "number": "2",
+   "id": "fig-sdeqsfull"
+  },
+  "eq:conn_four": {
+   "number": "5",
+   "id": "eq-conn_four"
+  },
+  "fig:fullkernel": {
+   "number": "3",
+   "id": "fig-fullkernel"
+  },
+  "eq:double_comm": {
+   "number": "7",
+   "id": "eq-double_comm"
+  },
+  "eq:double_commutator_kernel": {
+   "number": "9",
+   "id": "eq-double_commutator_kernel"
+  },
+  "eq:k_in_pert_theory": {
+   "number": "10",
+   "id": "eq-k_in_pert_theory"
+  },
+  "eq:continuity": {
+   "number": "13",
+   "id": "eq-continuity"
+  },
+  "eq:GFFs_kR": {
+   "number": "16",
+   "id": "eq-GFFs_kR"
+  },
+  "eq:bbar": {
+   "number": "17",
+   "id": "eq-bbar"
+  },
+  "fig:GFFchaos": {
+   "number": "4",
+   "id": "fig-GFFchaos"
+  },
+  "eq:IR_model": {
+   "number": "19",
+   "id": "eq-IR_model"
+  },
+  "LastBibItem": {
+   "number": "31",
+   "id": null
+  },
+  "LastPage": {
+   "number": "",
+   "id": null
+  }
+ },
+ "footnotes": [
+  {
+   "n": 1,
+   "html": "It is important that <l2m-math n=\"39\"></l2m-math> itself does not obtain an anomalous dimension as a function of <l2m-math n=\"40\"></l2m-math>, which will be the case in the examples in this letter."
+  },
+  {
+   "n": 2,
+   "html": "We implicitly assumed that the chaos exponent increases monotonically with the strength of the disorder <l2m-math n=\"46\"></l2m-math>. As we start with N decoupled systems it is reasonable, but not necessarily true. For example, an integrable deformation keeps the exponent at zero, but these are hard to come by in this context."
+  }
+ ],
+ "math": {
+  "items": [
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "\\langle [U(t),W(0)]^2\\rangle_\\beta\\sim e^{\\lambda_L t}",
+    "display": false
+   },
+   {
+    "tex": "U,W",
+    "display": false
+   },
+   {
+    "tex": "1/\\beta",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{Q}",
+    "display": false
+   },
+   {
+    "tex": "Q",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{Q}^N+\\sum_{i_1\\neq ...\\neq i_q}^N J_{i_1...i_q}\\mathcal{O}_{i_1}...\\mathcal{O}_{i_q}\\;,",
+    "display": true
+   },
+   {
+    "tex": "\\mathcal{Q}^N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{Q}",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}_i",
+    "display": false
+   },
+   {
+    "tex": "i=1,...,N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{Q}",
+    "display": false
+   },
+   {
+    "tex": "J_{i_1...i_q}",
+    "display": false
+   },
+   {
+    "tex": "\\langle J_{i_1...i_q}^2\\rangle= \\frac{J^2(q-1)!}{N^{q-1}}\\;.",
+    "display": true
+   },
+   {
+    "tex": "\\mathcal{Q}",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}_i",
+    "display": false
+   },
+   {
+    "tex": "1/N",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "K_R",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "K_R",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "K_R",
+    "display": false
+   },
+   {
+    "tex": "J=\\infty",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J)",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L= 0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L=\\max(0,\\lambda_L^{\\text{ker}})\\;.",
+    "display": true
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "1",
+    "display": false
+   },
+   {
+    "tex": "2",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{N}=2",
+    "display": false
+   },
+   {
+    "tex": "A_{q-1}",
+    "display": false
+   },
+   {
+    "tex": "A_2",
+    "display": false
+   },
+   {
+    "tex": "G(x)= \\langle \\mathcal{O}_i(x)\\mathcal{O}_i(0) \\rangle\\;.",
+    "display": true
+   },
+   {
+    "tex": "G-\\Sigma",
+    "display": false
+   },
+   {
+    "tex": "G",
+    "display": false
+   },
+   {
+    "tex": "1/N",
+    "display": false
+   },
+   {
+    "tex": "G",
+    "display": false
+   },
+   {
+    "tex": "n_s",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "n_s",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}_i",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}_i",
+    "display": false
+   },
+   {
+    "tex": "C=\\frac{1}{N^2} \\sum_{i,j}(\\langle\\mathcal{O}_i\\mathcal{O}_i\\mathcal{O}_j\\mathcal{O}_j\\rangle-\\langle \\mathcal{O}_i\\mathcal{O}_i \\rangle\\langle \\mathcal{O}_j\\mathcal{O}_j \\rangle)",
+    "display": true
+   },
+   {
+    "tex": "C=\\sum_{n=0}^\\infty K^n F_0\\;,",
+    "display": true
+   },
+   {
+    "tex": "K",
+    "display": false
+   },
+   {
+    "tex": "F_0",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "n_s'",
+    "display": false
+   },
+   {
+    "tex": "n_s'",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{O}_i",
+    "display": false
+   },
+   {
+    "tex": "K",
+    "display": false
+   },
+   {
+    "tex": "F_0",
+    "display": false
+   },
+   {
+    "tex": "G",
+    "display": false
+   },
+   {
+    "tex": "q-2",
+    "display": false
+   },
+   {
+    "tex": "n_s'",
+    "display": false
+   },
+   {
+    "tex": "\\Sigma",
+    "display": false
+   },
+   {
+    "tex": "K",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "J^{2n}",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "2m",
+    "display": false
+   },
+   {
+    "tex": "m\\leq n+1",
+    "display": false
+   },
+   {
+    "tex": "\\begin{split}\n    W_R(t_1,t_2) = \\frac{1}{N^2} \\sum_{i,j=1}^N &\\langle [\\mathcal{O}_i(\\beta/2) ,\\mathcal{O}_j(\\beta/2+i t_2)] \\\\\n    &\\cdot [\\mathcal{O}_i(0), \\mathcal{O}_j(i t_1)]\n    \\rangle,\n\\end{split}",
+    "display": true
+   },
+   {
+    "tex": "t_1,t_2",
+    "display": false
+   },
+   {
+    "tex": "\\lim_{t_1,t_2\\rightarrow \\infty} W_R(t_1,t_2) \\sim \\frac{1}{N} \\exp(+\\lambda_L (t_1+t_2)/2)\\;.",
+    "display": true
+   },
+   {
+    "tex": "4",
+    "display": false
+   },
+   {
+    "tex": "W_R=\\sum_{n=0}^\\infty K_R^n F_0 \\ \\Longrightarrow\\ (1-K_R)W_R = F_0\\;,",
+    "display": true
+   },
+   {
+    "tex": "K_R",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L>0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "k_R(\\lambda_L^{\\text{ker}})=1",
+    "display": false
+   },
+   {
+    "tex": "k_R(\\lambda)",
+    "display": false
+   },
+   {
+    "tex": "K_R",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}>0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L=\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L=0",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "k_R(\\lambda_L)",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J)",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\begin{split}\n    & k_R(\\lambda) = \\frac{J^2}{4} \\int d^2 x_3 d^2 x_4 \\exp(\\lambda/2 (t_3+t_4-t_1-t_2)) \\\\\n    &\\cdot \\langle [\\mathcal{O}(\\beta/2+i t_2), \\mathcal{O}(\\beta/2+i t_4)]\n    [\\mathcal{O}(i t_1), \\mathcal{O}(i t_3)]\\rangle_0 \n    \\\\\n    &\\cdot \\frac{G_{lr,\\Delta(q-1)+\\frac{\\lambda}{2}}(3,4)}{G_{lr,\\Delta+\\frac{\\lambda}{2}}(1,2)} +O(J^4)\\;,\n\\end{split}",
+    "display": true
+   },
+   {
+    "tex": "\\langle \\cdot \\rangle_0",
+    "display": false
+   },
+   {
+    "tex": "J=0",
+    "display": false
+   },
+   {
+    "tex": "3,4",
+    "display": false
+   },
+   {
+    "tex": "1,2",
+    "display": false
+   },
+   {
+    "tex": "G_{lr,\\Delta}",
+    "display": false
+   },
+   {
+    "tex": "2",
+    "display": false
+   },
+   {
+    "tex": "G_{lr,\\Delta}(1,2) = \\frac{1}{\\left( 4 \n    \\cosh\\left(\\frac{t_{12}-x_{12}}{2}\\right) \n    \\cosh\\left(\\frac{t_{12}+x_{12}}{2}\\right) \n    \\right)^\\Delta}.",
+    "display": true
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "J= 0^+",
+    "display": false
+   },
+   {
+    "tex": "k_R",
+    "display": false
+   },
+   {
+    "tex": "J^2",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J= 0^+)",
+    "display": false
+   },
+   {
+    "tex": "\\lambda",
+    "display": false
+   },
+   {
+    "tex": "\\lambda",
+    "display": false
+   },
+   {
+    "tex": "J=0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L(J=0)",
+    "display": false
+   },
+   {
+    "tex": "J=0",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\begin{split}\n    \\lim_{t_1,t_2\\rightarrow \\infty} W_R(t_1,t_2)\\mid_{J=0} \\;\\sim \\frac{1}{N} \\exp(+\\lambda_L^0 (t_1+t_2)/2)\n\\end{split}",
+    "display": true
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "t_1,t_2",
+    "display": false
+   },
+   {
+    "tex": "2d",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0\\le 0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J=0^+)",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda \\le \\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "t_3,t_4",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J)",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J=0^+) = \\lambda_L^0.",
+    "display": true
+   },
+   {
+    "tex": "k_R(\\lambda)=1",
+    "display": false
+   },
+   {
+    "tex": "J=0^+",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "1\\ll t \\ll \\log N",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "1",
+    "display": false
+   },
+   {
+    "tex": "2",
+    "display": false
+   },
+   {
+    "tex": "\\beta=2\\pi",
+    "display": false
+   },
+   {
+    "tex": "1",
+    "display": false
+   },
+   {
+    "tex": "S=S_0+S_\\text{SYK}",
+    "display": true
+   },
+   {
+    "tex": "\\begin{split}\nS_0&=-\\Delta \\sum_{i=1}^n  \\int d \\tau_1 d \\tau_2 \\chi_i\\left(\\tau_1\\right) \\frac{\\operatorname{sgn}\\left(\\tau_1-\\tau_2\\right)}{\\left|\\tau_1-\\tau_2\\right|^{2-2 \\Delta}} \\chi_i\\left(\\tau_2\\right)\\;,\\\\\nS_\\text{SYK}&=\\frac{i^{\\frac{q}{2}}}{q !} \\sum_{i_1, \\ldots, i_{q}=1}^n  \\int d \\tau J_{i_1 i_2 \\ldots i_{q}} \\chi_{i_1} \\chi_{i_2} \\cdots \\chi_{i_{q}}\\;.\n\\end{split}",
+    "display": true
+   },
+   {
+    "tex": "J_{i_1...i_q}",
+    "display": false
+   },
+   {
+    "tex": "\\langle J_{i_1...i_q}^2\\rangle= \\frac{J^2(q-1)!}{N^{q-1}}",
+    "display": false
+   },
+   {
+    "tex": "\\Delta=1/q",
+    "display": false
+   },
+   {
+    "tex": "1/N",
+    "display": false
+   },
+   {
+    "tex": "\\chi_i",
+    "display": false
+   },
+   {
+    "tex": "K_R^{\\text{cSYK}}",
+    "display": false
+   },
+   {
+    "tex": "k^{\\text{cSYK}}_R(\\lambda)=\\left(\\frac{\\bar{b}(J)}{\\bar b(J\\to \\infty)}\\right)^{q}\\frac{\\Gamma(3-2 \\Delta) \\Gamma(2 \\Delta+\\lambda)}{\\Gamma(1+2 \\Delta) \\Gamma(2-2 \\Delta+\\lambda)}\\;,",
+    "display": true
+   },
+   {
+    "tex": "\\bar b(J)",
+    "display": false
+   },
+   {
+    "tex": "\\frac{\\bar{b}^{q}}{1-2 \\bar{b}}=\\frac{1}{J^2 \\psi(1-\\Delta) \\psi(\\Delta)},\\; \\psi(\\Delta) \\equiv 2 \\cos (\\pi \\Delta) \\Gamma(1-2 \\Delta).",
+    "display": true
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "k^{\\text{cSYK}}_R(\\lambda)=1",
+    "display": false
+   },
+   {
+    "tex": "\\Delta=1/4",
+    "display": false
+   },
+   {
+    "tex": "\\Delta",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L(J)",
+    "display": false
+   },
+   {
+    "tex": "\\Delta=1/4",
+    "display": false
+   },
+   {
+    "tex": "2d",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "\\Delta",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L=1",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "-2\\Delta",
+    "display": false
+   },
+   {
+    "tex": "J=0",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\Delta>0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L= 0",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0=-2\\Delta",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}(J=0^+)",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{N}=2",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\Phi_i",
+    "display": false
+   },
+   {
+    "tex": "\\Delta=1/q",
+    "display": false
+   },
+   {
+    "tex": "W=\\sum_{i_1\\neq ...\\neq i_q}^NJ_{i_1...i_q}\\Phi_{i_1}...\\Phi_{i_q}\\;.",
+    "display": true
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\Delta",
+    "display": false
+   },
+   {
+    "tex": "2",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "-2\\Delta",
+    "display": false
+   },
+   {
+    "tex": "J\\to 0^+",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\Delta>0",
+    "display": false
+   },
+   {
+    "tex": "\\Delta>0",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{N}=2",
+    "display": false
+   },
+   {
+    "tex": "\\mathcal{N}=2",
+    "display": false
+   },
+   {
+    "tex": "A_{q-1}",
+    "display": false
+   },
+   {
+    "tex": "\\Phi",
+    "display": false
+   },
+   {
+    "tex": "W=\\Phi^q",
+    "display": false
+   },
+   {
+    "tex": "W=\\sum_{i=1}^N\\Phi_{i}^q+\\sum_{i_1\\neq....\\neq i_q} J_{i_1...i_q}\\tilde{\\Phi}_{i_1}...\\tilde{\\Phi}_{i_q}\\;.",
+    "display": true
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "A_{q-1}",
+    "display": false
+   },
+   {
+    "tex": "\\tilde\\Phi",
+    "display": false
+   },
+   {
+    "tex": "1/q",
+    "display": false
+   },
+   {
+    "tex": "A_{q-1}",
+    "display": false
+   },
+   {
+    "tex": "J=0",
+    "display": false
+   },
+   {
+    "tex": "J_{i_1...i_q}",
+    "display": false
+   },
+   {
+    "tex": "i_1\\neq...\\neq i_q",
+    "display": false
+   },
+   {
+    "tex": "\\tilde\\Phi_i",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L(J)",
+    "display": false
+   },
+   {
+    "tex": "q=3",
+    "display": false
+   },
+   {
+    "tex": "c=1",
+    "display": false
+   },
+   {
+    "tex": "\\tilde{\\Phi}_i",
+    "display": false
+   },
+   {
+    "tex": "c=1",
+    "display": false
+   },
+   {
+    "tex": "n",
+    "display": false
+   },
+   {
+    "tex": "\\tilde{\\Phi}_i",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^{\\text{ker}}",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L^0",
+    "display": false
+   },
+   {
+    "tex": "A_2",
+    "display": false
+   },
+   {
+    "tex": "\\protect \\mathcal {O}",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "J",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "N",
+    "display": false
+   },
+   {
+    "tex": "\\lambda_L",
+    "display": false
+   }
+  ],
+  "macros": {
+   "cO": "\\mathcal{O}",
+   "pder": [
+    "\\frac{\\partial#1}{\\partial#2}",
+    2
+   ],
+   "mean": "\\overline",
+   "dcft": "\\bar d",
+   "todo": [
+    "\\textcolor{red}{(#1)}",
+    1
+   ],
+   "ensuremath": [
+    "#1",
+    1
+   ],
+   "xspace": "",
+   "qedhere": "",
+   "bm": [
+    "\\boldsymbol{#1}",
+    1
+   ],
+   "nobreak": "",
+   "allowbreak": "",
+   "mathbbm": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "intertext": [
+    "\\text{#1}",
+    1
+   ],
+   "shortintertext": [
+    "\\text{#1}",
+    1
+   ],
+   "num": [
+    "#1",
+    1
+   ],
+   "si": [
+    "\\mathrm{#1}",
+    1
+   ],
+   "SI": [
+    "#1\\,\\mathrm{#2}",
+    2
+   ],
+   "textsc": [
+    "\\text{#1}",
+    1
+   ],
+   "vspace": [
+    "",
+    1
+   ],
+   "nolimits": "",
+   "displaybreak": "",
+   "dd": "\\mathrm{d}",
+   "mathds": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "boldmath": "",
+   "unboldmath": "",
+   "slashed": [
+    "{\\not{#1}}",
+    1
+   ],
+   "dag": "\\dagger",
+   "Bar": [
+    "\\bar{#1}",
+    1
+   ],
+   "Tilde": [
+    "\\tilde{#1}",
+    1
+   ],
+   "Hat": [
+    "\\hat{#1}",
+    1
+   ],
+   "Tr": "\\operatorname{Tr}",
+   "tr": "\\operatorname{tr}",
+   "widecheck": [
+    "\\check{#1}",
+    1
+   ],
+   "tcboxmath": [
+    "\\boxed{#1}",
+    1
+   ],
+   "footnote": [
+    "",
+    1
+   ],
+   "footnotesize": "",
+   "small": "",
+   "toprule": "\\hline",
+   "midrule": "\\hline",
+   "bottomrule": "\\hline",
+   "href": [
+    "#2",
+    2
+   ],
+   "relax": "",
+   "bbone": "\\mathbb{1}",
+   "one": "\\mathbb{1}",
+   "tikzsetnextfilename": [
+    "",
+    1
+   ],
+   "raisebox": [
+    "\\raise{#1}{#2}",
+    2
+   ]
+  },
+  "packages": [
+   "base",
+   "ams",
+   "newcommand",
+   "configmacros",
+   "textmacros",
+   "boldsymbol",
+   "upgreek",
+   "noundefined",
+   "physics",
+   "cancel"
+  ],
+  "key": "a6e246ed225796338ac6"
+ },
+ "warnings": {}
+}

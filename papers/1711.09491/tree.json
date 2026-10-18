@@ -1,0 +1,889 @@
+{
+ "format": "conifer-doc",
+ "version": 1,
+ "meta": {
+  "title": "Delayed instabilities in viscoelastic solids through a metric description",
+  "authors": [
+   "Erez Y. Urbach",
+   "Efi Efrati"
+  ],
+  "arxiv": "1711.09491",
+  "abstractHtml": "<p>While determining the stability of an unconstrained elastic structure is a straightforward task, this is not the case for viscoelastic structures. Seemingly elastically stable conformations of viscoelastic structures may gradually creep until stability is lost, and conversely, creeping does not necessarily imply that a structure will eventually become unstable. Understanding instabilities in viscoelastic structures requires a more intuitive description of viscoelasticity to allow analytical results and quantitative predictions. In this work we put forward a metric description of viscoelasticity in which the continua is characterized by temporally evolving reference lengths with respect to which elastic strains are measured. Formulating the three dimensional theory using metric tensors we are able to predict which structures will exhibit delayed instability due to viscoelastic flow. We also quantitatively describe the viscoelastic relaxation in free standing structures including cases where the relaxation leads to no apparent motion. We demonstrate these results and the power of the metric approach by elucidating the subtle mechanism of delayed instability in elastomer shells showing quantitative agreement with experimental measurements.</p>",
+  "kicker": "arXiv:1711.09491 · cond-mat.soft · November 2017",
+  "titleHtml": "Delayed instabilities in viscoelastic solids through a metric description",
+  "key": {
+   "equation": "eq-gbar_stationary_condition",
+   "figure": "fig-hopper_popper"
+  },
+  "defaultAudience": "physicist",
+  "source": {
+   "kind": "epsilon",
+   "doc": "papers/1711.09491/doc"
+  },
+  "date": "26 November 2017",
+  "note": "The paper as a Conifer tree. The text at the Paper depth is the paper itself; the gist, the summary, the definitions, the background notes and the questions were drafted by an AI reader and have not yet been checked by the author.",
+  "macros": {
+   "s": "\\sigma",
+   "t": "\\theta",
+   "a": "\\alpha",
+   "b": "\\beta",
+   "g": "\\gamma",
+   "d": "\\delta",
+   "l": "\\lambda",
+   "hatn": "\\hat{\\mathbf{n}}",
+   "r": "\\mathbf{r}",
+   "p": "\\mathbf{p}",
+   "e": "\\varepsilon",
+   "gbar": "\\bar{g}",
+   "abar": "\\bar{a}",
+   "bbar": "\\bar{b}",
+   "gbaro": "\\bar{g}^0",
+   "abaro": "\\bar{a}^0",
+   "nn": "\\nonumber \\\\",
+   "ensuremath": [
+    "#1",
+    1
+   ],
+   "xspace": "",
+   "qedhere": "",
+   "bm": [
+    "\\boldsymbol{#1}",
+    1
+   ],
+   "nobreak": "",
+   "allowbreak": "",
+   "mathbbm": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "intertext": [
+    "\\text{#1}",
+    1
+   ],
+   "shortintertext": [
+    "\\text{#1}",
+    1
+   ],
+   "num": [
+    "#1",
+    1
+   ],
+   "si": [
+    "\\mathrm{#1}",
+    1
+   ],
+   "SI": [
+    "#1\\,\\mathrm{#2}",
+    2
+   ],
+   "textsc": [
+    "\\text{#1}",
+    1
+   ],
+   "vspace": [
+    "",
+    1
+   ],
+   "nolimits": "",
+   "displaybreak": "",
+   "dd": "\\mathrm{d}",
+   "mathds": [
+    "\\mathbb{#1}",
+    1
+   ],
+   "boldmath": "",
+   "unboldmath": "",
+   "slashed": [
+    "{\\not{#1}}",
+    1
+   ],
+   "dag": "\\dagger",
+   "Bar": [
+    "\\bar{#1}",
+    1
+   ],
+   "Tilde": [
+    "\\tilde{#1}",
+    1
+   ],
+   "Hat": [
+    "\\hat{#1}",
+    1
+   ],
+   "Tr": "\\operatorname{Tr}",
+   "tr": "\\operatorname{tr}",
+   "widecheck": [
+    "\\check{#1}",
+    1
+   ],
+   "tcboxmath": [
+    "\\boxed{#1}",
+    1
+   ],
+   "footnote": [
+    "",
+    1
+   ],
+   "footnotesize": "",
+   "small": "",
+   "toprule": "\\hline",
+   "midrule": "\\hline",
+   "bottomrule": "\\hline",
+   "href": [
+    "#2",
+    2
+   ],
+   "relax": "",
+   "bbone": "\\mathbb{1}",
+   "one": "\\mathbb{1}",
+   "tikzsetnextfilename": [
+    "",
+    1
+   ],
+   "raisebox": [
+    "\\raise{#1}{#2}",
+    2
+   ]
+  }
+ },
+ "levels": [
+  {
+   "key": "gist",
+   "label": "Gist",
+   "hint": "the trunk: the three things to know"
+  },
+  {
+   "key": "brief",
+   "label": "Summary",
+   "hint": "the branches: one page, every sentence opens"
+  },
+  {
+   "key": "paper",
+   "label": "Paper",
+   "hint": "the foliage: the full text, with the roots folded"
+  }
+ ],
+ "audiences": [
+  {
+   "key": "specialist",
+   "label": "Specialist",
+   "hint": "works on elasticity, viscoelasticity or incompatible (non-Euclidean) elasticity"
+  },
+  {
+   "key": "physicist",
+   "label": "Physicist",
+   "hint": "a physicist from another area; knows continuum mechanics in outline"
+  },
+  {
+   "key": "student",
+   "label": "Student",
+   "hint": "knows undergraduate mechanics and some differential geometry"
+  }
+ ],
+ "root": {
+  "id": "root",
+  "kind": "paper",
+  "children": [
+   {
+    "id": "abstract",
+    "kind": "abstract",
+    "title": "Abstract",
+    "body": "<p>While determining the stability of an unconstrained elastic structure is a straightforward task, this is not the case for viscoelastic structures. Seemingly elastically stable conformations of viscoelastic structures may gradually creep until stability is lost, and conversely, <a data-def=\"creep\">creeping</a> does not necessarily imply that a structure will eventually become unstable. Understanding instabilities in viscoelastic structures requires a more intuitive description of viscoelasticity to allow analytical results and quantitative predictions. In this work we put forward a <a data-def=\"metric-description\">metric description</a> of viscoelasticity in which the continua is characterized by temporally evolving reference lengths with respect to which elastic strains are measured. Formulating the three dimensional theory using <a data-def=\"metric-tensor\">metric tensors</a> we are able to predict which structures will exhibit <a data-def=\"delayed-instability\">delayed instability</a> due to viscoelastic flow. We also quantitatively describe the viscoelastic relaxation in free standing structures including cases where the relaxation leads to no apparent motion. We demonstrate these results and the power of the metric approach by elucidating the subtle mechanism of delayed instability in elastomer shells showing quantitative agreement with experimental measurements.</p>"
+   },
+   {
+    "id": "root-p1",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Introduction</strong> The snapping of the Venus fly-trap leaf, one of the fastest motions in plant kingdom, is preceded by a relatively slow <dfn data-def=\"creep\">creeping</dfn> motion Forterre <em>et al.</em> (<a href=\"#cite-FSDM05\">2005</a>). A similar creep is observed prior to the <dfn data-def=\"snap-through\">snap through</dfn> of thin elastomeric shells known as <dfn data-def=\"popper\">jumping poppers</dfn> Pandey <em>et al.</em> (<a href=\"#cite-PMVH14\">2014</a>). While the snap through itself lasts only a fraction of a second Gomez <em>et al.</em> (<a href=\"#cite-GMV16\">2016</a>); Pandey <em>et al.</em> (<a href=\"#cite-PMVH14\">2014</a>), the slow creeping motion, during which the shells seems to be elastically stable, may last orders of magnitude longer. On a much larger scale, similar behavior is in some cases attributed to earth’s crust prior to an earthquake Freed and Lin (<a href=\"#cite-FL01\">2001</a>); Reches <em>et al.</em> (<a href=\"#cite-RSA94\">1994</a>). In all of these systems the viscoelastic flow in the material serves as the instigator for the instability that releases the internally stored elastic energy. While in most cases we are able explicitly write down the equations governing the viscoelastic behavior, the process of <dfn data-def=\"delayed-instability\">delayed viscoelastic instability</dfn> remains poorly understood.</p>",
+    "hash": "a2c21b3524bd",
+    "gist": {
+     "html": "Poppers and the Venus flytrap creep slowly before snapping; how creep triggers such instabilities remains poorly understood.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p2",
+    "kind": "paragraph",
+    "body": "<p>Viscoelastic solids display reversible elastic behavior when loads at a fast rate. However, they also show a slow <a data-def=\"creep\">creeping</a> behavior under a constant load, and exhibit <dfn data-def=\"stress-relaxation\">stress relaxation</dfn> when held at constant displacement. Commonly, such solids are modeled by a constitutive law relating the stress rate to the stress, strain and strain rate, or equivalently by expressing the stress as a function of the history of strain rate and a material dependent <dfn data-def=\"memory-kernel\">memory kernel</dfn> Christensen (<a href=\"#cite-RC12\">2012</a>). While these approaches capture the material response well, and yield accurate results through simulations of viscoelastic structures Santer (<a href=\"#cite-MS10\">2010</a>); Brinkmeyer <em>et al.</em> (<a href=\"#cite-BSP12\">2012</a>), they are rarely explicitly solvable and provide little intuition regarding the state of the viscoelastic material and in particular have little in the way of clarifying the governing processes in viscoelastic instabilities. Recent attempts to address viscoelastic instabilities by modeling the viscoelastic response as an elastic media with temporally evolving stiffness Brinkmeyer <em>et al.</em> (<a href=\"#cite-BSP12\">2012</a>); Santer (<a href=\"#cite-MS10\">2010</a>); Kim <em>et al.</em> (<a href=\"#cite-KLK10\">2010</a>) show only a qualitative agreement with experiment, and have limited applicability as in particular they fails to capture creeping at zero load.</p>",
+    "hash": "d9b1820017d2",
+    "gist": {
+     "html": "Standard viscoelastic models simulate well but give little insight; evolving-stiffness models agree only qualitatively and miss creep at zero load.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "fig-1d_illustration",
+    "kind": "figure",
+    "title": "Figure 1",
+    "body": "<figure class=\"float figure\" id=\"fig-1d_illustration\"><p><img src=\"images/1dae0ed7ef3bd802.png\" alt=\"\" style=\"width:322px\"></p><figcaption><span class=\"capname\">Figure 1.</span> <em>The viscoelastic reference length evolution.</em> At the resting state all three length measures on the body, its measured length <l2m-math n=\"0\"></l2m-math> (marked red), its <dfn data-def=\"reference-metric\">instantaneous reference length</dfn> <l2m-math n=\"1\"></l2m-math> (marked grey), and its <dfn data-def=\"rest-reference-metric\">rest reference length</dfn> <l2m-math n=\"2\"></l2m-math> (marked black) are all equal. When subjected to a constant displacement extension, the instantaneous reference length evolves away from the rest length and towards the presently assumed length, thus resulting in <a data-def=\"stress-relaxation\">stress relaxation</a>. It asymptotically approaches the stationary state <l2m-math n=\"3\"></l2m-math>, in which the initial stress is reduced by a factor of <l2m-math n=\"4\"></l2m-math>. When released the unconstrained system immediately adopts its favored instantaneous reference length, which in turn gradually <a data-def=\"creep\">creeps</a> towards the rest lengths.</figcaption></figure>",
+    "hash": "5021857aeafc",
+    "gist": {
+     "html": "Held stretched, the reference length creeps towards the imposed length, leaving a fraction $1-\\beta$ of the stress; released, it creeps back.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p3",
+    "kind": "paragraph",
+    "body": "<p>In this works we quantitatively describe the notion viscoelastic instability through a <dfn data-def=\"metric-description\">metric description</dfn>. In this metric approach we describe the materials’ behavior as a fast elastic response with respect to temporally evolving rest lengths that change due to the slow viscoelastic flow. In this framework the microscopic response of material that leads to <a data-def=\"stress-relaxation\">stress relaxation</a> is interpreted as the evolution of the rest lengths of the system towards the lengths assumed in its present state (see FIG. <a href=\"#fig-1d_illustration\">1</a>). The rest lengths in the system serve as a state variable accounting for the slow and dissipative evolution in the material. In particular it allows us to analyze the notion of stability in viscoelastic materials and discover a new <dfn data-def=\"stationarity\">stationarity property</dfn>; if a viscoelastic system starting at rest is brought abruptly to another locally stable state, then despite the continuous evolution of the internal stresses in the structure, it will display no motion. This result in particular elucidates the subtle nature of <a data-def=\"delayed-instability\">delayed instabilities</a> in such systems, and allows a quantitative understanding of them as we demonstrate through experiment.</p>",
+    "hash": "c4807f2361b5",
+    "gist": {
+     "html": "Elasticity about slowly evolving rest lengths reveals a stationarity property that explains delayed instabilities.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p4",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Linear viscoelastic continua</strong> All linear viscoelastic material constitutive relations, and in particular the relations for every spring dashpot model, can be expressed through a convolution of the strain rate with a <a data-def=\"stress-relaxation\">stress relaxation</a> function, <l2m-math n=\"5\"></l2m-math> Bower (<a href=\"#cite-AB09\">2009</a>); Christensen (<a href=\"#cite-RC12\">2012</a>). This relation can be brought into the form Coleman and Noll (<a href=\"#cite-CN61\">1961</a>)</p>\n<div class=\"display\" id=\"eq-linear_viscoelasticity\"><div class=\"eqbody\"><l2m-math n=\"6\"></l2m-math></div><span class=\"eqno\">(1)</span></div>\n<p class=\"cont\">Here <l2m-math n=\"7\"></l2m-math> is the material stiffness, <l2m-math n=\"8\"></l2m-math> is a dimensionless constant of the material, and <l2m-math n=\"9\"></l2m-math> is the <em><a data-def=\"memory-kernel\">normalized memory kernel</a></em> that satisfies <l2m-math n=\"10\"></l2m-math>, <l2m-math n=\"11\"></l2m-math> and as we expect the memory to only decay in time also satisfies <l2m-math n=\"12\"></l2m-math>. For a general three dimensional isotropic and incompressible material the tensorial generalization of <a href=\"#eq-linear_viscoelasticity\">(1)</a> reads Urbach and Efrati (<a href=\"#cite-UE18b\">2018</a>):</p>\n<div class=\"display\" id=\"eq-tensor_linear_viscoelasticity\"><div class=\"eqbody\"><l2m-math n=\"13\"></l2m-math></div><span class=\"eqno\">(2)</span></div>\n<p class=\"cont\">Here <l2m-math n=\"14\"></l2m-math> is the isotropic stiffness tensor <sup class=\"fnref\"><a href=\"#fn1\" id=\"fnref1\">1</a></sup>. <l2m-math n=\"18\"></l2m-math> denote the <dfn data-def=\"pk2\">second Piola-Kirchhoff stress</dfn> tensor, which through the equation above depends on the full history of the the strain tensor</p>\n<div class=\"display\" id=\"eq-strain_relation\"><div class=\"eqbody\"><l2m-math n=\"19\"></l2m-math></div><span class=\"eqno\">(3)</span></div>\n<p class=\"cont\">The metric <l2m-math n=\"20\"></l2m-math> measures lengths in the material and uniquely describes the configuration of the elastic body. We have also introduced the <em>rest <a data-def=\"reference-metric\">reference metric</a></em>, <l2m-math n=\"21\"></l2m-math>, the metric at which the system is locally stress-free and stationary. That is, if the elastic solid was to be cut to infinitesimal pieces and each of the pieces allowed to freely relax indefinitely, then the lengths in each of the pieces as given by the metric would approach the lengths given by the <a data-def=\"rest-reference-metric\">rest reference metric</a>, <l2m-math n=\"22\"></l2m-math>. For a more detailed description of covariant elasticity using <dfn data-def=\"metric-tensor\">metric tensors</dfn> the reader is referred to Urbach and Efrati (<a href=\"#cite-UE18b\">2018</a>); Sharon and Efrati (<a href=\"#cite-SE10\">2010</a>).</p>",
+    "hash": "e76b3712c24e",
+    "gist": {
+     "html": "Sets up linear viscoelasticity as a memory-kernel law, with strain measured as the metric minus the rest reference metric.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "bg-linear-ve",
+    "kind": "background",
+    "title": "Linear viscoelasticity and spring-dashpot models",
+    "audience": [
+     "student",
+     "physicist"
+    ],
+    "fold": true,
+    "body": "<p>In linear viscoelasticity a material responds to a strain history by adding up the responses to each past increment of strain (Boltzmann superposition). The stress is then a convolution, $\\sigma(t)=\\int G(t-s)\\dot\\varepsilon(s)\\,ds$, where the relaxation function $G(t)$ is the stress that follows a unit step of strain. Spring-dashpot models build such laws from ideal parts: a spring gives stress proportional to strain, a dashpot stress proportional to strain rate. A spring and dashpot in series (a Maxwell element) relax all stress, like a fluid. Adding a second spring in parallel gives the <a data-def=\"sls\">standard linear solid</a>, whose stress relaxes from an instantaneous modulus to a smaller long-time one with a single time $\\tau$. Every linear <a data-def=\"viscoelastic-solid\">viscoelastic solid</a> has such an instantaneous and a long-time stiffness. In the paper's form, $G(t)=C(1-\\beta+\\beta\\phi(t))$: $\\beta$ is the fraction of stiffness lost, and the kernel $\\phi$ says how fast.</p>"
+   },
+   {
+    "id": "bg-metric-strain",
+    "kind": "background",
+    "title": "Strain from metrics",
+    "audience": [
+     "student"
+    ],
+    "fold": true,
+    "body": "<p>Label each material point by coordinates $x^i$ that move with the body. The metric $g_{ij}$ gives the length of a small material segment in the deformed body, $dl^2=g_{ij}dx^idx^j$; in terms of the deformation gradient $F$ it is $F^TF$. A rest <a data-def=\"reference-metric\">reference metric</a> $\\bar g^0_{ij}$ gives the same segment's length in the stress-free state. Half their difference, $\\varepsilon_{ij}=\\tfrac12(g_{ij}-\\bar g^0_{ij})$, is the Green–Lagrange strain: it vanishes under rigid rotations and measures stretching exactly even when rotations are large, as in a shell turned inside out. The stress that pairs with this strain in the elastic energy is the <a data-def=\"pk2\">second Piola–Kirchhoff stress</a> $S^{ij}$, defined in the material coordinates rather than in the lab. For small strains both reduce to the familiar linear strain and Cauchy stress. Because a metric is defined pointwise, the reference metric need not come from any shape, which is what lets the paper make it evolve.</p>"
+   },
+   {
+    "id": "root-p5",
+    "kind": "paragraph",
+    "body": "<p>Eq. <a href=\"#eq-tensor_linear_viscoelasticity\">(2)</a> predicts that instantaneous incremental deformations <l2m-math n=\"23\"></l2m-math> lead to linear stress increments <l2m-math n=\"24\"></l2m-math> as one would predict for a purely elastic response. Inspired by this instantaneous elastic-like response we define the time-dependent <em><a data-def=\"reference-metric\">reference metric</a></em> <l2m-math n=\"25\"></l2m-math> of the body such as to satisfy</p>\n<div class=\"display\" id=\"eq-stress_relation\"><div class=\"eqbody\"><l2m-math n=\"26\"></l2m-math></div><span class=\"eqno\">(4)</span></div>\n<p class=\"cont\">The temporal evolution of the reference metric can be deduced from <a href=\"#eq-tensor_linear_viscoelasticity\">2</a>, <a href=\"#eq-strain_relation\">3</a>, ??, <a href=\"#eq-stress_relation\">4</a>, and reads</p>\n<div class=\"display\" id=\"eq-gbar_evolution_rule\"><div class=\"eqbody\"><l2m-math n=\"27\"></l2m-math></div><span class=\"eqno\">(5)</span></div>\n<p class=\"cont\">It is important to stress that equations <a href=\"#eq-stress_relation\">(4)</a> and <a href=\"#eq-gbar_evolution_rule\">(5)</a> are completely equivalent to Eq. <a href=\"#eq-tensor_linear_viscoelasticity\">(2)</a>. However the notion of a reference metric allows a more intuitive understanding of viscoelastic behavior. Note that <l2m-math n=\"28\"></l2m-math> remains unchanged by instantaneous variations of <l2m-math n=\"29\"></l2m-math>. We may thus consider it as the slow state variable describing the viscoelastic evolution of the material. At each moment in time we may consider the system as an elastic system with respect to the reference metric <l2m-math n=\"30\"></l2m-math> Efrati <em>et al.</em> (<a href=\"#cite-ESK09\">2009</a>); Efrati <em>et al.</em> (<a href=\"#cite-ESK13\">2013</a>). The dimensionless factor <l2m-math n=\"31\"></l2m-math> can be shown by Eq. <a href=\"#eq-tensor_linear_viscoelasticity\">(2)</a> to quantify the fraction of stress asymptotically relaxed in a constant displacement experiment starting from rest. <l2m-math n=\"32\"></l2m-math> is thus a measure of the <dfn data-def=\"beta\">degree of viscoelasticity</dfn> in the system. For a prescribed configuration given by the metric <l2m-math n=\"33\"></l2m-math> the reference metric <l2m-math n=\"34\"></l2m-math> will asymptotically approach the stationary solution of Eq. <a href=\"#eq-gbar_evolution_rule\">(5)</a>:</p>\n<div class=\"display\" id=\"eq-gbar_stationary_condition\"><div class=\"eqbody\"><l2m-math n=\"35\"></l2m-math></div><span class=\"eqno\">(6)</span></div>\n<p class=\"cont\">Therefore, <l2m-math n=\"36\"></l2m-math> also measures the material’s propensity to change its reference metric toward the realized metric in its present configuration. <l2m-math n=\"37\"></l2m-math> describes a purely elastic material, where the reference metric remains <l2m-math n=\"38\"></l2m-math> for all times <sup class=\"fnref\"><a href=\"#fn2\" id=\"fnref2\">2</a></sup>. <l2m-math n=\"44\"></l2m-math> describes a viscoelastic fluid where the <a data-def=\"rest-reference-metric\">rest reference metric</a> <l2m-math n=\"45\"></l2m-math> has no meaning and the material approaches arbitrarily close to <l2m-math n=\"46\"></l2m-math>, diminishing the stress to zero in relaxation.</p>",
+    "hash": "e533d8d70ded",
+    "gist": {
+     "html": "An exactly equivalent reference metric, the slow state variable, relaxes towards $\\beta g+(1-\\beta)\\bar g^0$; $\\beta$ measures viscoelasticity.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "bg-reference-metric",
+    "kind": "background",
+    "title": "Elasticity with respect to a non-Euclidean reference metric",
+    "audience": [
+     "student",
+     "physicist"
+    ],
+    "fold": true,
+    "body": "<p>In ordinary elasticity the stress-free state is a shape in space, and strain is measured from it. Incompatible, or non-Euclidean, elasticity generalises this: each small piece of material carries its own preferred lengths, a <a data-def=\"reference-metric\">reference metric</a> $\\bar g_{ij}$, and nothing requires that a body realising all of them at once exists in flat space. When the reference metric is Euclidean, with vanishing curvature, the body can relax to zero stress. When it is not, as in swelling gels or growing leaves, no configuration is stress-free; the body settles into the shape whose metric, necessarily Euclidean, is closest to $\\bar g_{ij}$ in the sense of the elastic energy, and keeps residual stress. The equilibrium shape thus solves a minimisation over <a data-def=\"euclidean-metric\">Euclidean metrics</a> with the reference metric as data. The paper treats a viscoelastic body at each instant as such an elastic body, whose reference metric drifts in time.</p>"
+   },
+   {
+    "id": "root-p6",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">The <dfn data-def=\"quasi-static\">quasi static approximation</dfn></strong> Viscoelastic systems are dissipative, thus the notion of an elastic free energy is ill defined. Nonetheless, the virtual work of displacements performed over a short period <l2m-math n=\"47\"></l2m-math>, coincides with the <dfn data-def=\"energy-functional\">instantaneous elastic energy functional</dfn> Efrati <em>et al.</em> (<a href=\"#cite-ESK09\">2009</a>)</p>\n<div class=\"display\" id=\"eq-energy_functional\"><div class=\"eqbody\"><l2m-math n=\"48\"></l2m-math></div><span class=\"eqno\">(7)</span></div>\n<p class=\"cont\">where the elastic strain is <l2m-math n=\"49\"></l2m-math>. Typically the elastic response time scale in elastomers is much smaller than the viscoelastic relaxation time. In such cases we can eliminate inertia from the system and approximate the motion of the material as quasi static evolution between elastic equilibrium states. That is, the configuration at every instance in time, given by the metric <l2m-math n=\"50\"></l2m-math>, minimizes the instantaneous elastic energy functional <a href=\"#eq-energy_functional\">(7)</a>. If we can characterize the possible <dfn data-def=\"euclidean-metric\">Euclidean metrics</dfn> by finite set of variables <l2m-math n=\"51\"></l2m-math>, <l2m-math n=\"52\"></l2m-math> then the minimization condition is for all <l2m-math n=\"53\"></l2m-math>, <l2m-math n=\"54\"></l2m-math> or</p>\n<div class=\"display\" id=\"eq-minimaztion_condition\"><div class=\"eqbody\"><l2m-math n=\"55\"></l2m-math></div><span class=\"eqno\">(8)</span></div>\n<p class=\"cont\">For this <dfn data-def=\"extremal\">extremal</dfn> point to be a minima, the Hessian, <l2m-math n=\"56\"></l2m-math>, needs to be positive definite. Condition <a href=\"#eq-minimaztion_condition\">(8)</a> gives <l2m-math n=\"57\"></l2m-math> as function of <l2m-math n=\"58\"></l2m-math>. <l2m-math n=\"59\"></l2m-math> on the other hand evolve in time according to Eq. <a href=\"#eq-gbar_evolution_rule\">(5)</a>. The quasi static coupled evolution of <l2m-math n=\"60\"></l2m-math> and <l2m-math n=\"61\"></l2m-math> is simpler to analyze both numerically and theoretically compared with the full dynamics.</p>",
+    "hash": "005c9b032767",
+    "gist": {
+     "html": "Elasticity is fast, so at each moment the shape minimises the elastic energy measured from the current reference metric.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p7",
+    "kind": "paragraph",
+    "body": "<p>As seen from Eq. <a href=\"#eq-gbar_stationary_condition\">(6)</a>, the long time stability of a body depends only on <l2m-math n=\"62\"></l2m-math>, and not on the specific <a data-def=\"memory-kernel\">memory kernel</a>. It is thus instructive to choose the model of <dfn data-def=\"sls\">standard linear solid</dfn> (SLS), which is the simplest model capable of exhibiting <a data-def=\"creep\">creeping</a> motion, a finite <a data-def=\"stress-relaxation\">stress relaxation</a> characterized by <l2m-math n=\"63\"></l2m-math> and possess only a single time scale <l2m-math n=\"64\"></l2m-math> Bower (<a href=\"#cite-AB09\">2009</a>); Christensen (<a href=\"#cite-RC12\">2012</a>). Its memory kernel is given by <l2m-math n=\"65\"></l2m-math>. The constitutive laws of the SLS model relating the stress and stain can be recast as an evolution law for the <a data-def=\"reference-metric\">reference metric</a></p>\n<div class=\"display multi\" id=\"eq-gbar_SLS_DE\"><div class=\"eqbody\"><l2m-math n=\"66\"></l2m-math></div></div>\n<p class=\"cont\">This equation is identical to Eq. <a href=\"#eq-gbar_evolution_rule\">(5)</a> under the SLS memory kernel, cast in a more intuitive differential equation.</p>",
+    "hash": "d78a2ada51b6",
+    "gist": {
+     "html": "Long-time stability depends only on $\\beta$; in the standard linear solid the reference metric relaxes exponentially to its stationary value.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p8",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Metastable <a data-def=\"stationarity\">configuration-stationarity</a></strong> A given <a data-def=\"reference-metric\">reference metric</a> <l2m-math n=\"67\"></l2m-math> can yield multiple elastically stable configurations in the <a data-def=\"energy-functional\">instantaneous elastic energy functional</a> <a href=\"#eq-energy_functional\">(7)</a>. As the reference metric evolves viscoelastically according to Eq. <a href=\"#eq-gbar_evolution_rule\">(5)</a> it could acquire new stable configurations, merge existing stable points or cause stable elastic configurations to lose their stability. The latter phenomenon, termed <em><a data-def=\"delayed-instability\">delayed instability</a></em>, manifests as a slow viscoelastic evolution followed by a rapid snap to a near stable configuration. This phenomenon was also termed temporary bistability Santer (<a href=\"#cite-MS10\">2010</a>), pseudo bistability Brinkmeyer <em>et al.</em> (<a href=\"#cite-BSP12\">2012</a>) or <a data-def=\"creep\">creep</a> buckling Hoff (<a href=\"#cite-NH56\">1956</a>); Hayman (<a href=\"#cite-BH78\">1978</a>) and forms the main difficulty in predicting the stability of visco-elastic structures. Here we show that the question of stability of the viscoelastic system reduces to examining the purely elastic stability of the rest system where <l2m-math n=\"68\"></l2m-math>.</p>",
+    "hash": "d8892802bffe",
+    "gist": {
+     "html": "Creep can destroy elastic stability, a delayed instability; its prediction reduces to the elastic stability of the rest system.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "bg-snap",
+    "kind": "background",
+    "title": "Elastic stability and snap-through",
+    "audience": [
+     "student"
+    ],
+    "fold": true,
+    "body": "<p>An elastic structure at rest sits at a local minimum of its elastic energy among the shapes it can take. Equilibria are the extrema of that energy, and an equilibrium has stability when the Hessian, the matrix of second derivatives of the energy, is positive definite, so that every small change raises the energy. Shells and arches can have two stable shapes, like a <a data-def=\"popper\">popper</a>'s natural and inverted forms. If a slowly changing parameter flattens the energy around one minimum until it merges with a nearby saddle, the Hessian gains a zero eigenvalue and the minimum disappears. Nothing then holds the structure, and it jumps, in a time set by elasticity and inertia, to another minimum: a <a data-def=\"snap-through\">snap-through</a>. Before that moment the motion is slow and simply follows the parameter. In a <a data-def=\"delayed-instability\">delayed instability</a> the slowly changing parameter is the <a data-def=\"creep\">creeping</a> <a data-def=\"reference-metric\">reference metric</a>.</p>"
+   },
+   {
+    "id": "root-p9",
+    "kind": "paragraph",
+    "body": "<p>Starting from rest, and deforming fast into a local elastic stable configuration will result in a stationary configuration, i.e. a configuration that will display no temporal variation despite the continuous evolution of the <a data-def=\"reference-metric\">reference metric</a> and the relaxation of the corresponding stress <sup class=\"fnref\"><a href=\"#fn3\" id=\"fnref3\">3</a></sup>. To show this claim it suffices to assume that <l2m-math n=\"69\"></l2m-math> in Eq. <a href=\"#eq-gbar_evolution_rule\">(5)</a> is constant in time to obtain <l2m-math n=\"70\"></l2m-math> and show that the constant <l2m-math n=\"71\"></l2m-math> satisfies the equilibrium equation <a href=\"#eq-minimaztion_condition\">(8)</a> with respect to the obtained <l2m-math n=\"72\"></l2m-math>. Conversely, if a system converges to a fixed stable state (where the configuration as well as the reference metric do not evolve), the corresponding configuration must also be <a data-def=\"extremal\">extremal</a> with respect to the <a data-def=\"rest-reference-metric\">rest reference metric</a>. This again could be shown by substituting Eq. <a href=\"#eq-gbar_stationary_condition\">(6)</a> into Eq. <a href=\"#eq-minimaztion_condition\">(8)</a>. We note that these results are not limited to a particular <a data-def=\"memory-kernel\">memory kernel</a>. Intuitively, both claims are due to <dfn data-def=\"collinearity\">collinearity</dfn> of <l2m-math n=\"73\"></l2m-math> and <l2m-math n=\"74\"></l2m-math> under the appropriate initial conditions, see FIG. <a href=\"#fig-metric_space\">2</a>. For explicit proof see Urbach and Efrati (<a href=\"#cite-UE18b\">2018</a>).</p>",
+    "hash": "b22c824d458f",
+    "gist": {
+     "html": "Brought abruptly from rest into a stable shape, a body never moves while its stress relaxes, for any memory kernel.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p10",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Acquired elastic stability and <a data-def=\"delayed-instability\">delayed instability</a></strong> When an appropriately cut elastic cone is flipped inside out and laid on the table (FIG. <a href=\"#fig-hopper_popper\">3</a>a) it <a data-def=\"creep\">creeps</a> for a few seconds and snaps back to its original shape. This phenomena of delayed instability seems to contradict the <a data-def=\"stationarity\">metastable configuration stationarity</a> described above. However, when examined carefully this stationarity property is not only reconciled with observations but to a large degree explains them quantitatively. A particular corollary of the configuration stationarity property is that instability could be observed only for initially unstable configurations. Had the system displayed stability at its initial state one can show that the state remains a local minimum of the elastic energy. Thus delayed instability can only be observed for states whose stability was acquired by the viscoelastic evolution Santer (<a href=\"#cite-MS10\">2010</a>); Brinkmeyer <em>et al.</em> (<a href=\"#cite-BSP12\">2012</a>). One can show that <dfn data-def=\"acquired-stability\">acquired stability</dfn> in configurations that were not <a data-def=\"extremal\">extremal</a> initially (e.g. saddle points) cannot persist indefinitely and must be eventually lost.</p>",
+    "hash": "109c03f6662a",
+    "gist": {
+     "html": "Delayed snaps need stability acquired by creep; acquired stability of a shape not initially extremal is eventually lost.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "fig-metric_space",
+    "kind": "figure",
+    "title": "Figure 2",
+    "body": "<figure class=\"float figure\" id=\"fig-metric_space\"><p>metric_space.tex</p><figcaption><span class=\"capname\">Figure 2.</span> A schematic representation of the metrics <a data-def=\"collinearity\">collinearity</a>. The minimization of the metric <l2m-math n=\"75\"></l2m-math> (marked by a full black circle) is constrained and performed with respect to the subset of metrics that correspond to realizable configurations (thick black line). Such metrics are in particular orientation preserving and Euclidean. Given a <a data-def=\"reference-metric\">reference metric</a> <l2m-math n=\"76\"></l2m-math> (marked by a full gray circle) the realized metric will correspond to the closest point from the set of admissible metrics to <l2m-math n=\"77\"></l2m-math> according to the distance function given by the <a data-def=\"energy-functional\">instantaneous elastic energy</a> <a href=\"#eq-energy_functional\">(7)</a>. Starting from rest, <l2m-math n=\"78\"></l2m-math> evolves from <l2m-math n=\"79\"></l2m-math> towards the <l2m-math n=\"80\"></l2m-math>, which remains the closest admissible metric to <l2m-math n=\"81\"></l2m-math> due to collinearity of the three metrics. As <l2m-math n=\"82\"></l2m-math> remains stationary, the evolution of <l2m-math n=\"83\"></l2m-math> will preserve the collinearity, approaching asymptotically <l2m-math n=\"84\"></l2m-math>, which is also collinear. We stress that throughout this evolution <l2m-math n=\"85\"></l2m-math> remains unchanged, thus no variation of the configuration will be observed despite the <a data-def=\"stress-relaxation\">stress relaxation</a>. </figcaption></figure>",
+    "hash": "47eb104a5bac",
+    "gist": {
+     "html": "Actual, reference and rest metrics stay collinear, so the realised shape stays put while the reference metric evolves.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "fig-hopper_popper",
+    "kind": "figure",
+    "title": "Figure 3",
+    "body": "<figure class=\"float figure\" id=\"fig-hopper_popper\"><div class=\"omitted\">[tikzpicture omitted in the HTML version]</div><div class=\"omitted\">[tikzpicture omitted in the HTML version]</div><div class=\"omitted\">[tikzpicture omitted in the HTML version]</div><figcaption><span class=\"capname\">Figure 3.</span> <span id=\"fig-hopper_popper\" class=\"anchor\"></span> (a) Straight and inverted conical <a data-def=\"popper\">poppers</a>. (b) The two axes span the dimensionless geometrical properties of the truncated conical poppers. The background colors represent the theoretically predicted regions of each of the phases. Each marker corresponds to a different popper, different shaped (and colored) markers indicate the different phases observed in experiment. (c) Numerically calculated flipping time as function of the normalized thickness of the conical popper for immediate release and long holding time. The different poppers were simulated by varying their thicknesses and constant radii <l2m-math n=\"86\"></l2m-math>. The material properties taken were <l2m-math n=\"87\"></l2m-math>, <l2m-math n=\"88\"></l2m-math>, Young’s modulus <l2m-math n=\"89\"></l2m-math> and Poisson ratio <l2m-math n=\"90\"></l2m-math>. A similar phase plot presented in Brinkmeyer <em>et al.</em> (<a href=\"#cite-BSP12\">2012</a>). </figcaption></figure>",
+    "hash": "c3515ed6e666",
+    "gist": {
+     "html": "Predicted and observed stability phases of conical poppers over two geometric ratios, with computed flipping times against thickness.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p11",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Experimental results</strong> Our theory predicts that when examining viscoelastic structures, initially stable configurations will show no temporal evolution of the configuration and in particular always keep their stability. When held fixed in a non-extremal configuration <a data-def=\"stress-relaxation\">stress relaxation</a> could lead to new acquired stable configurations, whose stability is lost in time. These results hold for all incompressible linear viscoelastic bodies regardless of the form of the stress relaxation kernel. We next come to test these predictions by examining experimentally the response of silicone-rubber <a data-def=\"popper\">poppers</a>.</p>",
+    "hash": "8e73040e4ec0",
+    "gist": {
+     "html": "Predictions to test: initially stable shapes never move; shapes held out of equilibrium may gain stability, then lose it.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p12",
+    "kind": "paragraph",
+    "body": "<p>We cast silicon rubber <a data-def=\"popper\">poppers</a> in the geometry of truncated-conical shells (FIG. <a href=\"#fig-hopper_popper\">3</a>a). The conical shells have an apex angle of <l2m-math n=\"91\"></l2m-math>, inner and outer radius radii <l2m-math n=\"92\"></l2m-math> and thickness <l2m-math n=\"93\"></l2m-math>. Sufficiently thin poppers show bistability with the inverted shape close to a mirror image of the undeformed state. As the thickness is increased this bistability is broken and when brought from rest to the inverted state the popper immediately snaps back. If the thickness is large enough this instability will persist regardless of how long we hold the conical shell in its inverted state. For intermediate values of the thickness we expect to observe unstable states that could acquire stability if held long enough in their inverted state. This <a data-def=\"acquired-stability\">acquired stability</a> is expected to be lost in a finite time. These three phases are plotted in FIG. <a href=\"#fig-hopper_popper\">3</a>c.</p>",
+    "hash": "1c5fd6038d75",
+    "gist": {
+     "html": "Conical poppers: thin ones are bistable, thick ones snap at once, intermediate ones gain stability when held, then lose it.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p13",
+    "kind": "paragraph",
+    "body": "<p>The conical shell <a data-def=\"popper\">popper</a> geometry is completely determined by two dimensionless variables <l2m-math n=\"94\"></l2m-math> and <l2m-math n=\"95\"></l2m-math>. The boundaries between the different stability phases of FIG. <a href=\"#fig-hopper_popper\">3</a>c depend on these geometric parameters as well as on the material constant <l2m-math n=\"96\"></l2m-math>. We produced <l2m-math n=\"97\"></l2m-math> different conical popper of different geometries and tested their phases. All popper were produced from the same material and share the same <l2m-math n=\"98\"></l2m-math>. Starting from rest <l2m-math n=\"99\"></l2m-math> the poppers were abruptly brought to the inverted shape, and held for time <l2m-math n=\"100\"></l2m-math> min. The poppers were then released, and the time to snap though <l2m-math n=\"101\"></l2m-math> was measured. Determining the phases boundaries requires knowledge of <l2m-math n=\"102\"></l2m-math>, which we measured through a <a data-def=\"stress-relaxation\">stress relaxation</a> experiment yielding <l2m-math n=\"103\"></l2m-math>. Using this value we calculated numerically the expected position of the phase boundaries. FIG. <a href=\"#fig-hopper_popper\">3</a>b shows the experimentally obtained phases superimposed on the phases predicted from the theory showing very good agreement.</p>",
+    "hash": "e51f9213bbfd",
+    "gist": {
+     "html": "About 50 poppers fall into the phases predicted from the separately measured $\\beta=0.0928\\pm0.0077$, with very good agreement.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p14",
+    "kind": "paragraph",
+    "body": "<p><strong class=\"runin\">Discussion</strong> The <a data-def=\"metric-description\">metric description</a> of viscoelasticity presented here is reminiscent of the <dfn data-def=\"additive-decomposition\">additive decomposition</dfn> of strains used to study elasto-plasticity as for example is done in Lee (<a href=\"#cite-EL69\">1969</a>),</p>\n<div class=\"display\"><div class=\"eqbody\"><l2m-math n=\"104\"></l2m-math></div><span class=\"eqno\">(10)</span></div>\n<p class=\"cont\">where <l2m-math n=\"105\"></l2m-math> and <l2m-math n=\"106\"></l2m-math> are the elastic and viscoelastic strains respectively. One can generalize the theory to account for plasticity or growth within the material by allowing <l2m-math n=\"107\"></l2m-math> to vary in time resulting in a covariant visco-elasto-plastic theory. The configurational response in such growth processes shows the evolution of <l2m-math n=\"108\"></l2m-math> rather than directly that of <l2m-math n=\"109\"></l2m-math>. Thus the viscoelastic response may cause a simple growth rule to appear complex, or cause an abrupt and localized growth events to seem diffuse and gradual.</p>",
+    "hash": "32ef2e0703d9",
+    "gist": {
+     "html": "The elastic plus viscoelastic split of strain resembles elasto-plasticity; a time-dependent rest metric would add plasticity or growth.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p15",
+    "kind": "paragraph",
+    "body": "<p>The covariant description of viscoelasticity employing the notion of the <a data-def=\"reference-metric\">reference metric</a> <l2m-math n=\"110\"></l2m-math> applies for all linear-viscoelastic materials. The result of <a data-def=\"stationarity\">metastable configuration stationarity</a> was, however, obtained under the restricting assumptions that the Poisson ratio associated with the elastic and viscoelastic response are similar, and that the system is brought instantaneously from its rest state to the metastable state. The former assumption may seem plausible for incompressible elastomers and gels, yet the later is expected to be violated by every physical experiment. While one could not prove full stationarity if these assumptions are lifted, the material’s response is continuous in the deviations from the idealized conditions and small deviations will result in very little motion, see Urbach and Efrati (<a href=\"#cite-UE18b\">2018</a>) for more details. In particular in the experiment we performed no discernible motion was observed for metastable state.</p>",
+    "hash": "a544984901a8",
+    "gist": {
+     "html": "Stationarity assumes equal Poisson ratios and instantaneous loading; small deviations cause little motion, and none was observed.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p16",
+    "kind": "paragraph",
+    "body": "<p>The theory proves particularly powerful when applied to describe the <a data-def=\"delayed-instability\">delayed instability</a> in elastomeric thin shells. We have focused on stability classification in the present work, yet predict to be able to quantitatively describe the non-trivial dependence jumping time on the holding time in the inverted state, and in particular its divergence near the boundary between the unstable regimes and stable regime in FIG. <a href=\"#fig-hopper_popper\">3</a>c.</p>",
+    "hash": "2e016879a529",
+    "gist": {
+     "html": "The theory should also give how snapping time depends on holding time, diverging near the stable phase.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "root-p17",
+    "kind": "paragraph",
+    "body": "<p>The coupling of discrete singular fast deformations to slow <a data-def=\"creep\">creeping</a> evolution was recently suggested to underlie non-monotonous and history dependent evolution in <dfn data-def=\"athermal\">athermal systems</dfn>, allowing them to display glassy behavior without the need to invoke the notion of effective temperature Lahini <em>et al.</em> (<a href=\"#cite-LGAR17\">2017</a>). The analysis below ties this creeping evolution and elastic instability, to the notion of <dfn data-def=\"frustration\">frustration</dfn>, and the existence of a realizable stress free state, constraining the possible response such media can yield. Thus, it may provide insight not only to viscoelastic dynamics and instabilities of macroscopic systems, but may also apply to the meso-scale evolution of creeping athermal systems Matan <em>et al.</em> (<a href=\"#cite-KWWN02\">2002</a>).</p>",
+    "hash": "9ba9ce445b76",
+    "gist": {
+     "html": "Tying creep and instability to frustration may also bear on the slow evolution of creeping athermal systems.",
+     "status": "ai-draft"
+    }
+   },
+   {
+    "id": "footnotes",
+    "kind": "footnotes",
+    "title": "Footnotes",
+    "body": "<section class=\"footnotes\" aria-labelledby=\"notes-h\"><h2 id=\"notes-h\">Notes</h2><ol class=\"fnlist\"><li id=\"fn1\"><a class=\"fnback\" href=\"#fnref1\" aria-label=\"Back to the text\">1</a><div class=\"fn-text\">Assuming the material’s response is isotropic and homogeneous near its rest stationary state, the stiffness tensor take the form <l2m-math n=\"15\"></l2m-math>, where <l2m-math n=\"16\"></l2m-math> is the inverse rest reference metric. We note that one could assume the material to be isotropic and uniform with respect to other metrics, for example with respect to <l2m-math n=\"17\"></l2m-math> (i.e. in the lab frame). Such theories will differ from the one presented here only in higher orders of the strain. The choice we make here is the most natural generalization for temporally evolving metrics, and is computationally favorable.</div></li><li id=\"fn2\"><a class=\"fnback\" href=\"#fnref2\" aria-label=\"Back to the text\">2</a><div class=\"fn-text\">The body is assumed to start with <l2m-math n=\"39\"></l2m-math>. Alternatively, <l2m-math n=\"40\"></l2m-math> relaxes to <l2m-math n=\"41\"></l2m-math> independently of the behavior of the body <l2m-math n=\"42\"></l2m-math>, thus after long enough relaxation we can take <l2m-math n=\"43\"></l2m-math>.</div></li><li id=\"fn3\"><a class=\"fnback\" href=\"#fnref3\" aria-label=\"Back to the text\">3</a><div class=\"fn-text\">For the case of elasto-plasticity, a similar idea was first proved but never published by H. Aharony. This type of behavior was also conjecture Hayman (<a href=\"#cite-BH78\">1978</a>).</div></li></ol></section>",
+    "hash": "b01b0bde079c"
+   },
+   {
+    "id": "refs",
+    "kind": "references",
+    "title": "References",
+    "body": "<section class=\"references\" aria-labelledby=\"refs-h\"><h2 id=\"refs-h\">References</h2><ol class=\"refs\"><li id=\"cite-FSDM05\"><span class=\"reftext\"> Y.  Forterre, J. M. Skotheim, J.  Dumais, and L.  Mahadevan, Nature <strong> 433</strong>, 421 ( 2005)</span></li><li id=\"cite-PMVH14\"><span class=\"reftext\"> A.  Pandey, D. E. Moulton, D.  Vella, and D. P. Holmes, EPL (Europhysics Letters) <strong> 105</strong>, 24001 ( 2014)</span></li><li id=\"cite-GMV16\"><span class=\"reftext\"> M.  Gomez, D. E. Moulton, and D.  Vella, Nature Physics ( 2016)</span></li><li id=\"cite-FL01\"><span class=\"reftext\"> A. M. Freed and J.  Lin, Nature <strong> 411</strong>, 180 ( 2001)</span></li><li id=\"cite-RSA94\"><span class=\"reftext\"> Z.  Reches, G.  Schubert, and C.  Anderson, Journal of Geophysical Research: Solid Earth <strong> 99</strong>, 21983 ( 1994)</span></li><li id=\"cite-RC12\"><span class=\"reftext\"> R.  Christensen, <em> Theory of viscoelasticity: an introduction</em> ( Elsevier, 2012)</span></li><li id=\"cite-MS10\"><span class=\"reftext\"> M.  Santer, International Journal of Solids and Structures <strong> 47</strong>, 3263 ( 2010)</span></li><li id=\"cite-BSP12\"><span class=\"reftext\"> A.  Brinkmeyer, M.  Santer, A.  Pirrera, and P.  Weaver, International Journal of Solids and Structures <strong> 49</strong>, 1077 ( 2012)</span></li><li id=\"cite-KLK10\"><span class=\"reftext\"> J.  Kim, H. S. Lee, and N.  Kim, Journal of engineering mechanics <strong> 136</strong>, 1067 ( 2010)</span></li><li id=\"cite-AB09\"><span class=\"reftext\"> A. F. Bower, <em> Applied mechanics of solids</em> ( CRC press, 2009)</span></li><li id=\"cite-CN61\"><span class=\"reftext\"> B. D. Coleman and W.  Noll, Reviews of Modern Physics <strong> 33</strong>, 239 ( 1961)</span></li><li id=\"cite-UE18b\"><span class=\"reftext\"> E. Y. Urbach and E.  Efrati, ( 2018), unpublished</span></li><li id=\"cite-Note1\"><span class=\"reftext\">Assuming the material’s response is isotropic and homogeneous near its rest stationary state, the stiffness tensor take the form <l2m-math n=\"111\"></l2m-math>, where <l2m-math n=\"112\"></l2m-math> is the inverse rest reference metric. We note that one could assume the material to be isotropic and uniform with respect to other metrics, for example with respect to <l2m-math n=\"113\"></l2m-math> (i.e. in the lab frame). Such theories will differ from the one presented here only in higher orders of the strain. The choice we make here is the most natural generalization for temporally evolving metrics, and is computationally favorable.</span></li><li id=\"cite-SE10\"><span class=\"reftext\"> E.  Sharon and E.  Efrati, Soft Matter <strong> 6</strong>, 5693 ( 2010)</span></li><li id=\"cite-ESK09\"><span class=\"reftext\"> E.  Efrati, E.  Sharon, and R.  Kupferman, Journal of the Mechanics and Physics of Solids <strong> 57</strong>, 762 ( 2009)</span></li><li id=\"cite-ESK13\"><span class=\"reftext\"> E.  Efrati, E.  Sharon, and R.  Kupferman, Soft Matter <strong> 9</strong>, 8187 ( 2013)</span></li><li id=\"cite-Note2\"><span class=\"reftext\">The body is assumed to start with <l2m-math n=\"114\"></l2m-math>. Alternatively, <l2m-math n=\"115\"></l2m-math> relaxes to <l2m-math n=\"116\"></l2m-math> independently of the behavior of the body <l2m-math n=\"117\"></l2m-math>, thus after long enough relaxation we can take <l2m-math n=\"118\"></l2m-math>.</span></li><li id=\"cite-NH56\"><span class=\"reftext\"> N. J. Hoff, The Aeronautical Quarterly <strong> 7</strong>, 1 ( 1956)</span></li><li id=\"cite-BH78\"><span class=\"reftext\"> B.  Hayman, in <em> Proceedings of the Royal Society of London A: Mathematical, Physical and Engineering Sciences</em>, Vol. 364 ( The Royal Society, 1978) pp. 393–414</span></li><li id=\"cite-Note3\"><span class=\"reftext\">For the case of elasto-plasticity, a similar idea was first proved but never published by H. Aharony. This type of behavior was also conjecture Hayman (<a href=\"#cite-BH78\">1978</a>).</span></li><li id=\"cite-EL69\"><span class=\"reftext\"> E. H. Lee ( ASME, 1969)</span></li><li id=\"cite-LGAR17\"><span class=\"reftext\"> Y.  Lahini, O.  Gottesman, A.  Amir, and S. M. Rubinstein, Physical Review Letters <strong> 118</strong>, 085501 ( 2017)</span></li><li id=\"cite-KWWN02\"><span class=\"reftext\"> K.  Matan, R. B. Williams, T. A. Witten, and S. R. Nagel, Physical Review Letters <strong> 88</strong>, 076101 ( 2002)</span></li></ol></section>",
+    "hash": "9d26621031eb"
+   }
+  ],
+  "gist": {
+   "html": "<ul class=\"gist-list\">\n<li><b>Context</b> <span data-covers=\"root-p1 root-p2\">Viscoelastic structures, like elastomer shells, can creep, then snap; standard models give little intuition about which will.</span></li>\n<li><b>Result</b><ul>\n  <li data-claims=\"c-metric\"><span data-covers=\"root-p5 fig-1d_illustration\">Viscoelasticity is recast exactly as elasticity about a “reference metric”, local rest lengths that creep towards the present shape.</span></li>\n  <li data-claims=\"c-stationary\"><span data-covers=\"root-p9 fig-metric_space\">A body brought abruptly from rest into a stable shape never moves, though its stress relaxes.</span></li>\n  <li data-claims=\"c-predict\"><span data-covers=\"root-p8 root-p10 root-p11\">So late snaps need shapes unstable at rest that creep stabilised while held; that stability is eventually lost if not initially extremal.</span></li>\n  <li data-claims=\"c-poppers\"><span data-covers=\"root-p13 fig-hopper_popper\">For about 50 rubber poppers, predicted stability phases match experiment, given one measured constant.</span></li>\n</ul></li>\n<li><b>Why it matters</b> <span data-covers=\"root-p1 root-p2 root-p3\">Delayed instabilities were poorly understood, and evolving-stiffness models only qualitative; this allows a quantitative understanding.</span></li>\n</ul>",
+   "status": "ai-draft",
+   "variants": {
+    "specialist": {
+     "html": "<ul class=\"gist-list\">\n<li><b>Context</b> <span data-covers=\"root-p2\">Delayed instability is hard to predict: hereditary-integral models are rarely solvable, and evolving-stiffness models agree with experiment only qualitatively and miss creep at zero load.</span></li>\n<li><b>Result</b><ul>\n  <li data-claims=\"c-metric\"><span data-covers=\"root-p5\">An isotropic, incompressible linear viscoelastic law is exactly elasticity about a reference metric, $S^{ij}=\\tfrac12C^{ijkl}(g_{kl}-\\bar g_{kl})$, relaxing towards $\\bar g^\\text{stat}_{ij}=\\beta g_{ij}+(1-\\beta)\\bar g^0_{ij}$.</span></li>\n  <li data-claims=\"c-stationary\"><span data-covers=\"root-p9 fig-metric_space\">Loaded instantly from rest into a local minimum, a body does not move while its stress relaxes, for any memory kernel: $g$, $\\bar g$ and $\\bar g^0$ stay collinear.</span></li>\n  <li data-claims=\"c-predict\"><span data-covers=\"root-p8 root-p10\">So delayed instability reduces to elastic stability of the rest system, $\\bar g=\\bar g^0$: it needs stability acquired by creep, which is eventually lost for initially non-extremal states.</span></li>\n  <li data-claims=\"c-poppers\"><span data-covers=\"root-p12 root-p13\">For about 50 conical silicone poppers, with $\\beta=0.0928\\pm0.0077$ from stress relaxation, the predicted bistable, delayed-snap and unstable phases agree very well with experiment.</span></li>\n</ul></li>\n<li><b>Why it matters</b> <span data-covers=\"root-p3\">Stationarity elucidates the subtle nature of delayed instabilities and allows their quantitative understanding;</span> <span data-covers=\"root-p17\">the paper suggests it may also apply to creeping athermal systems.</span></li>\n</ul>",
+     "status": "ai-draft"
+    },
+    "student": {
+     "html": "<ul class=\"gist-list\">\n<li><b>Context</b> <span data-covers=\"root-p1 root-p2\">Rubber shells can creep slowly, then snap suddenly; standard models give little intuition about which will.</span></li>\n<li><b>Result</b><ul>\n  <li data-claims=\"c-metric\"><span data-covers=\"root-p5 fig-1d_illustration\">Each piece of material has preferred “reference lengths”, drifting towards its present lengths while held, back to rest once released.</span></li>\n  <li data-claims=\"c-stationary\"><span data-covers=\"root-p9 fig-metric_space\">A shell pushed suddenly from rest into an elastically stable shape never moves, though its stresses relax.</span></li>\n  <li data-claims=\"c-predict\"><span data-covers=\"root-p8 root-p10 root-p11\">So only shapes unstable at first can snap late, after creep stabilised them while held; it is lost if they started out of equilibrium.</span></li>\n  <li data-claims=\"c-poppers\"><span data-covers=\"root-p13 fig-hopper_popper\">Tests on about 50 cone-shaped rubber “poppers” match predictions using one measured number.</span></li>\n</ul></li>\n<li><b>Why it matters</b> <span data-covers=\"root-p1 root-p3\">Delayed snapping, from Venus flytraps to poppers, was poorly understood; this picture explains it quantitatively.</span></li>\n</ul>",
+     "status": "ai-draft"
+    }
+   }
+  },
+  "brief": {
+   "html": "<p><span data-covers=\"root-p1 root-p2\">Jumping poppers, thin elastomer shells, creep slowly and then snap in a fraction of a second, as does the Venus flytrap leaf. Standard viscoelastic models simulate this well but are rarely solvable, so they say little about which structures will snap.</span> <span data-covers=\"root-p5 fig-1d_illustration\">The paper rewrites viscoelasticity as fast elasticity measured from reference lengths that slowly creep towards the present shape.</span> <span data-covers=\"root-p8 root-p10\">Whether a structure can snap late then reduces to its purely elastic stability at rest,</span> <span data-covers=\"root-p13\">and the predicted phases of conical poppers match experiment.</span></p>\n<p><span data-covers=\"root-p4\">A body's shape is described by its metric $g_{ij}$, which measures lengths in the material, and strain is measured from a rest reference metric $\\bar g^0_{ij}$.</span> <span data-covers=\"root-p5\">Any linear viscoelastic law is then exactly elasticity about a reference metric $\\bar g_{ij}$, which a sudden deformation leaves unchanged and which creeps towards $g_{ij}$.</span> <span data-covers=\"root-p5\">Held fixed, it approaches $\\bar g^\\text{stat}_{ij}=\\beta g_{ij}+(1-\\beta)\\bar g^0_{ij}$, so the material constant $\\beta$, from 0 (elastic) to 1 (fluid), is the fraction of stress that relaxes.</span> <span data-covers=\"root-p6\">Because elasticity acts much faster than creep, the shape at each moment minimises the elastic energy measured from $\\bar g_{ij}$.</span></p>\n<p><span data-covers=\"root-p9\">This yields a stationarity property. A body brought abruptly from rest into an elastically stable configuration shows no motion, even though its reference metric evolves and its stress relaxes.</span> <span data-covers=\"fig-metric_space\">The actual, reference and rest metrics stay collinear, so the present shape remains the admissible one closest to the drifting reference metric.</span> <span data-covers=\"root-p9\">Conversely, a body that settles into a fixed stable state must be extremal with respect to its rest reference metric. Neither result depends on the memory kernel.</span></p>\n<p><span data-covers=\"root-p10\">A cone flipped inside out creeps for seconds and then snaps back, which seems to contradict this but is explained by it. A shape stable from the start stays a local energy minimum, so a delayed snap needs stability acquired by creep.</span> <span data-covers=\"root-p10 root-p11\">Stability acquired while held in a shape that was not initially extremal cannot persist, and is eventually lost.</span></p>\n<p><span data-covers=\"root-p12\">Conical silicone-rubber poppers test this: thin ones are bistable, thick ones snap back at once, and in between a held popper should gain stability and later lose it.</span> <span data-covers=\"root-p13 fig-hopper_popper\">The authors measured $\\beta=0.0928\\pm0.0077$ by stress relaxation, computed the phase boundaries, and found very good agreement for about 50 poppers of different shapes.</span></p>\n<p><span data-covers=\"root-p15\">The stationarity result assumes equal Poisson ratios for the elastic and viscoelastic responses, and instantaneous loading, which no experiment achieves. The paper argues that small deviations cause little motion; none was seen.</span> <span data-covers=\"root-p9\">Its proofs are deferred to a companion paper.</span> <span data-covers=\"root-p16\">How the snapping time depends on the holding time, and diverges near the stable phase, is anticipated but not computed.</span> <span data-covers=\"root-p14 root-p17\">Letting the rest metric evolve would add plasticity and growth, and the paper suggests links to creeping athermal systems.</span></p>",
+   "status": "ai-draft"
+  }
+ },
+ "defs": [
+  {
+   "id": "creep",
+   "term": "creep",
+   "aliases": [
+    "creeping",
+    "creeps"
+   ],
+   "html": "Slow, continuing deformation of a material under a constant load, or slow motion of a structure with no change in what holds it. In a viscoelastic body it is driven by the gradual internal rearrangement of the material, and it can also occur with no load at all, as the material recovers its rest state.",
+   "at": {
+    "node": "root-p1",
+    "quote": "a relatively slow creeping motion"
+   }
+  },
+  {
+   "id": "snap-through",
+   "term": "snap through",
+   "aliases": [
+    "snap-through"
+   ],
+   "html": "A sudden jump of an elastic structure, such as a shell or an arch, from one equilibrium shape to another, when the shape it was in stops being stable. It is fast, set by elastic waves and inertia, unlike the slow creep that may precede it.",
+   "at": {
+    "node": "root-p1",
+    "quote": "prior to the snap through of thin elastomeric shells"
+   }
+  },
+  {
+   "id": "popper",
+   "term": "jumping poppers",
+   "aliases": [
+    "jumping popper",
+    "popper",
+    "poppers"
+   ],
+   "html": "Toy-like elastomer shells, here truncated cones, that can be turned inside out. Released, an inverted popper snaps back, at once or after a delay, and jumps off the table. Their geometry is set by the cone's radii and thickness; the paper uses them to test its predictions.",
+   "at": {
+    "node": "root-p1",
+    "quote": "thin elastomeric shells known as jumping poppers"
+   }
+  },
+  {
+   "id": "delayed-instability",
+   "term": "delayed instability",
+   "aliases": [
+    "delayed instabilities",
+    "delayed viscoelastic instability",
+    "temporary bistability",
+    "pseudo bistability",
+    "creep buckling"
+   ],
+   "html": "The loss of elastic stability of a configuration through viscoelastic creep, seen as slow evolution followed by a rapid snap to another stable configuration. The paper notes that it has also been called temporary bistability, pseudo bistability or creep buckling.",
+   "at": {
+    "node": "root-p1",
+    "quote": "the process of delayed viscoelastic instability"
+   }
+  },
+  {
+   "id": "viscoelastic-solid",
+   "term": "viscoelastic solid",
+   "aliases": [
+    "viscoelastic solids"
+   ],
+   "html": "A material that responds elastically to fast loading but creeps under a constant load and relaxes its stress when held at constant deformation, while keeping a rest shape to which it returns: elastomers, gels, many polymers. A viscoelastic fluid has no such rest shape.",
+   "at": {
+    "node": "root-p2",
+    "quote": "Viscoelastic solids display reversible elastic behavior"
+   }
+  },
+  {
+   "id": "stress-relaxation",
+   "term": "stress relaxation",
+   "html": "The decay of stress in a material held at a fixed deformation. In a viscoelastic solid the stress decays from its instantaneous elastic value to a smaller long-time value; here the fraction lost is the material constant $\\beta$.",
+   "at": {
+    "node": "root-p2",
+    "quote": "exhibit stress relaxation when held at constant displacement"
+   }
+  },
+  {
+   "id": "memory-kernel",
+   "term": "memory kernel",
+   "symbol": "$\\phi$",
+   "aliases": [
+    "normalized memory kernel"
+   ],
+   "html": "The function that weights how strongly past strains still affect the present stress in a linear viscoelastic law. Here it is normalised, $\\phi(0)=1$ and $\\phi(\\infty)=0$, and decreases with time; for the standard linear solid it is $e^{-s/\\tau}$.",
+   "at": {
+    "node": "root-p2",
+    "quote": "a material dependent memory kernel"
+   }
+  },
+  {
+   "id": "reference-metric",
+   "term": "reference metric",
+   "symbol": "$\\bar g_{ij}$",
+   "aliases": [
+    "instantaneous reference length",
+    "time-dependent reference metric"
+   ],
+   "html": "The local lengths with respect to which the elastic strain is measured at a given moment: the body's present stress is $\\tfrac12C^{ijkl}(g_{kl}-\\bar g_{kl})$. A sudden deformation leaves it unchanged, and it creeps towards the body's present metric. It is the slow state variable of the paper's description, distinct from the fixed rest reference metric.",
+   "at": {
+    "node": "fig-1d_illustration",
+    "quote": "its instantaneous reference length"
+   }
+  },
+  {
+   "id": "rest-reference-metric",
+   "term": "rest reference metric",
+   "symbol": "$\\bar g^0_{ij}$",
+   "aliases": [
+    "rest reference length"
+   ],
+   "html": "The metric at which the material is locally stress-free and stationary: the lengths each infinitesimal piece would reach if cut free and left to relax indefinitely. It is fixed in this paper; the reference metric relaxes towards it when the body is free.",
+   "at": {
+    "node": "fig-1d_illustration",
+    "quote": "its rest reference length"
+   }
+  },
+  {
+   "id": "metric-description",
+   "term": "metric description",
+   "html": "The paper's formulation of viscoelasticity: the body is at each moment an elastic body whose strain is measured from a reference metric, and all the slow, dissipative evolution of the material is carried by that reference metric. It is an exact rewriting of linear viscoelasticity, not a new model.",
+   "at": {
+    "node": "root-p3",
+    "quote": "through a metric description"
+   }
+  },
+  {
+   "id": "metric-tensor",
+   "term": "metric tensor",
+   "symbol": "$g_{ij}$",
+   "aliases": [
+    "metric tensors"
+   ],
+   "html": "A symmetric tensor $g_{ij}$ that gives the length of a small segment, $dl^2=g_{ij}dx^idx^j$, in coordinates attached to the material. The body's actual metric $g_{ij}$ describes its configuration up to rigid motions; the reference metrics give the lengths the material prefers.",
+   "at": {
+    "node": "root-p4",
+    "quote": "using metric tensors"
+   }
+  },
+  {
+   "id": "pk2",
+   "term": "second Piola-Kirchhoff stress",
+   "symbol": "$S^{ij}$",
+   "aliases": [
+    "second Piola–Kirchhoff stress"
+   ],
+   "html": "A measure of stress defined in the material's own coordinates rather than in the lab, the natural partner of a strain written as a difference of metrics. For small deformations it reduces to the ordinary (Cauchy) stress.",
+   "at": {
+    "node": "root-p4",
+    "quote": "second Piola-Kirchhoff stress tensor"
+   }
+  },
+  {
+   "id": "beta",
+   "term": "degree of viscoelasticity",
+   "symbol": "$\\beta$",
+   "html": "The dimensionless material constant $0<\\beta<1$: the fraction of stress that eventually relaxes when a body at rest is held at a fixed deformation. $\\beta=0$ is a purely elastic solid and $\\beta=1$ a viscoelastic fluid. Held fixed, the reference metric tends to $\\beta g_{ij}+(1-\\beta)\\bar g^0_{ij}$.",
+   "at": {
+    "node": "root-p5",
+    "quote": "the degree of viscoelasticity"
+   }
+  },
+  {
+   "id": "quasi-static",
+   "term": "quasi static approximation",
+   "aliases": [
+    "quasi static evolution",
+    "quasi static"
+   ],
+   "html": "Treating the motion as a sequence of elastic equilibria, neglecting inertia. It holds when the elastic response is much faster than viscoelastic relaxation, as in elastomers: at every moment the shape minimises the instantaneous elastic energy for the current reference metric.",
+   "at": {
+    "node": "root-p6",
+    "quote": "The quasi static approximation"
+   }
+  },
+  {
+   "id": "energy-functional",
+   "term": "instantaneous elastic energy functional",
+   "aliases": [
+    "instantaneous elastic energy"
+   ],
+   "html": "The elastic energy of the body measured from its current reference metric, $\\int\\tfrac12C^{ijkl}\\varepsilon^\\text{el}_{ij}\\varepsilon^\\text{el}_{kl}$ with $\\varepsilon^\\text{el}=\\tfrac12(g-\\bar g)$. A viscoelastic body has no true free energy, but over short times work done on it equals changes of this functional.",
+   "at": {
+    "node": "root-p6",
+    "quote": "coincides with the instantaneous elastic energy functional"
+   }
+  },
+  {
+   "id": "euclidean-metric",
+   "term": "Euclidean metric",
+   "aliases": [
+    "Euclidean metrics"
+   ],
+   "html": "A metric that a body can actually realise in flat three-dimensional space: one with vanishing curvature. The body's actual metric must be Euclidean; a reference metric need not be, and then no configuration is stress-free.",
+   "at": {
+    "node": "root-p6",
+    "quote": "the possible Euclidean metrics"
+   }
+  },
+  {
+   "id": "extremal",
+   "term": "extremal",
+   "html": "Said of a configuration at which the elastic energy is stationary, so that small changes do not change it to first order: an equilibrium, whether a minimum (stable) or a saddle point (unstable). The paper uses it with respect to a given reference metric, often the rest reference metric.",
+   "at": {
+    "node": "root-p6",
+    "quote": "For this extremal point to be a minima"
+   }
+  },
+  {
+   "id": "sls",
+   "term": "standard linear solid",
+   "aliases": [
+    "SLS"
+   ],
+   "html": "The simplest spring-and-dashpot model of a viscoelastic solid: a spring in parallel with a spring and dashpot in series. It creeps, relaxes a finite fraction of its stress, and has a single relaxation time $\\tau$; its memory kernel is $e^{-s/\\tau}$.",
+   "at": {
+    "node": "root-p7",
+    "quote": "the model of standard linear solid (SLS)"
+   }
+  },
+  {
+   "id": "stationarity",
+   "term": "configuration stationarity",
+   "aliases": [
+    "stationarity property",
+    "configuration stationarity property",
+    "metastable configuration stationarity",
+    "configuration-stationarity"
+   ],
+   "html": "The paper's name for its central result: a body brought abruptly from rest into a locally stable elastic configuration stays exactly in that configuration, although its reference metric keeps evolving and its stress relaxes. It holds for any memory kernel, under the assumptions the paper states.",
+   "at": {
+    "node": "root-p3",
+    "quote": "discover a new stationarity property"
+   }
+  },
+  {
+   "id": "collinearity",
+   "term": "collinearity",
+   "aliases": [
+    "collinear"
+   ],
+   "html": "Here, the property that the actual, reference and rest metrics lie on one straight line in the space of metrics: the reference metric is a weighted average of the other two. Starting from rest with the shape held fixed, the evolution preserves it, which is why the shape does not move.",
+   "at": {
+    "node": "root-p9",
+    "quote": "due to collinearity of"
+   }
+  },
+  {
+   "id": "acquired-stability",
+   "term": "acquired stability",
+   "aliases": [
+    "acquired elastic stability"
+   ],
+   "html": "Elastic stability that a configuration did not have at rest but gained through creep of the reference metric, for instance while a popper is held inverted. The paper shows that only such stability can later be lost, and that it is lost if the configuration was not initially extremal.",
+   "at": {
+    "node": "root-p10",
+    "quote": "Acquired elastic stability and delayed instability"
+   }
+  },
+  {
+   "id": "additive-decomposition",
+   "term": "additive decomposition",
+   "html": "Writing the total strain as a sum of an elastic part and an inelastic part. Here the total strain $\\tfrac12(g-\\bar g^0)$ splits into an elastic strain $\\tfrac12(g-\\bar g)$ and a viscoelastic strain $\\tfrac12(\\bar g-\\bar g^0)$; similar splits are used in elasto-plasticity.",
+   "at": {
+    "node": "root-p14",
+    "quote": "the additive decomposition of strains"
+   }
+  },
+  {
+   "id": "athermal",
+   "term": "athermal systems",
+   "html": "Systems whose constituents are too large for thermal fluctuations to move them, such as granular packings, foams or crumpled sheets. They can still evolve slowly and show glassy, history-dependent behaviour, driven by creep and sudden local rearrangements rather than by temperature.",
+   "at": {
+    "node": "root-p17",
+    "quote": "evolution in athermal systems"
+   }
+  },
+  {
+   "id": "frustration",
+   "term": "frustration",
+   "html": "Here, geometric frustration: the impossibility of satisfying all the local preferred lengths of a material at once, because the reference metric is not Euclidean. A frustrated body has no stress-free configuration and keeps residual stress whatever its shape.",
+   "at": {
+    "node": "root-p17",
+    "quote": "to the notion of frustration"
+   }
+  }
+ ],
+ "questions": [
+  {
+   "id": "q-notation",
+   "at": {
+    "node": "root-p5"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "What are $g_{ij}$, $\\bar g_{ij}$, $\\bar g^0_{ij}$, $\\beta$ and $\\tau$?",
+   "a": "$g_{ij}$ is the metric of the body's actual configuration, the lengths it has now. $\\bar g^0_{ij}$ is the fixed rest reference metric, where the material is stress-free and stationary. $\\bar g_{ij}$ is the time-dependent reference metric from which the elastic strain is measured; it lies between the two. $\\beta\\in(0,1)$ is the fraction of stress relaxed at fixed deformation, $0$ elastic and $1$ fluid. $\\tau$ is the single relaxation time of the standard linear solid.",
+   "answeredBy": [
+    "root-p4",
+    "root-p5",
+    "root-p7"
+   ]
+  },
+  {
+   "id": "q-equivalent",
+   "at": {
+    "node": "root-p5"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "If the reference metric is exactly equivalent to the usual law, what does it add?",
+   "a": "A state variable with a clear meaning. The usual law expresses stress through the whole strain history; here the history is stored in $\\bar g_{ij}$, which a sudden deformation leaves unchanged. At each instant the body is then simply elastic with respect to $\\bar g_{ij}$, so elastic stability analysis applies directly, and the long-time limit $\\bar g^\\text{stat}$ can be written down without solving any dynamics.",
+   "answeredBy": [
+    "root-p5",
+    "root-p6"
+   ]
+  },
+  {
+   "id": "q-stiffness",
+   "at": {
+    "node": "root-p2"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "How does this differ from modelling viscoelasticity as an evolving stiffness?",
+   "a": "Earlier treatments of delayed instability let the material's stiffness change in time. The paper notes that these agree with experiment only qualitatively and cannot capture creep at zero load. In the metric description the stiffness is fixed and the reference lengths evolve, so a released body can keep creeping with no load, as its reference metric relaxes back towards the rest metric.",
+   "answeredBy": [
+    "root-p2",
+    "fig-1d_illustration"
+   ]
+  },
+  {
+   "id": "q-kernel",
+   "at": {
+    "node": "root-p7"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "Do the results depend on the choice of the standard linear solid?",
+   "a": "No. The stationary reference metric depends on $\\beta$ alone, and the stationarity property and its converse hold for any memory kernel. The standard linear solid, with one relaxation time, is chosen because its evolution law is a simple differential equation. The kernel matters for how fast things happen, such as the time to snap, not for which configurations are eventually stable.",
+   "answeredBy": [
+    "root-p7",
+    "root-p9",
+    "root-p11"
+   ]
+  },
+  {
+   "id": "q-no-motion",
+   "at": {
+    "node": "root-p9"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "How can the stress relax while nothing moves?",
+   "a": "Because the relaxation happens inside the material. Starting from rest, the reference metric moves from the rest metric towards the present metric along the line joining them. The realised shape is the admissible metric closest to the reference metric, and along that line it stays the same one. So the stress drops by up to a fraction $\\beta$ while the shape stays put.",
+   "answeredBy": [
+    "root-p9",
+    "fig-metric_space"
+   ]
+  },
+  {
+   "id": "q-contradiction",
+   "at": {
+    "node": "root-p10"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "A flipped popper creeps and then snaps. Does that not contradict stationarity?",
+   "a": "No. Stationarity concerns shapes that are stable when first reached from rest; they never move. A popper that snaps late was unstable when first inverted, and only holding it inverted let creep make it stable. Its stability was acquired, and acquired stability in a shape that was not initially an equilibrium cannot last. So late snapping is predicted from the elastic stability of the rest state.",
+   "answeredBy": [
+    "root-p10",
+    "root-p11"
+   ]
+  },
+  {
+   "id": "q-experiment",
+   "at": {
+    "node": "root-p13"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "What exactly was compared with experiment?",
+   "a": "The stability phase of each of about 50 conical poppers: stable when inverted, snapping after a delay, or snapping at once. Each was inverted abruptly from rest, held for about a minute and released, and its time to snap was measured. $\\beta$ was measured independently by stress relaxation, and the phase boundaries in the plane of two geometric ratios were then computed with no free parameter fitted to the poppers.",
+   "answeredBy": [
+    "root-p13",
+    "fig-hopper_popper"
+   ]
+  },
+  {
+   "id": "q-not-shown",
+   "at": {
+    "node": "root-p15"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "What does the paper not show?",
+   "a": "Stationarity is proved only for equal elastic and viscoelastic Poisson ratios and instantaneous loading from rest; for real loading the paper argues that little motion results, citing a companion paper, where the proofs also appear. The experiment classifies stability phases but does not measure or compute how the time to snap depends on the holding time. Extensions to plasticity, growth and athermal systems are suggestions.",
+   "answeredBy": [
+    "root-p15",
+    "root-p16",
+    "root-p14"
+   ]
+  },
+  {
+   "id": "q-growth",
+   "at": {
+    "node": "root-p14"
+   },
+   "source": "ai",
+   "status": "draft",
+   "q": "Why would viscoelasticity make growth look complicated?",
+   "a": "If the rest metric itself changes in time, by plasticity or growth, the shape responds not to it directly but to the reference metric, which lags behind it viscoelastically. A simple growth rule can then appear complex, and abrupt, localised growth events can look diffuse and gradual in the observed shape.",
+   "answeredBy": [
+    "root-p14"
+   ]
+  }
+ ]
+}

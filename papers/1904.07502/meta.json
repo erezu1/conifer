@@ -1,0 +1,17 @@
+{
+ "id": "1904.07502",
+ "version": "3",
+ "title": "Generalized Hawking-Page transitions",
+ "authors": [
+  "Ofer Aharony",
+  "Erez Y. Urbach",
+  "Maya Weiss"
+ ],
+ "abstract": "We construct holographic backgrounds that are dual by the AdS/CFT correspondence to Euclidean conformal field theories on products of spheres $S^{d_1}\\times S^{d_2}$, for conformal field theories whose dual may be approximated by classical Einstein gravity (typically these are large $N$ strongly coupled theories). For $d_2=1$ these backgrounds correspond to thermal field theories on $S^{d_1}$, and Hawking and Page found that there are several possible bulk solutions, with two different topologies, that compete with each other, leading to a phase transition as the relative size of the spheres is modified. By numerically solving the Einstein equations we find similar results also for $d_2>1$, with bulk solutions in which either one or the other sphere shrinks to zero smoothly at a minimal value of the radial coordinate, and with a first order phase transition (for $d_1+d_2 < 9$) between solutions of two different topologies as the relative radius changes. For a critical ratio of the radii there is a (sub-dominant) singular solution where both spheres shrink, and we analytically analyze the behavior near this radius. For $d_1+d_2 < 9$ the number of solutions grows to infinity as the critical ratio is approached.",
+ "primary": "hep-th",
+ "categories": [
+  "hep-th",
+  "gr-qc"
+ ],
+ "published": "2019-04-16"
+}

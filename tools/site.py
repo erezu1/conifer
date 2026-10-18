@@ -20,9 +20,14 @@ DOCS = HERE / "docs"
 DOCS.mkdir(exist_ok=True)
 
 # every tree that has been built (papers/<key>/web/index.html), newest first by arXiv number; the sample last
+# (only the trees listed in papers/published.txt: a tree in progress has a page too, and must not reach the site)
+PUBLISHED = [l.strip() for l in (HERE / "papers" / "published.txt").read_text().splitlines() if l.strip() and not l.startswith("#")]
 cones = sorted(({"key": p.name, "page": p / "web" / "index.html", "data": p / "tree.json", "doc": p / "doc" / "paper.json"}
-                for p in (HERE / "papers").iterdir() if (p / "web" / "index.html").exists() and (p / "tree.json").exists()),
+                for p in (HERE / "papers").iterdir() if p.name in PUBLISHED and (p / "web" / "index.html").exists() and (p / "tree.json").exists()),
                key=lambda c: c["key"], reverse=True)
+for d in DOCS.iterdir():                                       # a folder for a tree no longer (or not yet) published goes
+    if d.is_dir() and re.fullmatch(r"\d{4}\.\d{4,5}", d.name) and d.name not in PUBLISHED:
+        shutil.rmtree(d)
 cones.append({"key": "semicircle", "page": HERE / "mockup" / "conifer-mockup.html", "data": HERE / "mockup" / "semicircle.tree.json", "doc": None})
 
 # THE INDEX DRAWS ITS FORMULAS (18 Oct, Erez): a title's and a gist's TeX is drawn here, at build time, with the paper's
