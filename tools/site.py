@@ -64,9 +64,20 @@ def with_math(text, doc_json):
     for p in parts:
         if p.startswith("$") and p.endswith("$") and len(p) > 1:
             svg = next(drawn)
-            out.append(svg if svg else html.escape(p))
+            f = svg if svg else html.escape(p)
+            # a formula written onto a word (AdS$_3$, $N$-point) does not break from it
+            w = re.search(r"\S+$", out[-1]) if out else None
+            if w:
+                out[-1] = out[-1][:w.start()]
+                f = '<span class="nb">' + w.group(0) + f + "</span>"
+            out.append(f)
         else:
-            out.append(html.escape(p))
+            t = html.escape(p)
+            m = re.match(r"\S+", t)
+            if m and out and out[-1].endswith("</span>") and out[-1].startswith('<span class="nb">') and len(parts) > 1:
+                out[-1] = out[-1][:-7] + m.group(0) + "</span>"
+                t = t[m.end():]
+            out.append(t)
     return "".join(out)
 
 
@@ -164,8 +175,15 @@ try {{ var t = JSON.parse(localStorage.getItem("conifer-reader") || "{{}}").them
 <style>
 {css}
 body {{ background: var(--bg); color: var(--fg); }}
-.index-top {{ display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }}
-.index-top .kicker {{ margin: 0; }}
+/* the bar with the project's name stays at the top as the list scrolls (as on erezu1.github.io); the year heads stick below it */
+:root {{ --head-h: 3rem; }}
+body {{ overflow-x: clip; }}
+.site-head {{ position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  height: var(--head-h); margin: -.6rem calc(50% - 50vw) 0; padding-inline: calc(50vw - 50%);
+  background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: saturate(1.3) blur(10px); -webkit-backdrop-filter: saturate(1.3) blur(10px); }}
+.site-head .brand {{ margin: 0; color: var(--muted); white-space: nowrap; }}
+.page .site-head a.brand {{ border-bottom: 0; background: none; }}
+.page .site-head a.brand:hover {{ color: var(--fg); }}
 .theme-btn {{ width: 2.25rem; height: 2.25rem; border: 0; background: none; color: var(--accent); cursor: pointer; display: grid; place-items: center; padding: 0; border-radius: 999px; }}
 .theme-btn:hover {{ background: var(--accent-soft); }}
 .theme-btn svg {{ width: 20px; height: 20px; grid-area: 1 / 1; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; transition: opacity .25s, transform .35s var(--ease-out); }}
@@ -181,7 +199,7 @@ body {{ background: var(--bg); color: var(--fg); }}
 .depths {{ list-style: none; padding: 0; margin: .5rem 0 0; display: grid; gap: .35rem; font: 400 .95rem/1.5 var(--sans); color: var(--muted); max-width: 40rem; }}
 .depths b {{ font: 600 .74rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-right: .5rem; }}
 .year {{ margin-top: 1.6rem; }}
-.year-head {{ position: sticky; top: 0; z-index: 2; margin: 0; padding: .45rem 0 .3rem; border-bottom: 1px solid var(--rule);
+.year-head {{ position: sticky; top: var(--head-h); z-index: 2; margin: 0; padding: .45rem 0 .3rem; border-bottom: 1px solid var(--rule);
   font: 500 1.05rem var(--serif); color: var(--muted); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }}
 .year-head::before {{ content: "§"; color: var(--accent); margin-right: .5rem; font-size: .9em; }}
 .pub-list {{ list-style: none; margin: 0; padding: 0; }}
@@ -196,7 +214,7 @@ body {{ background: var(--bg); color: var(--fg); }}
 .pub-title a:hover {{ background-size: 100% 1px; }}
 .pub-authors {{ font: 400 .88rem var(--sans); color: var(--muted); margin: .25rem 0 0; }}
 .pub-authors b {{ color: var(--fg); font-weight: 600; }}
-.pub-authors .nb {{ white-space: nowrap; }}
+.pub .nb {{ white-space: nowrap; }}
 .pub-context {{ font: 400 1rem/1.5 var(--serif); color: color-mix(in srgb, var(--fg) 82%, var(--muted)); margin: .5rem 0 0; max-width: 42rem; }}
 .finds {{ margin-top: .45rem; max-width: 42rem; }}
 .finds summary {{ list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; font: 500 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }}
@@ -218,8 +236,8 @@ body {{ background: var(--bg); color: var(--fg); }}
 </head>
 <body>
 <main class="page">
+ <header class="site-head"><a class="brand kicker" href="./">{logo}Project Conifer</a><button type="button" class="theme-btn" id="theme-btn" aria-label="Switch between light and dark">{SUN}{MOON}</button></header>
  <header class="titleblock">
-  <div class="index-top"><p class="kicker">{logo}Project Conifer</p><button type="button" class="theme-btn" id="theme-btn" aria-label="Switch between light and dark">{SUN}{MOON}</button></div>
   <h1 class="title">From the gist down</h1>
   <p class="intro">Each paper opens on a short card and goes deeper when you want it to. Switch between the depths with the tabs at the top of a paper.</p>
   <ul class="depths">
