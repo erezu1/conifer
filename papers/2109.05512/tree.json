@@ -5,11 +5,8 @@
   "title": "AdS from CFT for scalar QED",
   "authors": [
    "Ofer Aharony",
-   "e-mail: ofer.aharony@weizmann.ac.il",
    "Shai M. Chester",
-   "e-mail: iahs81@gmail.com",
-   "Erez Y. Urbach",
-   "e-mail: erez.urbach@weizmann.ac.il"
+   "Erez Y. Urbach"
   ],
   "arxiv": "2109.05512",
   "abstractHtml": "<p>We construct an explicit bulk dual in anti-de Sitter space, with couplings of order <l2m-math n=\"886\"></l2m-math>, for the <l2m-math n=\"887\"></l2m-math>-singlet sector of QED in <l2m-math n=\"888\"></l2m-math> space-time dimensions (<l2m-math n=\"889\"></l2m-math>) coupled to <l2m-math n=\"890\"></l2m-math> scalar fields. We begin from the bulk dual for the theory of <l2m-math n=\"891\"></l2m-math> complex free scalar fields that we constructed in our previous work, and couple this to <l2m-math n=\"892\"></l2m-math> gauge fields living on the boundary in order to get the bulk dual of scalar QED (in which the <l2m-math n=\"893\"></l2m-math> gauge fields become the boundary value of the bulk vector fields). As in our previous work, the bulk dual is non-local but we can write down an explicit action for it. We focus on the CFTs arising at low energies (or, equivalently, when the <l2m-math n=\"894\"></l2m-math> gauge coupling goes to infinity). For <l2m-math n=\"895\"></l2m-math> we discuss also the addition of a Chern-Simons term for <l2m-math n=\"896\"></l2m-math>, modifying the boundary conditions for the bulk gauge field. We also discuss the generalization to QCD, with <l2m-math n=\"897\"></l2m-math> gauge fields coupled to <l2m-math n=\"898\"></l2m-math> scalar fields in the fundamental representation (in the large <l2m-math n=\"899\"></l2m-math> limit with fixed <l2m-math n=\"900\"></l2m-math>).</p>",

@@ -5,11 +5,8 @@
   "title": "A Derivation of AdS/CFT for Vector Models",
   "authors": [
    "Ofer Aharony",
-   "e-mail: ofer.aharony@weizmann.ac.il",
    "Shai M. Chester",
-   "e-mail: iahs81@gmail.com",
-   "Erez Y. Urbach",
-   "e-mail: erez.urbach@weizmann.ac.il"
+   "Erez Y. Urbach"
   ],
   "arxiv": "2011.06328",
   "abstractHtml": "<p>We explicitly rewrite the path integral for the free or critical <l2m-math n=\"1797\"></l2m-math> (or <l2m-math n=\"1798\"></l2m-math>) bosonic vector models in <l2m-math n=\"1799\"></l2m-math> space-time dimensions as a path integral over fields (including massless high-spin fields) living on (<l2m-math n=\"1800\"></l2m-math>)-dimensional anti-de Sitter space. Inspired by de Mello Koch, Jevicki, Suzuki and Yoon and earlier work, we first rewrite the vector models in terms of bi-local fields, then expand these fields in eigenmodes of the conformal group, and finally map these eigenmodes to those of fields on anti-de Sitter space. Our results provide an explicit (non-local) action for a high-spin theory on anti-de Sitter space, which is presumably equivalent in the large <l2m-math n=\"1801\"></l2m-math> limit to Vasiliev’s classical high-spin gravity theory (with some specific gauge-fixing to a fixed background), but which can be used also for loop computations. Our mapping is explicit within the <l2m-math n=\"1802\"></l2m-math> expansion, but in principle can be extended also to finite <l2m-math n=\"1803\"></l2m-math> theories, where extra constraints on products of bulk fields need to be taken into account.</p>",

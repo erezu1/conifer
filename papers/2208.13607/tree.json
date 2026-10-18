@@ -5,13 +5,9 @@
   "title": "Explicit holography for vector models at finite N, volume and temperature",
   "authors": [
    "Ofer Aharony",
-   "e-mail: ofer.aharony@weizmann.ac.il",
    "Shai M. Chester",
-   "e-mail: iahs81@gmail.com",
    "Tal Sheaffer",
-   "e-mail: sheaffertal@gmail.com",
-   "Erez Y. Urbach",
-   "e-mail: erez.urbach@weizmann.ac.il"
+   "Erez Y. Urbach"
   ],
   "arxiv": "2208.13607",
   "abstractHtml": "<p>In previous work we constructed an explicit mapping between large <l2m-math n=\"708\"></l2m-math> vector models (free or critical) in <l2m-math n=\"709\"></l2m-math> dimensions and a non-local high-spin gravity theory on <l2m-math n=\"710\"></l2m-math>, such that the gravitational theory reproduces the field theory correlation functions order by order in <l2m-math n=\"711\"></l2m-math>. In this paper we discuss three aspects of this mapping. First, our original mapping was not valid non-perturbatively in <l2m-math n=\"712\"></l2m-math>, since it did not include non-local correlations between the gravity fields which appear at finite <l2m-math n=\"713\"></l2m-math>. We show that by using a bi-local <l2m-math n=\"714\"></l2m-math> type formalism similar to the one used in the SYK model, we can construct an exact mapping to the bulk that is valid also at finite <l2m-math n=\"715\"></l2m-math>. The theory in the bulk contains additional auxiliary fields which implement the finite <l2m-math n=\"716\"></l2m-math> constraints. Second, we discuss the generalization of our mapping to the field theory on <l2m-math n=\"717\"></l2m-math>, and in particular how the sphere free energy matches exactly between the two sides, and how the mapping can be consistently regularized. Finally, we discuss the field theory at finite temperature, and show that the low-temperature phase of the vector models can be mapped to a high-spin gravity theory on thermal AdS space.</p>",

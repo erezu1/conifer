@@ -4,10 +4,10 @@
  "meta": {
   "title": "The onset of quantum chaos in disordered CFTs",
   "authors": [
-   "Micha Berkooz, e-mail: micha.berkooz@weizmann.ac.il",
-   "Adar Sharon, e-mail: adar.sharon@weizmann.ac.il",
-   "Navot Silberstein e-mail: navot.silberstein@weizmann.ac.il",
-   "Erez Y. Urbach e-mail: erez.urbach@weizmann.ac.il"
+   "Micha Berkooz",
+   "Adar Sharon",
+   "Navot Silberstein",
+   "Erez Y. Urbach"
   ],
   "arxiv": "2111.06108",
   "abstractHtml": "<p>We study the Lyapunov exponent <l2m-math n=\"1259\"></l2m-math> in quantum field theories with spacetime-independent disorder interactions. Generically <l2m-math n=\"1260\"></l2m-math> can only be computed at isolated points in parameter space, and little is known about the way in which chaos grows as we deform the theory away from weak coupling. In this paper we describe families of theories in which the disorder coupling is an exactly marginal deformation, allowing us to follow <l2m-math n=\"1261\"></l2m-math> from weak to strong coupling. We find surprising behaviors in some cases, including a discontinuous transition into chaos. We also derive self-consistency equations for the two- and four-point functions for products of <l2m-math n=\"1262\"></l2m-math> nontrivial CFTs deformed by disorder at leading order in <l2m-math n=\"1263\"></l2m-math>.</p>",

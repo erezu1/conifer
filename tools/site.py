@@ -99,10 +99,17 @@ for c in cones:
         shutil.rmtree(DOCS / c["key"] / "img", ignore_errors=True)
         shutil.copytree(c["page"].parent / "img", DOCS / c["key"] / "img")
     m = d["meta"]
-    gist = context_of((d["root"].get("gist") or {}).get("html", ""))
+    gh = (d["root"].get("gist") or {}).get("html", "")
+    gist = context_of(gh)
     if len(gist) > 420:
         gist = gist[:420].rsplit(" ", 1)[0] + "…"
-    rows.append((c["key"], with_math(title_of(c, d), c["doc"]), ", ".join(m.get("authors", [])), m.get("kicker") or "", with_math(gist, c["doc"])))
+    rm = re.search(r"<b>Result</b>\s*<ul>(.*?)</ul>", gh, re.S)          # the gist's points: what the paper finds
+    points = [re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", p))).strip() for p in re.findall(r"<li[^>]*>(.*?)</li>", rm.group(1), re.S)] if rm else []
+    parts = [x.strip() for x in (m.get("kicker") or "").split("·")]
+    rows.append({"key": c["key"], "title": with_math(title_of(c, d), c["doc"]), "authors": m.get("authors", []),
+                 "cat": parts[1] if len(parts) > 1 else "", "when": parts[2] if len(parts) > 2 else "",
+                 "context": with_math(gist, c["doc"]), "points": [with_math(p, c["doc"]) for p in points],
+                 "year": "20" + c["key"][:2] if re.fullmatch(r"\d{4}\.\d{4,5}", c["key"]) else "Sample"})
 
 # the app's files at the site's root: icons, the manifest, the service worker
 (DOCS / "icons").mkdir(exist_ok=True)
@@ -120,46 +127,126 @@ HEAD = ('<link rel="icon" href="favicon.ico" sizes="any">\n<link rel="icon" href
 css = (HERE / "viewer" / "viewer.css").read_text()
 logo = (HERE / "logo" / "conifer-icon.svg").read_text().replace('width="64" height="64"', 'class="logo"').replace('<svg xmlns="http://www.w3.org/2000/svg"', "<svg")
 logo = re.sub(r"<!--.*?-->", "", logo, flags=re.S).strip()
-items = "\n".join(
-    f'<li class="cone"><a href="{k}/"><span class="cone-title">{t}</span><span class="cone-by">{html.escape(a)}{(" · " + html.escape(kk)) if kk else ""}</span><span class="cone-gist">{g}</span></a></li>'
-    for k, t, a, kk, g in rows)
+OWNER = "Erez Y. Urbach"                     # (bold in the author lines, as on erezu1.github.io)
+PLUS = '<svg viewBox="0 0 12 12" aria-hidden="true"><path class="h" d="M2.5 6h7"/><path class="v" d="M6 2.5v7"/></svg>'
+
+
+def entry(r):
+    auth = ", ".join(('<b class="nb">%s</b>' if a == OWNER else '<span class="nb">%s</span>') % html.escape(a) for a in r["authors"])
+    arx = ('<a href="https://arxiv.org/abs/%s">arXiv:%s</a>' % (r["key"], r["key"])) if r["year"] != "Sample" else "Sample tree"
+    meta = "".join('<span>%s</span>' % x for x in (arx, html.escape(r["cat"]), html.escape(r["when"])) if x)
+    finds = ('<details class="finds"><summary><span class="circ">%s</span>What it finds</summary><ul>%s</ul></details>'
+             % (PLUS, "".join("<li>%s</li>" % p for p in r["points"]))) if r["points"] else ""
+    return ('<li class="pub"><div class="pub-meta">%s</div><div class="pub-body"><h3 class="pub-title"><a href="%s/">%s</a></h3>'
+            '<p class="pub-authors">%s</p><p class="pub-context">%s</p>%s</div></li>' % (meta, r["key"], r["title"], auth, r["context"], finds))
+
+
+groups = []
+for r in rows:
+    if not groups or groups[-1][0] != r["year"]:
+        groups.append((r["year"], []))
+    groups[-1][1].append(r)
+items = "\n".join('<section class="year"><h2 class="year-head">%s</h2><ul class="pub-list">%s</ul></section>'
+                  % (html.escape(y), "".join(entry(r) for r in rs)) for y, rs in groups)
+SUN = ('<svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2'
+       'M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>')
+MOON = '<svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
 page = f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Conifer</title>
+<script>/* the reader's theme, before anything is drawn (shared with the trees: conifer-reader) */
+try {{ var t = JSON.parse(localStorage.getItem("conifer-reader") || "{{}}").theme; if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; }} catch (e) {{}}</script>
 {HEAD}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 {css}
-.cones {{ list-style: none; padding: 0; margin: 1.5rem 0; display: grid; gap: 1rem; }}
-.cone a {{ display: block; border: 1px solid var(--rule); border-radius: 14px; padding: 1rem 1.2rem; color: var(--fg); text-decoration: none; transition: background .15s, border-color .15s; }}
-.cone a:hover {{ background: var(--surface); border-color: color-mix(in srgb, var(--accent) 40%, transparent); text-decoration: none; }}
-.cone-title {{ display: block; font: 600 1.25rem/1.25 var(--serif); text-wrap: balance; }}
-.cone-by {{ display: block; font: .8rem var(--sans); color: var(--muted); margin: .3rem 0 .6rem; }}
-.cones li, .cones li * {{ text-align: left; hyphens: manual; -webkit-hyphens: manual; }}
-.cone-gist {{ display: block; font-size: .95em; color: color-mix(in srgb, var(--fg) 85%, var(--muted)); }}
-.intro {{ font-size: 1.02em; }}
+body {{ background: var(--bg); color: var(--fg); }}
+.index-top {{ display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }}
+.index-top .kicker {{ margin: 0; }}
+.theme-btn {{ width: 2.25rem; height: 2.25rem; border: 0; background: none; color: var(--accent); cursor: pointer; display: grid; place-items: center; padding: 0; border-radius: 999px; }}
+.theme-btn:hover {{ background: var(--accent-soft); }}
+.theme-btn svg {{ width: 20px; height: 20px; grid-area: 1 / 1; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; transition: opacity .25s, transform .35s var(--ease-out); }}
+.theme-btn svg * {{ vector-effect: non-scaling-stroke; stroke-width: 1.25px; }}
+.theme-btn .moon {{ opacity: 0; transform: rotate(-60deg) scale(.6); }}
+:root[data-theme="dark"] .theme-btn .sun {{ opacity: 0; transform: rotate(60deg) scale(.6); }}
+:root[data-theme="dark"] .theme-btn .moon {{ opacity: 1; transform: none; }}
+@media (prefers-color-scheme: dark) {{
+  :root:not([data-theme="light"]) .theme-btn .sun {{ opacity: 0; transform: rotate(60deg) scale(.6); }}
+  :root:not([data-theme="light"]) .theme-btn .moon {{ opacity: 1; transform: none; }}
+}}
+.page .intro {{ font: 400 1rem/1.55 var(--sans); color: var(--muted); max-width: 40rem; margin: .6rem 0 .3rem; text-align: left; hyphens: manual; }}
+.depths {{ list-style: none; padding: 0; margin: .5rem 0 0; display: grid; gap: .35rem; font: 400 .95rem/1.5 var(--sans); color: var(--muted); max-width: 40rem; }}
+.depths b {{ font: 600 .74rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-right: .5rem; }}
+.year {{ margin-top: 1.6rem; }}
+.year-head {{ position: sticky; top: 0; z-index: 2; margin: 0; padding: .45rem 0 .3rem; border-bottom: 1px solid var(--rule);
+  font: 500 1.05rem var(--serif); color: var(--muted); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }}
+.year-head::before {{ content: "§"; color: var(--accent); margin-right: .5rem; font-size: .9em; }}
+.pub-list {{ list-style: none; margin: 0; padding: 0; }}
+.pub {{ display: grid; grid-template-columns: 1fr; gap: .25rem 1rem; padding: 1.1rem 0; border-bottom: 1px solid color-mix(in srgb, var(--rule) 55%, transparent); }}
+.pub:last-child {{ border-bottom: 0; }}
+.pub-list li, .pub-list li * {{ text-align: left; hyphens: manual; -webkit-hyphens: manual; }}
+.pub-meta {{ font: 400 .74rem/1.45 var(--sans); color: var(--muted); display: flex; flex-wrap: wrap; gap: .1rem .8rem; font-variant-numeric: tabular-nums; }}
+.pub-meta a {{ color: var(--muted); text-decoration: none; }}
+.pub-meta a:hover {{ color: var(--accent); }}
+.pub-title {{ font: 500 1.24rem/1.3 var(--serif); margin: 0; text-wrap: pretty; }}
+.pub-title a {{ color: var(--fg); text-decoration: none; background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-size: 0 1px; background-position: 0 100%; transition: background-size .3s var(--ease-out); }}
+.pub-title a:hover {{ background-size: 100% 1px; }}
+.pub-authors {{ font: 400 .88rem var(--sans); color: var(--muted); margin: .25rem 0 0; }}
+.pub-authors b {{ color: var(--fg); font-weight: 600; }}
+.pub-authors .nb {{ white-space: nowrap; }}
+.pub-context {{ font: 400 1rem/1.5 var(--serif); color: color-mix(in srgb, var(--fg) 82%, var(--muted)); margin: .5rem 0 0; max-width: 42rem; }}
+.finds {{ margin-top: .45rem; max-width: 42rem; }}
+.finds summary {{ list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; font: 500 .72rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }}
+.finds summary::-webkit-details-marker {{ display: none; }}
+.finds summary:hover {{ color: var(--accent); }}
+.finds .circ {{ width: 1.15rem; height: 1.15rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--muted) 45%, transparent); display: grid; place-items: center; }}
+.finds summary:hover .circ {{ border-color: var(--accent); }}
+.finds .circ svg {{ width: 9px; height: 9px; fill: none; stroke: currentColor; stroke-linecap: round; }}
+.finds .circ svg * {{ vector-effect: non-scaling-stroke; stroke-width: 1.25px; }}
+.finds[open] .circ .v {{ display: none; }}
+.finds ul {{ list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .35rem; font: 400 .97rem/1.5 var(--serif); color: color-mix(in srgb, var(--fg) 85%, var(--muted)); }}
+.finds li {{ position: relative; padding-left: 1.05rem; }}
+.finds li::before {{ content: ""; position: absolute; left: .2rem; top: .62em; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }}
+@media (min-width: 720px) {{
+  .pub {{ grid-template-columns: 8.5rem 1fr; }}
+  .pub-meta {{ flex-direction: column; gap: .15rem; padding-top: .35rem; }}
+}}
 </style>
 </head>
 <body>
 <main class="page">
  <header class="titleblock">
-  <p class="kicker">{logo}Project Conifer</p>
-  <h1 class="title">Papers grown into trees</h1>
-  <p class="intro">Every paper here is a tree you can read at any depth. The trunk is the gist: the context, the result, why it matters. The branches are a one-page summary whose sentences show the part of the paper they stand for. The foliage is the paper itself, and the roots are its appendices and proofs, folded until you want them. Definitions, background notes and anticipated questions hang off the text, and a dial sets how much is shown.</p>
+  <div class="index-top"><p class="kicker">{logo}Project Conifer</p><button type="button" class="theme-btn" id="theme-btn" aria-label="Switch between light and dark">{SUN}{MOON}</button></div>
+  <h1 class="title">Papers you can read at three depths</h1>
+  <p class="intro">Each paper opens on a short card and goes deeper when you want it to. Switch between the depths with the tabs at the top of a paper.</p>
+  <ul class="depths">
+   <li><b>Gist</b>the question, what the paper finds and why it matters: a minute.</li>
+   <li><b>Summary</b>one page; tap a sentence to see the paragraphs it stands for.</li>
+   <li><b>Paper</b>the full text, with a short summary under each section, definitions on dotted terms, background notes and questions.</li>
+  </ul>
+  <p class="intro">The text of each paper is its authors'. The gists, summaries, definitions, notes and questions are drafted by AI, marked as such, and not yet reviewed by the authors.</p>
  </header>
- <ul class="cones">
 {items}
- </ul>
 {merge_caches(*caches)}
- <footer class="colophon">Summaries, definitions and questions are drafted by an AI reader and carry their status; the paper's text is the author's. Made with Epsilon.</footer>
+ <footer class="colophon">Made with Epsilon, which converts the papers' LaTeX.</footer>
 </main>
-<script>if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(function () {{}});</script>
+<script>
+(function () {{
+  var root = document.documentElement, btn = document.getElementById("theme-btn");
+  var dark = function () {{ return root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }};
+  btn.addEventListener("click", function () {{
+    var t = dark() ? "light" : "dark"; root.dataset.theme = t;
+    try {{ var s = JSON.parse(localStorage.getItem("conifer-reader") || "{{}}"); s.theme = t; localStorage.setItem("conifer-reader", JSON.stringify(s)); }} catch (e) {{}}
+  }});
+}})();
+if ("serviceWorker" in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register("sw.js").catch(function () {{}});
+</script>
 </body>
 </html>
 """
 (DOCS / "index.html").write_text(page)
 (DOCS / ".nojekyll").write_text("")
-print("site:", ", ".join(k for k, *_ in rows), "->", DOCS)
+print("site:", ", ".join(r["key"] for r in rows), "->", DOCS)
