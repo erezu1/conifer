@@ -2,7 +2,7 @@
 
 Turns a LaTeX paper into a tree that can be read at three depths: the **Gist** (the question, what the paper finds and why it matters), a one-page **Summary** in which every sentence shows the paragraphs it stands for, and the **Paper** itself, with a short summary under each section, definitions on dotted terms, background notes and questions. One page, for phones and the web, with the formulas drawn ahead of time.
 
-An example, the Wigner semicircle from random matrix theory: <https://erezu1.github.io/conifer/>.
+The project's page, with an example (the Wigner semicircle, from random matrix theory): <https://erezu1.github.io/conifer/>.
 
 ## From LaTeX to a tree
 
@@ -33,4 +33,4 @@ python3 tools/check_layers.py my-paper              # measures the draft against
 | `example/` | the semicircle example: its document (`doc_semicircle.py`), `build.py`, and the page |
 | `logo/` | the mark (a conifer drawn as a hierarchical graph), a wordmark and app icons |
 | `DESIGN.md`, `PERFORMANCE.md` | how the format and the reader were designed, and how the reader was made fast |
-| `docs/` | the site GitHub Pages serves: the example (`python3 tools/site.py`) |
+| `docs/` | the project's site that GitHub Pages serves: its page, listing the example (`python3 tools/site.py`) |
