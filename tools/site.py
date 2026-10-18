@@ -84,8 +84,13 @@ def with_math(text, doc_json):
 def context_of(gist_html):
     """The gist's Context, as text with its $TeX$ (the index shows it under the title)."""
     m = re.search(r"<li>\s*<b>Context</b>(.*?)</li>", gist_html, re.S)
-    t = m.group(1) if m else gist_html
-    t = re.sub(r"<[^>]+>", " ", t)
+    return text_of(m.group(1) if m else gist_html)
+
+
+def text_of(h):
+    """HTML -> text with its $TeX$; tags are removed only outside the formulas ($d<9$ is not a tag)."""
+    t = "".join(p if p.startswith("$") and p.endswith("$") and len(p) > 1 else re.sub(r"<[^>]+>", " ", p)
+                for p in re.split(r"(\$[^$]+\$)", h))
     return re.sub(r"\s+", " ", html.unescape(t)).strip()
 
 
@@ -113,9 +118,11 @@ for c in cones:
     gh = (d["root"].get("gist") or {}).get("html", "")
     gist = context_of(gh)
     if len(gist) > 420:
-        gist = gist[:420].rsplit(" ", 1)[0] + "…"
+        gist = gist[:420].rsplit(" ", 1)[0]
+        if gist.count("$") % 2: gist = gist[:gist.rindex("$")].rstrip()   # (not inside a formula)
+        gist += "…"
     rm = re.search(r"<b>Result</b>\s*<ul>(.*?)</ul>", gh, re.S)          # the gist's points: what the paper finds
-    points = [re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", p))).strip() for p in re.findall(r"<li[^>]*>(.*?)</li>", rm.group(1), re.S)] if rm else []
+    points = [text_of(p) for p in re.findall(r"<li[^>]*>(.*?)</li>", rm.group(1), re.S)] if rm else []
     parts = [x.strip() for x in (m.get("kicker") or "").split("·")]
     rows.append({"key": c["key"], "title": with_math(title_of(c, d), c["doc"]), "authors": m.get("authors", []),
                  "cat": parts[1] if len(parts) > 1 else "", "when": parts[2] if len(parts) > 2 else "",
