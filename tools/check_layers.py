@@ -85,6 +85,8 @@ def below(nid):
     for c in kids.get(nid, []): out |= below(c)
     return out
 framing = {"abstract"}                       # where Context and Why it matters may stand: the introduction, the discussion
+if top and not any(kids.get(t["id"]) for t in top):    # a letter without sections: its whole text frames itself
+    framing |= set(kind)
 if top: framing |= below(top[0]["id"])
 for t in top:
     if re.search(r"discussion|conclusion|summary|outlook", t.get("title") or "", re.I): framing |= below(t["id"])

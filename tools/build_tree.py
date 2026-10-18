@@ -245,8 +245,8 @@ def collect(s):
 
 
 def walk(o, key=None):
-    if isinstance(o, dict):
-        return {k: walk(v, k) for k, v in o.items()}
+    if isinstance(o, dict):                          # (a paper's macro definitions are kept as they are, not drawn)
+        return {k: (v if k == "macros" else walk(v, k)) for k, v in o.items()}
     if isinstance(o, list):
         return [walk(v, key) for v in o]
     if isinstance(o, str) and key not in SKIP and ("$" in o or "\\[" in o) and "<l2m-math" not in o:
